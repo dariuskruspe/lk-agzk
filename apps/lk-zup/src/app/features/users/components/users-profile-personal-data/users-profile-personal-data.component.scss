@@ -1,0 +1,19 @@
+.personal-data-wrapper {
+  padding-bottom: 24px;
+
+  h3 {
+    padding: 24px 24px 0;
+  }
+
+  .personal-data-list {
+
+    &__header {
+      background: var(--card-second-background);
+      padding: 0 24px;
+    }
+
+    &__values {
+      padding: 0 24px;
+    }
+  }
+}

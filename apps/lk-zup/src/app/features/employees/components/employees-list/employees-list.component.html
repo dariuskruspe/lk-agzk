@@ -1,0 +1,206 @@
+<p-toolbar class="title">
+  <h1>{{ 'TITLE_COMPANY' | translate }}</h1>
+</p-toolbar>
+
+<!-- Панель вкладок, поиска и фильтрации -->
+<div class="tabs-controls-panel">
+  <!-- Вкладки -->
+  <div class="tabs">
+    <!--    <div-->
+    <!--      class="tab-item active" (click)="changeTab('applicant')" [class.active]="activeTab === 'applicant'"-->
+    <!--    >-->
+    <!--      {{ 'TITLE_MY_ISSUES' | translate }}-->
+    <!--    </div>-->
+    <!--    <div-->
+    <!--      class="tab-item" (click)="changeTab('otherEmployee')" [class.active]="activeTab === 'otherEmployee'"-->
+    <!--    >-->
+    <!--      {{ 'TITLE_ISSUES_TO_MANAGEMENT' | translate }}-->
+    <!--    </div>-->
+  </div>
+
+  <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+  <div class="filters">
+    <!-- Поиск -->
+    <div class="p-input-icon-left mobile-search-input">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        [(ngModel)]="filterValue.search"
+        (ngModelChange)="applySearchFilter()"
+        class="search-input"
+        [placeholder]="'EMPLOYEE_SEARCH_FIELD' | translate"
+        type="text"
+      />
+    </div>
+
+    <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+    <div class="filter-icon-button">
+      <i
+        class="pi pi-sliders-h filter-icon"
+        (click)="showFilters = !showFilters; $event.stopPropagation()"
+      ></i>
+    </div>
+
+    @if (isMobileV()) {
+      <!-- Нижняя выпадающая панель (сайдбар) с фильтрами -->
+      <app-filters-sidebar [visible]="showFilters">
+        <ng-container *ngTemplateOutlet="filters"></ng-container>
+      </app-filters-sidebar>
+    } @else {
+      <!-- Диалоговое окно с фильтрами -->
+      @if (showFilters) {
+        <app-filters-dialog (closeButtonClicked)="showFilters = false">
+          <ng-container *ngTemplateOutlet="filters"></ng-container>
+        </app-filters-dialog>
+      }
+    }
+
+    <ng-template #filters>
+      <!-- Фильтр "Рабочий статус" -->
+      <div class="filter-item">
+        <label class="custom-form-field__label">
+          {{ 'TITLE_WORK_STATUS' | translate }}
+        </label>
+        <p-dropdown
+          [options]="employeeStateList?.employeesStates"
+          [(ngModel)]="filterValue.state"
+          [appendTo]="isMobileV() ? 'body' : null"
+          [showClear]="true"
+          [filter]="true"
+          optionLabel="name"
+          optionValue="code"
+          (ngModelChange)="applyFilters()"
+          class="dropdown-input"
+          placeholder="{{ 'TITLE_WORK_STATUS' | translate }}"
+        ></p-dropdown>
+      </div>
+
+      <!-- Фильтр "Организация" -->
+      <div class="filter-item">
+        <label class="custom-form-field__label">{{
+            'COMPANY_NAME' | translate
+          }}</label>
+        <p-dropdown
+          [(ngModel)]="filterValue.organizationID"
+          (ngModelChange)="applyFilters()"
+          [appendTo]="isMobileV() ? 'body' : null"
+          class="dropdown-input"
+          [filter]="true"
+          optionLabel="name"
+          optionValue="organizationID"
+          [options]="employeesCompanies?.organizations"
+          placeholder="{{ 'COMPANY_NAME' | translate }}"
+          [showClear]="true"
+        ></p-dropdown>
+      </div>
+
+      <!-- Фильтр "Подразделение" -->
+      <div class="filter-item">
+        <label class="custom-form-field__label">{{
+            'COMPANY_SUBDIVISION' | translate
+          }}</label>
+        <p-multiSelect
+          #departmentMultiselect
+          [(ngModel)]="filterValue.departments"
+          (ngModelChange)="applyFilters()"
+          (onPanelShow)="onDepartmentMultiselectPanelShow()"
+          [appendTo]="isMobileV() ? 'body' : null"
+          class="dropdown-input"
+          [disabled]="!filterValue.organizationID"
+          [filter]="true"
+          optionLabel="name"
+          optionValue="ID"
+          [options]="employeesCompanyDepartments"
+          [overlayOptions]="departmentFilterOverlayOptions"
+          [placeholder]="'COMPANY_SUBDIVISION' | translate"
+          [showClear]="true"
+        ></p-multiSelect>
+      </div>
+
+      <!-- Фильтр "Мой отдел" -->
+      <div class="filter-item">
+        <p-checkbox
+          [(ngModel)]="filterValue.myDept"
+          (ngModelChange)="applyFilters()"
+          [binary]="true"
+          id="my-department"
+        ></p-checkbox>
+        <label
+          for="my-department"
+          class="custom-form-field__label inline-flex mb-0 ml-10"
+        >{{ 'DEPARTMENT_MY' | translate }}</label
+        >
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Содержимое -->
+<div class="content">
+  <!-- Метки (chips — "чипы") фильтров -->
+  <div class="filter-chips">
+    <!-- Метки (chips — "чипы") поиска -->
+    <div class="filter-chip" *ngIf="filterValue.search">
+      {{ filterValue.search }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('search')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Рабочий статус" -->
+    <div class="filter-chip" *ngIf="filterValue.state">
+      {{ getStatusTitleByValue(filterValue.state) }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('state')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Организация" -->
+    <div class="filter-chip" *ngIf="filterValue.organizationID">
+      {{ getOrganizationTitleByValue(filterValue.organizationID) }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('organizationID')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Подразделение" -->
+    <ng-container *ngIf="filterValue.departments">
+      <ng-container *ngFor="let departmentID of filterValue.departments">
+        <div class="filter-chip">
+          {{ getDepartmentTitleByValue(departmentID) }}
+          <i
+            class="pi pi-times times-icon"
+            (click)="clearFilterByChips('departments', departmentID)"
+          ></i>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <!-- Метки (chips — "чипы") фильтра "Мой отдел" -->
+    <div class="filter-chip" *ngIf="filterValue.myDept">
+      {{ 'DEPARTMENT_MY' | translate }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('myDept')"
+      ></i>
+    </div>
+  </div>
+
+  <!-- Контейнер с загружаемым списком -->
+  <loadable-list-container
+    [template]="dataLayout"
+    [dataConfig]="dataConfig"
+    [dataList]="employeeList"
+    [scrollContainerClassCss]="'.scroll-main-container'"
+    [otherData]="{
+      employeesStates: employeeStateList
+    }"
+    [loading]="loading"
+    [appendFilterToQuery]="true"
+    (loadList)="onLoadList($event)"
+    (clickItem)="onGoDetails($event)"
+  ></loadable-list-container>
+</div>

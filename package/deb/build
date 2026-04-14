@@ -1,0 +1,56 @@
+#!/usr/bin/env node
+
+const {execSync} = require('node:child_process');
+const fs = require("fs");
+const path = require("path");
+
+const { join } = path;
+
+
+const ROOT_DIR = join(__dirname, '../../');
+const WORK_DIR = join(ROOT_DIR, 'package/deb');
+const SRC = join(WORK_DIR, 'src');
+const SOURCE_DIR = join(WORK_DIR, 'source')
+const SOURCE_DIST_DIR = join(SOURCE_DIR, '/dist/apps/lk-zup');
+const DIST_DIR = join(SRC, 'var/www/lk-zup');
+const DEBIAN = join(SRC, 'DEBIAN');
+const RESULT_FILE = `${WORK_DIR}/empldocs.deb`;
+
+exec(`bun install`, SOURCE_DIR);
+exec('bun nx build lk-zup -c common', SOURCE_DIR);
+
+injectVersion();
+
+exec(`rm -rf ${path.join(SOURCE_DIR, 'node_modules')}`);
+exec(`rm -rf ${DIST_DIR} && mkdir -p ${path.join(DIST_DIR, '../')}`);
+
+exec(`mv ${SOURCE_DIST_DIR} ${DIST_DIR}`);
+
+exec(`chmod -R 0755 ${DEBIAN}`);
+exec(`dpkg-deb --build ${SRC} ${RESULT_FILE}`);
+
+function injectVersion() {
+  const version = getZupVersion();
+  // replace string "{VERSION}" in ${DEBIAN}/control with passed version
+  const control = fs.readFileSync(join(DEBIAN, 'control'), 'utf-8');
+  const newControl = control.replace(/{VERSION}/g, version);
+  fs.writeFileSync(join(DEBIAN, 'control'), newControl);
+}
+
+function getZupVersion() {
+  const file = fs.readFileSync(
+    path.join(SOURCE_DIR, 'dist/apps/lk-zup/version/version.json'),
+    'utf-8'
+  );
+  const ver = JSON.parse(file);
+  return ver.version;
+}
+
+
+
+
+
+function exec(cmd, cwd) {
+  console.log(`Command: ${cmd}`)
+  return execSync(cmd, {stdio: 'inherit', cwd: cwd ?? ROOT_DIR });
+}

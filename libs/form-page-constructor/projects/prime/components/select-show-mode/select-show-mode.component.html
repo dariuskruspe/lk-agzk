@@ -1,0 +1,22 @@
+<ng-container
+  *ngIf="
+    item.optionListRequestAlias &&
+    optionList &&
+    optionList[item?.optionListRequestAlias]
+  "
+>
+  {{
+    showSelectItem(
+      formData?.data[item.formControlName],
+      optionList[item?.optionListRequestAlias].optionList
+    )
+  }}
+</ng-container>
+<ng-container *ngIf="!item.optionListRequestAlias">
+  {{
+    showSelectItem(
+      formData?.data[item.formControlName],
+      item.optionList
+    )
+  }}
+</ng-container>

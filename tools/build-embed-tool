@@ -1,0 +1,327 @@
+#!/usr/bin/env node
+const fs = require('fs');
+const path = require('path');
+const cheerio = require('cheerio');
+const { execSync } = require('node:child_process');
+const { existsSync } = require('node:fs');
+const { join } = require('node:path');
+
+const { es5Plugin } = require('esbuild-plugin-es5');
+const esbuild = require('esbuild');
+
+const ROOT_DIR = getParentRoot(process.cwd());
+const SRC_DIR = `${ROOT_DIR}/dist/apps/empl-embed`;
+const OUT_DIR = `${ROOT_DIR}/dist/empl-embed-bundles`;
+
+buildEmbedTool(process.argv[2]).then();
+
+async function buildEmbedTool(name) {
+  exec(
+    `bun nx build empl-embed -c ${name}`,
+    '',
+    path.join(ROOT_DIR, 'apps/empl-embed'),
+  );
+
+  const sourceHtmlFile = `${SRC_DIR}/${name}/browser/index-embed.html`;
+  const sourceEs5Dir = `${SRC_DIR}/${name}/es5`;
+  const targetHtmlFile = `${OUT_DIR}/${name}/index.html`;
+
+  const sourceDir = path.dirname(sourceHtmlFile);
+
+  if (!fs.existsSync(sourceHtmlFile)) {
+    console.error('Error: index.html not found:', sourceHtmlFile);
+    process.exit(1);
+  }
+
+  ensureDir(path.dirname(targetHtmlFile));
+
+  await translateToEs5(
+    path.join(sourceDir, 'main.js'),
+    path.join(sourceDir, 'main.js'),
+  );
+  await translateToEs5(
+    path.join(sourceDir, 'polyfills.js'),
+    path.join(sourceDir, 'polyfills.js'),
+  );
+
+  inlineResourcesInHtml(sourceHtmlFile)
+    .then((inlinedHtml) => {
+      fs.writeFileSync(targetHtmlFile, inlinedHtml);
+      console.log('HTML file processed:', targetHtmlFile);
+    })
+    .catch((e) => {
+      console.error('Error:', e);
+      process.exit(1);
+    });
+}
+
+async function translateToEs5(file, out) {
+  await esbuild.build({
+    entryPoints: [file],
+    bundle: true,
+    outfile: out,
+    allowOverwrite: true,
+    plugins: [es5Plugin()], // # 1. Use esbuild-plugin-es5
+    target: ['es5'], // # 2. Set the target to es5
+    alias: {
+      // # 3. Set the alias to @swc/helpers
+      '@swc/helpers': path.dirname(
+        require.resolve('@swc/helpers/package.json'),
+      ),
+    },
+  });
+}
+
+function exec(cmd, description, dir) {
+  console.log(description ? description : `Command: ${cmd}`);
+  return execSync(cmd, { stdio: 'inherit', cwd: dir ?? ROOT_DIR });
+}
+
+function getParentRoot(root) {
+  if (existsSync(join(root, 'package.json'))) {
+    return root;
+  } else {
+    return getParentRoot(join(root, '..'));
+  }
+}
+
+function ensureDir(dir) {
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true });
+  }
+}
+
+/**
+ * Helper to strip query/hash parameters.
+ * Example: "Inter-italic.var.woff2?v=3.19" -> "Inter-italic.var.woff2".
+ */
+function stripUrlParameters(url) {
+  return url.replace(/[?#].*$/, '');
+}
+
+/**
+ * Read a file from disk, convert it to a Base64 data URL.
+ * @param {string} filePath - Path to the file.
+ * @param {string} [mimeType] - Optional override for the MIME type.
+ */
+async function fileToDataUrl(filePath, mimeType) {
+  const fileBuffer = await fs.promises.readFile(filePath);
+
+  let detectedMime;
+  if (mimeType) {
+    detectedMime = mimeType;
+  } else {
+    const ext = path.extname(filePath).toLowerCase();
+    switch (ext) {
+      case '.png':
+        detectedMime = 'image/png';
+        break;
+      case '.jpg':
+      case '.jpeg':
+        detectedMime = 'image/jpeg';
+        break;
+      case '.gif':
+        detectedMime = 'image/gif';
+        break;
+      case '.svg':
+        detectedMime = 'image/svg+xml';
+        break;
+      case '.woff':
+        detectedMime = 'font/woff';
+        break;
+      case '.woff2':
+        detectedMime = 'font/woff2';
+        break;
+      case '.ttf':
+        detectedMime = 'font/ttf';
+        break;
+      case '.eot':
+        detectedMime = 'application/vnd.ms-fontobject';
+        break;
+      case '.css':
+        detectedMime = 'text/css';
+        break;
+      case '.js':
+        detectedMime = 'text/javascript';
+        break;
+      default:
+        detectedMime = 'application/octet-stream';
+        break;
+    }
+  }
+
+  const base64 = fileBuffer.toString('base64');
+  return 'data:' + detectedMime + ';base64,' + base64;
+}
+
+/**
+ * Inline all url(...) references inside CSS text content.
+ * @param {string} cssContent - The CSS content to process.
+ * @param {string} baseDir - The base directory to resolve relative paths.
+ */
+async function inlineCssUrls(cssContent, baseDir) {
+  const urlRegex = /url\(("|'|)?(?!data:)([^"')]+)("|'|)?\)/g;
+
+  const replacements = [];
+  let match;
+
+  while ((match = urlRegex.exec(cssContent)) !== null) {
+    const fullMatch = match[0];
+    const resourcePathRaw = match[2];
+
+    // Strip query params
+    const resourcePath = stripUrlParameters(resourcePathRaw);
+    const absolutePath = path.resolve(baseDir, resourcePath);
+
+    if (!fs.existsSync(absolutePath)) {
+      console.warn('Warning: file not found:', absolutePath);
+      continue;
+    }
+
+    const dataUrl = await fileToDataUrl(absolutePath);
+    replacements.push({
+      start: match.index,
+      end: match.index + fullMatch.length,
+      replacement: 'url(' + dataUrl + ')',
+    });
+  }
+
+  let result = '';
+  let lastIndex = cssContent.length;
+  for (let i = replacements.length - 1; i >= 0; i--) {
+    const r = replacements[i];
+    result = cssContent.substring(r.end, lastIndex) + result;
+    result = r.replacement + result;
+    lastIndex = r.start;
+  }
+  return cssContent.substring(0, lastIndex) + result;
+}
+
+/**
+ * Inline all images in an element's 'style' attribute.
+ * We treat the 'style' attribute text as CSS.
+ */
+async function inlineStyleAttributes($, baseDir) {
+  const elementsWithStyle = $('[style]');
+  for (let i = 0; i < elementsWithStyle.length; i++) {
+    const elem = elementsWithStyle[i];
+    const styleVal = $(elem).attr('style');
+    if (!styleVal) continue;
+
+    const inlined = await inlineCssUrls(styleVal, baseDir);
+    $(elem).attr('style', inlined);
+  }
+}
+
+/**
+ * Inline resources in all <style> elements.
+ */
+async function inlineStyleTags($, baseDir) {
+  const styleTags = $('style');
+  for (let i = 0; i < styleTags.length; i++) {
+    const elem = styleTags[i];
+    const cssContent = $(elem).html() || '';
+    const inlined = await inlineCssUrls(cssContent, baseDir);
+    $(elem).html(inlined);
+  }
+}
+
+async function inlineResourcesInHtml(htmlFilePath) {
+  const baseDir = path.dirname(htmlFilePath);
+  const htmlContent = await fs.promises.readFile(htmlFilePath, 'utf-8');
+
+  const $ = cheerio.load(htmlContent);
+
+  // Inline <script src=...>
+  const scriptTags = $('script[src]');
+  for (let i = 0; i < scriptTags.length; i++) {
+    const elem = scriptTags[i];
+    const srcRaw = $(elem).attr('src');
+    if (!srcRaw) continue;
+
+    // strip GET params, #, etc.
+    const src = stripUrlParameters(srcRaw);
+    const fullPath = path.resolve(baseDir, src);
+
+    if (fs.existsSync(fullPath)) {
+      const scriptContent = await fs.promises.readFile(fullPath, 'utf-8');
+      $(elem).removeAttr('src');
+      $(elem).text(scriptContent);
+    } else {
+      console.warn('Warning: script not found:', fullPath);
+    }
+  }
+
+  // Inline <link rel="stylesheet" href="..." />
+  const linkTags = $('link[rel="stylesheet"][href]');
+  for (let i = 0; i < linkTags.length; i++) {
+    const elem = linkTags[i];
+    const hrefRaw = $(elem).attr('href');
+    if (!hrefRaw) continue;
+
+    const href = stripUrlParameters(hrefRaw);
+    const fullPath = path.resolve(baseDir, href);
+
+    if (fs.existsSync(fullPath)) {
+      let cssContent = await fs.promises.readFile(fullPath, 'utf-8');
+      cssContent = await inlineCssUrls(cssContent, path.dirname(fullPath));
+      const styleTag = `<style>${cssContent}</style>`;
+      $(elem).after(styleTag);
+      $(elem).remove();
+    } else {
+      console.warn('Warning: stylesheet not found:', fullPath);
+    }
+  }
+
+  // Inline <img src="..." />
+  const imgTags = $('img[src]');
+  for (let i = 0; i < imgTags.length; i++) {
+    const elem = imgTags[i];
+    const srcRaw = $(elem).attr('src');
+    if (!srcRaw) continue;
+
+    if (srcRaw.startsWith('data:') || /^(http|https):/.test(srcRaw)) {
+      continue;
+    }
+
+    const src = stripUrlParameters(srcRaw);
+    const fullPath = path.resolve(baseDir, src);
+    if (fs.existsSync(fullPath)) {
+      const dataUrl = await fileToDataUrl(fullPath);
+      $(elem).attr('src', dataUrl);
+    } else {
+      console.warn('Warning: image not found:', fullPath);
+    }
+  }
+
+  // Icons
+  const iconLinks = $(
+    'link[rel~="icon"][href], link[rel~="apple-touch-icon"][href], link[rel~="shortcut-icon"][href]',
+  );
+  for (let i = 0; i < iconLinks.length; i++) {
+    const elem = iconLinks[i];
+    const hrefRaw = $(elem).attr('href');
+    if (!hrefRaw) continue;
+
+    if (hrefRaw.startsWith('data:') || /^(http|https):/.test(hrefRaw)) {
+      continue;
+    }
+
+    const href = stripUrlParameters(hrefRaw);
+    const fullPath = path.resolve(baseDir, href);
+    if (fs.existsSync(fullPath)) {
+      const dataUrl = await fileToDataUrl(fullPath);
+      $(elem).attr('href', dataUrl);
+    } else {
+      console.warn('Warning: icon not found:', fullPath);
+    }
+  }
+
+  // Inline <style> tags
+  await inlineStyleTags($, baseDir);
+
+  // Inline style attributes
+  await inlineStyleAttributes($, baseDir);
+
+  return $.html();
+}

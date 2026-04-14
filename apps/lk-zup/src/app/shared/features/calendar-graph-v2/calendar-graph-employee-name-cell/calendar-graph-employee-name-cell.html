@@ -1,0 +1,37 @@
+<div
+  class="calendar-graph-employee-name-cell"
+  [class.calendar-graph-employee-name-cell--clickable]="data().clickable !== false"
+  [class.calendar-graph-employee-name-cell--current-user]="data().isCurrentUser"
+  [class.calendar-graph-employee-name-cell--manager]="
+    data().isManager && !data().isCurrentUser
+  "
+  [class.calendar-graph-employee-name-cell--unsigned]="
+    data().hasUnsignedPeriods
+  "
+  (click)="onCellClick()"
+>
+  @if (selectionEnabled() && selectionValue()) {
+    <p-checkbox
+      [ngModel]="selectedIds()"
+      (ngModelChange)="onSelectionChange($event)"
+      [name]="checkboxName()"
+      [value]="selectionValue()"
+      [styleClass]="checkboxStyleClass()"
+      (click)="$event.stopPropagation()"
+    ></p-checkbox>
+  }
+
+  <span
+    class="calendar-graph-employee-name-cell__name"
+    [class.calendar-graph-employee-name-cell__name--current-user]="
+      data().isCurrentUser
+    "
+    [class.calendar-graph-employee-name-cell__name--manager]="
+      data().isManager && !data().isCurrentUser
+    "
+    [pTooltip]="tooltip()"
+    tooltipPosition="right"
+  >
+    {{ data().name }}
+  </span>
+</div>

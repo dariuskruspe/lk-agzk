@@ -1,0 +1,30 @@
+<div class="confirmation-dialog">
+  <div class="dialog-content">
+    <!-- <div class="dialog-icon">
+      <i class="pi pi-exclamation-triangle"></i>
+    </div> -->
+    <div class="dialog-message">
+      <!-- <h3>Подтверждение</h3> -->
+      <!-- <p> -->
+      {{ message }}
+      <!-- </p> -->
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button
+      pButton
+      type="button"
+      [label]="confirmButtonText"
+      class="p-button-primary"
+      (click)="onConfirm()"
+    ></button>
+    <button
+      pButton
+      type="button"
+      [label]="'BUTTON_CANCEL_LABEL' | translate"
+      class="p-button-outlined"
+      (click)="onCancel()"
+    ></button>
+  </div>
+</div>

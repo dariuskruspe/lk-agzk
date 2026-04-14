@@ -1,0 +1,36 @@
+.reference-information {
+  &__sideMenu {
+    width: 275px;
+
+    .sideMenu-wrapper {
+      .expansion-panel {
+        padding-bottom: 20px;
+
+        .title {
+          padding-bottom: 10px;
+        }
+
+        .list-menu {
+          margin-left: 20px;
+
+          .active {
+            font-weight: bold;
+          }
+
+          &__item:hover {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+
+          &__item {
+            line-height: 32px;
+          }
+
+          .pointer-list {
+            color: var(--basic-color);
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,63 @@
+@if (currentDocument()) {
+  <!-- Используем уникальный ключ для принудительного пересоздания компонента при смене документа -->
+  <!-- Добавляем timestamp для гарантии пересоздания при каждом открытии модального окна -->
+  <!-- В модальном режиме используем *ngIf с уникальным ключом для принудительного пересоздания -->
+  @if (isModalMode) {
+    <app-signature-file
+      [attr.data-doc-id]="currentDocument()?.id"
+      [attr.data-modal-timestamp]="modalOpenTimestamp()"
+      [providers]="
+        (providersFacade.getData$() | async) || providersFacade.getData()
+      "
+      [isSignatureRequired]="isSignatureRequired"
+      [isSignatureEnabled]="isSignatureEnabled"
+      [buttonCaption]="buttonCaption"
+      [dialogRef]="dialogRef"
+      [hasAgreement]="hasAgreement"
+      [refuseEnabled]="settingsFacade.getData()?.general.refuseSignatureEnabled"
+      [issueId]="issueId"
+      [document]="currentDocument()"
+      [documentFileUint8Array]="currentDocumentFileUint8Array()"
+      [isDocumentFileLoading]="currentIsDocumentFileLoading()"
+      [fileTimestamp]="modalOpenTimestamp()"
+      (onclose)="close($event)"
+      (ondownload)="download($event)"
+      [isSigning]="signing()"
+      (onsign)="sign()"
+      (onissue)="openIssue()"
+      (onrefuse)="refuse()"
+      (setDocViewed)="setDocViewed()"
+      (onreworkPresentation)="reworkPresentation()"
+    ></app-signature-file>
+  } @else {
+    <app-signature-file
+      [attr.data-doc-id]="currentDocument()?.id"
+      [providers]="
+        (providersFacade.getData$() | async) || providersFacade.getData()
+      "
+      [isSignatureRequired]="isSignatureRequired"
+      [isSignatureEnabled]="isSignatureEnabled"
+      [buttonCaption]="buttonCaption"
+      [dialogRef]="dialogRef"
+      [hasAgreement]="hasAgreement"
+      [refuseEnabled]="settingsFacade.getData()?.general.refuseSignatureEnabled"
+      [issueId]="issueId"
+      [document]="currentDocument()"
+      [documentFileUint8Array]="currentDocumentFileUint8Array()"
+      [isDocumentFileLoading]="currentIsDocumentFileLoading()"
+      [fileTimestamp]="isModalMode ? modalOpenTimestamp() : null"
+      (onclose)="close($event)"
+      (ondownload)="download($event)"
+      [isSigning]="signing()"
+      (onsign)="sign()"
+      (onissue)="openIssue()"
+      (onrefuse)="refuse()"
+      (setDocViewed)="setDocViewed()"
+      (onreworkPresentation)="reworkPresentation()"
+      [showNextButton]="showNextButton"
+      [hasNextDocument]="hasNextDocument"
+      [isLoadingNext]="isLoadingNext"
+      (navigateToNext)="onNavigateToNext()"
+    ></app-signature-file>
+  }
+}

@@ -1,0 +1,725 @@
+// Миксины
+@mixin card {
+  background-color: var(--bg-element);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
+  padding: 16px;
+  border: 1px solid var(--sidebar-border);
+}
+
+@mixin hover-transition {
+  transition: all 0.25s ease;
+}
+
+// Основные стили
+.form-builder {
+  color: var(--foreground-color);
+  border-radius: var(--radius-md);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(var(--main-content-height) - 12px);
+  gap: 8px;
+  padding: 12px;
+  overflow-x: hidden;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0;
+    flex: 1;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-element);
+    border-radius: var(--radius-md);
+    box-shadow: var(--card-shadow);
+    border: 1px solid var(--sidebar-border);
+  }
+
+  &__tabs {
+    display: flex;
+    align-items: center;
+    height: 56px;
+  }
+
+  &__tab {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 100%;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    color: var(--foreground-color-secondary);
+    font-weight: 500;
+    font-size: 14px;
+    user-select: none;
+    @include hover-transition;
+
+    i {
+      font-size: 16px;
+    }
+
+    &:hover {
+      color: var(--button-primary-bg);
+      background-color: var(--control-hover-bg);
+    }
+
+    &--active {
+      color: var(--button-primary-bg);
+      font-weight: 600;
+    }
+
+    &--disabled {
+      pointer-events: none;
+      opacity: 0.5;
+      color: var(--foreground-color-secondary);
+      cursor: not-allowed;
+    }
+
+    &-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: var(--button-primary-bg);
+      border-radius: 3px 3px 0 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 0 16px;
+  }
+
+  &__history-actions {
+    display: flex;
+    gap: 4px;
+    padding-right: 16px;
+    border-right: 1px solid var(--sidebar-border);
+    margin-right: 10px;
+
+    .p-button {
+      &.p-button-text {
+        color: var(--foreground-color-secondary);
+
+        &:hover {
+          background-color: var(--control-hover-bg);
+        }
+      }
+    }
+  }
+
+  ::ng-deep {
+    .p-button {
+      &.p-button-sm {
+        padding: 0.4rem 1rem;
+        font-size: 0.875rem;
+        border-radius: 6px;
+
+        .p-button-icon {
+          font-size: 0.875rem;
+        }
+      }
+
+      &.p-button-primary {
+        background-color: var(--button-primary-bg);
+        color: var(--button-primary-text);
+        border-color: var(--button-primary-bg);
+        font-weight: 600;
+
+        &:hover {
+          background-color: var(--button-primary-hover-bg);
+          border-color: var(--button-primary-hover-bg);
+        }
+      }
+
+      &.p-button-outlined {
+        color: var(--foreground-color-secondary);
+        border-color: var(--sidebar-border);
+
+        &:hover {
+          background-color: var(--control-hover-bg);
+        }
+      }
+    }
+  }
+
+  &__tab-content {
+    background-color: var(--bg-element);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--sidebar-border);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+  }
+
+  &__content-card {
+    @include card;
+    padding: 0;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  &__workspace {
+    display: flex;
+  }
+
+  &__fields-section {
+    flex: 0 0 350px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid var(--sidebar-border);
+    background-color: var(--bg-element);
+  }
+
+  &__preview-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-element);
+  }
+
+  &__section-header {
+    padding: 12px 16px;
+    font-weight: 600;
+    background-color: var(--control-hover-bg);
+    color: var(--button-primary-bg);
+    border-bottom: 1px solid var(--sidebar-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__section-title {
+    font-size: 14px;
+  }
+
+  &__fields-container {
+    flex: 1;
+    overflow-y: auto;
+    user-select: none;
+  }
+
+  &__preview-container {
+    flex: 1 1 0;
+    padding: 16px;
+    overflow-y: auto;
+  }
+}
+
+// Стили для дропзоны
+.drop-zone {
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    user-select: none;
+  }
+
+  &__placeholder {
+    text-align: center;
+    color: var(--foreground-color-secondary);
+    padding: 30px;
+    border: 2px dashed var(--sidebar-border);
+    border-radius: var(--radius-md);
+    width: 100%;
+
+    &-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: var(--button-primary-bg);
+      opacity: 0.7;
+    }
+
+    &-text {
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+// Стили для превью поля
+.field-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background-color: var(--bg-element);
+  position: relative;
+  border: 1px solid transparent;
+  user-select: none;
+
+  &:hover {
+    border: 1px dashed var(--button-primary-bg);
+    background-color: var(--control-hover-bg);
+  }
+
+  &--group {
+    color: var(--button-primary-bg);
+    font-weight: 500;
+    border-left: 3px solid var(--button-primary-bg);
+    &:hover {
+      border-left: 3px solid var(--button-primary-bg);
+    }
+  }
+
+  &--nested {
+    margin-top: 2px;
+    padding: 10px 14px;
+    background-color: var(--bg-element);
+    border: 1px solid transparent;
+    border-bottom: 1px solid var(--sidebar-border);
+
+    &:hover {
+      border: 1px dashed var(--button-primary-bg);
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+  }
+
+  &__type {
+    font-size: 11px;
+    color: var(--foreground-color-secondary);
+    background-color: var(--control-hover-bg);
+    padding: 2px 6px;
+    border-radius: var(--radius);
+    display: inline-block;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 1;
+  }
+
+  &__actions {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 8px;
+  }
+
+  &:hover &__actions {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Стили для кнопок действий
+.field-action {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  @include hover-transition;
+
+  &--edit {
+    color: var(--button-primary-bg);
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+    }
+  }
+
+  &--delete {
+    color: var(--button-danger-bg);
+
+    &:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+  }
+}
+
+// Стили для popover выбора полей
+.add-field-popover {
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 16px;
+  background-color: var(--bg-element);
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--foreground-color);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+
+  &__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__group {
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+
+    &:not(:last-child) {
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+  }
+
+  &__group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    margin-bottom: 8px;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  &__group-icon {
+    color: var(--foreground-color-secondary);
+    font-size: 14px;
+  }
+
+  &__group-title {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--foreground-color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__group-items {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 4px;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 6px;
+    border: none;
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &__item-name {
+    font-weight: 500;
+    color: var(--foreground-color);
+    font-size: 13px;
+  }
+
+  &__item-type {
+    font-size: 11px;
+    color: var(--foreground-color-secondary);
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: var(--control-hover-bg);
+  }
+}
+
+::ng-deep {
+  .add-field-popover-wrapper {
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--liquid-shadow) !important;
+    overflow: hidden;
+    border: 1px solid var(--sidebar-border);
+
+    .p-overlaypanel-content {
+      padding: 0 !important;
+    }
+
+    &:before,
+    &:after {
+      display: none !important;
+    }
+  }
+}
+
+// Улучшение стилей для пустого состояния
+.drop-zone__empty {
+  .drop-zone__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding: 24px;
+    border: 2px dashed var(--sidebar-border);
+    border-radius: var(--radius-md);
+    margin: 16px;
+
+    &-icon {
+      font-size: 24px;
+      color: var(--button-primary-bg);
+      opacity: 0.6;
+    }
+
+    &-text {
+      color: var(--foreground-color-secondary);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    button {
+      min-width: 160px;
+      padding: 0.6rem 1rem;
+      border-style: dashed;
+      border-color: var(--button-primary-bg);
+      color: var(--button-primary-bg);
+      font-size: 13px;
+
+      &:hover {
+        border-style: solid;
+        background-color: var(--button-primary-bg);
+        color: var(--button-primary-text);
+      }
+    }
+  }
+}
+
+// Стиль для элемента списка с кнопкой добавления первого поля
+.drop-zone__item--add-button {
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  margin-bottom: 8px;
+  padding: 0;
+  width: 100%;
+
+  .field-preview__add-button {
+    margin-top: 0;
+  }
+}
+
+.form-builder__fields-container {
+  flex: 1 1 0;
+  overflow: auto;
+}
+
+.drop-zone__field-list {
+  width: 100%;
+  padding: 8px;
+  overflow-y: auto;
+  background-color: var(--bg-element);
+  user-select: none;
+}
+
+.drop-zone__field-item {
+  background-color: var(--bg-element);
+  margin-bottom: 0;
+  width: 100%;
+  user-select: none;
+}
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+// Стили для двухпанельного макета с чатом
+.form-builder__body {
+  display: flex;
+  gap: 16px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+
+  &--with-chat {
+    .form-builder__main-content {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+}
+
+.form-builder__main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.form-builder__chat-panel {
+  flex: 0 0 420px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-element);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--liquid-shadow);
+  border: 1px solid var(--sidebar-border);
+  overflow: hidden;
+  min-width: 350px;
+
+  .chat-panel__header {
+    padding: 14px 16px;
+    height: 50px;
+    background-color: var(--control-hover-bg);
+    color: var(--button-primary-bg);
+    border-bottom: 1px solid var(--sidebar-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h4 {
+      margin: 0;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      i {
+        font-size: 16px;
+      }
+    }
+
+    ::ng-deep .p-button {
+      width: 28px;
+      height: 28px;
+      padding: 0;
+      border: none;
+      background-color: rgba(56, 128, 255, 0.1);
+      color: var(--button-primary-bg);
+      border-radius: var(--radius);
+
+      &:hover {
+        background-color: rgba(56, 128, 255, 0.2);
+      }
+
+      .p-button-icon {
+        font-size: 14px;
+      }
+    }
+  }
+
+  .chat-panel__content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+
+    app-issue-template-builder-chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+
+      ::ng-deep .chat-container {
+        margin: 0;
+        height: 100%;
+        border-radius: 0;
+        box-shadow: none;
+        border: none;
+
+        .chat-header {
+          display: none; // Скрываем заголовок, так как он есть в панели
+        }
+
+        .messages-container {
+          flex: 1;
+          min-height: 0;
+        }
+      }
+    }
+  }
+}
+
+// Стили для кнопки ИИ-ассистента
+.ai-chat-toggle {
+  ::ng-deep {
+    .p-button-icon {
+      animation: pulse 2s infinite;
+    }
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+// Адаптивность для чата
+@media (max-width: 1400px) {
+  .form-builder__chat-panel {
+    flex: 0 0 380px;
+    min-width: 320px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .form-builder__body--with-chat {
+    flex-direction: column;
+    gap: 12px;
+
+    .form-builder__main-content {
+      flex: 1;
+    }
+
+    .form-builder__chat-panel {
+      flex: 0 0 50vh;
+      min-width: auto;
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .form-builder__body--with-chat {
+    gap: 8px;
+
+    .form-builder__chat-panel {
+      flex: 0 0 60vh;
+    }
+  }
+}

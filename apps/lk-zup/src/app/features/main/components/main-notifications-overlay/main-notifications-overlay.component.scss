@@ -1,0 +1,210 @@
+.main-notifications-overlay {
+  display: block;
+  width: 40vw;
+  height: 100vh;
+  background: var(--sidebar-drawer-bg);
+  box-shadow: var(--control-shadow);
+  border-radius: var(--control-radius);
+  left: var(--sidebar-width);
+  top: 0px;
+  position: fixed;
+  z-index: 2000;
+  overflow: hidden;
+  color: var(--foreground-color, #1f2937);
+}
+
+.main-notifications-overlay__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  height: 100%;
+  width: 100%;
+  padding: 56px 32px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.main-notifications-overlay__loading::before {
+  content: '';
+  position: absolute;
+  inset: 24px 18px;
+  border-radius: calc(var(--control-radius, 16px) * 1.4);
+  background: radial-gradient(
+    circle at top left,
+    rgba(255, 255, 255, 0.35),
+    transparent 55%
+  );
+  opacity: 0.75;
+  filter: blur(22px);
+  z-index: -1;
+}
+
+.main-notifications-overlay__loading-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.main-notifications-overlay__spinner {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto;
+  border-radius: 50%;
+  border: 4px solid rgba(79, 70, 229, 0.18);
+  border-top-color: var(--button-primary-bg, rgba(79, 70, 229, 1));
+  animation: main-notifications-overlay-spin 1s linear infinite;
+}
+
+.main-notifications-overlay__loading-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  text-align: center;
+  color: inherit;
+}
+
+.main-notifications-overlay__loading-subtitle {
+  margin: 0;
+  text-align: center;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: var(--foreground-color-secondary, rgba(107, 114, 128, 1));
+}
+
+.main-notifications-overlay__skeleton-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.main-notifications-overlay__skeleton-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+}
+
+.main-notifications-overlay__skeleton-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.65),
+    rgba(79, 70, 229, 0.16),
+    rgba(255, 255, 255, 0.65)
+  );
+  background-size: 200% 100%;
+  animation: main-notifications-overlay-skeleton 1.6s ease-in-out infinite;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.05);
+}
+
+.main-notifications-overlay__skeleton-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.main-notifications-overlay__skeleton-line {
+  display: block;
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(
+    100deg,
+    rgba(255, 255, 255, 0.65),
+    rgba(79, 70, 229, 0.16),
+    rgba(255, 255, 255, 0.65)
+  );
+  background-size: 200% 100%;
+  animation: main-notifications-overlay-skeleton 1.6s ease-in-out infinite;
+  box-shadow: inset 0 1px 2px rgb(0 0 0 / 0.05);
+}
+
+.main-notifications-overlay__skeleton-line--primary {
+  width: 85%;
+  height: 14px;
+}
+
+.main-notifications-overlay__loading-progress {
+  height: 6px;
+  border-radius: 999px;
+  background: rgba(79, 70, 229, 0.12);
+  overflow: hidden;
+  position: relative;
+}
+
+.main-notifications-overlay__loading-progress-bar {
+  position: absolute;
+  inset: 0;
+  width: 50%;
+  background: linear-gradient(
+    90deg,
+    rgba(79, 70, 229, 0),
+    rgba(79, 70, 229, 0.45),
+    rgba(79, 70, 229, 0)
+  );
+  animation: main-notifications-overlay-progress 1.8s ease-in-out infinite;
+}
+
+@keyframes main-notifications-overlay-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes main-notifications-overlay-skeleton {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+@keyframes main-notifications-overlay-progress {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .main-notifications-overlay__spinner,
+  .main-notifications-overlay__skeleton-avatar,
+  .main-notifications-overlay__skeleton-line,
+  .main-notifications-overlay__loading-progress-bar {
+    animation: none;
+  }
+}
+
+.main-notifications-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1999;
+}
+
+@media (max-width: 768px) {
+  .main-notifications-overlay {
+    width: 100vw;
+    left: 0 !important;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+    padding-bottom: 80px;
+  }
+}

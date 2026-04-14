@@ -1,0 +1,21 @@
+<mat-progress-bar
+  class="absolute-top"
+  mode="indeterminate"
+  *ngIf="
+    (salariesDashboardSalariesFacade.loading$() | async) ||
+    (salariesDashboardSalariesFacade.loading$() | async)
+  "
+></mat-progress-bar>
+
+<app-salaries-salaries-details
+  [initDate]="initDate"
+  [workPeriods]="workPeriodFacade.getData$() | async"
+  [payslip]="
+    (salariesDashboardSalariesFacade.getData$() | async) ||
+    salariesDashboardSalariesFacade.getData()
+  "
+  [dateLocale]="langFacade.getLang()"
+  (workPeriodDateUpdate)="workPeriodDateUpdate($event)"
+  (textDisplayChange)="textDisplayChange()"
+>
+</app-salaries-salaries-details>

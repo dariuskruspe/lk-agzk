@@ -1,0 +1,42 @@
+.calendar {
+  display: flex;
+  flex-direction: row;
+}
+.calendar-body {
+  overflow: scroll;
+  max-height: 55vh;
+  position: relative;
+}
+.block-item {
+  min-width: 32px;
+  margin-right: 2px;
+  background: var(--menu-background);
+}
+.date-number {
+  font-size: 14px;
+  color: var(--basic-color);
+  text-align: center;
+}
+.date-week {
+  font-size: 14px;
+  color: grey;
+  text-align: center;
+}
+.color-block {
+  border: 1px solid #D3DBE3;
+  border-radius: 5px;
+  height: 56px;
+}
+.current-date {
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+.employee-name {
+  padding: 10px 0;
+  font-size: 14px;
+}
+.static-calendar {
+  position: sticky;
+  top: 0;
+  background: var(--menu-background);
+}

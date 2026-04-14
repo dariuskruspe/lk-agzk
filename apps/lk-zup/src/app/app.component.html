@@ -1,0 +1,16 @@
+<router-outlet></router-outlet>
+<ng-container *ngIf="bootstrapParams?.demo">
+  <button
+    pButton
+    pRipple
+    type="button"
+    icon="pi pi-phone"
+    class="contact-me p-button-rounded p-button-success"
+    (click)="contactMe()"
+  ></button>
+</ng-container>
+<router-outlet name="platform"></router-outlet>
+
+<app-app-updater *ngIf="!isDevMode()"></app-app-updater>
+
+<app-liquid-provider></app-liquid-provider>

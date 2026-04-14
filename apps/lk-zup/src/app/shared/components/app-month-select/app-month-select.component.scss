@@ -1,0 +1,116 @@
+.app-month-select {
+  display: flex;
+  align-items: center;
+  width: 211px;
+  position: relative;
+}
+
+.app-month-select__button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background-color: transparent;
+  outline: none;
+  cursor: pointer;
+  color: var(--foreground-color);
+  transition: opacity 0.2s ease;
+
+  &:hover {
+    opacity: 0.7;
+  }
+}
+
+.app-month-select__value {
+  flex: 1;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  height: 30px;
+  color: var(--foreground-color);
+  max-width: 150px;
+
+  &-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    overflow: hidden;
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &--open &-container {
+    height: 360px;
+    background-color: var(--control-bg);
+    box-shadow: var(--control-shadow);
+    backdrop-filter: var(--control-backdrop-filter);
+    z-index: 1000;
+  }
+
+  // Центрированная позиция (по умолчанию)
+  &--open &--position-center &-container {
+    top: 50%;
+    transform: translateY(-50%);
+    align-items: center;
+  }
+
+  // Позиция сверху (когда недостаточно места сверху)
+  &--open &--position-top &-container {
+    top: 0;
+    transform: translateY(0);
+    align-items: flex-start;
+  }
+
+  // Позиция снизу (когда недостаточно места снизу)
+  &--open &--position-bottom &-container {
+    bottom: 0;
+    top: auto;
+    transform: translateY(0);
+    align-items: flex-end;
+  }
+
+  &-list {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    transform: translateY(calc(-30px * var(--active-month-index, 0)));
+    transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  &--open &-list {
+    transform: translateY(0);
+  }
+
+  &-item {
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    line-height: 14px;
+    cursor: pointer;
+    transition:
+      all 0.2s ease,
+      background-color 0.4s ease;
+    color: var(--foreground-color);
+    padding: 0 12px;
+    flex-shrink: 0;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+    }
+  }
+
+  &--open &-item {
+    &--active {
+      background-color: var(--control-active-bg);
+    }
+  }
+}

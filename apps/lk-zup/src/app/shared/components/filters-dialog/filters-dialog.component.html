@@ -1,0 +1,15 @@
+<div id="filters-dialog" class="filters-dialog">
+  <!-- YOUR FILTERS HERE -->
+  <ng-content></ng-content>
+
+  <!-- Панель с кнопками -->
+  <div class="filter-button-bar">
+    <!-- Кнопка "Закрыть" (закрывает диалоговое окно с фильтрами) -->
+    <button
+      pButton
+      [label]="'BUTTON_CLOSE' | translate"
+      class="p-button-outlined"
+      (click)="onClose()"
+    ></button>
+  </div>
+</div>

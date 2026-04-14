@@ -1,0 +1,60 @@
+.income {
+  height: 100%;
+
+  // dont work without it!
+  ::ng-deep .p-card {
+    height: 100%;
+  }
+}
+
+.salary-total__sum {
+  margin: 0 0 20px;
+  font-size: 50px;
+  line-height: 55px;
+  color: #989aa2;
+  cursor: pointer;
+}
+
+.salary-total__sum-num {
+  position: relative;
+
+  &:hover .salary-total__sum-tooltip {
+    display: block;
+  }
+}
+
+.salary-total__sum-tooltip {
+  position: absolute;
+  top: -100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: none;
+  padding: 5px 10px;
+  width: fit-content;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  color: var(--basic-color);
+  background: #ffffff;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 5px;
+}
+
+.buttons-wrapper {
+  margin-top: 20px;
+  display: block;
+
+  .salary-button {
+    min-width: 200px;
+  }
+}
+.hidden-block {
+  height: 52px;
+}
+.title-text {
+  margin-bottom: 0;
+}
+.tooltip-icon {
+  margin-left: 7px;
+}

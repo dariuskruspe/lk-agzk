@@ -1,0 +1,54 @@
+<div class="container-fluid">
+  <div class="row">
+    <p-toolbar class="title">
+      <h1 class="salary-title">
+        {{ 'TITLE_SALARY' | translate }}
+      </h1>
+      <span class="spacer"></span>
+      <button
+        *ngIf="this.settingsFacade?.getData()?.payroll.createIssueButton?.enable"
+        pButton
+        type="button"
+        class="button-full-xs right-margin-empty"
+        icon="pi pi-plus-circle"
+        iconPos="left"
+        label="{{ 'BUTTON_ISSUE_CREATE' | translate }}"
+        (click)="toIssues()"
+      ></button>
+    </p-toolbar>
+    <div *ngIf="showSubtitle" class="salary-subtitle left-padding-empty">
+<!--      <span class="attention-text">!</span>-->
+      {{ 'SALARY_SUBTITLE' | translate }}
+    </div>
+    <div class="salaries-wrap p-0">
+      <div class="salaries-wrap__item">
+        <app-salaries-dashboard-salaries
+          [workPeriods]="workPeriodFacade.getData$() | async"
+          [payslip]="salariesDashboardSalariesFacade.getData$() | async"
+          [dateLocale]="langFacade.getLang()"
+          [loading]="salariesDashboardSalariesFacade.loading$() | async"
+          (workPeriodDateUpdate)="workPeriodDateUpdate($event)"
+          (textDisplayChange)="textDisplayChange()"
+          (openSalaryImgDialog)="openSalaryImgDialog($event)"
+        >
+        </app-salaries-dashboard-salaries>
+      </div>
+      <div class="salaries-wrap__item" *ngIf="settingsFacade.getData().payroll.averageIncome.enable">
+        <app-salaries-dashboard-income
+          [textShow]="textShow"
+          [loading]="salariesDashboardIncomeFacade.loading$() | async"
+          [averageIncome]="salariesDashboardIncomeFacade.getData$() | async"
+        >
+        </app-salaries-dashboard-income>
+      </div>
+    </div>
+
+    <app-salaries-dashboard-tax
+      *ngIf="this.settingsFacade?.getData()?.payroll?.taxAllowance?.enable"
+      [loading]="salariesDashboardTaxFacade.loading$() | async"
+      [taxList]="salariesDashboardTaxFacade.forcedData$ | async"
+      [taxStateList]="issuesStatusListFacade.forcedData$ | async"
+      (goDetails)="onIssueDetails($event)"
+    ></app-salaries-dashboard-tax>
+  </div>
+</div>

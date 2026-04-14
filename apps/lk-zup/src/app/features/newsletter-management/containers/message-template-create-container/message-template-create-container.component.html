@@ -1,0 +1,150 @@
+<div class="message-template-create-container">
+  <div class="template-create-header" *ngIf="!isDialog">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-arrow-left"
+      class="p-button-text back-button"
+      (click)="onCancel()"
+    ></button>
+    <h1 class="page-title" *ngIf="!templateId">{{ 'NEWSLETTER_CREATE_TEMPLATE' | translate }}</h1>
+    <h1 class="page-title" *ngIf="templateId">{{ 'NEWSLETTER_CHANGE_TEMPLATE' | translate }}</h1>
+  </div>
+
+  <form
+    [formGroup]="templateForm"
+    (ngSubmit)="onSubmit()"
+    class="template-form"
+  >
+    <div class="form-section">
+      <div class="mb-12">
+        <p-card>
+          <div class="flex justify-between">
+            <span class="section-title">
+              {{ 'NEWSLETTER_MESSAGE_TEMPLATE' | translate }}
+            </span>
+            <div class="header-actions">
+              <div class="action-buttons">
+                <button
+                  pButton
+                  type="button"
+                  [label]="'NEWSLETTER_ADD_CONFIRMATION' | translate"
+                  icon="pi pi-plus"
+                  class="p-button-outlined add-confirmation-button"
+                  (click)="addConfirmationButton()"
+                ></button>
+                <label for="previewToggle">{{
+                  'NEWSLETTER_TEMPLATE_PREVIEW' | translate
+                }}</label>
+                <p-inputSwitch
+                  [(ngModel)]="showPreview"
+                  inputId="previewToggle"
+                  [ngModelOptions]="{ standalone: true }"
+                ></p-inputSwitch>
+                <button
+                  pButton
+                  type="button"
+                  class="p-button-outlined cancel-button"
+                  [disabled]="isLoading"
+                  icon="pi pi-copy"
+                  (click)="onCopy()"
+                ></button>
+                <button
+                  pButton
+                  type="submit"
+                  [label]="'BUTTON_SAVE' | translate"
+                  icon="pi pi-save"
+                  class="p-button-primary save-button"
+                  [disabled]="isLoading || templateForm.invalid"
+                  [loading]="isLoading"
+                  (click)="onSubmit()"
+                ></button>
+                <button
+                  *ngIf="templateId"
+                  pButton
+                  type="button"
+                  class="p-button-outlined cancel-button"
+                  [disabled]="isLoading"
+                  icon="pi pi-trash"
+                  (click)="onDelete()"
+                ></button>
+                <!-- <button
+                  pButton
+                  type="button"
+                  class="p-button-outlined cancel-button"
+                  [disabled]="isLoading"
+                  icon="pi pi-times"
+                  (click)="onCancel()"
+                ></button> -->
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-field">
+              <label for="templateName">{{
+                'NEWSLETTER_TEMPLATE_NAME' | translate
+              }}</label>
+              <input
+                type="text"
+                id="templateName"
+                pInputText
+                formControlName="templateName"
+                [placeholder]="'NEWSLETTER_ENTER_PLACEHOLDER' | translate"
+                class="form-input"
+              />
+              <div
+                class="field-error"
+                *ngIf="
+                  templateForm.get('templateName')?.invalid &&
+                  templateForm.get('templateName')?.touched
+                "
+              >
+                {{ 'NEWSLETTER_FIELD_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+        </p-card>
+      </div>
+
+      <p-card>
+        <div class="editor-preview-container">
+          <div class="editor-section" [class.hidden]="showPreview">
+            <div class="form-field">
+              <div class="editor-container">
+                <app-message-template-editor
+                  formControlName="newsletterTemplate"
+                  [placeholder]="'NEWSLETTER_ENTER_PLACEHOLDER' | translate"
+                ></app-message-template-editor>
+              </div>
+              <div
+                class="field-error"
+                *ngIf="
+                  templateForm.get('newsletterTemplate')?.invalid &&
+                  templateForm.get('newsletterTemplate')?.touched
+                "
+              >
+                {{ 'NEWSLETTER_FIELD_REQUIRED' | translate }}
+              </div>
+            </div>
+          </div>
+
+          <div class="preview-section" [class.hidden]="!showPreview">
+            <div class="preview-header">
+              <h4>{{ 'NEWSLETTER_TEMPLATE_PREVIEW' | translate }}</h4>
+            </div>
+            <div class="preview-content">
+              <div
+                class="preview-iframe"
+                [innerHTML]="
+                  (templateForm.get('newsletterTemplate')?.value | trustedHtml: false) ||
+                  '<p>' + ('NEWSLETTER_ENTER_PLACEHOLDER' | translate) + '</p>'
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+      </p-card>
+    </div>
+  </form>
+</div>

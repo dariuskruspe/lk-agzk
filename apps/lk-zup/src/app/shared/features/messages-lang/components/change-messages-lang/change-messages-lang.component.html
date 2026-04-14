@@ -1,0 +1,20 @@
+<div>
+  <div>
+    {{ 'MESSAGES_LANGUAGE' | translate }}
+  </div>
+
+  <p-toolbar class="margin-top">
+    <button
+      pButton
+      label="{{ 'YES_BUTTON' | translate }}"
+      class="mr-12"
+      (click)="close(true)"
+    ></button>
+    <button
+      pButton
+      label="{{ 'NO_BUTTON' | translate }}"
+      class="p-button-outlined"
+      (click)="close(false)"
+    ></button>
+  </p-toolbar>
+</div>

@@ -1,0 +1,21 @@
+.separator {
+  height: 1px;
+  background: #D3DBE3;
+  margin-bottom: 16px;
+}
+.survey-option {
+  width: 94%;
+}
+.remove-icon {
+  margin: 14px;
+}
+.space-between {
+  justify-content: space-between;
+}
+.custom-link {
+  cursor: pointer;
+  color: var(--link-color);
+  &:hover {
+    text-decoration: underline;
+  }
+}

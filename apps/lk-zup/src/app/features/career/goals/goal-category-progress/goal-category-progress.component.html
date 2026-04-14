@@ -1,0 +1,8 @@
+<div class="gc-header">
+  <span class="gc-header-title">Прогресс:</span>
+  <span class="gc-header-value">{{ progress() }}%</span>
+</div>
+
+<div class="gc-progress">
+  <div [style.width]="progress() + '%'"></div>
+</div>

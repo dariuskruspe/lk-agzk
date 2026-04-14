@@ -1,0 +1,18 @@
+<div class="row files-container">
+  <ng-container *ngFor="let file of items()">
+    <div class="col-lg-3 col-md-6 col-sm-12 file-container">
+      <div class="doc" (click)="onOpenFile(file)">
+        <img [src]="file.icon || 'assets/files/file.svg'" />
+        <div class="hover">
+          <i class="pi pi-external-link"></i>
+        </div>
+      </div>
+      <div class="file-name">{{ file['fileName'] }}</div>
+    </div>
+    @if (loading()) {
+      <div class="files-container__spinner">
+        <p-progressSpinner></p-progressSpinner>
+      </div>
+    }
+  </ng-container>
+</div>

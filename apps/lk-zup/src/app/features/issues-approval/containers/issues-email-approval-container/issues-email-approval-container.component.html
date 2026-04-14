@@ -1,0 +1,36 @@
+<div class="approval-container" *ngIf="!error">
+  <div class="title" *ngIf="isTaskApproved">
+  {{'ISSUE_EMAIL_APPROVE_TITLE' | translate}}
+  </div>
+  <div class="title" *ngIf="!isTaskApproved && !convertedParams?.fromEmail">
+    <span *ngIf="isApprove === true">{{'ISSUE_EMAIL_APPROVE_TITLE_CONFIRMATION' | translate}}</span>
+    <span *ngIf="isApprove === false">{{'ISSUE_EMAIL_REJECT_TITLE_CONFIRMATION' | translate}}</span>
+  </div>
+  <div class="approval-container__card">
+    <p-card>
+      <app-issues-email-approval
+        [approveData]="issuesEmailApprovalFacade.getData$() | async"
+        [loading]="loading"
+        [isApprove]="isApprove"
+        [settings]="settingsFacade.getData() || (settingsFacade.getData$() | async)"
+        [isTaskProcessed]="isTaskApproved || convertedParams?.fromEmail"
+        (approve)="onApprove($event)"
+        (reject)="onReject($event)"
+      ></app-issues-email-approval>
+    </p-card>
+  </div>
+  <div class="bottom-text">
+    {{'ISSUE_EMAIL_APPROVE_TEXT' | translate}} <span [routerLink]="['']" class="link">{{'ISSUE_EMAIL_APPROVE_LINK' | translate}}</span>
+  </div>
+</div>
+<div class="approval-container" *ngIf="error">
+  <div class="title" *ngIf="convertedParams && convertedParams.approve">
+    {{'ISSUE_EMAIL_APPROVE_ERROR_TITLE' | translate}}
+  </div>
+  <div class="title" *ngIf="convertedParams && !convertedParams.approve">
+    {{'ISSUE_EMAIL_REJECT_ERROR_TITLE' | translate}}
+  </div>
+  <div class="bottom-text">
+    {{'ISSUE_EMAIL_APPROVE_TEXT' | translate}} <span [routerLink]="['']" class="link">{{'ISSUE_EMAIL_APPROVE_LINK' | translate}}</span>
+  </div>
+</div>

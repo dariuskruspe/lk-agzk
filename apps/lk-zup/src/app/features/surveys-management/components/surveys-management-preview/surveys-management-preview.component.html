@@ -1,0 +1,103 @@
+<div class="container-fluid">
+  <div class="row">
+    <form
+      [formGroup]="form"
+      class="col-md-12 p-0"
+    >
+      <div class="card mb">
+        <div class="mt-10" *ngIf="setting?.description">
+          <app-surveys-management-text-form
+            [text]="setting.description"
+          ></app-surveys-management-text-form>
+        </div>
+        <div class="custom-form-field" *ngFor="let question of questions; let i = index">
+          <p-divider align="left" type="solid" *ngIf="question.section && (i === 0 || question.section !== questions[i-1].section)">
+            <b>{{question.section}}</b>
+          </p-divider>
+          <label
+            class="custom-form-field__label"
+            [innerHTML]="replaceLinksWithAnchorTags(question.formulation)"
+            [for]="question.questionID"
+          ></label>
+          <textarea
+            *ngIf="question.answerType === 'text' || !question.answerType"
+            pInputTextarea
+            rows="1"
+            [autoResize]="true"
+            [formControlName]="question.questionID"
+            [id]="question.questionID"
+          ></textarea>
+          <div *ngIf="question.answerType === 'oneOption'">
+            <div class="field-checkbox mb-10" *ngFor="let option of question.answerOptions">
+              <p-radioButton
+                [inputId]="option.formulation"
+                [value]="option.formulation"
+                [formControlName]="question.questionID"
+                (onClick)="setUnchecked(question.questionID)"
+              />
+              <label class="ml-2" [for]="option.formulation">
+                {{option.formulation}}
+              </label>
+            </div>
+          </div>
+          <div *ngIf="question.answerType === 'severalOptions'">
+            <div class="field-checkbox mb-10" *ngFor="let option of question.answerOptions">
+              <p-checkbox
+                [value]="option.formulation"
+                name="group"
+                [label]="option.formulation"
+                [formControlName]="question.questionID" />
+            </div>
+          </div>
+          <div *ngIf="question.answerType === 'notRequired' && question.fileData">
+            <div class="row files-container">
+              <ng-container>
+                <div class="file-container cursor-pointer">
+<!--                  <div class="doc" (click)="downloadFile(question.fileData)">-->
+<!--                    <img src="assets/files/file.svg"/>-->
+<!--                  </div>-->
+<!--                  <div class="file-name">{{ question.fileData.fileName }}</div>-->
+                  <button
+                    pButton
+                    class="p-button-outlined"
+                    icon="pi pi-download"
+                    label="{{ 'BUTTON_DOWNLOAD' | translate }}"
+                    [loading]="isDownloadLoadingSignal()"
+                    (click)="downloadFile(question.fileData)"
+                  ></button>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="setting?.conclusion">
+          <label class="ml-2">
+            {{ 'CONCLUSION' | translate }}
+          </label>
+          <app-surveys-management-text-form
+            *ngIf="setting.conclusion"
+            [text]="setting.conclusion"
+          ></app-surveys-management-text-form>
+        </div>
+
+<!--        <div class="separator"></div>-->
+        <p-toolbar class="buttons margin-top" *ngIf="!hideButtons">
+          <button
+            pButton
+            label="{{ 'BUTTON_SEND' | translate }}"
+            type="submit"
+            class="col-12 col-md-auto"
+            (click)="onSubmit()"
+          ></button>
+          <p-button
+            label="{{ 'BUTTON_CANCEL' | translate }}"
+            class="col-12 col-md-auto p-button-outlined ml-8"
+            [link]="true"
+            (click)="cancelSurveyClick()"
+          ></p-button>
+        </p-toolbar>
+      </div>
+    </form>
+  </div>
+</div>

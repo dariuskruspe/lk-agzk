@@ -1,0 +1,19 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
+import { AbstractValidationComponent } from '../abstract-validation/abstract-validation.component';
+
+@Component({
+    selector: 'app-link-validation',
+    templateUrl: './link-validation.component.html',
+    styleUrls: ['./link-validation.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
+})
+export class LinkValidationComponent extends AbstractValidationComponent {
+  constructor(
+    protected config: DynamicDialogConfig,
+    protected dialogRef: DynamicDialogRef
+  ) {
+    super(config, dialogRef);
+  }
+}

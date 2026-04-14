@@ -1,0 +1,21 @@
+:host ::ng-deep .custom-spinner .p-progress-spinner-circle {
+  animation: custom-progress-spinner-color 6s ease-in-out infinite;
+}
+
+.loading-wrapper {
+  height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@keyframes custom-progress-spinner-color {
+  100%,
+  0%,
+  40%,
+  66%,
+  80%,
+  90% {
+    stroke: var(--primary);
+  }
+}

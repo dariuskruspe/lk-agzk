@@ -1,0 +1,44 @@
+.custom-form-field {
+  &__label,
+  label {
+    color: var(--basic-color);
+  }
+
+  &__upload-header {
+    label {
+      white-space: break-spaces;
+    }
+  }
+
+  &__static-files {
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 10px;
+  }
+
+  .custom-form-array {
+    @media (max-width: 767px) {
+      &__row {
+        border-top: 1px solid var(--border-color);
+      }
+    }
+  }
+}
+
+
+.custom-list {
+  &:last-of-type {
+    padding-bottom: 0 !important;
+  }
+
+  &__item {
+  }
+
+  &__line.label {
+    color: var(--gray);
+  }
+
+  &__line {
+    color: var(--basic-color);
+  }
+}

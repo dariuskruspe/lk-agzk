@@ -1,0 +1,65 @@
+<div class="notification-window">
+  @if (!items?.length && !alertsSignal()?.actions?.length) {
+    <div class="p-16">
+      {{ 'NO_NOTIFICATIONS' | translate }}
+    </div>
+  }
+  <div class="notification-window__header">
+    <div class="notification-window__header_main"></div>
+    <div class="notification-window__header_actions">
+      <button
+        (click)="windowClosed.emit()"
+        class="notification-window__header_actions_button"
+      >
+        <lucide-icon [name]="XIcon"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <app-unfinished-actions-container></app-unfinished-actions-container>
+
+  <div class="notification-window__items">
+    <div
+      *ngFor="let item of items; let i = index"
+      class="notification-window__item"
+      [id]="i"
+    >
+      <app-notification-item
+        [item]="item"
+        (clicked)="clicked.emit($event)"
+        (closed)="closed.emit($event)"
+      ></app-notification-item>
+    </div>
+  </div>
+  <div class="notification-window__footer">
+    <button
+      *ngIf="pushesAvailable"
+      type="button"
+      class="push-toggle-button"
+      [class.push-toggle-button--enabled]="pushesEnabled"
+      [class.push-toggle-button--loading]="pushesLoading"
+      [disabled]="pushesLoading"
+      (click)="togglePushes()"
+    >
+      <lucide-icon
+        [name]="pushesEnabled ? BellIcon : BellOffIcon"
+        class="push-toggle-button__icon"
+      ></lucide-icon>
+      <span class="push-toggle-button__label">{{
+        (pushesEnabled ? 'PUSHES_DISABLE' : 'PUSHES_ENABLE') | translate
+      }}</span>
+    </button>
+
+    <button
+      pButton
+      pRipple
+      *ngIf="items?.length"
+      type="button"
+      icon="pi pi-trash"
+      iconPos="right"
+      label="{{ 'CLEAR_NOTIFICATIONS' | translate }}"
+      class="p-button-text p-button-secondary p-button-sm"
+      (click)="closed.emit()"
+    ></button>
+  </div>
+</div>

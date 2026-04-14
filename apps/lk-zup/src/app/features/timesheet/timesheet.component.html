@@ -1,0 +1,64 @@
+<div
+  class="app-page-container app-timesheet"
+  [attr.data-timesheet-mode]="mode()"
+>
+  <div class="timesheet-header">
+    <div class="timesheet-header__top">
+      <h1>{{ 'TITLE_TIMESHEET' | translate }}</h1>
+
+      <div class="timesheet-header__month-nav">
+        <app-month-select
+          class="timesheet-header__month-select"
+          [(value)]="month"
+        ></app-month-select>
+      </div>
+
+      <div class="timesheet-header__actions">
+        <!-- <app-button
+          [label]="'DOWNLOAD_REPORT' | translate"
+          [icon]="ArrowDownToLineIcon"
+          variant="outlined"
+        ></app-button> -->
+
+        <!-- <app-button
+          [label]="'CREATE' | translate"
+          [icon]="PlusIcon"
+          severity="primary"
+        ></app-button> -->
+      </div>
+    </div>
+
+    <!-- <div class="timesheet-header__bottom">
+      <app-button
+        [label]="'FILTER' | translate"
+        [icon]="SlidersHorizontalIcon"
+      ></app-button>
+    </div> -->
+  </div>
+
+  <section
+    class="timesheet-content"
+    aria-label="Timesheet content"
+    [attr.aria-busy]="data.isLoading()"
+  >
+    @if (data.isLoading()) {
+      <app-spinner
+        [fill]="true"
+        text="Загружаем табель..."
+        description="Это займет несколько секунд"
+      ></app-spinner>
+    }
+
+    <app-calendar-graph-month
+      [config]="calendarGraphMonthConfig()"
+      [month]="month()"
+      [rows]="rows()"
+    ></app-calendar-graph-month>
+  </section>
+
+  @if (legendItems().length) {
+    <div class="timesheet-legend-container" appBindStickyClass>
+      <app-timesheet-legend [items]="legendItems()"></app-timesheet-legend>
+    </div>
+  }
+</div>

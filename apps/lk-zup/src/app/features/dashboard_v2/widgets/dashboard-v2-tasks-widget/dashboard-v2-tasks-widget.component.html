@@ -1,0 +1,62 @@
+<p-card class="my-tasks">
+  <!-- Заголовок с кнопкой -->
+  <div class="my-tasks__header">
+    <h3 class="my-tasks__title">{{ 'DASHBOARD_MY_TASKS' | translate }}</h3>
+
+    <p-button
+      routerLink="/issues/types"
+      [label]="'BUTTON_ISSUE_CREATE' | translate"
+      icon="pi pi-plus"
+    ></p-button>
+  </div>
+
+  <!-- Список задач -->
+  <div class="my-tasks__list">
+    @for (task of tasks(); track task.id) {
+      <div class="task-item">
+        <div class="task-item__icon-wrapper">
+          @if (task.iconType === 'warning') {
+            <div class="task-item__icon task-item__icon--warning">
+              <i class="pi pi-exclamation-triangle"></i>
+            </div>
+          } @else {
+            <div class="task-item__icon task-item__icon--document">
+              <i class="pi pi-file"></i>
+            </div>
+          }
+        </div>
+
+        <div class="task-item__content">
+          <p class="task-item__title">{{ task.title }}</p>
+          @if (task.status) {
+            <p class="task-item__status">{{ task.status }}</p>
+          }
+        </div>
+
+        <div class="task-item__actions">
+          @for (action of task.actions; track $index) {
+            <button
+              type="button"
+              [class]="getButtonClasses(action)"
+              class="dashboard-btn-action"
+              (click)="handleTaskAction(task, action)"
+              [disabled]="action.loading"
+            >
+              @if (action.icon) {
+                <i [class]="action.icon"></i>
+              }
+              <span>{{ action.label }}</span>
+              @if (action.loading) {
+                <span class="pi pi-spinner pi-spin"></span>
+              }
+            </button>
+          }
+        </div>
+      </div>
+
+      @if ($index < tasks().length - 1) {
+        <div class="task-item__divider"></div>
+      }
+    }
+  </div>
+</p-card>

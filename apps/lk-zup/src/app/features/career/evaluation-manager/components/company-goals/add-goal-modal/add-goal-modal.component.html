@@ -1,0 +1,94 @@
+<div [formGroup]="form" class="add-goal-form">
+  <app-form-field class="field mb-24" *ngIf="goalType() === 'company'">
+    <label>Организация <span class="p-text-secondary">*</span></label>
+    <p-dropdown
+      [options]="performers()"
+      styleClass="w-full"
+      appendTo="body"
+      optionLabel="label"
+      optionValue="value"
+      formControlName="performerID"
+      placeholder="Выберите организацию"
+      [loading]="performers().length === 0"
+    ></p-dropdown>
+    <app-form-error>Обязательное поле</app-form-error>
+  </app-form-field>
+
+  <app-form-field class="field mb-24" *ngIf="goalType() === 'department'">
+    <label>Подразделение <span class="p-text-secondary">*</span></label>
+    <p-dropdown
+      [options]="performers()"
+      styleClass="w-full"
+      appendTo="body"
+      optionLabel="label"
+      optionValue="value"
+      formControlName="performerID"
+      placeholder="Выберите подразделение"
+      [loading]="performers().length === 0"
+    ></p-dropdown>
+    <app-form-error>Обязательное поле</app-form-error>
+  </app-form-field>
+
+  <app-form-field class="field mb-24">
+    <label>Наименование цели <span class="p-text-secondary">*</span></label>
+    <input
+      pInputText
+      class="w-full"
+      formControlName="title"
+      placeholder="Введите короткое название цели"
+    />
+    <app-form-error>Обязательное поле</app-form-error>
+  </app-form-field>
+
+  <app-form-field class="field mb-24">
+    <label>Категория цели <span class="p-text-secondary">*</span></label>
+    <p-dropdown
+      [options]="categories()"
+      styleClass="w-full"
+      appendTo="body"
+      optionLabel="label"
+      optionValue="value"
+      formControlName="categoryID"
+      placeholder="Выберите категорию"
+      [loading]="categories().length === 0"
+    ></p-dropdown>
+    <app-form-error>Обязательное поле</app-form-error>
+  </app-form-field>
+
+  <app-form-field class="field mb-24">
+    <label>Описание цели</label>
+    <textarea
+      pInputTextarea
+      formControlName="description"
+      class="w-full"
+      [autoResize]="true"
+      rows="5"
+      placeholder="Введите подробное описание цели"
+    ></textarea>
+  </app-form-field>
+
+  <div class="flex actions-container">
+    <div class="flex">
+      <p-button
+        label="Сохранить"
+        styleClass="sm"
+        [loading]="loading()"
+        (click)="onSave()"
+      ></p-button>
+      <p-button
+        label="Отменить"
+        [text]="true"
+        styleClass="sm ml-15"
+        (click)="onCancel()"
+      ></p-button>
+    </div>
+    <div class="delete-button-container" *ngIf="isEditMode() && canDelete()">
+      <p-button
+        label="Удалить"
+        icon="pi pi-trash"
+        [text]="true"
+        (click)="onDelete()"
+      />
+    </div>
+  </div>
+</div>

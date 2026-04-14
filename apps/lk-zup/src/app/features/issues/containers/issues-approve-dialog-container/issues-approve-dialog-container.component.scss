@@ -1,0 +1,21 @@
+.title {
+  font-weight: 600;
+  font-size: 22px;
+  margin: 24px auto 10px 0;
+}
+
+.comment-label {
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+
+.button-send {
+  margin-left: 0;
+}
+
+:host {
+  textarea {
+    height: 168px !important;
+    overflow: auto !important;
+  }
+}

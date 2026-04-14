@@ -1,0 +1,14 @@
+<p-card class="support">
+  <div *ngIf="menu" class="support__menu-open" (click)="openMenu()">
+    <mat-icon svgIcon="icon-support-menu"></mat-icon>
+    <span>Навигация по разделу</span>
+  </div>
+
+  <h2>
+    {{ page?.title }}
+  </h2>
+
+  <div class="support__desc-wrap">
+    <div [innerHTML]="page?.body"></div>
+  </div>
+</p-card>

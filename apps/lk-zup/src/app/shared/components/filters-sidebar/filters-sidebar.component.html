@@ -1,0 +1,43 @@
+<p-sidebar
+  #sidebar
+  [(visible)]="visible"
+  position="bottom"
+  appendTo="body"
+  styleClass="filters-dialog"
+  [showCloseIcon]="false"
+>
+  @if (showDefaultHeader) {
+    <div class="sidebar-header">
+      @if (showDefaultHeaderToolbar) {
+        <p-toolbar class="space-between">
+          <div class="sidebar-title">{{ sidebarTitle | translate }}</div>
+          <button
+            pButton
+            pRipple
+            (click)="sidebar.close($event)"
+            icon="pi pi-times"
+            class="p-button-rounded p-button-secondary p-button-text"
+            type="button"
+          ></button>
+        </p-toolbar>
+      }
+    </div>
+  }
+  <div class="sidebar-content">
+    <!-- YOUR FILTERS HERE -->
+    <ng-content></ng-content>
+
+    @if (showDefaultContentToolbar) {
+      <p-toolbar class="margin-top">
+        @if (showCloseButton) {
+          <p-button
+            (onClick)="sidebar.close($event)"
+            [label]="'BUTTON_CLOSE' | translate"
+            class="button-full-xs filter-button"
+            type="button"
+          ></p-button>
+        }
+      </p-toolbar>
+    }
+  </div>
+</p-sidebar>

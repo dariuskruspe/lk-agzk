@@ -1,0 +1,42 @@
+<div class="docky-intro">
+  <div class="docky-intro__header">
+    <img
+      src="../../../../../assets/img/docky/icon-256.png"
+      class="docky-intro__icon"
+      alt="Docky"
+    />
+    <div class="docky-intro__heading">
+      <h2 class="docky-intro__title">
+        Привет! Я Доки, твой виртуальный кадровик.
+      </h2>
+      <p class="docky-intro__subtitle">
+        Помогу с отпуском, справками и другими кадровыми вопросами.
+      </p>
+    </div>
+  </div>
+
+  <div class="docky-intro__agents">
+    @for (agent of agents(); track agent.name) {
+      <div class="docky-intro__agent">
+        <div class="docky-intro__agent-header">
+          <lucide-icon
+            class="docky-intro__agent-icon"
+            [name]="BotIcon"
+          ></lucide-icon>
+          <span class="docky-intro__agent-name">{{ agent.name }}</span>
+          <span class="docky-intro__agent-desc">&mdash; {{ agent.intro }}</span>
+        </div>
+
+        <div class="docky-intro__agent-examples">
+          @for (example of agent.example_queries; track example) {
+            <span
+              class="docky-intro__agent-example"
+              (click)="clickExample.emit(example)"
+              >{{ example }}</span
+            >
+          }
+        </div>
+      </div>
+    }
+  </div>
+</div>

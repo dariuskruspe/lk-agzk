@@ -1,0 +1,11 @@
+@if (templateHtml()) {
+  <p-card>
+    <app-custom-sections-template-view
+      [template]="templateHtml()"
+    ></app-custom-sections-template-view>
+  </p-card>
+} @else if (markupData()) {
+  <app-support-information-page
+    [blocks]="contentData()"
+  ></app-support-information-page>
+}

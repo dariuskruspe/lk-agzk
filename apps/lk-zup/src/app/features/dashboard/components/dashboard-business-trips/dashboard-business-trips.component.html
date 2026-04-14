@@ -1,0 +1,77 @@
+<div class="wrapper" *ngIf="isEnabled">
+  <p-toolbar class="title">
+    <h2 class="dashboard-title mobile-title">
+      {{ 'TITLE_BUSINESS_TRIPS' | translate }}
+    </h2>
+    <span class="spacer"></span>
+    <button
+      pButton
+      type="button"
+      class="title-button button-full-xs"
+      label="{{ 'TO_BUSINESS_TRIPS_GRAPH' | translate }}"
+      [routerLink]="['', 'business-trip']"
+    ></button>
+  </p-toolbar>
+
+  <ng-container *skeleton="loading === false; else skeleton; repeat: 3">
+    <p-card *ngIf="!documentDataList?.length">
+      <div class="empty-issues">
+        <div class="left-side">
+          <div class="empty-text">
+            {{ 'ISSUE_NO_ACTIVE_BUSINESS_TRIPS' | translate }}
+          </div>
+
+          <div class="button-card button-card-empty">
+            <button
+              pButton
+              class="p-button-outlined s mobile-button"
+              label="{{ 'BUTTON_ISSUE_APPLICATIONS' | translate }}"
+              [routerLink]="['', 'business-trip']"
+            ></button>
+          </div>
+        </div>
+        <div class="right-side">
+          <img
+            [src]="
+              isDarkTheme()
+                ? 'assets/img/svg/empty-issues-dark.svg'
+                : 'assets/img/svg/empty-issues.svg'
+            "
+            alt="empty-issues"
+          />
+        </div>
+      </div>
+    </p-card>
+    <div *ngIf="documentDataList?.length">
+      <div class="left-side">
+        <loadable-list-container
+          [template]="dataLayout"
+          [dataList]="{ documents: documentDataList, count: 2 }"
+          [dataConfig]="dataConfig"
+          [otherData]="{}"
+          [pagination]="false"
+          [takeCount]="3"
+          (clickItem)="onOpenDocument($event)"
+          (clickButton)="openAdvanceReport($event)"
+        ></loadable-list-container>
+        <div class="button-card">
+          <button
+            pButton
+            class="p-button-outlined s"
+            label="{{ 'BUTTON_ISSUE_APPLICATIONS' | translate }}"
+            [routerLink]="['', 'business-trip']"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+
+<ng-template #skeleton>
+  <div class="skeleton-list-item">
+    <div class="skeleton-list-item__el">
+      <p-skeleton height="36px" width="36px" borderRadius="50%"></p-skeleton>
+    </div>
+    <p-skeleton height="25px" width="250px"></p-skeleton>
+  </div>
+</ng-template>

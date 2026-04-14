@@ -1,0 +1,98 @@
+mat-toolbar.mat-toolbar.custom-item {
+  align-items: inherit;
+  cursor: pointer;
+
+  @media (max-width: 800px) {
+    height: 100px;
+  }
+
+  @media (max-width: 500px) {
+    height: 56px;
+  }
+
+  &:hover {
+    background-color: #f5f5f5;
+  }
+
+  .custom-item__wrap {
+    width: 100px;
+    padding: 0 10px;
+    justify-content: space-around;
+
+    .custom-item_wrapper__text_snippet {
+      width: 38px;
+      height: 38px;
+      position: relative;
+      border-radius: 18px;
+
+      mat-icon {
+        top: 7px;
+        left: 8px;
+        position: absolute;
+      }
+    }
+
+    .custom-item_wrapper__attachment_icon {
+      width: 20px;
+
+      mat-icon {
+        top: -10px;
+        left: 10px;
+        position: absolute;
+      }
+    }
+
+    span.no-signed {
+      background-color: #ed4346;
+    }
+
+    span.signed {
+      background-color: #ffae00;
+    }
+
+    .custom-item__attachment_icon {
+      line-height: 0.4;
+      transform: rotate(-90deg);
+    }
+
+    .custom-item_wrapper__button {
+      margin: 0 auto;
+
+      @media (max-width: 500px) {
+        display: none;
+      }
+
+      button {
+        padding: 4px 8px;
+        font-size: 11px;
+        box-sizing: border-box;
+        font-weight: bold;
+        border-radius: 5px;
+      }
+
+      .custom-item__button {
+        border: 1px solid rgba(37, 47, 63, 0.1);
+        background: #ffeaea;
+      }
+
+      .custom-item__button:hover {
+        background: #fdd7d7;
+      }
+
+      .custom-item__button.signedButton {
+        border: 1px solid rgba(37, 47, 63, 0.1);
+        background: #fcefd5;
+      }
+
+      .custom-item__button.signedButton:hover {
+        background: #fae1c7;
+      }
+    }
+  }
+
+  .ellipsis {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,13 @@
+<div>
+  <loadable-list-container
+    [template]="dataTemplate"
+    [dataConfig]="dataConfig"
+    [dataList]="{ templates: templates, count: totalCount }"
+    [scrollContainerClassCss]="'.scroll-main-container'"
+    [loading]="loading$ | async"
+    [appendFilterToQuery]="true"
+    [pagination]="true"
+    (clickItem)="onTemplateClick($event)"
+    (loadList)="onLoadList($event)"
+  ></loadable-list-container>
+</div>

@@ -1,0 +1,70 @@
+.custom-item--empty {
+  justify-content: center;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 18px;
+  color: var(--basic-color);
+  background: #eceef1;
+}
+
+button.custom-icon-button {
+  margin-right: 10px;
+
+  mat-icon {
+    margin-right: 0;
+    min-width: auto;
+  }
+}
+
+.issues-link {
+  display: block;
+  text-align: center;
+  margin: 20px auto;
+}
+
+.wrapper {
+  margin-bottom: 20px;
+
+  .title {
+    display: flex;
+    justify-content: space-between;
+    .mobile-title {
+      @media (max-width: 767px) {
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+.empty-issues {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  .left-side {
+    .empty-text {
+      color: var(--secondary-color);
+    }
+    .all-issues-btn {
+      .small-button {
+        margin-top: 30px;
+        height: 32px;
+      }
+    }
+  }
+  .right-side {
+
+  }
+}
+.button-card {
+  margin-top: -5px;
+  background: var(--card-background);
+  border-radius:  0 0 6px 6px;
+  padding: 0 0 25px 15px;
+}
+.button-card-empty {
+  padding: 40px 0 0 0;
+  .mobile-button {
+    @media (max-width: 402px) {
+      padding: 20px;
+    }
+  }
+}

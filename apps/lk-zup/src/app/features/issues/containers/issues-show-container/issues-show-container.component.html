@@ -1,0 +1,105 @@
+<div
+  *ngIf="screenSize.signal.isDesktop() || screenSize.signal.isMobileH()"
+  class="desktop-steps"
+>
+  <!-- (!) skuzminov: вынес шаги в отдельный компонент app-steps (основан на app-issues-status-steps) -> теперь вместо
+  компонента app-issues-status-steps можно использовать его, чтобы везде было одинаково -->
+  <!-- (!!) поменял на "forcedData$ | async", т. к. без этого заклинания после смены ориентации экрана -->
+  <!-- телефона с вертикальной на горизонтальную компонент не будет отображаться -->
+  <!--  <app-issues-status-steps-->
+  <!--    [steps]="issuesStatusStepsFacade.forcedData$ | async"-->
+  <!--  ></app-issues-status-steps>-->
+
+  <!-- Пример с передачей опций из .ts-файла (если нужно изменить стили элементов) -->
+  <app-steps
+    [steps]="issuesStatusStepsFacade.forcedData$ | async"
+    [options]="stepsOptions"
+  ></app-steps>
+
+  <!-- Пример с передачей опций прямо в шаблоне -->
+  <!-- (подходит для быстрой настройки, например, если нужно просто поменять направление отображения шагов или -->
+  <!-- выбрать другой шаблон отображения) -->
+  <!-- TODO: добавить глобальные настройки (возможно даже вынести некоторые параметры во входные свойства -->
+  <!--       компонента), чтобы сделать настройку отображения шагов более удобной --><!-- (!) -->
+  <!--  <app-steps-->
+  <!--    [steps]="-->
+  <!--      (issuesStatusStepsFacade.getData$() | async) ||-->
+  <!--      issuesStatusStepsFacade.getData()-->
+  <!--    "-->
+  <!--    [options]="{-->
+  <!--      currentTemplate: 'timeline',-->
+  <!--      template: { timeline: { layout: 'vertical' } }-->
+  <!--    }"-->
+  <!--  ></app-steps>-->
+</div>
+<ng-container *ngIf="issueId">
+  <!-- Блок "К подписанию" - отображает документы со статусом "К подписанию" -->
+  <app-issues-docs-to-sign
+    (docOnClick)="docOnClick($event)"
+    [docSignList]="
+      abstractIssuesContainer.issuesDocsSignListFacade.getData$() | async
+    "
+    [loading]="abstractIssuesContainer.loadingSignal()"
+    [stateList]="abstractIssuesContainer.agreementDocumentStateFacade.getData()"
+  ></app-issues-docs-to-sign>
+
+  <p-card class="no-padding">
+    <app-issues-show
+      (backPage)="backPage()"
+      (closeDialog)="closeDialog()"
+      (getFile)="getFile($event)"
+      (issueCancel)="onIssueCancel($event)"
+      (openedHistory)="onHistoryOpen($event)"
+      (docOnClick)="docOnClick($event)"
+      (downloadArch)="onDownloadArch()"
+      [issueID]="issueId"
+      [dashboard]="dashboard"
+      [isItDialog]="isItDialog"
+      [isRequiringApproval]="
+        abstractIssuesContainer.isRequiringApproval$ | async
+      "
+      [fileBase64]="
+        abstractIssuesContainer.issuesFormFileFacade.getData$() | async
+      "
+      [issueJoinData]="
+        abstractIssuesContainer.myIssuesShowFacade.getData$() | async
+      "
+      [issuesCancelAccess]="
+        abstractIssuesContainer.settingsFacade.getData()?.issues
+          ?.issueCancelAccess
+      "
+      [issuesHistory]="
+        abstractIssuesContainer.issueHistoryFacade.getData$() | async
+      "
+      [issuesStatusList]="
+        abstractIssuesContainer.issuesStatusListFacade.forcedData$ | async
+      "
+      [issueSteps]="issuesStatusStepsFacade.forcedData$ | async"
+      [employeesStaticData]="
+        employeesStaticDataManagerFacade.getData$() | async
+      "
+      [docSignList]="
+        abstractIssuesContainer.issuesDocsSignListFacade.getData$() | async
+      "
+      [docSignStateList]="abstractIssuesContainer.agreementDocumentStateFacade.getData()"
+      [docSignLoading]="abstractIssuesContainer.loadingSignal()"
+      [docSignDownloading]="abstractIssuesContainer.issuesArchFacade.loading$() | async"
+      [isDraft]="isDraft"
+      [syncTabWithQueryParams]="syncTabWithQueryParams"
+    ></app-issues-show>
+    <app-issues-management-approve
+      *ngIf="!isHistory"
+      (approved)="approveManually(true, '')"
+      (closeDialog)="backPage()"
+      (rejected)="approveManually(false, '')"
+      [isItDialog]="isItDialog"
+      [isRequiringApproval]="
+        abstractIssuesContainer.isRequiringApproval$ | async
+      "
+      [isRequiringSignature]="
+        abstractIssuesContainer.isRequiringSignature$ | async
+      "
+      [loading]="abstractIssuesContainer.loadingSignal()"
+    ></app-issues-management-approve>
+  </p-card>
+</ng-container>

@@ -1,0 +1,99 @@
+.main-v2-layout {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100vw;
+  background: var(--bg-primary);
+  color: var(--foreground-color);
+  position: relative;
+
+  .main-v2-layout-content {
+    flex: 1;
+    min-width: 0px;
+
+    & > div {
+      width: 100%;
+      padding: var(--main-padding-y) var(--main-padding-x);
+    }
+  }
+}
+
+// Мобильный хедер с hamburger
+.mobile-header {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: var(--sidebar-bg, #fff);
+  border-bottom: 1px solid var(--sidebar-border, #ddd);
+  align-items: center;
+  padding: 0 16px;
+  z-index: 999;
+  gap: 16px;
+
+  @media (max-width: 768px) {
+    display: flex !important;
+    background: #f0f0f0 !important; // Для отладки
+  }
+}
+
+.mobile-hamburger {
+  width: 40px;
+  height: 40px;
+  background: transparent;
+  border: none;
+  color: var(--sidebar-menu-text);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background: var(--sidebar-menu-hover-bg);
+  }
+
+  svg {
+    pointer-events: none;
+  }
+}
+
+.mobile-logo {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+// Оверлей для закрытия сайдбара
+.mobile-overlay {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+
+  @media (max-width: 768px) {
+    display: block;
+  }
+}
+
+// Адаптивность для мобильных устройств
+@media (max-width: 768px) {
+  .main-v2-layout {
+    flex-direction: column;
+  }
+
+  .main-v2-layout-content {
+    margin-top: 60px; // Отступ для мобильного хедера
+
+    & > div {
+      padding: 16px;
+    }
+  }
+}

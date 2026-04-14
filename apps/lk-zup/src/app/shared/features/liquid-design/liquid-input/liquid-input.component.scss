@@ -1,0 +1,18 @@
+:host {
+  display: block;
+  width: 584px;
+  height: 56px;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: var(--liquid-block-radius, var(--radius-lg));
+    backdrop-filter: blur(0px);
+    filter: url(#searchbox-filter);
+    overflow: hidden;
+    isolation: isolate;
+  }
+}

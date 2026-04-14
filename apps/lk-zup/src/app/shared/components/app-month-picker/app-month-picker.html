@@ -1,0 +1,83 @@
+@if (showTrigger()) {
+<div
+  #trigger
+  class="app-month-picker__trigger"
+  (click)="toggle()"
+  role="combobox"
+  [attr.aria-expanded]="isOpen()"
+  aria-haspopup="dialog"
+  [attr.aria-label]="'Выбор месяца и года'"
+  tabindex="0"
+>
+  @if(templateTrigger()) {
+  <ng-container
+    *ngTemplateOutlet="templateTrigger(); context: { displayValue: displayValue() }"
+  ></ng-container>
+  } @else { {{ displayValue() }} }
+</div>
+}
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="overlayOrigin()!"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayPositions]="[
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ]"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  (backdropClick)="onOverlayDetach()"
+  (detach)="onOverlayDetach()"
+>
+  <div class="app-month-picker__dropdown">
+    <div class="app-month-picker__header">
+      <button
+        class="app-month-picker__nav-button"
+        (click)="onDecreaseYear()"
+        [disabled]="!canDecreaseYear()"
+        aria-label="Предыдущий год"
+        type="button"
+      >
+        <lucide-icon [name]="ChevronLeftIcon"></lucide-icon>
+      </button>
+      <div class="app-month-picker__year">{{ displayedYearValue() }}</div>
+      <button
+        class="app-month-picker__nav-button"
+        (click)="onIncreaseYear()"
+        [disabled]="!canIncreaseYear()"
+        aria-label="Следующий год"
+        type="button"
+      >
+        <lucide-icon [name]="ChevronRightIcon"></lucide-icon>
+      </button>
+    </div>
+    <div class="app-month-picker__months-grid" role="grid">
+      @for (month of monthNames(); track $index) {
+      <button
+        class="app-month-picker__month"
+        [class.app-month-picker__month--selected]="isMonthSelected()($index)"
+        [class.app-month-picker__month--disabled]="isMonthDisabled()($index)"
+        [disabled]="isMonthDisabled()($index)"
+        (click)="selectMonth($index, $event)"
+        role="gridcell"
+        [attr.aria-selected]="isMonthSelected()($index)"
+        type="button"
+      >
+        {{ month.charAt(0).toUpperCase() + month.slice(1, 3) }}
+      </button>
+      }
+    </div>
+  </div>
+</ng-template>

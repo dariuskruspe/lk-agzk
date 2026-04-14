@@ -1,0 +1,109 @@
+.reference-information {
+  &__title {
+    margin: 5px 2px 20px 2px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+  }
+  &__panel {
+    box-shadow: none;
+    padding: 25px 0;
+    border-radius: 0;
+    border-bottom: 1px solid var(--border-color);
+    &--title {
+      font-size: 20px;
+    }
+    &--text {
+      margin: 0;
+      padding-top: 20px;
+    }
+    mat-panel-description.mat-expansion-panel-header-description {
+      flex-grow: 0;
+      .blue-icon {
+        color: var(--primary);
+      }
+    }
+  }
+  &__constructor {
+    img {
+      width: 100%;
+    }
+    &--title {
+      font-size: 20px;
+      line-height: 28px;
+      padding-top: 25px;
+    }
+    &--reference {
+      ::ng-deep a {
+        color: var(--primary);
+        font-size: 16px;
+        line-height: 22px;
+        text-decoration: none;
+      }
+    }
+    &--video {
+      width: 100%;
+      height: 400px;
+      padding: 10px;
+    }
+    &.shadow {
+      padding: 20px;
+      margin-top: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+    }
+  }
+  /*Стилистика бокового меню*/
+  &__sideMenu {
+    /*боковое меню*/
+    &--faq {
+      width: 275px;
+      ::ng-deep mat-list {
+        box-shadow: none;
+      }
+      .list-menu {
+        .active {
+          background: var(--card-background);
+          font-weight: bold;
+        }
+        .pointer-list {
+          cursor: pointer;
+          font-size: 16px;
+          line-height: 22px;
+        }
+      }
+    }
+    /*боковое collapse меню*/
+    &--collapse {
+      width: 275px;
+      ::ng-deep mat-list {
+        box-shadow: none;
+      }
+      .title {
+        padding-bottom: 20px;
+      }
+      .sideMenu-wrapper {
+        .expansion-panel {
+          background: var(--card-background);
+          box-shadow: none;
+          .list-menu {
+            .active {
+              background: var(--hover);
+              font-weight: bold;
+            }
+            .pointer-list {
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.download-link {
+  text-decoration: underline;
+  color: var(--primary);
+  cursor: pointer;
+}
+:host::ng-deep ol, ul {
+  padding-left: 20px;
+}

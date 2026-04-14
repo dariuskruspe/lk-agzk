@@ -1,0 +1,33 @@
+<p-toolbar class="title">
+  <button
+    pButton class="p-button-rounded p-button-outlined" icon="pi pi-arrow-left" (click)="onBackPage()"
+  ></button>
+  <h1>
+    {{ 'TITLE_INCOME_TAX' | translate }}
+  </h1>
+  <span class="spacer"></span>
+  <button
+    pButton
+    iconPos="left"
+    icon="pi pi-plus-circle"
+    class="button-full-xs"
+    label="{{ 'BUTTON_ISSUE_CREATE' | translate }}"
+    [routerLink]="['', 'issues', 'types']"
+    queryParamsHandling="preserve"
+  ></button>
+</p-toolbar>
+
+<loadable-list-container
+  [template]="dataLayout"
+  [dataConfig]="dataConfig"
+  [dataList]="taxList"
+  [filter]="filterConfig"
+  [scrollContainerClassCss]="scrollContainerClassCss"
+  [otherData]="{
+    taxStateList: taxStateList
+  }"
+  [loading]="loading"
+  [appendFilterToQuery]="true"
+  (loadList)="onLoadList($event)"
+  (clickItem)="onGoDetails($event)"
+></loadable-list-container>

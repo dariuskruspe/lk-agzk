@@ -1,0 +1,99 @@
+<ng-container *ngIf="isMobile; else desktop">
+  <div class="mobile-wrapper cy-main-menu">
+    <div class="mobile-menu">
+      <div *ngFor="let item of menuItems" class="mobile-menu__group">
+        <ng-container *ngIf="item.items?.length; else root">
+          <div *ngFor="let subitem of item?.items" class="mobile-menu__item" (click)="navigateMobile(subitem)"
+            [ngStyle]="{'background': subitem.state?.background}">
+            {{ subitem.label }}
+          </div>
+        </ng-container>
+        <ng-template #root>
+          <div class="mobile-menu__item" (click)="navigateMobile(item)"
+            [ngStyle]="{'background': item.state?.background}">
+            {{ item.label }}
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</ng-container>
+<ng-template #desktop>
+  <aside class="aside-menu cy-main-menu">
+    <ul>
+      <ng-container *skeleton="hasContent; else skeleton; repeat 3">
+        <li *ngFor="let item of menuItems" [class.expanded]="item.expanded">
+          <a *ngIf="item.routerLink" class="aside-menu-item" [ngClass]="item.styleClass" [routerLink]="item.routerLink"
+            [routerLinkActiveOptions]="item.routerLinkActiveOptions || {}" (click)="itemClick.emit(item)"
+            routerLinkActive="active">
+            <i [class]="item.icon" class="aside-menu-icon"></i>
+            <span class="aside-menu-label">{{ item.label }}</span>
+          </a>
+          <a *ngIf="!item.routerLink" class="aside-menu-item" (click)="toggleItem(item)">
+            <i [class]="item.icon" class="aside-menu-icon"></i>
+            <span class="aside-menu-label">{{ item.label }}</span>
+            <span class="aside-menu-arrow">
+              <ng-template [ngTemplateOutlet]="arrowIcon"></ng-template>
+            </span>
+          </a>
+          <ul *ngIf="item.items?.length" class="aside-menu-children">
+            <li *ngFor="let child of item.items" [ngClass]="child.styleClass">
+              <a [routerLink]="child.routerLink" class="aside-menu-item" (click)="itemClick.emit(child)"
+                routerLinkActive="active" [routerLinkActiveOptions]="child.routerLinkActiveOptions || {}">
+                <i [class]="child.icon" class="aside-menu-icon"></i>
+                <span class="aside-menu-label">{{ child.label }} </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+
+    </ul>
+  </aside>
+</ng-template>
+
+<ng-template #arrowIcon>
+  <svg width="20" height="8" viewBox="0 0 20 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clip-path="url(#clip0_9483_130991)">
+      <path d="M14.3887 1.20972L10.3887 5.20972L6.38867 1.20972" stroke="#454E57" stroke-width="2" />
+    </g>
+    <defs>
+      <clipPath id="clip0_9483_130991">
+        <rect width="8" height="20" fill="white" transform="matrix(0 1 -1 0 20 0)" />
+      </clipPath>
+    </defs>
+  </svg>
+</ng-template>
+
+<ng-template #skeleton>
+  <div class="skeleton-menu-item" style="margin-bottom: 4px;">
+    <div style="margin-right: 10px;">
+      <p-skeleton width="30px" height="30px" borderRadius="10px"></p-skeleton>
+    </div>
+    <p-skeleton width="150px" height="25px"></p-skeleton>
+  </div>
+  <div class="skeleton-menu-item" style="margin-left: 16px;">
+    <div style="margin-right: 10px;">
+      <p-skeleton width="30px" height="30px" borderRadius="10px"></p-skeleton>
+    </div>
+    <p-skeleton width="150px" height="25px"></p-skeleton>
+  </div>
+  <div class="skeleton-menu-item" style="margin-left: 16px;">
+    <div style="margin-right: 10px;">
+      <p-skeleton width="30px" height="30px" borderRadius="10px"></p-skeleton>
+    </div>
+    <p-skeleton width="150px" height="25px"></p-skeleton>
+  </div>
+  <div class="skeleton-menu-item" style="margin-left: 16px;">
+    <div style="margin-right: 10px;">
+      <p-skeleton width="30px" height="30px" borderRadius="10px"></p-skeleton>
+    </div>
+    <p-skeleton width="150px" height="25px"></p-skeleton>
+  </div>
+  <div class="skeleton-menu-item" style="margin-left: 16px;">
+    <div style="margin-right: 10px;">
+      <p-skeleton width="30px" height="30px" borderRadius="10px"></p-skeleton>
+    </div>
+    <p-skeleton width="150px" height="25px"></p-skeleton>
+  </div>
+</ng-template>

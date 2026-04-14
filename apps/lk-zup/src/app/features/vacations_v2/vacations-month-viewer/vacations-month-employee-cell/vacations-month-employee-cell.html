@@ -1,0 +1,9 @@
+<app-calendar-graph-employee-name-cell
+  [data]="employee()"
+  [selectionEnabled]="enableSelection()"
+  [selectedIds]="selectedIds()"
+  [selectionValue]="row().vacation.employeeId"
+  checkboxName="selected-vacations"
+  (cellClick)="onEmployeeClick()"
+  (selectionChange)="onCheckboxChange($event)"
+></app-calendar-graph-employee-name-cell>

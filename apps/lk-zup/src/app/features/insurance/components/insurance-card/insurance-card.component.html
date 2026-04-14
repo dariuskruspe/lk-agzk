@@ -1,0 +1,84 @@
+<div *ngIf="insurance">
+  <div class="selector-wrapper">
+    <p-dropdown
+      [options]="insurance.insurance"
+      [(ngModel)]="selectedInsurance"
+      (ngModelChange)="selectInsurance()"
+      class="p-dropdown-max"
+      optionLabel="insuranceName"
+    ></p-dropdown>
+  </div>
+  <div *ngIf="insuranceCard" class="container">
+    <div
+      class="description"
+      [innerHTML]="insuranceCard.insuranceData.description | trustedHtml : true"
+    ></div>
+
+    <div
+      *ngIf="insuranceCard?.insuranceData?.insuredData"
+      class="card-container"
+    >
+      <div
+        *ngFor="let cards of insuranceCard?.insuranceData?.insuredData"
+        class="p-card"
+      >
+        <div class="hat">
+          <button
+            pButton
+            iconPos="left"
+            label="{{ 'BUTTON_EDIT' | translate }}"
+            icon="pi pi-pencil"
+            class="p-button-text"
+            (click)="changeInsuranceClinic(cards)"
+          ></button>
+          <button
+            pButton
+            iconPos="left"
+            label="{{ 'BUTTON_DELETE' | translate }}"
+            icon="pi pi-pencil"
+            class="p-button-text"
+            (click)="deleteInsurance(cards)"
+          ></button>
+          <div class="status">{{ cards.header }}</div>
+        </div>
+        <span class="top-status"></span>
+        <div *ngFor="let field of cards.fieldsData" class="inner-list">
+          <div class="title">
+            {{ field.name }}
+          </div>
+          <div
+            [ngClass]="field.link ? 'link' : 'title-value'"
+            class="title-value"
+            (click)="downloadFile(field.link)"
+          >
+            {{ field.value }}
+            <i *ngIf="field.link" class="hrm-icons icon-transition"></i>
+          </div>
+        </div>
+        <div
+          *ngIf="cards.link"
+          (click)="downloadFile(cards.link)"
+          class="title-download"
+        >
+          {{ 'INSURANCE_DOWNLOAD' | translate }}
+          <i class="hrm-icons icon-download"></i>
+        </div>
+      </div>
+    </div>
+    <div
+      *ngIf="insuranceCard.insuranceData?.insuredAdditionalData.length"
+      class="price-container"
+    >
+      <div
+        *ngFor="
+          let additionalInfo of insuranceCard?.insuranceData
+            ?.insuredAdditionalData
+        "
+        class="price-item"
+      >
+        <div class="price-title">{{ additionalInfo.name }}</div>
+        <div class="price-value">{{ additionalInfo.value }}</div>
+      </div>
+    </div>
+  </div>
+</div>

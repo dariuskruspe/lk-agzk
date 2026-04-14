@@ -1,0 +1,15 @@
+<p-toolbar class="title nowrap">
+  <button
+    pButton
+    class="p-button-rounded p-button-outlined"
+    icon="pi pi-arrow-left"
+    (click)="onBackPage()"
+  ></button>
+  <h1>
+    {{ document?.name }}
+  </h1>
+</p-toolbar>
+
+<app-signature-file-container
+  (onclose)="closeFile($event)"
+></app-signature-file-container>

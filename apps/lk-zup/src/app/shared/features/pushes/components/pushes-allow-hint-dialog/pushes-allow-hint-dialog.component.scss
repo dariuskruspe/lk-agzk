@@ -1,0 +1,26 @@
+.spinner-container {
+  padding: 15px 0;
+}
+
+.pushes-hint-dialog-container {
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  h2 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+}
+
+.push-hint {
+  text-align: center;
+  p {
+    text-align: left;
+  }
+  img {
+    width: 336px;
+  }
+}

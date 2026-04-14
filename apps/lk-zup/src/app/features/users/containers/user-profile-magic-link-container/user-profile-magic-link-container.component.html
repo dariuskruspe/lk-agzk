@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div class="row">
+    <p-toolbar class="title">
+      <h1>
+        {{ 'AUTH_WAYS' | translate }}
+      </h1>
+    </p-toolbar>
+    <div class="col-lg-9 col-12 p-0">
+      <app-user-profile-magic-link
+        *ngIf="settingsFacade.getData()?.userProfile?.useMagicLink"
+        [customIcon]="currentUserFacade.getCurrentEmployee()?.qrlogo"
+        [token]="localstorageService.getTokens()"
+      ></app-user-profile-magic-link>
+    </div>
+  </div>
+</div>

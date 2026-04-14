@@ -1,0 +1,717 @@
+// Переменные заменены на CSS переменные из themes_v2
+
+// Миксины
+@mixin hover-transition {
+  transition: all 0.2s ease;
+}
+// Стили для дропзоны
+.drop-zone {
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    user-select: none;
+  }
+
+  &__placeholder {
+    text-align: center;
+    color: var(--foreground-color-secondary);
+    padding: 30px;
+    border: 2px dashed var(--sidebar-border);
+    border-radius: var(--radius-md);
+    width: 100%;
+
+    &-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: var(--button-primary-bg);
+      opacity: 0.7;
+    }
+
+    &-text {
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+
+  &__field-item {
+    &--drag-hover {
+      position: relative;
+      padding-top: 4px;
+
+      &::before {
+        content: '';
+        position: absolute;
+        left: 10px;
+        right: 10px;
+        height: 3px;
+        background-color: var(--button-primary-bg);
+        top: 0;
+        border-radius: var(--radius);
+        animation: pulse 1.5s infinite;
+      }
+    }
+
+    &--drop-hover {
+      background-color: rgba(56, 128, 255, 0.05);
+      border-top: 2px solid var(--button-primary-bg);
+
+      .field-preview {
+        background-color: rgba(255, 255, 255, 0.8);
+      }
+    }
+  }
+
+  &__field-placeholder {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+    background-color: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(2px);
+    border-radius: var(--radius);
+
+    &-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: rgba(56, 128, 255, 0.1);
+      border: 2px dashed var(--button-primary-bg);
+      border-radius: var(--radius);
+      padding: 12px 16px;
+      animation: pulseBorder 1.5s infinite;
+
+      i {
+        font-size: 20px;
+        color: var(--button-primary-bg);
+        margin-bottom: 4px;
+      }
+
+      span {
+        font-size: 14px;
+        color: var(--button-primary-bg);
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__drop-area {
+    height: 0;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    z-index: 10;
+    pointer-events: none;
+    opacity: 0;
+
+    &--active {
+      height: 60px;
+      margin: 8px 0;
+      border-radius: var(--radius);
+      background-color: rgba(56, 128, 255, 0.08);
+      border: 2px dashed var(--button-primary-bg);
+      animation: pulseBorder 1.5s infinite;
+      pointer-events: auto;
+      opacity: 1;
+      box-shadow: var(--control-shadow);
+    }
+
+    &--nested {
+      margin-left: 20px;
+
+      &.drop-zone__drop-area--active {
+        margin: 8px 0 8px 20px;
+        height: 50px;
+      }
+    }
+  }
+
+  &__drop-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    transform: translateY(10px);
+    transition: transform 0.3s ease;
+
+    .drop-zone__drop-area--active & {
+      transform: translateY(0);
+    }
+
+    i {
+      font-size: 20px;
+      color: var(--button-primary-bg);
+      margin-bottom: 4px;
+    }
+
+    span {
+      font-size: 14px;
+      color: var(--button-primary-bg);
+      font-weight: 500;
+    }
+  }
+
+  &__field-placeholder-below,
+  &__field-placeholder-above {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+    height: 50px;
+    background-color: var(--control-hover-bg);
+    color: var(--button-primary-bg);
+    box-shadow: var(--control-shadow);
+    animation: slideDown 0.2s ease-out;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+    background-color: var(--control-hover-bg);
+    border: 1px dashed var(--button-primary-bg);
+    color: var(--button-primary-bg);
+    border-radius: var(--radius);
+    font-size: 12px;
+    font-weight: 500;
+    margin: 4px 0;
+
+    i {
+      font-size: 14px;
+    }
+
+    i {
+      margin-right: 6px;
+    }
+
+    span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+  }
+}
+
+// Стили для групп полей
+.field-group {
+  &__nested {
+    padding-left: 16px;
+    margin-left: 12px;
+    border-left: 2px solid var(--button-primary-bg);
+    background-color: rgba(56, 128, 255, 0.1);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    margin-bottom: 8px;
+  }
+}
+
+// Стили для превью поля
+.field-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background-color: var(--bg-element);
+  position: relative;
+  border: 1px solid transparent;
+  user-select: none;
+
+  &:hover {
+    border: 1px dashed var(--button-primary-bg);
+    background-color: var(--control-hover-bg);
+  }
+
+  &--group {
+    color: var(--button-primary-bg);
+    font-weight: 500;
+    border-left: 3px solid var(--button-primary-bg);
+    &:hover {
+      border-left: 3px solid var(--button-primary-bg);
+    }
+  }
+
+  &--nested {
+    margin-top: 2px;
+    padding: 10px 10px 10px 20px;
+    background-color: rgba(56, 128, 255, 0.1);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    margin-bottom: 4px;
+    position: relative;
+
+    &:hover {
+      border: 1px dashed var(--button-primary-bg);
+      background-color: rgba(56, 128, 255, 0.15);
+    }
+
+    &:last-child {
+      margin-bottom: 4px;
+    }
+
+    .drop-zone__field-placeholder-above,
+    .drop-zone__field-placeholder-below {
+      width: calc(100% - 20px);
+      left: 10px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+  }
+
+  &__type {
+    font-size: 11px;
+    color: var(--foreground-color-secondary);
+    background-color: var(--control-hover-bg);
+    padding: 2px 6px;
+    border-radius: var(--radius);
+    display: inline-block;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: fit-content;
+    line-clamp: 1;
+  }
+
+  &__actions {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 8px;
+  }
+
+  &:hover &__actions {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  &--dragging {
+    opacity: 0.7;
+    border: 1px dashed var(--sidebar-border);
+    cursor: grabbing;
+    transform: scale(0.98) translateY(-2px);
+    box-shadow: var(--liquid-shadow);
+    z-index: 100;
+    position: relative;
+  }
+
+  &--drag-hover {
+    position: relative;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background-color: var(--button-primary-bg);
+      top: -2px;
+      border-radius: var(--radius);
+      animation: pulse 1.5s infinite;
+    }
+  }
+
+  &--drop-hover {
+    background-color: rgba(56, 128, 255, 0.05);
+    border-top: 2px solid var(--button-primary-bg);
+    box-shadow: var(--control-shadow);
+  }
+
+  &__drag-handle {
+    cursor: grab;
+    color: var(--foreground-color-secondary);
+    margin-right: 8px;
+    display: inline-flex;
+    align-items: center;
+
+    &:hover {
+      color: var(--foreground-color);
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+// Стили для кнопок действий
+.field-action {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  @include hover-transition;
+
+  &--edit {
+    color: var(--button-primary-bg);
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+    }
+  }
+
+  &--delete {
+    color: var(--button-danger-bg);
+
+    &:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+  }
+
+  &--add {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    .pi-plus {
+      font-weight: bold;
+    }
+  }
+}
+
+// Стили для popover выбора полей
+.add-field-popover {
+  max-height: 500px;
+  overflow-y: auto;
+  padding: 16px;
+  background-color: #fff;
+
+  &__title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--foreground-color);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+
+  &__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  &__group {
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+
+    &:not(:last-child) {
+      margin-bottom: 8px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+  }
+
+  &__group-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    margin-bottom: 8px;
+    background: transparent;
+    border-bottom: none;
+  }
+
+  &__group-icon {
+    color: var(--foreground-color-secondary);
+    font-size: 14px;
+  }
+
+  &__group-title {
+    font-weight: 600;
+    font-size: 12px;
+    color: var(--foreground-color-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  &__group-items {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 4px;
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: var(--radius-md);
+    border: none;
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+  }
+
+  &__item-name {
+    font-weight: 500;
+    color: var(--foreground-color);
+    font-size: 13px;
+  }
+
+  &__item-type {
+    font-size: 11px;
+    color: var(--foreground-color-secondary);
+    padding: 2px 8px;
+    border-radius: 12px;
+    background-color: var(--control-hover-bg);
+  }
+}
+
+::ng-deep {
+  .add-field-popover-wrapper {
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--liquid-shadow) !important;
+    overflow: hidden;
+    border: 1px solid var(--sidebar-border);
+
+    .p-overlaypanel-content {
+      padding: 0 !important;
+    }
+
+    &:before,
+    &:after {
+      display: none !important;
+    }
+  }
+
+  .p-button.p-button-outlined.p-button-primary.field-action--add {
+    background-color: var(--bg-element);
+    border: 1px dashed var(--button-primary-bg);
+    color: var(--button-primary-bg);
+    height: 24px;
+    padding: 0;
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .p-button-icon {
+      font-size: 12px;
+      margin: 0;
+    }
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+      border-color: var(--button-primary-bg);
+    }
+  }
+
+  // Стиль для body при перетаскивании
+  .dragging-field {
+    cursor: grabbing;
+
+    .drop-zone__field-item-wrapper {
+      transition:
+        transform 0.3s ease,
+        margin 0.3s ease;
+      position: relative;
+
+      &.shift-down {
+        transform: translateY(60px);
+      }
+    }
+
+    .field-group__nested {
+      .field-preview--nested {
+        transition:
+          transform 0.3s ease,
+          margin 0.3s ease;
+        position: relative;
+
+        &.shift-down {
+          transform: translateY(50px);
+        }
+      }
+    }
+  }
+}
+
+// Стиль для кнопки добавления
+.field-preview__add-button {
+  display: flex;
+  justify-content: center;
+  padding: 4px 16px;
+  position: relative;
+
+  &::before {
+    display: none;
+  }
+
+  button {
+    position: relative;
+    z-index: 1;
+    background-color: var(--bg-element);
+    width: 100%;
+  }
+
+  &--nested {
+    margin-left: 20px;
+    padding-left: 0;
+    padding-right: 16px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+}
+
+.drop-zone__field-list {
+  user-select: none;
+}
+
+.drop-zone__field-item {
+  background-color: var(--bg-element);
+  margin-bottom: 0;
+  width: 100%;
+  user-select: none;
+}
+
+.drop-zone__field-item-wrapper {
+  margin-bottom: 8px;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.6);
+  }
+  70% {
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(33, 150, 243, 0);
+  }
+}
+
+@keyframes pulseBorder {
+  0% {
+    border-color: rgba(33, 150, 243, 0.6);
+  }
+  50% {
+    border-color: rgba(33, 150, 243, 0.3);
+  }
+  100% {
+    border-color: rgba(33, 150, 243, 0.6);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(10px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+// Добавляем стили для кнопок добавления полей
+.add-field-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 10px 16px;
+  background-color: rgba(56, 128, 255, 0.08);
+  color: var(--button-primary-bg);
+  border: 1px dashed var(--button-primary-bg);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+
+  i {
+    font-size: 16px;
+  }
+
+  &:hover {
+    background-color: rgba(56, 128, 255, 0.15);
+    transform: translateY(-1px);
+    box-shadow: var(--control-shadow);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &--nested {
+    background-color: rgba(56, 128, 255, 0.05);
+    color: var(--button-primary-bg);
+    border-color: var(--button-primary-bg);
+    padding: 8px 12px;
+    font-size: 12px;
+
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+.field-preview__add-button {
+  padding: 8px 16px;
+
+  &--first {
+    margin-bottom: 8px;
+  }
+
+  &--nested {
+    padding: 4px 8px;
+    margin-top: 4px;
+  }
+}

@@ -1,0 +1,48 @@
+@let status = goal().status;
+
+<div class="goal-item">
+  @if (isCompleted()) {
+    <div class="circle completed">
+      <i class="pi pi-check"></i>
+    </div>
+  } @else {
+    <div class="circle"></div>
+  }
+
+  <div class="goal-info">
+    <div>{{ goal().name }}</div>
+  </div>
+
+  @if (status && goal().isEditable) {
+    <app-issue-status
+      [color]="status?.color"
+      [label]="status?.name"
+      [pTooltip]="status?.description"
+      fontColor="var(--basic-color)"
+    ></app-issue-status>
+  }
+
+  <div class="goal-actions">
+    @if (goal().isEditable) {
+    <button
+      class="goal-action goal-edit"
+      (click)="canEdit() && edit.emit()"
+      [disabled]="!canEdit()"
+    >
+      <i class="pi pi-pencil"></i>
+    </button>
+    <button
+      class="goal-action goal-delete"
+      (click)="canDelete() && onDelete($event)"
+      [disabled]="!canDelete()"
+    >
+      <i class="pi pi-times"></i>
+    </button>
+    }
+  </div>
+</div>
+<div class="goal-description">
+  <div
+    [innerHTML]="goal().description | trustedHtml"
+  ></div>
+</div>

@@ -1,0 +1,29 @@
+{
+  "name": "lk-zup-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/lk-zup-e2e/src",
+  "projectType": "application",
+  "tags": [],
+  "implicitDependencies": ["lk-zup"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/cypress:cypress",
+      "options": {
+        "cypressConfig": "apps/lk-zup-e2e/cypress.config.ts",
+        "devServerTarget": "lk-zup:serve:development",
+        "testingType": "e2e"
+      },
+      "configurations": {
+        "production": {
+          "devServerTarget": "lk-zup:serve:production"
+        },
+        "ci": {
+          "devServerTarget": "lk-zup:serve-static"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

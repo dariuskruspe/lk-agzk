@@ -1,0 +1,57 @@
+<div class="custom-sections-container">
+  <div class="custom-sections-header">
+    <h1>Произвольные страницы</h1>
+  </div>
+
+  <div class="card">
+    <p-table
+      [value]="sections()"
+      styleClass="p-datatable-sm p-datatable-hoverable-rows"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [scrollable]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th style="width: 80%">Название</th>
+          <th style="width: 20%">Действия</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-section>
+        <tr>
+          <td>
+            <div class="section-name">
+              @if (section.nameIcon) {
+                <i class="pi {{ section.nameIcon }} section-icon"></i>
+              }
+              <span>{{ section.name }}</span>
+            </div>
+          </td>
+          <td>
+            <div class="action-buttons">
+              <button
+                pButton
+                icon="pi pi-pencil"
+                class="p-button-rounded p-button-outlined p-button-info"
+                (click)="editSection(section)"
+                pTooltip="Редактировать раздел"
+              ></button>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="2">
+            <div class="empty-message">
+              <i class="pi pi-folder-open empty-icon"></i>
+              <p class="empty-title">Страницы не найдены</p>
+              <p class="empty-subtitle">
+                В данный момент нет доступных страниц
+              </p>
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

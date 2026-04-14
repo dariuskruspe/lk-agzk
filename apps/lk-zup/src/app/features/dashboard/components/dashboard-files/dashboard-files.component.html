@@ -1,0 +1,92 @@
+@if (isEnabledDocuments) {
+  <div class="page_wrapper row documents-flex-container">
+    <div>
+      <div *ngIf="!documentDataList?.count; else documentsTable">
+        <p-toolbar>
+          <h2>
+            {{ 'TITLE_MY_DOCUMENTS' | translate }}
+          </h2>
+        </p-toolbar>
+
+        <p-card *skeleton="documentDataList; else skeleton; repeat: 3">
+          <div class="empty-files">
+            <div class="left-side">
+              <div class="empty-text">
+                {{ 'ALL_DOCUMENTS_SIGNED' | translate }}
+              </div>
+              <div class="all-issues-btn">
+                <button
+                  pButton
+                  label="{{ 'BUTTON_OPEN_ALL' | translate }}"
+                  class="p-button-outlined s"
+                  [routerLink]="['', 'my-documents']"
+                  routerLinkActive="active"
+                ></button>
+              </div>
+            </div>
+            <div class="right-side">
+              <img
+                [src]="
+                  isDarkTheme()
+                    ? 'assets/img/svg/empty-files-dark.svg'
+                    : 'assets/img/svg/empty-files.svg'
+                "
+                alt="empty-issues"
+                [class]="
+                  issueDataList?.issues.length === 3
+                    ? 'third'
+                    : issueDataList?.issues.length === 2
+                      ? 'second'
+                      : 'first'
+                "
+              />
+            </div>
+          </div>
+        </p-card>
+      </div>
+      <ng-template #documentsTable>
+        <div>
+          <div class="counter-container">
+            <h2>
+              {{ 'TITLE_MY_DOCUMENTS' | translate }}
+            </h2>
+            <p-badge
+              [value]="documentDataList.count.toString()"
+              styleClass="mr-2"
+              severity="danger"
+              class="small"
+            ></p-badge>
+          </div>
+
+          <loadable-list-container
+            [template]="documentsLayout"
+            [dataConfig]="documentsConfig"
+            [dataList]="documentDataList"
+            [otherData]="{
+              states: documentStateList,
+            }"
+            [pagination]="false"
+            (clickItem)="clickDocument($event)"
+          ></loadable-list-container>
+          <div class="button-card">
+            <button
+              pButton
+              class="issues-link p-button-outlined s"
+              label="{{ 'BUTTON_OPEN_ALL' | translate }}"
+              [routerLink]="['', 'my-documents']"
+            ></button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+}
+
+<ng-template #skeleton>
+  <div class="skeleton-list-item">
+    <div class="skeleton-list-item__el">
+      <p-skeleton height="36px" width="36px" borderRadius="50%"></p-skeleton>
+    </div>
+    <p-skeleton height="25px" width="250px"></p-skeleton>
+  </div>
+</ng-template>

@@ -1,0 +1,69 @@
+<p-card styleClass="salary-card">
+  @if (selectedMonth()) {
+    <div class="salary-card__container">
+      <div class="salary-card__header">
+        <p class="salary-card__title">
+          Зарплата за
+
+          <app-month-picker
+            [min]="minMonth()"
+            [max]="maxMonth()"
+            [(value)]="selectedMonth"
+            #calendarRef
+          >
+            <ng-template #trigger let-displayValue="displayValue">
+              <div class="salary-card__month-picker-trigger">
+                <span>{{ displayValue }}</span>
+                <lucide-icon [name]="ChevronDownIcon"></lucide-icon>
+              </div>
+            </ng-template>
+          </app-month-picker>
+        </p>
+      </div>
+
+      <button
+        class="salary-card__download-btn"
+        aria-label="Скачать"
+        (click)="download()"
+      >
+        <lucide-icon [name]="DownloadIcon"></lucide-icon>
+      </button>
+
+      <div class="salary-card__amount-section">
+        <button
+          class="salary-card__eye-btn"
+          aria-label="Показать/скрыть сумму"
+          (click)="toggleVisibility()"
+        >
+          @if (isAmountVisible()) {
+            <lucide-icon [name]="EyeIcon"></lucide-icon>
+          } @else {
+            <lucide-icon [name]="EyeOffIcon"></lucide-icon>
+          }
+        </button>
+        @if (loading()) {
+          <div class="widget-loading">
+            <i class="pi pi-spinner pi-spin"></i>
+          </div>
+        } @else {
+          <p class="salary-card__amount">
+            @if (isAmountVisible()) {
+              {{ payslip()?.accrued }}
+            } @else {
+              •••••• ₽
+            }
+          </p>
+        }
+      </div>
+
+      <p class="salary-card__payment-info">
+        {{ 'SALARY_REMAINING_PAYABLE' | translate }}:
+        @if (loading()) {
+          <i class="pi pi-spinner pi-spin"></i>
+        } @else {
+          {{ payslip()?.balance }}
+        }
+      </p>
+    </div>
+  }
+</p-card>

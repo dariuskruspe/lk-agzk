@@ -1,0 +1,20 @@
+.app-date-picker__trigger {
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+}
+
+.app-date-picker__calendar {
+  ::ng-deep {
+    .p-calendar {
+      width: 100%;
+      border: none;
+
+      .p-datepicker {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+      }
+    }
+  }
+}

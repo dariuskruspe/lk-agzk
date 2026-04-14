@@ -1,0 +1,7 @@
+<div
+  class="app-select-button-option"
+  [class.active]="value() === appSelectButtonService.value()"
+  (click)="appSelectButtonService.select(value())"
+>
+  <ng-content></ng-content>
+</div>

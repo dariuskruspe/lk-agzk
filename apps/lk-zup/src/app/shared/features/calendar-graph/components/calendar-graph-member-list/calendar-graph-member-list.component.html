@@ -1,0 +1,35 @@
+<div class="member-list">
+  <!-- Проходим по всем отпускам и отображаем фио и должность сотрудников -->
+  @for (member of displayedVacationsSignal(); track member.employeeId) {
+  <div>
+    <!-- <только если включено выделение сотрудников и текущая страница "Отпуска сотрудников"> -->
+    @if (enableEmployeeSelectionSignal() && urlSegmentsSignal()?.[0]?.path ===
+    'vacations-management') {
+    <div class="checkbox-container flex flex-row ai-flex-start p-5">
+      @if (member?.employeeId) {
+      <p-checkbox
+        [(ngModel)]="selectedEmployeeIdsSignal"
+        (onChange)="
+          employeeVacationsService.onSelectedEmployeeIdsChange($event)
+        "
+        name="selected-vacations"
+        [inputId]="member.employeeId"
+        [value]="member.employeeId"
+        styleClass="employee-checkbox"
+      ></p-checkbox>
+      }
+    </div>
+    }
+    <div class="member"
+     (click)="onEditVacation(member)">
+      <div
+        class="name"
+        [ngStyle]="{ 'font-weight': hasUnsigned(member) ? 'bold' : 'normal' }"
+      >
+        {{ member.name }}
+      </div>
+      <div class="position">{{ member.position }}</div>
+    </div>
+  </div>
+  }
+</div>

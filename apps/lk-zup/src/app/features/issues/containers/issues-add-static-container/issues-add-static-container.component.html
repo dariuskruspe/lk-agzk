@@ -1,0 +1,139 @@
+<mat-progress-bar
+    class="absolute-top" mode="indeterminate" *ngIf="
+    (issuesDayOffFacade.loading$() | async) ||
+    (optionListFacade.loading$() | async) ||
+    (issuesTypeFacade.loading$() | async)
+  "
+></mat-progress-bar>
+<app-issues-add-command
+    *ngIf="alias === 'command'"
+    [dayOff]="issuesDayOffFacade.getData$() | async"
+    [currentUser]="currentUserFacade.forcedData$ | async"
+    [settings]="(settingsFacade.getData$() | async) || settingsFacade.getData()"
+    [issuesOptionLists]="issuesOptionListFacade.getData$() | async"
+    [dateLocale]="langFacade.getLang()"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+    (issueFormSubmit)="addIssue($event)"
+    (toggleDateControls)="toggleDateControls($event)"
+    (getOptionLists)="showIssuesOptionLists($event)"
+    (goBack)="goBack()"
+></app-issues-add-command>
+<app-issues-add-business-trip
+    *ngIf="alias === 'businessTrip'"
+    [dayOff]="issuesDayOffFacade.getData$() | async"
+    [issuesOptionLists]="issuesOptionListFacade.getData$() | async"
+    [dateLocale]="langFacade.getLang()"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [currentUser]="currentUserFacade.forcedData$ | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+    (issueFormSubmit)="addIssue($event)"
+    (toggleDateControls)="toggleDateControls($event)"
+    (getOptionLists)="showIssuesOptionLists($event)"
+    (goBack)="goBack()"
+></app-issues-add-business-trip>
+<app-issues-add-weekend-work
+    *ngIf="alias === 'weekendWork'"
+    [settings]="(settingsFacade.getData$() | async) || settingsFacade.getData()"
+    [dayOff]="issuesDayOffFacade.getData$() | async"
+    [optionLists]="issuesOptionListFacade.getData$() | async"
+    [issuesOptionLists]="issuesOptionListFacade.getData$() | async"
+    [dateLocale]="langFacade.getLang()"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+    (issueFormSubmit)="addIssue($event)"
+    (toggleDateControls)="toggleDateControls($event)"
+    (getOptionLists)="showIssuesOptionLists($event)"
+    (goBack)="goBack()"
+></app-issues-add-weekend-work>
+<app-issues-add-overtime-work
+    *ngIf="alias === 'overtimeWork'"
+    [dayOff]="issuesDayOffFacade.getData$() | async"
+    [optionLists]="optionListFacade.getData$() | async"
+    [issuesOptionLists]="issuesOptionListFacade.getData$() | async"
+    [dateLocale]="langFacade.getLang()"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+    (issueFormSubmit)="addIssue($event)"
+    (toggleDateControls)="toggleDateControls($event)"
+    (getOptionLists)="showIssuesOptionLists($event)"
+    (goBack)="goBack()"
+></app-issues-add-overtime-work>
+<app-issues-add-compensation
+    *ngIf="alias === 'vacationCompensation'"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [isLoading]="issuesFacade.loading$() | async"
+    [currentUser]="currentUserFacade.forcedData$ | async"
+    [vacationBalanceByTypeID]="issuesCompensationIdFacade.getData$() | async"
+    (issueFormSubmit)="addIssue($event); isLoading = !isLoading"
+    [employeesStaticData]="
+    employeesStaticDataFacade.getData() ||
+    (employeesStaticDataFacade.getData$() | async)
+  "
+    [employeesAdditionalStaticData]="employeesAdditionalStaticDataFacade.getData()"
+    [optionLists]="optionListFacade.getData$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+>
+</app-issues-add-compensation>
+<app-issues-add-insurance
+    *ngIf="isInsurance"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [currentUser]="currentUserFacade.forcedData$ | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    (issueFormSubmit)="addIssue($event)"
+    (goBack)="goBack()"
+    [optionLists]="optionListFacade.getData$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+>
+</app-issues-add-insurance>
+<app-issues-add-weekend-hourly
+    *ngIf="alias === 'weekendWorkByHours'"
+    [settings]="(settingsFacade.getData$() | async) || settingsFacade.getData()"
+    [dayOff]="issuesDayOffFacade.getData$() | async"
+    [optionLists]="issuesOptionListFacade.getData$() | async"
+    [issuesOptionLists]="issuesOptionListFacade.getData$() | async"
+    [dateLocale]="langFacade.getLang()"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+    (issueFormSubmit)="addIssue($event)"
+    (toggleDateControls)="toggleDateControls($event)"
+    (getOptionLists)="showIssuesOptionLists($event)"
+    (goBack)="goBack()"
+>
+</app-issues-add-weekend-hourly>
+<app-issues-add-personnel-transfer
+    *ngIf="isPersonnelTransfer"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [currentUser]="currentUserFacade.forcedData$ | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    (issueFormSubmit)="addIssue($event)"
+    (goBack)="goBack()"
+    [employeesStaticData]="employeesStaticDataFacade.forcedData$ | async"
+    [optionLists]="optionListFacade.getData$() | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+>
+</app-issues-add-personnel-transfer>
+<app-issues-add-unscheduled-vacation
+    *ngIf="alias === 'unscheduledVacation'"
+    [issuesType]="issuesTypeFacade.getData$() | async"
+    [loading]="issuesAddFacade.loading$() | async"
+    [vacationBalance]="issuesVacationBalanceFacade.getData$() | async"
+    [vacationBalanceByDate]="issuesVacationBalanceDateFacade.getData$() | async"
+    [isMobile]="isMobile$ | async"
+    [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+    [daysOff]="daysOffFacade.forcedData$ | async"
+    [employeesStaticData]="
+    employeesStaticDataFacade.getData() ||
+    (employeesStaticDataFacade.getData$() | async)
+  "
+    [employeesAdditionalStaticData]="employeesAdditionalStaticDataFacade.getData()"
+    (issueFormSubmit)="addIssue($event)"
+    (goBack)="goBack()"
+    (changeDate)="changeVacationBalanceByDate($event)"
+>
+</app-issues-add-unscheduled-vacation>

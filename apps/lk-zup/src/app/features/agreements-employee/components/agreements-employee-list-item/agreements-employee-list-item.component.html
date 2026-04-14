@@ -1,0 +1,41 @@
+<mat-toolbar
+  *ngFor="let item of dataList?.documents"
+  class="custom-item"
+  (click)="onClick(item)"
+>
+  <div class="custom-item__wrap row">
+    <div class="row col-md-10 col-12">
+      <span
+        class="custom-item_wrapper__text_snippet col-2"
+        [ngClass]="
+          otherData?.documentsStates && findWorkStatus(item.state)?.sign
+            ? 'signed'
+            : 'no-signed'
+        "
+      >
+        <mat-icon>text_snippet</mat-icon>
+      </span>
+      <div class="row col-11 align-items-center">
+        <h4 class="col-lg-11 col-12 ellipsis">{{ item.name }}</h4>
+        <p class="col-lg-1 col-12">
+          {{ item.stateDate | date: 'dd.MM.yyyy' }}
+        </p>
+      </div>
+    </div>
+    <div class="col-md-2 col-12 custom-item_wrapper__button">
+      <mat-icon class="custom-item__attachment_icon">attachment</mat-icon>
+      <button
+        class="custom-item__button"
+        [ngClass]="{
+          signedButton: otherData?.documentsStates
+            ? findWorkStatus(item.state)?.sign
+            : null
+        }"
+      >
+        {{
+          otherData?.documentsStates ? findWorkStatus(item.state)?.name : null
+        }}
+      </button>
+    </div>
+  </div>
+</mat-toolbar>

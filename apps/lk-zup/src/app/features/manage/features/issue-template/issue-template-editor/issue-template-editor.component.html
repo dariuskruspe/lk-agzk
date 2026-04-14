@@ -1,0 +1,140 @@
+<div class="form-builder__workspace">
+  <div class="form-builder__fields-section">
+    <div class="form-builder__section-header">
+      <div class="form-builder__section-header-content">
+        <i class="pi pi-list-ul"></i>
+        <span class="form-builder__section-title">Доступные поля</span>
+      </div>
+      <div class="form-builder__section-actions">
+        <button
+          class="form-builder__section-button"
+          pTooltip="Редактировать JSON"
+          (click)="openJsonEditor()"
+        >
+          <i class="pi pi-code"></i>
+        </button>
+      </div>
+    </div>
+
+    <div class="form-builder__fields-container">
+      <app-issue-template-field-list
+        [templates]="templates()"
+        [focusedField]="focusedField()"
+        (addField)="showAddFieldPopover($event)"
+        (removeField)="removeItem($event)"
+        (editField)="editItem($event)"
+        (focusField)="onFocusField($event)"
+        (unfocusField)="onUnfocusField($event)"
+        (moveField)="moveField($event)"
+      ></app-issue-template-field-list>
+    </div>
+  </div>
+
+  @if (templates()?.length) {
+    <div class="form-builder__preview-section">
+      <div class="form-builder__section-header">
+        <div class="form-builder__section-header-content">
+          <span class="form-builder__section-title">Предпросмотр формы</span>
+        </div>
+        <div class="view-mode-switcher">
+          <button
+            class="view-mode-button"
+            [class.view-mode-button--active]="previewMode() === 'desktop'"
+            (click)="setPreviewMode('desktop')"
+            pTooltip="Режим компьютера"
+          >
+            <i class="pi pi-desktop"></i>
+          </button>
+          <button
+            class="view-mode-button"
+            [class.view-mode-button--active]="previewMode() === 'mobile'"
+            (click)="setPreviewMode('mobile')"
+            pTooltip="Мобильный режим"
+          >
+            <i class="pi pi-mobile"></i>
+          </button>
+
+          <span class="view-mode-divider"></span>
+
+          <button
+            class="view-mode-button inspector-toggle"
+            [class.view-mode-button--active]="inspectorEnabled()"
+            (click)="toggleInspector()"
+            pTooltip="{{
+              inspectorEnabled() ? 'Выключить инспектор' : 'Включить инспектор'
+            }}"
+          >
+            <app-icon-inspect></app-icon-inspect>
+          </button>
+        </div>
+      </div>
+      <div
+        class="form-builder__preview-container"
+        [class.form-builder__preview-container--mobile]="
+          previewMode() === 'mobile'
+        "
+      >
+        <app-issue-template-builder-preview
+          [focusedField]="focusedField()"
+          [templates]="templates()"
+          [inspectorEnabled]="inspectorEnabled()"
+          (editField)="editSelectedItem($event)"
+          (deleteField)="deleteSelectedItem($event)"
+        ></app-issue-template-builder-preview>
+      </div>
+    </div>
+  }
+</div>
+
+<!-- OverlayPanel для добавления полей -->
+<p-overlayPanel #op styleClass="add-field-popover-wrapper">
+  <ng-template pTemplate>
+    <div class="add-field-popover">
+      <h3 class="add-field-popover__title">Выберите поле для добавления</h3>
+      <div class="add-field-popover__groups">
+        @for (group of availableFields(); track group.title) {
+          <div class="add-field-popover__group">
+            <div class="add-field-popover__group-header">
+              <i class="add-field-popover__group-icon {{ group.icon }}"></i>
+              <span class="add-field-popover__group-title">{{
+                group.title
+              }}</span>
+            </div>
+            <div class="add-field-popover__group-items">
+              @for (field of group.fields; track field.name) {
+                @let isDisabled =
+                  field.type === 'arr-smart' && currentInsertPath.length > 0;
+
+                <div
+                  class="add-field-popover__item"
+                  [class.add-field-popover__item--disabled]="isDisabled"
+                  (click)="
+                    !isDisabled
+                      ? addFieldAtPosition(op, field)
+                      : $event.preventDefault()
+                  "
+                >
+                  <span class="add-field-popover__item-name">{{
+                    field.name
+                  }}</span>
+                  <span class="add-field-popover__item-type">{{
+                    field.type
+                  }}</span>
+                </div>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </ng-template>
+</p-overlayPanel>
+
+<!-- Компонент настроек полей -->
+@if (fieldSettingsVisible()) {
+  <app-issue-template-builder-field-settings
+    [value]="currentFieldValue()"
+    (close)="onFieldSettingsClose()"
+    (save)="onFieldSettingsSave($event)"
+  ></app-issue-template-builder-field-settings>
+}

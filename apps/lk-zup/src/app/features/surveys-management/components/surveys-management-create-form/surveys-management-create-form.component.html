@@ -1,0 +1,266 @@
+<div class="container-fluid">
+  <div class="row">
+    <form
+      [formGroup]="form"
+      (change)="changeForm()"
+      class="col-md-12 p-0"
+    >
+      <div class="card mb">
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{'SURVEY_NAME' | translate }}</label>
+          <input
+            pInputText
+            type="text"
+            formControlName="name"
+            placeholder="{{'SURVEY_NAME_PLACEHOLDER' | translate }}"
+          />
+        </div>
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{'INTRODUCTION' | translate }}</label>
+          <input
+            pInputText
+            type="text"
+            formControlName="description"
+            placeholder="{{'INTRODUCTION_PLACEHOLDER' | translate }}"
+          />
+        </div>
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{'EMPLOYEE_APPROVERS' | translate }}</label>
+          <p-multiSelect
+            formControlName="coordinators"
+            [options]="coordinatorsList?.optionList || []"
+            optionLabel="representation"
+            optionValue="value"
+            placeholder="{{'EMPLOYEE_APPROVERS_PLACEHOLDER' | translate }}"
+          ></p-multiSelect>
+        </div>
+        <app-surveys-management-text-form
+          *ngIf="coordinatorsChoiceHelp"
+          [text]="coordinatorsChoiceHelp || ''"
+        ></app-surveys-management-text-form>
+        <div class="separator"></div>
+        <label class="custom-form-field__label">{{'RESPONDENTS' | translate }}</label>
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{'ORGANIZATIONS' | translate }}</label>
+          <p-multiSelect
+            formControlName="organizations"
+            [options]="organizationsList?.optionList || []"
+            optionLabel="representation"
+            optionValue="value"
+            placeholder="{{'ORGANIZATIONS_PLACEHOLDER' | translate }}"
+          ></p-multiSelect>
+        </div>
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{'DEPARTMENTS' | translate }}</label>
+          <p-multiSelect
+            formControlName="divisions"
+            [options]="divisionsList?.optionList || []"
+            optionLabel="representation"
+            optionValue="value"
+            placeholder="{{'DEPARTMENTS_PLACEHOLDER' | translate }}"
+          ></p-multiSelect>
+        </div>
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{'BREADCRUMBS_EMPLOYEES' | translate }}</label>
+          <p-multiSelect
+            formControlName="individuals"
+            [options]="individualsList?.optionList || []"
+            optionLabel="representation"
+            optionValue="value"
+            placeholder="{{'EMPLOYEES_PLACEHOLDER' | translate }}"
+          ></p-multiSelect>
+        </div>
+        <app-surveys-management-text-form
+          *ngIf="respondentsChoiceHelp"
+          [text]="respondentsChoiceHelp || ''"
+        ></app-surveys-management-text-form>
+        <div class="separator"></div>
+        <div class="custom-form-field row">
+          <div  class="col-md-6">
+            <label class="custom-form-field__label">{{'SURVEY_START_DATE' | translate }}</label>
+            <p-calendar
+              formControlName="startDate"
+              [showIcon]="true"
+              [iconDisplay]="'input'"
+              [minDate]="form.get('startDate').value || currentDate"
+            ></p-calendar>
+          </div>
+          <div class="col-md-6">
+            <label class="custom-form-field__label">{{'SURVEY_END_DATE' | translate }}</label>
+            <p-calendar
+              formControlName="endDate"
+              [showIcon]="true"
+              [iconDisplay]="'input'"
+              [minDate]="form.get('endDate').value || form.get('startDate').value"
+            ></p-calendar>
+          </div>
+        </div>
+<!--        <app-surveys-management-text-form-->
+<!--        [text]="'SURVEY_HELP_TEXT' | translate"-->
+<!--        ></app-surveys-management-text-form>-->
+        <div class="separator"></div>
+        <label class="custom-form-field__label mb-10">{{'SURVEY_TYPE' | translate }}</label>
+        <div class="field-checkbox mb-10">
+          <p-radioButton
+            inputId="s"
+            [value]="'anonymous'"
+            formControlName="surveyType"
+            />
+          <label [for]="'s'" class="ml-2">
+            {{'ANONYMOUS' | translate }}
+          </label>
+        </div>
+        <div class="field-checkbox mb-20">
+          <p-radioButton
+            inputId="s2"
+            [value]="'nonAnonymous'"
+            formControlName="surveyType"
+            />
+          <label [for]="'s2'" class="ml-2">
+            {{'NON_ANONYMOUS' | translate }}
+          </label>
+        </div>
+<!--        <div class="separator"></div>-->
+<!--        <app-surveys-management-text-form-->
+<!--          *ngIf="!surveysManagementCreateService.disableEditForm()"-->
+<!--          [text]="'SURVEY_HELP_TEXT_2' | translate"-->
+<!--        ></app-surveys-management-text-form>-->
+
+        <div class="separator"></div>
+        <div class="field-checkbox custom-form-field">
+          <p-checkbox
+            inputId="enableReminders"
+            formControlName="enableReminders"
+            binary="true"
+            (onChange)="setRemindersFrequencyValidator($event)"
+          ></p-checkbox>
+          <label [for]="'enableReminders'" class="ml-2">
+            {{ 'REMINDERS' | translate }}
+          </label>
+        </div>
+
+        @if (form.get('enableReminders').value) {
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{ 'PERIODICITY' | translate }}</label>
+          <p-dropdown
+            formControlName="remindersFrequency"
+            [options]="frequencyList?.optionList || []"
+            optionLabel="representation"
+            optionValue="value"
+          ></p-dropdown>
+        </div>
+
+        <div class="field-checkbox custom-form-field">
+          <p-checkbox
+            inputId="enableAdditionalReminders"
+            formControlName="enableAdditionalReminders"
+            binary="true"
+            (onChange)="setEnableAdditionalRemindersValidator($event)"
+          ></p-checkbox>
+          <label [for]="'enableAdditionalReminders'" class="ml-2">
+            {{ 'ENABLE_ADDITIONAL_REMINDERS' | translate }}
+          </label>
+        </div>
+
+        @if (form.get('enableAdditionalReminders').value) {
+
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{ 'ADDITIONAL_REMINDERS_START_PERIOD' | translate }}</label>
+          <p-dropdown
+            formControlName="additionalRemindersStartPeriod"
+            [options]="frequencyList?.optionList || []"
+            optionLabel="representation"
+            optionValue="value"
+          ></p-dropdown>
+        </div>
+
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{ 'ADDITIONAL_REMINDERS_FREQUENCY' | translate }}</label>
+          <p-dropdown
+            formControlName="additionalRemindersFrequency"
+            [options]="frequencyList?.optionList || []"
+            optionLabel="representation"
+            optionValue="value"
+          ></p-dropdown>
+        </div>
+
+        }
+        }
+
+<!--        <div class="separator"></div>-->
+        <div class="flex mb-15 gap-10">
+          {{ 'QUESTIONS' | translate }}
+          <div class="separator mt-10 full-wid"></div>
+        </div>
+        <app-surveys-management-text-form
+          *ngIf="!surveysManagementCreateService.disableEditForm()"
+          [text]="'SURVEY_HELP_TEXT_2' | translate"
+        ></app-surveys-management-text-form>
+<!--        <div class="separator"></div>-->
+        <app-surveys-management-constructor
+          [showDividerError]="showDividerError()"
+        ></app-surveys-management-constructor>
+
+        <div class="mt-10 mb-22" *ngIf="!surveysManagementCreateService.disableEditForm()">
+          <button
+            pButton
+            label="{{ 'ADD_QUESTION' | translate }}"
+            class="col-12 col-md-auto"
+            (click)="confirm($event)"
+          ></button>
+        </div>
+
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">{{'CONCLUSION' | translate }}</label>
+          <input
+            pInputText
+            type="text"
+            formControlName="conclusion"
+            placeholder="{{'CONCLUSION_PLACEHOLDER' | translate }}"
+          />
+        </div>
+        <p-toolbar class="buttons margin-top">
+          <button
+            pButton
+            label="{{ getSubmitButtonLabel() | translate }}"
+            type="submit"
+            class="col-12 col-md-auto"
+            (click)="onSubmit()"
+            [loading]="isSurveyLoadingSignal()"
+          ></button>
+          <button
+            pButton
+            label="{{ 'SAVE_IN_DRAFT' | translate }}"
+            type="submit"
+            class="col-12 col-md-auto p-button-outlined ml-8"
+            (click)="onSubmitDraft()"
+            [loading]="isSurveyLoadingSignal()"
+          ></button>
+          <p-button
+            label="{{ 'BUTTON_CANCEL' | translate }}"
+            class="col-12 col-md-auto p-button-outlined ml-8"
+            [link]="true"
+            (click)="onCansel()"
+            [disabled]="isSurveyLoadingSignal()"
+          ></p-button>
+        </p-toolbar>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card flex justify-center">
+  <p-confirmPopup key="types">
+    <ng-template pTemplate="headless">
+      <p-listbox
+        *ngIf="fieldTypes.length"
+        [options]="fieldTypes"
+        [(ngModel)]="selectedType"
+        optionLabel="name"
+        optionValue="value"
+        (onChange)="addField()"
+        [listStyle]="{'max-height': '320px'}"
+      />
+    </ng-template>
+  </p-confirmPopup>
+</div>

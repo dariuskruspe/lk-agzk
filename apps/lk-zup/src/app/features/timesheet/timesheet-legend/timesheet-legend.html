@@ -1,0 +1,36 @@
+<section class="timesheet-legends" aria-label="Легенда табеля">
+  @for (item of items(); track item.id) {
+    <div class="timesheet-legend">
+      <div
+        class="timesheet-legend__preview"
+        [class.timesheet-legend__preview--warning]="item.variant === 'warning'"
+        [class.timesheet-legend__preview--filled]="item.variant === 'filled'"
+        [class.timesheet-legend__preview--outlined]="
+          item.variant === 'outlined'
+        "
+        [class.timesheet-legend__preview--icon]="item.variant === 'icon'"
+        [class.timesheet-legend__preview--hours]="item.variant === 'hours'"
+        [class.timesheet-legend__preview--hours-fact]="
+          item.variant === 'hours' && item.value?.startsWith('ф')
+        "
+        [style]="{
+          '--legend-color': item.color,
+          '--legend-bg': item.backgroundColor,
+        }"
+        aria-hidden="true"
+      >
+        @if (item.variant === 'hours') {
+          <div class="timesheet-legend__icon_hours">
+            {{ item.value }}
+          </div>
+        } @else if (item.icon) {
+          <app-icon kind="lucide" [icon]="item.icon"></app-icon>
+        } @else if (item.iconClass) {
+          <app-icon kind="custom" [icon]="item.iconClass"></app-icon>
+        }
+      </div>
+
+      <div class="timesheet-legend__label">{{ item.label }}</div>
+    </div>
+  }
+</section>

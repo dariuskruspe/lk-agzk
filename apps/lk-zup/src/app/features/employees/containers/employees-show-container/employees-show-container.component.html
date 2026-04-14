@@ -1,0 +1,7 @@
+<app-employees-show
+  [employeePersonalData]="employeesCompanyProfileFacade.getData$() | async"
+  [synonymsSettings]="settingsFacade.getData() || (settingsFacade.getData$() | async)"
+  [employeeStateList]="employeeStateListFacade.forcedData$ | async"
+  (backPage)="backPage()"
+  (goRouteManager)="goRouteEmployee($event)"
+></app-employees-show>

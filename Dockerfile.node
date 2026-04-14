@@ -1,0 +1,12 @@
+FROM cr.selcloud.ru/empldocs-front/empldocs_front_server:latest
+
+ARG path
+
+COPY ${path} /data/versions/_offline_version
+
+ENV EMPL_PORT=80
+ENV EMPL_SSL_PORT=443
+
+EXPOSE 80 443
+
+

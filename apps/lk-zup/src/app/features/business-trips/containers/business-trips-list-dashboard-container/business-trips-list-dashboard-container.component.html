@@ -1,0 +1,33 @@
+@if (isV2Enabled()) {
+  @if (isEmployeeBusinessTrips()) {
+    <app-employee-business-trip-v2 />
+  } @else {
+    <app-business-trip-v2 />
+  }
+} @else if (settingsSignal() && userSettingsSignal()) {
+  <app-business-trips-list-dashboard
+    [issuesTypeList]="issuesTypeListFacade.forcedData$ | async"
+    [businessTripsList]="
+      businessTripsIssuesListFacade.getData() ||
+      (businessTripsIssuesListFacade.getData$() | async)
+    "
+    [businessTripsStatusList]="issuesStatusListFacade.forcedData$ | async"
+    [members]="businessTripsMembersFacade.forcedData$ | async"
+    [loading]="preloader.loading$ | async"
+    [businessTripsPeriod]="businessTripsTimesheetFacade.forcedData$ | async"
+    [showIssuesList]="
+      settingsSignal().businessTrips.businessTripsIssues.enable &&
+      userSettingsSignal().businessTrips.businessTripsIssues.enable &&
+      sectionId === 'businessTrips'
+    "
+    [scrollPosition]="scrollPositionFacade.getData()?.position"
+    [types]="vacationsStatusFacade.forcedData$ | async"
+    [sectionId]="sectionId"
+    [currentUser]="userFacade.getData()"
+    (loadList)="getList($event)"
+    (goDetails)="onIssueDetails($event)"
+    (saveScrollPosition)="saveScrollPosition($event)"
+    (changeYearFilter)="changeYear($event)"
+    (goToIssueCreation)="toBusinessTripCreation()"
+  ></app-business-trips-list-dashboard>
+}

@@ -1,0 +1,45 @@
+<!-- Фильтр "По состоянию на" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'EMPLOYEE_VACATIONS_DATE' | translate }}
+  </label>
+  <p-calendar
+    [ngModel]="filterValue.date"
+    (ngModelChange)="selectedDateChange.emit($event)"
+    dateFormat="dd.mm.yy"
+    [firstDayOfWeek]="1"
+    [readonlyInput]="true"
+    styleClass="w-full"
+    [touchUI]="isMobileV()"
+  >
+    <ng-template pTemplate="date" let-dateMeta>
+      <span [ngClass]="{ 'weekend': isWeekend(dateMeta2Date(dateMeta)) }">
+        {{ dateMeta.day }}
+      </span>
+    </ng-template>
+  </p-calendar>
+</div>
+
+<!-- Фильтр "Сотрудник" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'VACATION_EMPLOYEE_TITLE' | translate }}
+  </label>
+  <p-multiSelect
+    [(ngModel)]="filterValue['selectedEmployeeIds']"
+    (ngModelChange)="applyFilters.emit()"
+    class="dropdown-input"
+    [filter]="true"
+    maxSelectedLabels="0"
+    optionLabel="fullName"
+    optionValue="id"
+    [options]="
+              (vacationsEmployeeListFacade.getData$() | async) ||
+              vacationsEmployeeListFacade.getData()
+            "
+    placeholder="{{ 'EMPLOYEE_NAME_PLACEHOLDER' | translate }}"
+    [selectedItemsLabel]="'SELECTED_ITEMS_LABEL' | translate"
+    [showClear]="true"
+    styleClass="w-full"
+  ></p-multiSelect>
+</div>

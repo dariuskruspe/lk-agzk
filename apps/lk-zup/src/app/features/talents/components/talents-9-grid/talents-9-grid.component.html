@@ -1,0 +1,30 @@
+<div class="nine-grid">
+  <div class="nine-grid__header">
+    <span></span>
+    <span>{{ 'LOW' | translate }}</span>
+    <span>{{ 'MEDIUM' | translate }}</span>
+    <span>{{ 'HIGH' | translate }}</span>
+  </div>
+  <div class="nine-grid__body">
+    <div class="nine-grid__y-labels">
+      <span>{{ 'EXCEEDS_EXPECTATIONS' | translate }}</span>
+      <span>{{ 'MEETS_EXPECTATIONS' | translate }}</span>
+      <span>{{ 'NEEDS_IMPROVEMENT' | translate }}</span>
+    </div>
+    <div class="nine-grid__cells">
+      <ng-container *ngFor="let row of grid">
+        <div class="nine-grid__row">
+          <ng-container *ngFor="let cell of row">
+            <div class="nine-grid__cell" [ngStyle]="{'background': cell.color}">
+              <div class="nine-grid__avatars" *ngIf="cell.employees">
+                <img *ngFor="let user of cell.employees" [src]="user.photo" class="nine-grid__avatar" [pTooltip]="user.name" [routerLink]="['', 'talents', user.id]"/>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="nine-grid__x-label">{{ 'POTENTIAL' | translate }} &rarr;</div>
+  <div class="nine-grid__y-label">← {{ 'EFFICIENCY' | translate }}</div>
+</div>

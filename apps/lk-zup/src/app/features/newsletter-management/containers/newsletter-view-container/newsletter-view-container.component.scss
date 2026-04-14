@@ -1,0 +1,157 @@
+.newsletter-view-container {
+  .view-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+
+    .back-button {
+      padding: 8px;
+      color: #6c757d;
+
+      &:hover {
+        background-color: #f8f9fa;
+        color: #007bff;
+      }
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+
+      .action-button {
+        padding: 8px;
+        color: #6c757d;
+
+        &:hover {
+          background-color: #f8f9fa;
+          color: #007bff;
+        }
+      }
+    }
+  }
+
+  .view-content {
+    .status-section {
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .status-tag {
+        padding: 4px 8px;
+        border-radius: 5px;
+        color: var(--text-color);
+        font-size: 12px;
+      }
+    }
+
+    .newsletter-details {
+      margin-bottom: 32px;
+
+      .detail-item {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 12px 0;
+
+        .detail-label {
+          margin-bottom: 10px;
+          font-weight: 300;
+        }
+
+        .detail-value-with-button {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          width: 100%;
+
+          .detail-value {
+            flex: 1;
+          }
+
+          .download-button {
+            white-space: nowrap;
+          }
+        }
+      }
+    }
+
+    .message-content,
+    .sms-content {
+      margin-bottom: 32px;
+
+      .content-title {
+        // font-size: 18px;
+        font-weight: 300;
+        margin: 0 0 16px 0;
+        padding-bottom: 8px;
+      }
+
+      .message-text,
+      .sms-text {
+        padding: 16px;
+        border-radius: 6px;
+        border: 1px solid #e9ecef;
+        font-size: 14px;
+        line-height: 1.6;
+      }
+    }
+
+    .confirmation-section {
+      padding-top: 16px;
+      border-top: 1px solid #e9ecef;
+
+      ::ng-deep .p-checkbox {
+        .p-checkbox-label {
+          font-size: 14px;
+          color: #495057;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .newsletter-view-container {
+    padding: 16px;
+
+    .view-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 16px;
+
+      .page-title {
+        font-size: 20px;
+      }
+
+      .header-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+
+    .view-content {
+      padding: 16px;
+
+      .newsletter-details {
+        .detail-item {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 4px;
+
+          .detail-value-with-button {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+
+            .download-button {
+              width: 100%;
+              justify-content: center;
+            }
+          }
+        }
+      }
+    }
+  }
+}

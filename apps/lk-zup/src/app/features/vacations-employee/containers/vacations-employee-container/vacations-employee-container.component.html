@@ -1,0 +1,153 @@
+<!-- Страница "Остатки отпусков" -->
+
+<div class="employee-vacations-body">
+  <!-- Тулбар с заголовком и кнопками -->
+  <p-toolbar class="title">
+    <h1>{{ 'VACATION_BALANCES' | translate }}</h1>
+
+    <span class="spacer"></span>
+
+    <!-- Кнопка "Сортировать по" -->
+    <p-splitButton
+      (onClick)="applySorting(sortField)"
+      [label]="'SORT_BY' | translate"
+      [model]="sortButtonItems"
+      [outlined]="true"
+      styleClass="sort-button"
+    />
+
+    <!-- Кнопка "Скачать отчёт" -->
+    <p-splitButton
+      (onClick)="downloadReport()"
+      [label]="'DOWNLOAD_REPORT' | translate"
+      [disabled]="isDownloadEmployeeReportsInProgress$ | async"
+      [model]="saveReportButtonItems"
+      [outlined]="true"
+    />
+  </p-toolbar>
+
+  <!-- Панель вкладок, поиска и фильтрации -->
+  <div class="tabs-controls-panel">
+    <!-- Вкладки -->
+    <div class="tabs"></div>
+
+    <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+    <div class="filters">
+      <!-- Поиск -->
+      <div class="p-input-icon-left mobile-search-input">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          [(ngModel)]="filterValue.search"
+          (ngModelChange)="applySearchFilter()"
+          class="search-input"
+          [placeholder]="'ISSUE_SEARCH_FIELD' | translate"
+          type="text"
+        />
+      </div>
+
+      <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+      <div class="filter-icon-button">
+        <i
+          class="pi pi-sliders-h filter-icon"
+          (click)="toggleFilters($event)"
+        ></i>
+      </div>
+
+      @if (isMobileV()) {
+        <!-- Нижняя выпадающая панель (сайдбар) с фильтрами -->
+        <app-filters-sidebar [visible]="showFilters">
+          <app-vacation-employee-filters
+            [filterValue]="filterValue"
+            [vacationsEmployeeListFacade]="vacationsEmployeeListFacade"
+            (applyFilters)="applyFilters()"
+            (selectedDateChange)="onSelectedDateChange($event)"
+          ></app-vacation-employee-filters>
+        </app-filters-sidebar>
+      } @else {
+        <!-- Диалоговое окно с фильтрами -->
+        @if (showFilters) {
+          <app-filters-dialog (closeButtonClicked)="showFilters = false">
+            <app-vacation-employee-filters
+              [filterValue]="filterValue"
+              [vacationsEmployeeListFacade]="vacationsEmployeeListFacade"
+              (applyFilters)="applyFilters()"
+              (selectedDateChange)="onSelectedDateChange($event)"
+            ></app-vacation-employee-filters>
+          </app-filters-dialog>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Содержимое -->
+  <div class="content">
+    <!-- Метки (chips — "чипы") фильтров -->
+    <div class="filter-chips">
+      <!-- Метки (chips — "чипы") фильтра "По состоянию на" -->
+      <div
+        *ngIf="
+          filterValue.date &&
+          filterValue.date?.getTime() !== this.today?.getTime()
+        "
+        class="filter-chip"
+      >
+        {{ filterValue.date | date: 'dd.MM.yyyy' }}
+        <i
+          class="pi pi-times times-icon"
+          (click)="clearFilterByChips('date')"
+        ></i>
+      </div>
+
+      <!-- Метки (chips — "чипы") поиска -->
+      <div class="filter-chip" *ngIf="filterValue.search">
+        {{ filterValue.search }}
+        <i
+          class="pi pi-times times-icon"
+          (click)="clearFilterByChips('search')"
+        ></i>
+      </div>
+
+      <!-- Метки (chips — "чипы") фильтра "Сотрудник" -->
+      <ng-container *ngIf="filterValue['selectedEmployeeIds']">
+        <ng-container
+          *ngFor="let employeeID of filterValue['selectedEmployeeIds']"
+        >
+          <div class="filter-chip">
+            {{ getEmployeeChipTitleByID(employeeID) }}
+            <i
+              class="pi pi-times times-icon"
+              (click)="clearFilterByChips('selectedEmployeeIds', employeeID)"
+            ></i>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <!-- Старые фильтры (через FPC) -->
+    <!--    <app-vacation-employee-filters-->
+    <!--      [employee]="-->
+    <!--        vacationsEmployeeListFacade.getData() ||-->
+    <!--        (vacationsEmployeeListFacade.getData$() | async)-->
+    <!--      "-->
+    <!--      [list]="-->
+    <!--        getEmployeesByFilter(vacationsEmployeeMembersFacade.getData$() | async)-->
+    <!--      "-->
+    <!--      (filterDate)="changeFilterDate($event)"-->
+    <!--      (clearAllFilters)="clearFilters()"-->
+    <!--      (filterEmployees)="changeFilterEmployees($event)"-->
+    <!--    ></app-vacation-employee-filters>-->
+
+    <!-- Контейнер с загружаемым списком -->
+    <app-vacation-employee-list
+      [list]="
+        getEmployeesByFilter(vacationsEmployeeMembersFacade.getData$() | async)
+      "
+      [loading]="loading$ | async"
+      [isDownloadEmployeeReportInProgress]="
+        isDownloadEmployeeReportInProgress$ | async
+      "
+      (downloadById)="downloadById($event)"
+    ></app-vacation-employee-list>
+  </div>
+</div>

@@ -1,0 +1,59 @@
+@let current = message(); @switch (current.type) { @case ('human') {
+<div class="docky-message docky-message--human">
+  <div class="docky-message__bubble">{{ current.text }}</div>
+</div>
+} @case ('agent') {
+<div class="docky-message docky-message--agent">
+  <div class="docky-message__agent-response">
+    <div class="docky-message__agent-id">{{ current.agentName }}</div>
+    @if (current.text.length > 0) {
+    <div
+      class="docky-message__markdown"
+      [innerHTML]="current.text | trustedHtml : true"
+    ></div>
+    } @if (current.pending && current.text.length > 0) {
+    <div class="docky-message__typing">
+      <span class="docky-message__typing-text">Доки печатает</span>
+      <span class="docky-message__typing-dots">
+        <span></span>
+        <span></span>
+        <span></span>
+      </span>
+    </div>
+    }
+  </div>
+</div>
+} @case ('error') {
+<div class="docky-message docky-message--error">
+  <div class="docky-message__error">{{ current.text }}</div>
+</div>
+} @case ('system') {
+<div class="docky-message docky-message--system">
+  <div class="docky-message__system">{{ current.text }}</div>
+</div>
+} @case ('tool_call') {
+<div class="docky-message docky-message--tool">
+  <div
+    class="docky-tool-call"
+    [class.is-pending]="current.pending"
+    [class.is-complete]="!current.pending"
+  >
+    <span class="docky-tool-call__icon" aria-hidden="true">
+      @if (current.pending) {
+      <span class="docky-tool-call__spinner"></span>
+      } @else {
+      <span class="docky-tool-call__ok">✓</span>
+      }
+    </span>
+    <span class="docky-tool-call__title"
+      >{{ current.tool.title || current.tool.name }}</span
+    >
+  </div>
+</div>
+} @case ('custom') {
+<div class="docky-message docky-message--custom">
+  <ng-container
+    *ngComponentOutlet="current.component; inputs: { payload: current.data }"
+  />
+</div>
+} }

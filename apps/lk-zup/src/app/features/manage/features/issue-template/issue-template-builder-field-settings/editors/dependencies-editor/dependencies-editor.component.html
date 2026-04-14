@@ -1,0 +1,233 @@
+<div class="dependencies-editor">
+  @for (group of groups; track group.key) {
+    <app-settings-group
+      [group]="group"
+      [hasChanges]="hasGroupChanges(group.key)"
+      [expandedByDefault]="true"
+    >
+      @switch (group.key) {
+        @case ('dependencies') {
+          <!-- Зависимости полей -->
+          <div class="dependencies-list">
+            @for (
+              dependency of dependencies();
+              track dependency.id;
+              let i = $index
+            ) {
+              <div
+                class="dependency-item"
+                [class.field-error]="!!getDependencyError(dependency)"
+              >
+                <div class="dependency-header">
+                  <span class="dependency-number"
+                    >Зависимость #{{ i + 1 }}</span
+                  >
+                  <button
+                    type="button"
+                    pButton
+                    icon="pi pi-trash"
+                    severity="danger"
+                    size="small"
+                    [text]="true"
+                    (click)="removeDependency(i)"
+                    title="Удалить зависимость"
+                  ></button>
+                </div>
+
+                <div class="dependency-fields">
+                  <div class="field-editor">
+                    <div class="field-header">
+                      <label class="field-label">
+                        Название поля (control)
+                        <span class="required-marker">*</span>
+                      </label>
+                      <div class="field-description">
+                        Имя поля формы, которое зависит от текущего поля
+                      </div>
+                    </div>
+                    <div class="field-input">
+                      <input
+                        type="text"
+                        class="form-input"
+                        [value]="dependency.control"
+                        [class.invalid]="!!getDependencyError(dependency)"
+                        (input)="updateControlName(i, $event)"
+                        (blur)="onControlNameBlur(i, $event)"
+                        placeholder="formControlName зависимого поля"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="dependency-type">
+                    <div class="field-editor">
+                      <div class="checkbox-wrapper">
+                        <p-checkbox
+                          [binary]="true"
+                          [ngModel]="dependency.clone"
+                          (ngModelChange)="toggleClone(i)"
+                          label="Клонировать значение"
+                          styleClass="field-checkbox"
+                        ></p-checkbox>
+                        <div class="checkbox-description">
+                          Поле будет автоматически дублировать значение текущего
+                          поля
+                        </div>
+                      </div>
+                    </div>
+
+                    @if (!dependency.clone) {
+                      <div class="field-editor">
+                        <div class="field-header">
+                          <label class="field-label">Условие отображения</label>
+                          <div class="field-description">
+                            JavaScript-выражение для определения когда
+                            показывать поле
+                          </div>
+                        </div>
+                        <div class="field-input">
+                          <textarea
+                            class="form-textarea"
+                            [value]="dependency.condition || ''"
+                            [class.invalid]="!!getDependencyError(dependency)"
+                            (input)="updateCondition(i, $event)"
+                            (blur)="onConditionBlur(i, $event)"
+                            placeholder="$V === 'someValue'"
+                            rows="2"
+                          ></textarea>
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <!-- Ошибка валидации -->
+                  @if (getDependencyError(dependency)) {
+                    <div class="field-error">
+                      {{ getDependencyError(dependency) }}
+                    </div>
+                  }
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-state">
+                <i class="pi pi-share-alt"></i>
+                <p>Зависимости не настроены</p>
+                <span>Нажмите "Добавить", чтобы создать новую зависимость</span>
+              </div>
+            }
+          </div>
+
+          <div class="group-actions">
+            <button
+              type="button"
+              pButton
+              icon="pi pi-plus"
+              label="Добавить зависимость"
+              severity="secondary"
+              size="small"
+              (click)="addDependency()"
+            ></button>
+          </div>
+        }
+
+        @case ('requiredFields') {
+          <!-- Обязательные поля -->
+          <div class="required-fields-list">
+            @for (
+              field of requiredToFillFields();
+              track $index;
+              let i = $index
+            ) {
+              <div
+                class="field-editor"
+                [class.field-error]="!!getRequiredFieldError(field)"
+              >
+                <div class="field-input">
+                  <div class="input-with-action">
+                    <input
+                      type="text"
+                      class="form-input"
+                      [value]="field"
+                      [class.invalid]="!!getRequiredFieldError(field)"
+                      (input)="updateRequiredField(i, $event)"
+                      placeholder="formControlName обязательного поля"
+                    />
+                    <button
+                      type="button"
+                      pButton
+                      icon="pi pi-trash"
+                      severity="danger"
+                      size="small"
+                      [text]="true"
+                      (click)="removeRequiredField(i)"
+                      title="Удалить поле"
+                    ></button>
+                  </div>
+                  <!-- Ошибка валидации -->
+                  @if (getRequiredFieldError(field)) {
+                    <div class="field-error">
+                      {{ getRequiredFieldError(field) }}
+                    </div>
+                  }
+                </div>
+              </div>
+            } @empty {
+              <div class="empty-state">
+                <i class="pi pi-lock"></i>
+                <p>Нет обязательных полей</p>
+                <span>Нажмите "Добавить", чтобы связать с другим полем</span>
+              </div>
+            }
+          </div>
+
+          <div class="group-actions">
+            <button
+              type="button"
+              pButton
+              icon="pi pi-plus"
+              label="Добавить поле"
+              severity="secondary"
+              size="small"
+              (click)="addRequiredField()"
+            ></button>
+          </div>
+        }
+
+        @case ('help') {
+          <!-- Справка по синтаксису -->
+          <div class="syntax-help-content">
+            <div class="syntax-grid">
+              @for (item of conditionSyntaxHelp; track item.operator) {
+                <div class="syntax-item">
+                  <code>{{ item.operator }}</code>
+                  <span>{{ item.description }}</span>
+                </div>
+              }
+            </div>
+
+            <div class="syntax-examples">
+              <h5>Примеры использования:</h5>
+              <ul>
+                <li>
+                  <code>$V === 'да'</code> — поле отобразится, если значение
+                  текущего поля равно "да"
+                </li>
+                <li>
+                  <code>$V > 18</code> — поле отобразится, если значение больше
+                  18
+                </li>
+                <li>
+                  <code>$V !== '' && $V !== null</code> — поле отобразится, если
+                  оно не пустое
+                </li>
+                <li>
+                  <code>m($V).day() > 0 && m($V).day() < 6</code> — отобразится
+                  для будних дней
+                </li>
+              </ul>
+            </div>
+          </div>
+        }
+      }
+    </app-settings-group>
+  }
+</div>

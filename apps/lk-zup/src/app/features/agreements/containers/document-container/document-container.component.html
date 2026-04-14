@@ -1,0 +1,10 @@
+@if (openDocumentSignal()) {
+  <app-document
+    [hasNextDocument]="!!nextDocument()"
+    [isLoadingNext]="isLoadingNextDocuments()"
+    (backPage)="backPage()"
+    (oncloseFile)="closeFile($event)"
+    (navigateToNext)="navigateToNextDocument()"
+    [showNextButton]="showNextButton()"
+  ></app-document>
+}

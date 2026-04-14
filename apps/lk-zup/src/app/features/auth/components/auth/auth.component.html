@@ -1,0 +1,85 @@
+<!-- Страница авторизации -->
+<div class="auth-page flex flex-col" [class.mobile]="isMobileV()">
+  <div
+    class="auth-page-row flex"
+    [class.flex-row]="!isMobileV()"
+    [class.flex-col]="isMobileV()"
+  >
+    <!-- <скрываем блок с логотипом ЛКС для экранов мобильных устройств в вертикальной ориентации и смартфонов в горизонтальной> -->
+    @if (!isMobileV()) {
+      <!-- Контейнер с логотипом ЛКС -->
+      <section class="logo-container flex flex-1 jc-center ai-center">
+        <img src="/assets/img/logo.png" class="app-logo w-full" />
+      </section>
+    }
+
+    <!-- Контейнер авторизации (входа) в ЛКС -->
+    <section
+      class="auth-container flex jc-center ai-center"
+      [class.p-20]="!isMobileV()"
+      [class.p-10]="isMobileV()"
+    >
+      <div class="auth-card">
+        <!-- Логотип (по умолчанию EmplDocs) -->
+        <div class="main-logo-container">
+          @if (hasCustomLogo()) {
+            <img [src]="customLogoUrl()" class="main-logo" />
+          } @else {
+            <app-logo class="block main-logo-default" [full]="true"></app-logo>
+          }
+        </div>
+
+        <!-- Авторизация -->
+        <div class="auth mt-20">
+          <!-- <только если единственным доступным вариантом авторизации является 'sso'> -->
+          @if (isSsoOnly()) {
+            <!-- Кнопка "Войти с помощью SSO" -->
+            <ng-container *ngTemplateOutlet="buttonSSO"></ng-container>
+
+            <div class="auth-form"></div>
+          } @else {
+            <h2 class="text-20 font-bold mb-24">
+              {{ 'BUTTON_LOGIN' | translate }}
+            </h2>
+            <app-select-button [(value)]="currentAuthType">
+              <app-select-button-option [value]="'login'">
+                <span>{{ 'LOGIN' | translate }}</span>
+              </app-select-button-option>
+              <app-select-button-option [value]="'sms'">
+                <span>{{ 'PHONE' | translate }}</span>
+              </app-select-button-option>
+            </app-select-button>
+
+            <div class="auth-form mt-24">
+              @switch (currentAuthType()) {
+                @case ('login') {
+                  <app-auth-login-container></app-auth-login-container>
+                }
+                @case ('sms') {
+                  <app-auth-sms-container></app-auth-sms-container>
+                }
+              }
+              @if (authTypes().includes('sso')) {
+                <hr class="divider my-25" />
+
+                <!-- Кнопка "Войти с помощью SSO" -->
+                <ng-container *ngTemplateOutlet="buttonSSO"></ng-container>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<ng-template #buttonSSO>
+  <!-- Кнопка "Войти с помощью SSO" -->
+  <p-button
+    (onClick)="ssoAuth()"
+    styleClass="w-full"
+    icon="pi pi-key"
+    [label]="'BUTTON_LOGIN_SSO' | translate"
+  >
+  </p-button>
+</ng-template>

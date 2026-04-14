@@ -1,0 +1,110 @@
+<div class="basic-settings-editor">
+  @for (group of availableSettings(); track group.key) {
+    <app-settings-group
+      [group]="group"
+      [hasChanges]="hasGroupChanges(group)"
+      [expandedByDefault]="true"
+    >
+      @for (field of group.fields; track field.key) {
+        <div class="field-editor" [class.field-error]="!!getFieldError(field)">
+          <!-- Улучшенный header для полей (скрыт для boolean) -->
+          @if (field.type !== 'boolean') {
+            <div class="field-header">
+              <label class="field-label">
+                {{ field.label }}
+                @if (field.required) {
+                  <span class="required-marker">*</span>
+                }
+              </label>
+              @if (field.description) {
+                <div class="field-description">{{ field.description }}</div>
+              }
+            </div>
+          }
+
+          <div class="field-input">
+            @switch (field.type) {
+              @case ('text') {
+                <input
+                  type="text"
+                  class="form-input"
+                  [value]="getFieldValue(field.key) || ''"
+                  [placeholder]="field.placeholder || ''"
+                  [class.invalid]="!!getFieldError(field)"
+                  (input)="updateField(field.key, $any($event.target).value)"
+                />
+              }
+              @case ('textarea') {
+                <textarea
+                  class="form-textarea"
+                  [value]="getFieldValue(field.key) || ''"
+                  [placeholder]="field.placeholder || ''"
+                  [class.invalid]="!!getFieldError(field)"
+                  (input)="updateField(field.key, $any($event.target).value)"
+                  rows="3"
+                ></textarea>
+              }
+              @case ('number') {
+                <input
+                  type="number"
+                  class="form-input"
+                  [value]="getFieldValue(field.key)"
+                  [min]="field.min"
+                  [max]="field.max"
+                  [class.invalid]="!!getFieldError(field)"
+                  (input)="
+                    updateField(field.key, $any($event.target).valueAsNumber)
+                  "
+                />
+              }
+              @case ('boolean') {
+                <!-- Улучшенная компоновка чекбокса с встроенным label -->
+                <div class="checkbox-wrapper">
+                  <p-checkbox
+                    [binary]="true"
+                    [ngModel]="!!getFieldValue(field.key)"
+                    (ngModelChange)="updateField(field.key, $event)"
+                    [label]="field.label"
+                    styleClass="field-checkbox"
+                  ></p-checkbox>
+                  @if (field.description) {
+                    <div class="checkbox-description">
+                      {{ field.description }}
+                    </div>
+                  }
+                </div>
+              }
+              @case ('select') {
+                <select
+                  class="form-select"
+                  [ngModel]="getFieldValue(field.key)"
+                  [class.invalid]="!!getFieldError(field)"
+                  (ngModelChange)="updateField(field.key, $event)"
+                >
+                  <option [ngValue]="undefined">Выберите значение</option>
+                  @for (option of field.options; track option.value) {
+                    <option [ngValue]="option.value">
+                      {{ option.label }}
+                    </option>
+                  }
+                </select>
+              }
+            }
+
+            <!-- Ошибка валидации -->
+            @if (getFieldError(field)) {
+              <div class="field-error">{{ getFieldError(field) }}</div>
+            }
+          </div>
+        </div>
+      }
+    </app-settings-group>
+  }
+
+  @if (availableSettings().length === 0) {
+    <div class="no-settings">
+      <i class="pi pi-info-circle"></i>
+      <span>Для данного типа поля нет доступных базовых настроек</span>
+    </div>
+  }
+</div>

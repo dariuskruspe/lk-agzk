@@ -1,0 +1,64 @@
+types {
+    application/javascript js mjs;
+}
+
+upstream ${VAR_API_DOMAIN} {
+  server ${VAR_API_IP}:443;
+}
+
+server {
+    listen 80;
+
+    server_name ${VAR_DOMAIN_NAME};
+
+    return 301 https://$host$request_uri;
+}
+
+server {
+    listen 443 ssl;
+
+    client_max_body_size 100M;
+    proxy_read_timeout 300;
+    proxy_connect_timeout 300;
+    proxy_send_timeout 300;
+    send_timeout 300;
+
+    large_client_header_buffers 4 32k;
+    proxy_buffer_size   128k;
+    proxy_buffers   4 256k;
+    proxy_busy_buffers_size   256k;
+
+    server_name ${VAR_DOMAIN_NAME};
+
+    ssl_certificate ${VAR_CERT};
+    ssl_certificate_key ${VAR_CERT_KEY};
+
+    # Diffie-Hellman parameter for DHE ciphersuites
+    ssl_dhparam            /etc/nginx/dhparam.pem;
+
+    # Mozilla Intermediate configuration
+    ssl_protocols          TLSv1.2 TLSv1.3;
+    ssl_ciphers            ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;
+
+    location /data/ {
+        proxy_pass_header Content-Type;
+        add_header x-destination ${VAR_PROXY_URL};
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass ${VAR_PROXY_URL};
+    }
+
+    location /api/ {
+        proxy_pass_header Content-Type;
+        add_header x-destination ${VAR_PROXY_URL};
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_pass ${VAR_PROXY_URL};
+    }
+
+    location / {
+        root /usr/share/nginx/lk-zup;
+        try_files $uri $uri/ /index.html;
+        index index.html;
+    }
+}

@@ -1,0 +1,22 @@
+@if (openDocumentSignal(); as doc) {
+  <p-toolbar class="title nowrap">
+    <button
+      pButton
+      class="p-button-rounded p-button-outlined"
+      icon="pi pi-arrow-left"
+      (click)="onBackPage()"
+    ></button>
+    <h1>
+      {{ doc.name }}
+    </h1>
+  </p-toolbar>
+
+  <app-signature-file-container
+    (onclose)="closeFile($event)"
+    [showNextButton]="showNextButton"
+    [hasNextDocument]="hasNext"
+    [isLoadingNext]="isLoading"
+    (navigateToNext)="onNavigateToNext()"
+  ></app-signature-file-container>
+
+}

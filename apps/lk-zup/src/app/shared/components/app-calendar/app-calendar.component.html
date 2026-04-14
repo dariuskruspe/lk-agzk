@@ -1,0 +1,87 @@
+<div class="calendar">
+  <!-- Хедер с навигацией -->
+  <div class="calendar-header">
+    <h3 class="month-name">{{ monthName() }}</h3>
+
+    <div class="calendar-header-buttons">
+      @if (loading()) {
+        <div class="calendar-loading">
+          <i class="pi pi-spinner pi-spin"></i>
+        </div>
+      }
+      <button class="nav-button" (click)="previousMonth()">
+        <lucide-icon [name]="ChevronLeftIcon"></lucide-icon>
+      </button>
+      <button class="nav-button" (click)="nextMonth()">
+        <lucide-icon [name]="ChevronRightIcon"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Дни недели -->
+  <div class="calendar-weekdays">
+    @for (day of weekDays; track day) {
+      <div class="weekday">{{ day }}</div>
+    }
+  </div>
+
+  <!-- Сетка дней -->
+  <div class="calendar-grid" (mouseleave)="hoveredDay.set(null)">
+    @for (day of calendarDays(); track day.id) {
+      <div
+        class="calendar-day-wrapper"
+        (mouseenter)="onMouseEnter($event, day)"
+        [style]="{
+          '--fill-color': day.style.fill ?? 'var(--calendar-fill-color)',
+          '--border-color': day.style.border ?? 'var(--calendar-border-color)',
+          '--text-color': day.style.text ?? 'var(--calendar-text-color)',
+        }"
+      >
+        <div
+          #dayElement
+          class="calendar-day"
+          [class.text]="day.style.type === 'text'"
+          [class.none]="day.style.type === 'none'"
+          [class.filled]="day.style.type === 'filled'"
+          [class.outlined]="day.style.type === 'outlined'"
+          [class.hovered]="
+            day.style.type !== 'none' && hoveredDay()?.date === day.date
+          "
+        >
+          <span class="day-number">{{ day.date.getDate() }}</span>
+        </div>
+      </div>
+    }
+  </div>
+
+  <ng-template
+    cdkConnectedOverlay
+    [cdkConnectedOverlayOrigin]="tooltipOriginElement()!"
+    [cdkConnectedOverlayOpen]="
+      !!hoveredDay()?.tooltip && !!tooltipOriginElement()
+    "
+    [cdkConnectedOverlayPositions]="[
+      {
+        originX: 'center',
+        originY: 'top',
+        overlayX: 'center',
+        overlayY: 'bottom',
+        offsetY: -8,
+      },
+    ]"
+  >
+    <div class="calendar-tooltip" *ngIf="hoveredDay()">
+      <ng-container *ngIf="tooltipTemplate(); else defaultTooltip">
+        <ng-container
+          *ngTemplateOutlet="
+            tooltipTemplate()!;
+            context: { $implicit: hoveredDay() }
+          "
+        ></ng-container>
+      </ng-container>
+      <ng-template #defaultTooltip>
+        <span class="calendar-tooltip-text">{{ hoveredDay()?.tooltip }}</span>
+      </ng-template>
+    </div>
+  </ng-template>
+</div>

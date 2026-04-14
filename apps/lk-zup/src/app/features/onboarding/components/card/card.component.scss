@@ -1,0 +1,204 @@
+.onb-card {
+  position: absolute;
+  border-radius: 20px;
+  padding: 25px;
+  z-index: 9002;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  opacity: 1;
+  transform: translate(0px, 0px);
+
+  & .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+
+    & > .onb-close-button {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      width: 21px;
+      height: 20px;
+      cursor: pointer;
+      border-radius: 4px;
+      z-index: 9003;
+
+      &:before,
+      &:after {
+        content: '';
+        position: absolute;
+        width: 17px;
+        height: 2px;
+        top: 9px;
+        left: 2px;
+        background: #f0f0f0;
+      }
+
+      &:before {
+        transform: rotate(45deg);
+      }
+
+      &:after {
+        transform: rotate(-45deg);
+      }
+
+      &:hover:before,
+      &:hover:after {
+        background: #ccc;
+      }
+    }
+  }
+
+  & .image {
+    margin: -25px -25px 10px -25px;
+    border-radius: 20px;
+
+    & > img {
+      border-radius: 20px;
+      width: 100%;
+      height: auto;
+    }
+  }
+
+  & > .onb-slide-number {
+    color: #f0f0f0;
+    top: 30px;
+    left: 30px;
+    font-size: 14px;
+    padding: 2px 4px 0;
+    line-height: 18px;
+    border-radius: 4px;
+    float: right;
+  }
+
+  & h3 {
+    color: inherit;
+    font-size: 1.3rem;
+    font-weight: normal;
+  }
+
+  & .description {
+    margin-bottom: 15px;
+
+    &:last-child {
+      margin-bottom: 0 !important;
+    }
+  }
+
+  & .paragraph::ng-deep {
+    margin-bottom: 15px;
+
+    & > p:not(:last-child) {
+      margin-bottom: 20px;
+    }
+
+    & > ul,
+    & > ol {
+      margin-left: 20px;
+      margin-bottom: 20px;
+
+      &:last-child {
+        margin: 0 !important;
+      }
+    }
+
+    &:last-child {
+      margin: 0 !important;
+    }
+  }
+
+  & .buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    width: 100%;
+
+    & button {
+      flex: 1 1 auto;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      padding: 10px;
+      cursor: pointer;
+      z-index: 9003;
+      max-width: 358px;
+
+      &:active {
+        background: #1f5ace;
+        box-shadow: inset 0 0 3px 0 #000;
+      }
+
+      &:not(:first-child) {
+        margin-left: 20px;
+      }
+    }
+  }
+
+  & .link {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+
+    & button {
+      color: #fff;
+      text-decoration: underline !important;
+    }
+  }
+}
+
+#lottie {
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 9002;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+  text-align: center;
+  opacity: 1;
+}
+
+.onb-form-group {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  position: relative;
+  margin-bottom: 25px;
+
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-bottom: 15px;
+
+    input {
+      width: 100%;
+      background: #353c4a;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,.1);
+      &::placeholder {
+        color: #ffffff !important;
+      }
+    }
+
+    textarea {
+      width: 100%;
+      background: #353c4a;
+      color: #ffffff;
+      border: 1px solid rgba(255,255,255,.1);
+      &::placeholder {
+        color: #ffffff !important;
+      }
+    }
+  }
+
+  .onb-form-error {
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    color: #ed4346;
+  }
+}
+
+

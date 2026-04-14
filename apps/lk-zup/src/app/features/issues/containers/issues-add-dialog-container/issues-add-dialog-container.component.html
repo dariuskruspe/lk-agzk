@@ -1,0 +1,21 @@
+<div>
+  <app-issues-add-dialog
+    [issueData]="data.formData"
+    [issueType]="type$ ? (type$ | async) : (issuesTypeFacade.getData$() | async)"
+    [dateLocale]="langFacade.getLang()"
+    [loading]="issuesFacade.loading$() | async"
+    [loading$]="type$ ? data.facade?.loading$() : issuesTypeFacade.loading$()"
+    [onOtherEmployee]="onOtherEmployee"
+    [submit$]="submit$"
+    (formSubmitOut)="addDialogIssue($event)"
+  ></app-issues-add-dialog>
+</div>
+<p-toolbar class="margin-top">
+  <button
+    pButton
+    type="button"
+    label="{{ 'BUTTON_SEND' | translate }}"
+    (click)="onSubmitDialog()"
+    [disabled]="issuesFacade.loading$() | async"
+  ></button>
+</p-toolbar>

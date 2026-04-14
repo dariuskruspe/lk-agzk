@@ -1,0 +1,28 @@
+::ng-deep {
+  .custom-form-field {
+    @media (max-width: 768px) {
+      margin-bottom: 20px;
+
+      &__label {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .p-button {
+    @media (max-width: 768px) {
+      padding: 14px 20px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+  }
+
+  .p-inputtext,
+  .p-inputmask input {
+    @media (max-width: 768px) {
+      padding: 14px 16px;
+      font-size: 16px;
+    }
+  }
+}

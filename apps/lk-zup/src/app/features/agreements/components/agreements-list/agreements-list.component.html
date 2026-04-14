@@ -1,0 +1,164 @@
+<!-- Страница "Мои документы" (раздел меню "Сотрудник") -->
+<!-- Страница "Документы на подпись" (раздел меню "Менеджер") -->
+
+<!-- Тулбар с заголовком -->
+<p-toolbar class="title">
+  <h1>
+    {{ title | translate }}
+  </h1>
+</p-toolbar>
+
+<!-- Панель вкладок, поиска и фильтрации -->
+<div class="tabs-controls-panel">
+  <!-- Вкладки -->
+  <div class="tabs">
+    <!-- Вкладка "Все документы" -->
+    <div
+      class="tab-item"
+      (click)="changeTab('ALL_DOCUMENTS')"
+      [class.active]="activeTab === 'ALL_DOCUMENTS'"
+    >
+      <span class="tab-title">{{ 'TITLE_ALL_DOCUMENTS' | translate }}</span>
+    </div>
+
+    <!-- Вкладка "К подписанию" -->
+    <div
+      class="tab-item active"
+      (click)="changeTab('DOCUMENTS_TO_BE_SIGNED')"
+      [class.active]="activeTab === 'DOCUMENTS_TO_BE_SIGNED'"
+    >
+      <span class="tab-title">{{ 'TITLE_TO_BE_SIGNED' | translate }}</span
+      ><span class="counter ml-20">{{
+        toBeSignedCount()?.toString() || '...'
+      }}</span>
+    </div>
+  </div>
+
+  <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+  <div class="filters">
+    <!-- Поиск -->
+    <div class="p-input-icon-left mobile-search-input">
+      <i class="pi pi-search"></i>
+      <input
+        pInputText
+        [(ngModel)]="filterValue.search"
+        (ngModelChange)="applySearchFilter()"
+        class="search-input"
+        [placeholder]="'ISSUE_SEARCH_FIELD' | translate"
+        type="text"
+      />
+    </div>
+
+    <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+    <div class="filter-icon-button">
+      <i
+        class="pi pi-sliders-h filter-icon"
+        (click)="toggleFilters($event)"
+      ></i>
+    </div>
+
+    <fpc-filter
+      [loading]="loading"
+      [hideResultCount]="true"
+      [filter]="{ main: [], secondary: [], options: {} }"
+      [filterSize]="0"
+      [listSize]="0"
+      [showLegendButton]="false"
+      [showFilerIcon]="false"
+      [isSecondaryFilter]="showFilters"
+    >
+      <app-agreements-filter
+        [filterValue]="filterValue"
+        [daysValueList]="daysValueList"
+        [stateList]="stateList"
+        [documentTypesList]="documentTypesList"
+        [selectedType]="selectedType"
+        (applyFilters)="applyFilters()"
+      ></app-agreements-filter>
+    </fpc-filter>
+
+    <!-- Диалоговое окно с фильтрами -->
+    <div class="filters-dialog" *ngIf="showFilters && !isMobileV()">
+      <app-agreements-filter
+        [filterValue]="filterValue"
+        [daysValueList]="daysValueList"
+        [stateList]="stateList"
+        [documentTypesList]="documentTypesList"
+        [selectedType]="selectedType"
+        (applyFilters)="applyFilters($event)"
+      ></app-agreements-filter>
+
+      <!-- Панель с кнопками -->
+      <div class="filter-button-bar">
+        <!-- Кнопка "Закрыть" (закрывает диалоговое окно с фильтрами) -->
+        <button
+          pButton
+          label="{{ 'BUTTON_CLOSE' | translate }}"
+          class="p-button-outlined"
+          (click)="showFilters = false"
+        ></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Содержимое -->
+<div class="content">
+  <!-- Метки (chips — "чипы") фильтров -->
+  <div class="filter-chips">
+    <!-- Метки (chips — "чипы") поиска -->
+    <div class="filter-chip" *ngIf="filterValue.search">
+      {{ filterValue.search }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('search')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Статус" -->
+    <div
+      *ngIf="filterValue.state && activeTab !== 'DOCUMENTS_TO_BE_SIGNED'"
+      class="filter-chip"
+    >
+      {{ getStatusTitleByValue(filterValue.state) }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('state')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Период" -->
+    <div class="filter-chip" *ngIf="filterValue.days">
+      {{ getPeriodTitleByValue(filterValue.days) }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('days')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Тип документа" -->
+    <div class="filter-chip" *ngIf="selectedType">
+      {{ selectedType.documentsTypeName }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('documentsType')"
+      ></i>
+    </div>
+  </div>
+
+  <!-- Контейнер с загружаемым списком -->
+  <loadable-list-container
+    [template]="dataLayout"
+    [dataList]="agreementsList"
+    [dataConfig]="dataConfig"
+    [otherData]="stateList"
+    [scrollContainerClassCss]="scrollContainerClassCss"
+    [loading]="loading"
+    [select]="isMassSignAvailable && activeTab === 'DOCUMENTS_TO_BE_SIGNED'"
+    [selectButtonTitle]="'SIGN_SELECTED_FILES'"
+    [appendFilterToQuery]="true"
+    (loadList)="onLoadList($event)"
+    (clickItem)="handleOpenDocument($event)"
+    (clickSelectedList)="signList($event)"
+  ></loadable-list-container>
+</div>

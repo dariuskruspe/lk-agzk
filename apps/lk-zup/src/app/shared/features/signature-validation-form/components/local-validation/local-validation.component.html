@@ -1,0 +1,79 @@
+<!-- Состояние подписи - показывается только это -->
+@if (loadingSigningSignal()) {
+  <div class="signing-overlay">
+    <div class="signing-content">
+      <div class="signing-spinner">
+        <p-progressSpinner
+          [style]="{ width: '48px', height: '48px' }"
+          strokeWidth="3"
+        ></p-progressSpinner>
+      </div>
+      <h3 class="signing-title">{{ 'SIGNING_IN_PROGRESS' | translate }}</h3>
+      <p class="signing-description">
+        {{ 'SIGNING_IN_PROGRESS_HINT' | translate }}
+      </p>
+      <div class="signing-steps">
+        <div class="signing-step active">
+          <i class="pi pi-check-circle"></i>
+          <span>{{ 'SIGNING_CERTIFICATE_SELECTED' | translate }}</span>
+        </div>
+        <div class="signing-step active">
+          <i class="pi pi-spin pi-spinner"></i>
+          <span>{{ 'SIGNING_DOCUMENT_IN_PROGRESS' | translate }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="local-validation">
+    <!-- Состояние загрузки -->
+    @if (loadingSignal()) {
+      <div class="loading-state">
+        <p-progressSpinner
+          [style]="{ width: '24px', height: '24px' }"
+          strokeWidth="3"
+        ></p-progressSpinner>
+        <div class="loading-state__content">
+          <p class="loading-state__text">{{ 'CONNECTING_LOCAL' | translate }}</p>
+          <small class="loading-state__hint">{{
+            'CONNECTING_LOCAL_HINT' | translate
+          }}</small>
+        </div>
+      </div>
+    }
+
+    <!-- Состояние ошибки - нет сертификатов -->
+    @if (isEmpty()) {
+      <div class="empty-state">
+        <i class="pi pi-exclamation-triangle empty-state__icon"></i>
+        <h4 class="empty-state__title">Сертификаты не найдены</h4>
+        <p class="empty-state__description">
+          Убедитесь, что КриптоПро установлен и содержит валидные сертификаты
+        </p>
+      </div>
+    }
+
+    <!-- Селектор сертификатов -->
+    @if (certificates().length && !loadingSignal()) {
+      <div class="certificate-selection">
+        <app-crypto-pro-cert-select
+          [certificates]="certificates()"
+          [value]="activeCert()"
+          (valueChange)="activeCert.set($event)"
+        ></app-crypto-pro-cert-select>
+      </div>
+    }
+  </div>
+
+  <!-- Футер с кнопкой подписи -->
+  @if (certificates().length && !loadingSignal()) {
+    <div class="action-footer">
+      <p-button
+        label="{{ 'BUTTON_SIGN' | translate }}"
+        styleClass="p-button-primary w-full"
+        [disabled]="!activeCert()"
+        (onClick)="signByLocal()"
+      ></p-button>
+    </div>
+  }
+}

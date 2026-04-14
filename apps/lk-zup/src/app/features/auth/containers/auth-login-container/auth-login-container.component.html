@@ -1,0 +1,4 @@
+<app-auth-login
+  (submitLoginForm)="submitLoginForm($event)"
+  [loading$]="authLoginFacade.loading$() | async"
+></app-auth-login>

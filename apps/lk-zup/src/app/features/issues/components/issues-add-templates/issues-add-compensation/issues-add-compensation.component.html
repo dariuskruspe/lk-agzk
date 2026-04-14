@@ -1,0 +1,113 @@
+<div class="container-fluid">
+  <p-toolbar class="title nowrap">
+    <button
+      pButton
+      class="p-button-rounded p-button-outlined"
+      icon="pi pi-arrow-left"
+      [routerLink]="['', 'issues', 'types']"
+    ></button>
+    <h1>
+      {{ issuesType?.FullName }}
+    </h1>
+  </p-toolbar>
+</div>
+<div class="main-container">
+  <p-card class="form-container">
+    <div
+      *ngIf="issuesType"
+      class="container-fluid"
+    >
+      <div class="row mb-10">
+        <div>
+          <div class="custom-form-field">
+            <label class="custom-form-field__label">{{ issuesType.template[0].label }}</label>
+            <p-dropdown
+              placeholder="Выберите вид"
+              [formControl]="vacationType"
+              [options]="vacationBalanceByTypeID"
+              emptyMessage="Доступных отпусков не найдено"
+              [ngClass]="vacationType.touched && vacationType.invalid ? 'invalid' : ''"
+              optionLabel="vacationName"
+              (onChange)="validateDays(numOfDays.value)"
+            ></p-dropdown>
+            <div
+              class="error-message-count"
+              *ngIf="vacationType.touched && vacationType.invalid"
+            >
+              Поле не заполнено
+            </div>
+          </div>
+          <div class="custom-form-field p-fluid">
+            <label class="custom-form-field__label">{{ issuesType.template[1].label }}</label> <input
+            type="number"
+            [ngClass]="invalidNumDays ? 'invalid' : ''"
+            [formControl]="numOfDays"
+            (keyup)="validateDays(numOfDays.value)"
+            min="0"
+            step="1"
+            pInputText
+            pattern="\d*"
+          >
+            <div
+              class="error-message-count"
+              *ngIf="numOfDays.touched && !numOfDays.value"
+            >
+              Поле не заполнено
+            </div>
+            <div
+              class="error-message-count"
+              *ngIf="numOfDays.touched && invalidNumDays"
+            >
+              Превышает кол-во доступных дней отпуска
+            </div>
+            <div
+              class="error-message-count"
+              *ngIf="numOfDays.touched && numOfDays.invalid"
+            >
+              Введите целое число
+            </div>
+          </div>
+        </div>
+      </div>
+      <p-toolbar class="buttons">
+        <button
+          [disabled]="vacationType.invalid || (invalidNumDays || numOfDays.invalid)"
+          [loading]="isLoading"
+          pButton
+          label="{{ 'BUTTON_SEND' | translate }}"
+          class="col-12 col-md-auto"
+          (click)="sendForm()"
+          type="submit"
+        ></button>
+        <button
+          pButton
+          label="{{ 'BUTTON_CANCEL' | translate }}"
+          class="col-12 col-md-auto p-button-outlined"
+          [routerLink]="['', 'issues', 'types']"
+        ></button>
+      </p-toolbar>
+    </div>
+  </p-card>
+  <div class="additional-info col-md-4 mb-4 p-0">
+    <app-item-list
+      *ngIf="staticData"
+      [items]="staticData | translateObj"
+      font="13px"
+    ></app-item-list>
+    <app-item-list
+      [items]="employeeDataModded"
+      font="13px"
+    ></app-item-list>
+    <div *ngIf="employeesApprovingPersons?.length" class="approver-title">
+      <span *ngIf="employeesApprovingPersons.length === 1">{{ 'EMPLOYEE_APPROVER' | translate }}</span>
+      <span *ngIf="employeesApprovingPersons.length > 1">{{ 'EMPLOYEE_APPROVERS' | translate }}</span>
+      :
+      <div *ngFor="let approvePerson of employeesApprovingPersons" class="value">
+        {{approvePerson}}
+      </div>
+    </div>
+    <app-item-link-list
+      [items]="issuesType?.crossPeriods || []"
+    ></app-item-link-list>
+  </div>
+</div>

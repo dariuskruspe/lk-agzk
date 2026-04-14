@@ -1,0 +1,361 @@
+@if (isNativeMobile && (initLoadingService.isWelcome$() | async)) {
+  <p-toolbar>
+    <h1>
+      {{ 'WELCOME_TITLE' | translate }}
+      <b>{{ (currentUser.forcedData$ | async)?.forename }}!</b>
+    </h1>
+  </p-toolbar>
+}
+<!-- <только для обычной (desktop'ной) версии приложения> -->
+@if (!isMobileV()) {
+  <p-toolbar>
+    <div class="flex flex-1 jc-flex-end gap-16 px-10">
+      <!-- Кнопка вкл/выкл режим редактирования (drag'n'drop + resize) виджетов -->
+      <i
+        (click)="toggleEditMode()"
+        class="pi pi-pencil clickable link-color"
+        [pTooltip]="'TOGGLE_EDIT_GRID_HINT' | translate"
+        tooltipPosition="left"
+      >
+      </i>
+
+      <!-- Кнопка сброса сетки виджетов в значение по умолчанию -->
+      <i
+        (click)="resetGrid()"
+        class="pi pi-table clickable link-color"
+        [pTooltip]="'RESTORE_DEFAULT_GRID_HINT' | translate"
+        tooltipPosition="left"
+      >
+      </i>
+    </div>
+  </p-toolbar>
+}
+
+<!-- <только если данные виджетов загружены> -->
+@if (isDataLoadedSignal()) {
+  <!-- Рабочий стол (дэшборд) пользователя с выбранными в настройках приложения виджетами -->
+  <div class="dashboard-container w-full">
+    <gridstack
+      [ngClass]="{ editable: isEditable }"
+      [options]="gridOptions"
+      (changeCB)="onChange()"
+      (dragStopCB)="onDragStop($event)"
+      (resizeStopCB)="onResizeStop($event)"
+    >
+      <!-- Виджет "Рабочий статус" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_status'); as enabled) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('work-status'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-current-state
+                id="cy-dashboard-dashboard_status"
+                [currentState]="currentStateFacade.forcedData$ | async"
+                [currentUser]="currentUser.forcedData$ | async"
+                [theme]="settingsThemeFacade.theme()"
+                [employeeStateList]="
+                  employeeStateListFacade.forcedData$ | async
+                "
+                [isEnabled]="enabled"
+              ></app-dashboard-current-state>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Популярные заявки" -->
+      <!-- <только если включён в настройках> -->
+      @if (true) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('popular-requests'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-popular-requests
+                [popularRequests]="popularRequestsFacade.forcedData$ | async"
+                [isEnabled]="true"
+              ></app-dashboard-popular-requests>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Мои документы" -->
+      <!-- <только если включён в настройках> -->
+      @if (
+        (settingsFacade.forcedData$ | async)?.myDocuments?.enable &&
+        isWidgetByNameEnabled('dashboard_documents')
+      ) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('my-documents'); as widget) {
+          <gridstack-item [options]="widget">
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-files
+                id="cy-dashboard-dashboard_documents"
+                (filterSignedStatus)="onGetAgreementsList($event)"
+                (loadList)="getIssuesManagementList($event)"
+                (openDocument)="openDocumentDialog($event)"
+                (openIssue)="openIssueShowDialogApprove($event)"
+                [currentUser]="currentUser.forcedData$ | async"
+                [documentDataList]="myDocumentsListFacade.forcedData$ | async"
+                [documentStateList]="
+                  agreementDocumentStateFacade.forcedData$ | async
+                "
+                [isEnabledDocuments]="
+                  isWidgetByNameEnabled('dashboard_documents')
+                "
+                [issueDataList]="issuesManagementListFacade.forcedData$ | async"
+                [issueStateList]="issuesStatusListFacade.forcedData$ | async"
+                [loading]="
+                  (myDocumentsListFacade.forcedLoading$ | async) ||
+                  (agreementDocumentStateFacade.forcedLoading$ | async) ||
+                  (issuesManagementListFacade.forcedLoading$ | async) ||
+                  (issuesStatusListFacade.forcedLoading$ | async)
+                "
+              ></app-dashboard-files>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "На согласовании" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_employeeRequests')) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('my-approvals'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-my-approvals
+                (filterSignedStatus)="onGetAgreementsList($event)"
+                (loadList)="getIssuesManagementList($event)"
+                (openDocument)="openDocumentDialog($event)"
+                (openIssue)="openIssueShowDialogApprove($event)"
+                [currentUser]="currentUser.forcedData$ | async"
+                [documentDataList]="myDocumentsListFacade.forcedData$ | async"
+                [documentStateList]="
+                  agreementDocumentStateFacade.forcedData$ | async
+                "
+                [isEnabledIssues]="
+                  isWidgetByNameEnabled('dashboard_employeeRequests')
+                "
+                [issueDataList]="issuesManagementListFacade.forcedData$ | async"
+                [issueStateList]="issuesStatusListFacade.forcedData$ | async"
+                [loading]="
+                  (myDocumentsListFacade.forcedLoading$ | async) ||
+                  (agreementDocumentStateFacade.forcedLoading$ | async) ||
+                  (issuesManagementListFacade.forcedLoading$ | async) ||
+                  (issuesStatusListFacade.forcedLoading$ | async)
+                "
+              ></app-dashboard-my-approvals>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Мои заявки" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_requests'); as enabled) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('my-applications'); as widget) {
+          <gridstack-item
+            #myApplicationsWidget
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-issue
+                id="cy-dashboard-dashboard_requests"
+                [currentUser]="currentUser.forcedData$ | async"
+                [issueList]="issuesListFacade.forcedData$ | async"
+                [issuesStatusList]="issuesStatusListFacade.forcedData$ | async"
+                [loading]="
+                  (issuesListFacade.forcedLoading$ | async) ||
+                  (issuesStatusListFacade.forcedLoading$ | async)
+                "
+                (openIssue)="openIssueShowDialog($event)"
+                [isEnabled]="isWidgetByNameEnabled('dashboard_requests')"
+              ></app-dashboard-issue>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Командировки" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_businessTrips'); as enabled) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('business-trips'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-business-trips
+                [loading]="dashboardBusinessTripsFacade.forcedLoading$ | async"
+                [documentDataList]="
+                  dashboardBusinessTripsFacade.forcedData$ | async
+                "
+                (openIssue)="openIssueShowDialog($event)"
+                [isEnabled]="enabled"
+              ></app-dashboard-business-trips>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Отпуска (содержит информацию по остаткам отпусков)" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_vacations'); as enabled) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('vacation-balances'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-vacation
+                id="cy-dashboard-dashboard_vacations"
+                [vacationArray]="vacationFacade.forcedData$ | async"
+                [vacationTotal]="vacationTotalFacade.forcedData$ | async"
+                [vacationTypes]="vacationTypeFacade.forcedData$ | async"
+                [settings]="settingsFacade.forcedData$ | async"
+                [dateLocale]="langFacade.getLang()"
+                [issueStateList]="issuesStatusListFacade.forcedData$ | async"
+                (openIssue)="openIssueAddDialog($event)"
+                (openCreatedIssue)="openIssueShowDialog($event)"
+                (vacationBalanceDateUpdate)="vacationBalanceDateUpdate($event)"
+                (openVacationImgDialog)="openVacationImgDialog($event)"
+                [issueType]="issueTypeFacade.forcedData$ | async"
+                [isEnabled]="enabled"
+                [showMyVacationSchedule]="false"
+              ></app-dashboard-vacation>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Мой график отпусков" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_vacations'); as enabled) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('my-vacation-schedule'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-vacation
+                [vacationArray]="vacationFacade.forcedData$ | async"
+                [vacationTotal]="vacationTotalFacade.forcedData$ | async"
+                [vacationTypes]="vacationTypeFacade.forcedData$ | async"
+                [settings]="settingsFacade.forcedData$ | async"
+                [dateLocale]="langFacade.getLang()"
+                [issueStateList]="issuesStatusListFacade.forcedData$ | async"
+                (openIssue)="openIssueAddDialog($event)"
+                (openCreatedIssue)="openIssueShowDialog($event)"
+                (vacationBalanceDateUpdate)="vacationBalanceDateUpdate($event)"
+                (openVacationImgDialog)="openVacationImgDialog($event)"
+                [issueType]="issueTypeFacade.forcedData$ | async"
+                [isEnabled]="enabled"
+                [showVacationBalances]="false"
+              ></app-dashboard-vacation>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Зарплата" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_payroll'); as enabled) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('salary'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget
+              [widgetStyle]="{ height: isMobileV() ? 'auto' : 'auto' }"
+            >
+              <app-dashboard-salary
+                id="cy-dashboard-dashboard_payroll"
+                [currentUser]="currentUser.forcedData$ | async"
+                [payslip]="salaryFacade.forcedData$ | async"
+                [workPeriods]="workPeriodFacade.forcedData$ | async"
+                [dateLocale]="langFacade.getLang()"
+                (workPeriodDateUpdate)="workPeriodDateUpdate($event)"
+                (openSalaryImgDialog)="openSalaryImgDialog($event)"
+                [isEnabled]="enabled"
+              ></app-dashboard-salary>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      <!-- Виджет "Пользовательские отчёты" -->
+      <!-- <только если включён в настройках> -->
+      @if (isWidgetByNameEnabled('dashboard_customReports'); as enabled) {
+        <!-- <только если заданы параметры отображения виджета в сетке Gridstack> -->
+        @if (getWidgetById('custom-reports'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget [widgetStyle]="{ height: 'auto' }">
+              <app-dashboard-vacation-reports
+                id="cy-dashboard-dashboard_customReports"
+                [isEnabled]="enabled"
+                [reports]="vacationReportsFacade.forcedData$ | async"
+                (openVacationReportDialog)="openVacationReportDialog($event)"
+              >
+              </app-dashboard-vacation-reports>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+
+      @if (isWidgetByNameEnabled('custom-widgets'); as enabled) {
+        @if (getWidgetById('custom-widgets'); as widget) {
+          <gridstack-item
+            [options]="widget"
+            [attr.gs-w]="isMobileV() ? '2' : widget.w"
+          >
+            <app-widget [widgetStyle]="{ height: 'auto' }">
+              <app-dashboard-cutom-widgets
+                id="cy-dashboard-dashboard_custom_widgets"
+                [widgets]="widgets()"
+                [loading]="widgetsLoading()"
+                (openCustomWidgetDialog)="openCustomWidgetDialog($event)"
+              >
+              </app-dashboard-cutom-widgets>
+            </app-widget>
+          </gridstack-item>
+        }
+      }
+    </gridstack>
+  </div>
+}

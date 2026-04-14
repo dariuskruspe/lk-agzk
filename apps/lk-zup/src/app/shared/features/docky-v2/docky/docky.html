@@ -1,0 +1,85 @@
+<!-- Виджет (остаётся на месте, скрывается визуально при открытом чате) -->
+<app-liquid-container
+  class="input-full"
+  [radius]="20"
+  [class.widget-hidden]="isOpen()"
+>
+  <div class="input" (click)="openChat()">
+    <div class="input-prefix">
+      <img
+        src="../../../assets/img/docky/icon-256.png"
+        alt="Docky"
+        class="input-docky-icon"
+      />
+    </div>
+
+    <input
+      type="text"
+      [placeholder]="'DOCKY_WELCOME_TEXT' | translate"
+      readonly
+    />
+
+    <div class="input-suffix">
+      <lucide-icon [name]="SendIcon"></lucide-icon>
+    </div>
+  </div>
+</app-liquid-container>
+
+<!-- Чат (рендерится в body через CDK Portal) -->
+<ng-template #chatTemplate>
+  @if (isOpen()) {
+  <div
+    class="docky-chat-overlay"
+    @overlayAnimation
+    (click)="onOverlayClick()"
+  ></div>
+  <div class="docky-chat-panel" @chatPanelAnimation>
+    <!-- Header -->
+    <div class="docky-chat-header">
+      <div class="docky-chat-header__actions">
+        <button
+          class="docky-chat-header__action docky-chat-header__clear"
+          type="button"
+          title="Новый чат"
+          aria-label="Новый чат"
+          pTooltip="Новый чат"
+          pTooltipPosition="bottom"
+          [disabled]="isStreaming() || !messages().length"
+          (click)="onClearChat()"
+        >
+          <lucide-icon [name]="MessageCirclePlusIcon"></lucide-icon>
+        </button>
+        <button
+          class="docky-chat-header__action docky-chat-header__close"
+          type="button"
+          title="Закрыть чат"
+          aria-label="Закрыть чат"
+          (click)="closeChat()"
+        >
+          <lucide-icon [name]="XIcon"></lucide-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="docky-chat-messages" #messagesViewport>
+      <app-docky-chat
+        [messages]="messages()"
+        [isThinking]="isThinking()"
+        [isStreaming]="isStreaming()"
+        (clickExample)="onExampleClick($event)"
+        (retry)="onRetryClick()"
+      />
+    </div>
+
+    <!-- Footer с input -->
+    <div class="docky-chat-footer">
+      <app-docky-chat-input
+        [isStreaming]="isStreaming()"
+        (send)="onMessageSend($event)"
+        (stop)="onStopStream()"
+      />
+    </div>
+  </div>
+  }
+</ng-template>

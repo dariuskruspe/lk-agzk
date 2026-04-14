@@ -1,0 +1,76 @@
+<div class="modal-info" [ngClass]="{ 'mobile-v': isMobileV() }">
+  <div>
+    <div class="info-title">
+      {{ info?.dateStart | date : 'dd.MM.yyyy' }} -
+      <span>
+        {{ info?.dateEnd | date : 'dd.MM.yyyy' }}
+      </span>
+      <br />{{ info?.name }}
+    </div>
+    <div class="info-body">
+      <div class="item">
+        <div class="title">{{ 'COMMAND_DATE_BEGIN' | translate }}</div>
+        <div class="value">{{ info.dateStart | date : 'dd.MM.yyyy' }}</div>
+      </div>
+      <div class="item">
+        <div class="title">{{ 'COMMAND_DATE_END' | translate }}</div>
+        <div class="value">{{ info.dateEnd | date : 'dd.MM.yyyy' }}</div>
+      </div>
+      <div class="item">
+        <div class="title">{{ 'COMMAND_DATE_COUNT' | translate }}</div>
+        <div class="value">{{ info.count }}</div>
+      </div>
+    </div>
+
+    <div
+      class="info_warning"
+      *ngIf="info.linkedIssueTypeId && !info.linkedIssueId"
+    >
+      <i class="pi pi-info-circle icon"></i>
+      {{ 'EXPENSE_REPORT_SUBTITLE' | translate }}
+    </div>
+    <div class="vacation-buttons">
+      <button
+        *ngIf="info.enableButtons && info.status !== 'cancelled'"
+        label="{{ 'BUTTON_CHANGE' | translate }}"
+        [disabled]="businessTripsIssuesFieldsFacade.loading$() | async"
+        [loading]="
+          (businessTripsDocumentFieldsFacade.loading$() | async) ||
+          (issuesCancelFacade.loading$() | async)
+        "
+        pButton
+        (click)="changeIssue()"
+      ></button>
+      <button
+        *ngIf="
+          info.linkedIssueTypeId &&
+          info.enableReportButtons &&
+          !info.linkedIssueId &&
+          info.enableButtons
+        "
+        label="{{ 'CREATE_CUSTOM_REPORT' | translate }}"
+        pButton
+        (click)="toIssue()"
+      ></button>
+      <button
+        *ngIf="info.enableButtons && info.cancelAccess"
+        label="{{ 'BUTTON_CANCEL_LABEL' | translate }}"
+        pButton
+        class="p-button-outlined"
+        [disabled]="businessTripsIssuesFieldsFacade.loading$() | async"
+        [loading]="
+          (businessTripsDocumentFieldsFacade.loading$() | async) ||
+          (issuesCancelFacade.loading$() | async)
+        "
+        (click)="cancelIssue()"
+      ></button>
+      <button
+        *ngIf="info.linkedIssueId && info.enableReportButtons"
+        label="{{ 'TO_ISSUE_EXPENSE_REPORT' | translate }}"
+        pButton
+        class="p-button-link"
+        (click)="toCreatedIssue()"
+      ></button>
+    </div>
+  </div>
+</div>

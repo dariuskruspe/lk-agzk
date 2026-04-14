@@ -1,0 +1,39 @@
+<div [formGroup]="form">
+  <label
+    for="{{ item.formControlName }}"
+    class="custom-form-field__label"
+  >
+    {{ item.label }}{{ isRequired() ? ' *' : '' }}
+  </label>
+  <p-multiSelect
+    #dd
+    id="{{ item.formControlName }}"
+    [options]="options"
+    [group]="grouped"
+    [selectionLimit]="selectionLimit"
+    [formControlName]="item.formControlName"
+    defaultLabel="{{ item.placeholder && item.placeholder !== 'undefined' ? item.placeholder : '' }}"
+    optionValue="value"
+    [optionLabel]="optionLabel"
+    (onChange)="selectItem($event)"
+    [attr.aria-describedby]="item.formControlName + '-error'"
+    [disabled]="!options?.length"
+    [appendTo]="dd"
+    [showClear]="true"
+  >
+    <ng-template let-group pTemplate="group">
+      <div class="multi-select-group-head">
+          <p-checkbox
+            [binary]="true"
+            [inputId]="group.value"
+            [(ngModel)]="checkboxes[(group.value)?.toString()]"
+            [ngModelOptions]="{standalone: true}"
+            (onChange)="onGroupClick(group)"
+          ></p-checkbox>
+          <label [for]="group.value">
+            {{ group[optionLabel] }}
+          </label>
+      </div>
+    </ng-template>
+  </p-multiSelect>
+</div>

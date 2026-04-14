@@ -1,0 +1,278 @@
+// Переменные
+$primary-color: #3880ff;
+$primary-light: #eef1ff;
+$secondary-color: #6c757d;
+$danger-color: #ff5252;
+$success-color: #0cce6b;
+$border-color: #eaecf0;
+$text-color: #333;
+$shadow-color: rgba(32, 41, 57, 0.08);
+
+// Новые переменные для адаптации к светло-голубому фону
+$background-light-blue: #f0f8ff; // светло-голубой фон
+$card-background: #ffffff; // белый фон для карточек
+$card-border: #d9e6f2; // более голубоватый оттенок для границ
+$primary-blue: #0d6efd; // более насыщенный синий для акцентов
+$primary-blue-light: #e6f0ff; // светлый оттенок синего
+$hover-background: #f5f8ff; // фон при наведении
+$header-background: white; // фон шапки
+
+// Миксины
+@mixin card {
+  background-color: $card-background;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 16px;
+  border: 1px solid $card-border;
+}
+
+@mixin hover-transition {
+  transition: all 0.25s ease;
+}
+
+// Основные стили
+.form-builder {
+  color: $text-color;
+  border-radius: 8px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(var(--main-content-height) - 12px);
+  gap: 8px;
+  padding: 12px;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 0;
+    flex: 1;
+    background-color: $card-background;
+    border-radius: 9px;
+    border: 1px solid $card-border;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: $header-background;
+    border-radius: 9px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: 1px solid $card-border;
+    padding: 0 16px;
+  }
+
+  &__title {
+    h1 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin: 0;
+    }
+  }
+
+  &__tabs {
+    display: flex;
+    align-items: center;
+    height: 56px;
+  }
+
+  &__tab {
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    height: 100%;
+    gap: 8px;
+    cursor: pointer;
+    position: relative;
+    color: $secondary-color;
+    font-weight: 500;
+    font-size: 14px;
+    user-select: none;
+    @include hover-transition;
+
+    i {
+      font-size: 16px;
+    }
+
+    &:hover {
+      color: $primary-blue;
+    }
+
+    &--active {
+      color: $primary-blue;
+      font-weight: 600;
+    }
+
+    &-indicator {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background-color: $primary-blue;
+      border-radius: 3px 3px 0 0;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .preview-switch {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-right: 16px;
+
+    &__label {
+      font-size: 14px;
+      color: $secondary-color;
+    }
+  }
+
+  .editor-content {
+    padding: 16px;
+  }
+
+  .loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    gap: 16px;
+    color: $secondary-color;
+  }
+}
+
+// Стили для переключателя превью
+.preview-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  &__label {
+    font-size: 14px;
+    color: $secondary-color;
+    font-weight: 500;
+  }
+}
+
+// Общие стили для полей формы
+.field {
+  margin-bottom: 1.5rem;
+
+  label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: $text-color;
+  }
+
+  .text-muted {
+    display: block;
+    margin-top: 0.25rem;
+    color: $secondary-color;
+    font-size: 0.875rem;
+  }
+}
+
+// Стили для состояния загрузки
+.loading-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  i {
+    color: $primary-blue;
+  }
+
+  p {
+    margin-top: 1rem;
+    color: $secondary-color;
+  }
+}
+
+// Стили для PrimeNG компонентов
+:host ::ng-deep {
+  .p-inputswitch.p-inputswitch-sm {
+    .p-inputswitch-slider {
+      height: 20px;
+      width: 36px;
+      &::before {
+        height: 16px;
+        width: 16px;
+        margin-top: -8px;
+      }
+    }
+    &.p-inputswitch-checked .p-inputswitch-slider::before {
+      transform: translateX(16px);
+    }
+  }
+
+  .p-button {
+    &.p-button-sm {
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+      border-radius: 6px;
+
+      .p-button-icon {
+        font-size: 0.875rem;
+      }
+    }
+
+    &.p-button-primary {
+      background-color: $primary-blue;
+      border-color: $primary-blue;
+      &:enabled:hover {
+        background-color: darken($primary-blue, 5%);
+        border-color: darken($primary-blue, 5%);
+      }
+    }
+
+    &.p-button-outlined {
+      color: $secondary-color;
+      border-color: $card-border;
+      &:enabled:hover {
+        background-color: $hover-background;
+        color: $primary-blue;
+        border-color: $primary-blue;
+      }
+    }
+  }
+
+  .w-full {
+    width: 100%;
+  }
+
+  .mb-3 {
+    margin-bottom: 1rem;
+  }
+
+  .mr-2 {
+    margin-right: 0.5rem;
+  }
+
+  .d-flex {
+    display: flex;
+  }
+
+  .align-items-center {
+    align-items: center;
+  }
+}
+
+app-custom-sections-template-editor {
+  flex: 1;
+  min-height: 1px;
+}
+
+.custom-sections-template-view-container {
+  padding: 24px;
+}

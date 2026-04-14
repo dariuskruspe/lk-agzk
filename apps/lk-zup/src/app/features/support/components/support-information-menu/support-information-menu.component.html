@@ -1,0 +1,23 @@
+<div class="reference-information__sideMenu">
+  <div class="sideMenu-wrapper">
+    <div
+      *ngFor="let menuItem of sideMenuState" class="expansion-panel"
+    >
+      <div class="title"> {{ menuItem.title }} </div>
+      <!-- Подменю -->
+      <div class="list-menu">
+        <div
+          *ngFor="let submenu of menuItem?.child" [ngClass]="{
+            active:
+              submenu.pageId ===
+              route?.firstChild?.snapshot?.params?.pageId
+          }" (click)="onMenuItemClick(submenu.pageId)" class="list-menu__item"
+        >
+          <span class="pointer-list">
+            {{ submenu.title }}
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

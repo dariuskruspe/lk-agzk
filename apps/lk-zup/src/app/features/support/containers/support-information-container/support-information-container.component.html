@@ -1,0 +1,12 @@
+<div class="support-wrapper reference-information">
+  <div class="support-wrapper__body">
+    <router-outlet></router-outlet>
+  </div>
+  <div class="support-wrapper__menu">
+    <app-support-information-menu
+      [sideMenu]="supportHelpSideMenuFacade.getData$() | async"
+      [isBodyLoading]="supportHelpBlockFacade.loading$() | async"
+      (menuItemClick)="changeSupportHelpBlock($event)"
+    ></app-support-information-menu>
+  </div>
+</div>

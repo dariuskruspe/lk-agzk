@@ -1,0 +1,24 @@
+<div
+  *ngIf="response?.message"
+  class="additional-info"
+>
+  <app-additional-message
+    [closable]="false"
+    [res]="response"
+  ></app-additional-message>
+</div>
+<div class="validation-container">
+  <div class="validation-container__description">
+    {{ 'APPLICATION_FOR_SIGNATURE_START' | translate }}
+    <b>{{ provider.metadata?.app }}</b>
+    {{ 'APPLICATION_FOR_SIGNATURE_END' | translate }}
+  </div>
+  <p-toolbar class="margin-top">
+    <button
+      pButton
+      label="{{ 'BUTTON_CLOSE' | translate }}"
+      class="p-button-outlined"
+      (click)="close()"
+    ></button>
+  </p-toolbar>
+</div>

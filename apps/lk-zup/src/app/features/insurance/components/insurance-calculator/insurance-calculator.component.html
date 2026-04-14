@@ -1,0 +1,107 @@
+<div class="calculator-card-body">
+  <div class="options-form">
+    <div class="p-fluid calc-field">
+      <label class="custom-form-field__label">
+        {{ 'INSURANCE_CALCULATOR_CITY_LABEL' | translate }}
+      </label>
+      <p-dropdown
+        [options]="options.cities"
+        [(ngModel)]="optionsValue.city"
+        optionLabel="representation"
+        optionValue="value"
+        class="dropdown-input"
+        placeholder="{{ 'CHOOSE' | translate }}"
+        appendTo="body"
+        [disabled]="loadingOptions"
+      ></p-dropdown>
+    </div>
+    <div class="p-fluid calc-field">
+      <label class="custom-form-field__label">
+        {{ 'INSURANCE_CALCULATOR_GRADE_LABEL' | translate }}
+      </label>
+      <p-dropdown
+        [options]="options.grades"
+        [(ngModel)]="optionsValue.grade"
+        optionLabel="representation"
+        optionValue="value"
+        class="dropdown-input"
+        placeholder="{{ 'CHOOSE' | translate }}"
+        appendTo="body"
+        [disabled]="loadingOptions"
+      ></p-dropdown>
+    </div>
+
+    <div class="p-fluid calc-field">
+      <label class="custom-form-field__label">
+        {{ 'INSURANCE_CALCULATOR_DATE_LABEL' | translate }}
+        <!--        <i class="pi pi-question-circle" [pTooltip]="'INSURANCE_CALCULATOR_DATE_LABEL_TOOLTIP' | translate"></i>-->
+      </label>
+      <p-dropdown
+        [options]="options.dates"
+        [(ngModel)]="optionsValue.date"
+        optionLabel="representation"
+        optionValue="value"
+        class="dropdown-input"
+        placeholder="{{ 'CHOOSE' | translate }}"
+        appendTo="body"
+        [disabled]="loadingOptions"
+      ></p-dropdown>
+    </div>
+
+    <div class="calc-field">
+      <button
+        pButton
+        label="{{ 'CALCULATE' | translate }}"
+        (click)="getCalculate()"
+        [disabled]="
+          !optionsValue.date ||
+          !optionsValue.grade ||
+          !optionsValue.city ||
+          loadingOptions
+        "
+        [loading]="loadingCalculatorResponse"
+      ></button>
+    </div>
+
+    <div class="mini-loader" *ngIf="loadingOptions">
+      <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <div *ngIf="calculatorResponse && !loadingCalculatorResponse">
+      <app-insurance-custom-accordion
+        *ngFor="
+          let program of calculatorResponse.insurancePrograms;
+          let i = index
+        "
+        [title]="program.name"
+        [count]="counterValues[i]"
+        (changeCount)="changeCount($event, i)"
+      >
+        <div class="program-body">
+          <div class="description">
+            {{ program.description }}
+          </div>
+          <div *ngFor="let field of program.fields" class="program-item">
+            <div class="name">{{ field.name }}</div>
+            <div class="value" *ngIf="isDate(field.value)">
+              {{ field.value | date : 'dd.MM.yyyy' }}
+            </div>
+            <div class="value" *ngIf="!isDate(field.value)">
+              {{ field.value }}
+            </div>
+          </div>
+        </div>
+      </app-insurance-custom-accordion>
+      <div class="result">
+        <div class="title" *ngIf="calculatorResponse.totalFieldName">{{ calculatorResponse.totalFieldName }}</div>
+        <div class="title" *ngIf="!calculatorResponse.totalFieldName">{{ 'INSURANCE_CALCULATOR_TOTAL' | translate }}</div>
+        <div class="value">{{getTotalValue()}}</div>
+      </div>
+      <div class="text">
+        <div
+          [innerHTML]="calculatorResponse.description | trustedHtml : true"
+        ></div>
+      </div>
+    </div>
+  </div>
+</div>

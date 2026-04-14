@@ -1,0 +1,68 @@
+.list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background: var(--card-background);
+  padding: 18px;
+  margin-bottom: 5px;
+  border-radius: 5px;
+  color: rgb(152, 154, 162);
+  @media (max-width: 1268px) {
+    flex-direction: column;
+  }
+  .user {
+    display: flex;
+    flex-direction: row;
+    .avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      position: relative;
+      overflow:hidden;
+    }
+    .avatar img {
+      position: absolute;
+      top:50%;
+      left:50%;
+      transform:translate(-50%,-50%);
+      width: 32px;
+      height: 32px;
+      object-fit:cover;
+    }
+    &__name {
+      align-self: center;
+      margin-left: 20px;
+      width: 260px;
+      color: var(--basic-color);
+    }
+  }
+  &__col {
+    align-self: center;
+    @media (max-width: 767px) {
+      align-self: flex-start;
+      margin-bottom: 10px;
+    }
+  }
+  .days {
+    .count {
+      color: var(--link-color);
+      cursor: pointer;
+    }
+  }
+  .vacation {
+    min-width: 430px;
+    @media (max-width: 767px) {
+      display: flex;
+      flex-direction: column;
+    }
+    &__dates {
+      color: var(--basic-color);
+    }
+  }
+  .download {
+    .download-icon {
+      color: var(--link-color);
+      cursor: pointer;
+    }
+  }
+}

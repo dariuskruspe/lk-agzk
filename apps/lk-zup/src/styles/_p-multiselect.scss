@@ -1,0 +1,10 @@
+.custom-form-field {
+  .p-multiselect-item-group {
+    background-color: var(--title-background) !important;
+    .multi-select-group-head:hover {
+      & label {
+        cursor: pointer !important;
+      }
+    }
+  }
+}

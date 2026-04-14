@@ -1,0 +1,42 @@
+.modal-link {
+  color: #2196f3;
+  text-decoration: none;
+  font-size: 16px;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.mat-list-option {
+  width: calc(100% + 40px);
+  padding: 0 20px;
+  margin: 0 -20px;
+  box-sizing: border-box;
+
+  @media (max-width: 767px) {
+    display: block;
+    padding-bottom: 15px;
+    height: auto;
+  }
+}
+
+.agreement-employee-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: start;
+    padding-bottom: 10px;
+  }
+}
+
+form mat-icon {
+  position: absolute;
+  top: 9px;
+  right: 10px;
+  width: 20px;
+  height: 20px;
+  color: var(--primary);
+}

@@ -1,0 +1,6 @@
+<app-issues-type-list
+  [issuesTypeList]="issuesTypeListFacade.forcedData$ | async"
+  [filterIssuesTypeList]="filterIssuesTypeList$ | async"
+  (filter)="onFilterIssuesTypeList($event)"
+  (backPage)="backPage()"
+></app-issues-type-list>

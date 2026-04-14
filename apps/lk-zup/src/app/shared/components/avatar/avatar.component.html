@@ -1,0 +1,41 @@
+<div class="avatar-container">
+  <!-- Вариант 1 (изображение как CSS-фон для div [div -> style -> 'background-image']) -->
+  <div
+    *ngIf="avatarSignal() || photoURLSignal(); else placeholder"
+    class="image-container"
+    [ngStyle]="{
+      'background-image':
+        'url(' + encodeURI(avatarSignal() || photoURLSignal()) + ')',
+      width: width,
+      height: height,
+      boxShadow: boxShadow
+    }"
+  ></div>
+
+  <!-- Вариант 2 (изображение [img]) -->
+  <!--  <img *ngIf="avatarSignal() || photoURLSignal(); else placeholder"-->
+  <!--       alt="avatar"-->
+  <!--       class="user-avatar"-->
+  <!--       [ngStyle]="{ width: width, height: height, boxShadow: boxShadow }"-->
+  <!--       [src]="encodeURI(avatarSignal() || photoURLSignal())"-->
+  <!--  >-->
+
+  <ng-template #placeholder>
+    <div
+      class="image-container avatar-placeholder"
+      [ngStyle]="{ width: width, height: height, boxShadow: boxShadow }"
+    ></div>
+  </ng-template>
+
+  <label *ngIf="isEditable" for="avatar-input-file">
+    <div class="icon-wrapper">
+      <input
+        type="file"
+        id="avatar-input-file"
+        accept="image/*"
+        (change)="onAvatarChange($event)"
+      />
+      <i class="pi pi-pencil icon"></i>
+    </div>
+  </label>
+</div>

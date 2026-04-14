@@ -1,0 +1,80 @@
+.company-goals-container {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.goals-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: var(--title-color);
+}
+
+.goals-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.goal-card {
+  position: relative;
+  background: var(--card-background);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  min-height: 120px;
+
+  &.clickable {
+    cursor: pointer;
+  }
+}
+
+.goal-background {
+  position: absolute;
+  bottom: -18px;
+  right: -50px;
+  width: 150px;
+  height: 135px;
+  background-image: url(/assets/img/goals/arrow-target.png);
+  background-repeat: no-repeat;
+  background-position: bottom right;
+  background-size: cover;
+  opacity: 0.1;
+  pointer-events: none;
+}
+
+.goal-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.goal-title {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--text-color, #333);
+  line-height: 1.4;
+}
+
+.goal-category {
+  font-size: 0.875rem;
+  color: var(--text-color-secondary, #666);
+  line-height: 1.3;
+}

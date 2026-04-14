@@ -1,0 +1,17 @@
+.filters-body {
+  margin-bottom: 15px;
+}
+.result-count {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 15px;
+  .link {
+    color: var(--link-color);
+    text-decoration: underline;
+    cursor: pointer;
+    margin-left: 5px;
+  }
+}
+.filter-item {
+  margin-bottom: 16px;
+}

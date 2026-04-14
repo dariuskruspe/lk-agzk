@@ -1,0 +1,16 @@
+<div>
+  <loadable-list-container
+    [template]="dataTemplate"
+    [dataConfig]="dataConfig"
+    [dataList]="{ newsletters: newsletters, count: totalCount }"
+    [scrollContainerClassCss]="'.scroll-main-container'"
+    [loading]="loading$ | async"
+    [appendFilterToQuery]="true"
+    [pagination]="true"
+    (clickItem)="onNewsletterClick($event)"
+    (loadList)="onLoadList($event)"
+    [otherData]="{
+      issuesStatusList: statusList
+    }"
+  ></loadable-list-container>
+</div>

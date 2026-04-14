@@ -1,0 +1,22 @@
+@if (isV2Enabled()) {
+  @if (isVacationsManagement()) {
+    <app-vacations-management-v2 />
+  } @else {
+    <app-vacations-v2 />
+  }
+} @else {
+  <app-vacations-graph
+    *ngIf="initYear"
+    [initYear]="initYear"
+    [loading$]="loading$"
+    [vacations]="vacationsGraphPeriodsFacade.getData$() | async"
+    [currentUser]="userFacade.getData()"
+    [dayOffList]="vacationsGraphDayOffListFacade.getData() || (vacationsGraphDayOffListFacade.getData$() | async)"
+    [availableDays]="vacationsAvailableDays.getData$() | async"
+    [types]="vacationsStatusFacade.forcedData$ | async"
+    [states]="vacationsStatesFacade.getData$() | async"
+    [loading]="!initYear || (vacationsGraphPeriodsFacade.loading$() | async)"
+    (openModal)="onOpenModal($event)"
+    (filterChanged)="refetchData($event)"
+  ></app-vacations-graph>
+}

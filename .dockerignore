@@ -1,0 +1,7 @@
+node_modules
+libs
+apps
+tools
+docs
+.storybook
+zip_develop

@@ -1,0 +1,5 @@
+<app-sms-creation
+  [loading]="confirmationSent"
+  [provider]="provider"
+  (submitCode)="onCodeReceived($event)"
+></app-sms-creation>

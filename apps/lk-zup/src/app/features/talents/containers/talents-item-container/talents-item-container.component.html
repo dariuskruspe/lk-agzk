@@ -1,0 +1,108 @@
+<p-toolbar class="margin-top-bottom p-toolbar-single-row" *ngIf="talentStorageData">
+  <p-toolbar class="nowrap">
+    <p-button
+      icon="pi pi-arrow-left"
+      [link]="true"
+      (click)="onBackPage()"
+    ></p-button>
+    <h1>
+      {{talentStorageData.fullName}}
+    </h1>
+  </p-toolbar>
+  <span class="spacer"></span>
+</p-toolbar>
+<div class="profile-info" *ngIf="talentStorageData">
+  <div
+    class="photo"
+    [ngStyle]="{
+      backgroundImage: photo
+        ? 'url(' + encodeURI(photo) + ')'
+        : 'url(assets/img/svg/user-circle.svg)'
+    }"
+  ></div>
+  <div class="info">
+    <div>
+      <b>{{talentStorageData.position}}</b>
+    </div>
+
+    <div>
+      {{talentStorageData.division}}
+    </div>
+  </div>
+</div>
+<p-card class="no-padding" *ngIf="talentItem">
+  <p-tabView>
+    <p-tabPanel header="{{ 'TALENTS' | translate }}">
+      <div class="column">
+        <div class="column grid-row mb-0" *ngFor="let talent of talentItem.talents">
+          <div
+            class="column"
+          >
+            <span class="header-row talent" [ngStyle]="{background: talent.color}">{{talent.name}}</span>
+          </div>
+          <div
+            class="column"
+            >
+            <span class="header-row" *ngIf="settingsSignal().talents.EditingEnable">
+              <i class="pi pi-times cursor-pointer" (click)="removeTalent(talent.talentID)"></i>
+            </span>
+          </div>
+        </div>
+
+        <div>
+          <button
+            pButton
+            label="{{ 'ADD_TALENT' | translate }}"
+            icon="pi pi-plus"
+            iconPos="left"
+            [outlined]="true"
+            [disabled]="!settingsSignal().talents.EditingEnable"
+            (click)="addTalent()"
+          ></button>
+        </div>
+
+
+      </div>
+
+    </p-tabPanel>
+
+    <!-- Вкладка "История изменений" -->
+    <p-tabPanel header="{{ 'ISSUE_CHANGES' | translate }}">
+      <ng-container>
+        <div class="header-content">
+          <div *ngFor="let history of talentItem.changeHistory" class="column">
+            <div class="history-row">
+              <div
+                class="history-row__column"
+              >
+                <div class="history-row__date">
+                  {{history.modificationDate | date: 'dd.MM.yyyy'}}
+                </div>
+                <div
+                  class="history-row__status"
+                >
+                  <div
+                    class="history-row__status_tag"
+                    [ngStyle]="{
+                    backgroundColor: history?.color || 'var(--draft)',
+                  }"
+                  >
+                    {{history.name}}
+                  </div>
+                </div>
+              </div>
+
+              <div class="history-row__name" *ngIf="history.isDelete">
+                {{ 'TALENT_REMOVED' | translate }}
+              </div>
+            </div>
+            <div class="history-comment" *ngIf="history.description">
+              {{history.description}}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </p-tabPanel>
+  </p-tabView>
+</p-card>
+

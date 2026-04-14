@@ -1,0 +1,36 @@
+.hugerte-container {
+  width: 100%;
+  min-height: 400px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  overflow: hidden;
+
+  ::ng-deep .tox {
+    .tox-toolbar {
+      background: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+
+    .tox-edit-area {
+      .tox-edit-area__iframe {
+        min-height: 350px;
+      }
+    }
+  }
+}
+
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  background: #f8f9fa;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+
+  p {
+    margin: 0;
+    color: #6c757d;
+    font-size: 14px;
+  }
+}

@@ -1,0 +1,51 @@
+.assessment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.assessment-item {
+  display: flex;
+  align-items: center;
+  background: var(--card-background);
+  border-radius: 12px;
+  padding: 24px 32px;
+}
+
+.icon i {
+  color: var(--link-color);
+}
+
+.info {
+  display: flex;
+  flex: 1;
+  margin-left: 24px;
+  flex-direction: row;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--title-color);
+  width: 280px;
+  align-self: center;
+}
+
+.description {
+  color: rgb(152, 154, 162);
+  font-size: 18px;
+  margin-top: 4px;
+}
+
+.status {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 11px;
+  color: var(--basic-color);
+  &.done {
+    background: #f3f8e7;
+  }
+  &.pending {
+    background: #e3eaff;
+  }
+}

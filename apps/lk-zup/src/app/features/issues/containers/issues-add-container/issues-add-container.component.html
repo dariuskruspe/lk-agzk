@@ -1,0 +1,16 @@
+<app-issues-add
+  [issuesType]="issuesTypeFacade.getData$() | async"
+  [employeesStaticData]="
+    employeesStaticDataFacade.getData() ||
+    (employeesStaticDataFacade.getData$() | async)
+  "
+  [employeesAdditionalStaticData]="employeesAdditionalStaticDataFacade.getData()"
+  [employeesApprovingPersons]="issuesApprovingPersonsFacade.forcedData$ | async"
+  [dateLocale]="langFacade.getLang()"
+  [loading]="issuesAddFacade.loading$() | async"
+  [signatureValidation]="settingsFacade.getData()?.general?.signatureValidation"
+  [currentUserSingState]="currentUserFacade.getData()?.signState"
+  [vacationBalance]="(issuesVacationBalanceFacade.getData$() | async) || issuesVacationBalanceFacade.getData()"
+  (createIssue)="addIssue($event)"
+  (backPage)="backPage()"
+></app-issues-add>

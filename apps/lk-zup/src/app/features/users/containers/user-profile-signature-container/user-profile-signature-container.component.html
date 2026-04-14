@@ -1,0 +1,28 @@
+<div class="container-fluid">
+  <div class="row">
+    <p-toolbar class="title">
+      <!-- Заголовок "Электронная подпись" -->
+      <h1>
+        {{ 'PROFILE_ELECTRONIC_SIGNATURE' | translate }}
+      </h1>
+    </p-toolbar>
+    <ng-container
+      *ngIf="!currentUserFacade.getData()?.signState; else certificates"
+    >
+      <div class="description">
+        {{ 'PROFILE_SING_STATE_FALSE_MESSAGE' | translate }}
+      </div>
+    </ng-container>
+
+    <ng-template #certificates>
+      <ng-container *ngFor="let provider of providers | async">
+        <div *ngIf="provider" class="col-12 p-0">
+          <app-user-profile-signature
+            [provider]="provider"
+            (openForm)="openSignatureCreation($event)"
+          ></app-user-profile-signature>
+        </div>
+      </ng-container>
+    </ng-template>
+  </div>
+</div>

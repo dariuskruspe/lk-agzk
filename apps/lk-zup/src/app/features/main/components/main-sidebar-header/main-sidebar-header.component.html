@@ -1,0 +1,68 @@
+@if (selectedEmployee(); as employee) {
+  <button
+    type="button"
+    class="sidebar-header"
+    [class.sidebar-header--single]="employees().length <= 1"
+    (click)="showCompanyMenu($event)"
+  >
+    <div class="sidebar-header__content">
+      <app-logo></app-logo>
+      @if (!isCollapsed()) {
+        <div class="sidebar-header__info">
+          <div class="sidebar-header__title">
+            {{ employee.organizationShortName }}
+          </div>
+        </div>
+      }
+    </div>
+    @if (employees().length > 1) {
+      <lucide-icon [img]="ChevronsUpDownIcon"></lucide-icon>
+    }
+  </button>
+}
+
+<ng-template #companyMenuTemplate>
+  <div class="company-menu">
+    <div class="company-menu__content">
+      <div class="company-menu__header">{{ 'CHOOSE_COMPANY' | translate }}</div>
+      <ul class="company-menu__list">
+        @for (
+          employee of employees();
+          track trackByEmployeeId($index, employee)
+        ) {
+          <li class="company-menu__item">
+            <button
+              type="button"
+              class="company-menu__link"
+              [class.company-menu__link--active]="
+                employee.employeeID === selectedEmployeeId()
+              "
+              (click)="selectEmployee(employee)"
+            >
+              <div class="company-menu__info">
+                <div class="company-menu__title">
+                  {{ employee.organizationShortName }}
+                </div>
+                @if (
+                  employee.typeOfEmployment ||
+                  employee.position ||
+                  employee.department
+                ) {
+                  <div class="company-menu__subtitle">
+                    <span>{{ employee.typeOfEmployment }}</span>
+                    @if (employee.position) {
+                      <span>, {{ employee.position }}</span>
+                    }
+                    @if (employee.department) {
+                      <span>, {{ employee.department }}</span>
+                    }
+                  </div>
+                }
+              </div>
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</ng-template>

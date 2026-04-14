@@ -1,0 +1,18 @@
+<div class="validation-container">
+  <div class="validation-container__description">
+    {{ 'SIGNATURE_THROUGH_LINK_BEGIN' | translate }}
+    <button
+      pButton
+      label="{{ 'SIGNATURE_THROUGH_LINK' | translate }}"
+      (click)="goLink()"
+      class="p-button-link"
+    ></button>
+    {{ 'SIGNATURE_THROUGH_LINK_END' | translate }}
+  </div>
+  <p-toolbar class="margin-top">
+    <p-button
+      label="{{ 'SIGNATURE_SIDE_LINK' | translate }}"
+      (onClick)="close(); goLink()"
+    ></p-button>
+  </p-toolbar>
+</div>

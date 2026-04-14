@@ -1,0 +1,132 @@
+.calendar-graph-month {
+  position: relative;
+}
+
+.calendar-graph-month__header {
+  display: block;
+}
+
+.calendar-graph-month__header--sticky {
+  display: flow-root;
+  position: sticky;
+  z-index: 3;
+  background: var(
+    --calendar-graph-month-sticky-background,
+    var(
+      --timesheet-sticky-bg,
+      var(--app-grid-sticky-background, var(--bg-primary, #fff))
+    )
+  );
+  backdrop-filter: var(--control-backdrop-filter, none);
+  -webkit-backdrop-filter: var(--control-backdrop-filter, none);
+}
+
+.calendar-graph-month__header--sticky .app-grid-header {
+  background: inherit;
+}
+
+.calendar-graph-month__header--sticky.is-stuck {
+  border-bottom: 1px solid
+    var(--calendar-graph-header-border, var(--timesheet-divider, #eee));
+}
+
+.calendar-graph-month__nav {
+  display: inline-flex;
+  position: fixed;
+  top: 50%;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: var(--timesheet-card-border, 1px solid rgba(226, 232, 240, 0.9));
+  border-radius: 999px;
+  background: var(--control-bg, var(--bg-primary, #fff));
+  color: var(--foreground-color, #1f2937);
+  box-shadow: var(--control-shadow);
+  backdrop-filter: var(--control-backdrop-filter, none);
+  -webkit-backdrop-filter: var(--control-backdrop-filter, none);
+  transform: translateY(-50%);
+  cursor: pointer;
+  z-index: 3;
+  transition:
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:not(:disabled):hover {
+    background: var(--control-hover-bg, var(--control-bg, var(--bg-primary)));
+    box-shadow:
+      var(--control-shadow),
+      0 10px 24px -18px
+        color-mix(in srgb, var(--foreground-color, #1f2937) 30%, transparent);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      var(--control-shadow),
+      0 0 0 2px
+        color-mix(
+          in srgb,
+          var(
+              --primary-color,
+              var(--button-primary-bg, var(--foreground-color, #1f2937))
+            )
+            18%,
+          transparent
+        );
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.app-grid-row {
+  gap: 2px;
+}
+
+.calendar-graph-month__nav--left {
+  left: var(--main-left-offset);
+  margin-left: 16px;
+}
+
+.calendar-graph-month__nav--right {
+  right: 16px;
+}
+
+.calendar-graph-month__day-header {
+  min-width: 0;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .calendar-graph-month__day-number,
+  .calendar-graph-month__day-weekday {
+    line-height: 1.2;
+  }
+
+  &--weekend {
+    color: var(--calendar-graph-secondary-text-color, #989aa2);
+  }
+}
+
+.calendar-graph-month app-grid-header .app-grid-row {
+  padding: 8px 0;
+  margin-bottom: 0px;
+}
+
+.calendar-graph-month app-grid-header .app-grid-header {
+  display: contents;
+}
+
+.calendar-graph-month .app-grid-row {
+  gap: var(--calendar-graph-col-gap, 2px);
+}
+.calendar-graph-month app-grid-body .app-grid-row {
+  margin-bottom: var(--calendar-graph-row-gap, 10px);
+}

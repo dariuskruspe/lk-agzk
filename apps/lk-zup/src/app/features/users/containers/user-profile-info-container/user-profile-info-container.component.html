@@ -1,0 +1,36 @@
+<div class="container-fluid">
+  <p-toolbar class="title">
+    <h1>
+      {{ 'TITLE_PROFILE' | translate }}
+    </h1>
+  </p-toolbar>
+  <div class="profile-info">
+    <div class="profile-info__row">
+      <app-users-profile-organization
+        [settings]="settingsFacade.getData()"
+        [personalData]="usersProfilePersonalDataFacade.forcedData$ | async"
+        (editDialog)="openIssueDialog($event)"
+        (downloadFileArch)="downloadArch($event)"
+      ></app-users-profile-organization>
+    </div>
+
+    <div class="profile-info__row">
+      <div class="profile-info__contacts">
+        <app-users-profile-contacts
+          [personalData]="usersProfilePersonalDataFacade.forcedData$ | async"
+          [settings]="settingsFacade.getData()"
+          (editDialog)="openIssueDialog($event)"
+        ></app-users-profile-contacts>
+      </div>
+
+      <div class="profile-info__personal">
+        <app-users-profile-personal-data
+          [settings]="settingsFacade.getData()"
+          [personalData]="usersProfilePersonalDataFacade.forcedData$ | async"
+          (editDialog)="openIssueDialog($event)"
+          (editOneDialog)="openOneIssueDialog($event)"
+        ></app-users-profile-personal-data>
+      </div>
+    </div>
+  </div>
+</div>

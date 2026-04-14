@@ -1,0 +1,224 @@
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.history-row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+  align-items: center;
+  justify-content: space-between;
+  @media (max-width: 950px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &__column {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    flex: 0 0 auto;
+  }
+
+  &__status {
+    flex: 0 0 auto;
+
+    &_tag {
+      font-weight: 400;
+      font-size: 11px;
+      line-height: 14px;
+      text-transform: uppercase;
+      border-radius: 5px;
+      color: var(--mainTextColor);
+      padding: 4px 8px;
+    }
+  }
+
+  &__name {
+    order: 2;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--mainTextColor);
+    text-decoration-line: underline;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
+    text-align: right;
+    @media (max-width: 950px) {
+      order: 1;
+      margin-top: 10px;
+      max-width: 100%;
+      text-align: left;
+    }
+  }
+
+  &__date {
+    flex: 0 0 auto;
+    margin-right: 20px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--gray);
+  }
+}
+
+.title {
+  color: var(--text-color-secondary);
+  margin: 32px 0 22px 0;
+}
+
+.history-comment {
+  background: var(--card-background);
+  border: 1px solid var(--border-color);
+  border-radius: 5px;
+  padding: 14px 20px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  margin-bottom: 20px;
+
+  .comment-title {
+    color: var(--gray);
+  }
+}
+
+.profile-info {
+  display: flex;
+  margin: 20px 20px 20px 20px;
+  color: var(--basic-color);
+  & > .photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+  & > .info {
+    padding-left: 20px;
+    align-self: center;
+    color: var(--title-color);
+
+    & > * {
+      line-height: 20px;
+      &:not(:last-child) {
+        margin-bottom: 14px;
+      }
+    }
+  }
+}
+.successor-list-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  background-color: var(--form-background);
+  padding: 22px;
+  border-radius: 10px;
+  align-items: center;
+  margin-bottom: 5px;
+  .name {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 200px;
+    gap: 10px;
+    i {
+      color: var(--primary);
+    }
+    .full-name {
+      padding-left: 5px;
+    }
+  }
+  .division {
+    width: 220px;
+    color: var(--grey);
+  }
+  .best {
+    width: 20px;
+    color: var(--primary);
+  }
+  .status {
+    width: 180px;
+    font-size: 14px;
+    text-align: center;
+  }
+  .buttons {
+    min-width: 52px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    color: var(--grey);
+  }
+}
+.potential-positions {
+  margin-bottom: 24px;
+}
+.readiness-status {
+  padding: 3px 5px;
+  border-radius: 5px;
+}
+.add-button {
+  padding: 12px 12px 12px 35px;
+}
+.categories-list {
+  font-family: 'Inter', Arial, sans-serif;
+}
+
+.category {
+  //margin-bottom: 24px;
+  //border-radius: 8px;
+  //background: #f4f8fe;
+  //box-shadow: 0 1px 2px #e6eaf3;
+}
+
+.category-title {
+  background: #f4f8fe;
+  color: var(--title-color);;
+  font-weight: 500;
+  font-size: 18px;
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 -24px 24px -24px;
+  box-shadow: 0 1px 2px #e6eaf3;
+}
+
+.arrow {
+  font-size: 18px;
+  transition: transform 0.2s;
+}
+.arrow.open {
+  transform: rotate(180deg);
+}
+
+.category-content {
+  padding: 12px 16px 16px 16px;
+}
+
+.goal {
+  margin-bottom: 18px;
+  color: var(--text-color);
+}
+
+.goal-title {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.goal-description {
+  color: var(--grey);
+  font-size: 15px;
+}

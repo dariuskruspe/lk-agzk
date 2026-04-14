@@ -1,0 +1,12 @@
+<p-toolbar class="title">
+  <h2>
+    {{ issueType?.FullName }}
+  </h2>
+</p-toolbar>
+<fpc
+  [formData$]="fpcData$"
+  [dateLocale]="currentUserFacade.getLang()"
+  [loading]="loading"
+  (formSubmit)="submitEventOut($event)"
+  [submit$]="submit$"
+></fpc>

@@ -1,0 +1,16 @@
+<ng-container *ngIf="list?.length; else empty">
+  <div *ngFor="let item of list">
+    <app-vacation-employee-list-item
+      [isDownloadEmployeeReportInProgress]="
+        isDownloadEmployeeReportInProgress && item.employeeID === downloadId
+      "
+      [item]="item"
+      (downloadItem)="downloadItem($event)"
+    ></app-vacation-employee-list-item>
+  </div>
+</ng-container>
+
+<!-- Сообщение об отсутствии данных (когда список пуст) -->
+<ng-template #empty>
+  <app-info *ngIf="!loading">{{ 'LIST_EMPTY' | translate }}</app-info>
+</ng-template>

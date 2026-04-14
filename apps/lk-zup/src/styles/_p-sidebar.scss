@@ -1,0 +1,38 @@
+.p-sidebar {
+  height: auto !important;
+  min-height: 50vh;
+
+  .p-sidebar-content {
+    flex: 1 0 auto;
+
+    display: flex;
+    flex-direction: column;
+  }
+
+  .p-dropdown-items-wrapper {
+    max-height: 140px !important;
+  }
+}
+
+.p-sidebar-bottom {
+  border-top-right-radius: 15px;
+  border-top-left-radius: 15px;
+
+  .p-sidebar-content {
+    padding: 1.25rem !important;
+  }
+
+  .p-sidebar-header {
+    padding: 0 !important;
+  }
+}
+
+.link {
+  color: var(--primary);
+  //text-decoration: underline;
+  cursor: pointer;
+}
+
+.loadable-list-result {
+  color: var(--basic-color);
+}

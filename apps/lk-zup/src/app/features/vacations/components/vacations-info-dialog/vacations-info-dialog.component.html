@@ -1,0 +1,83 @@
+<div class="modal-info">
+  <div>
+    <div class="info-title">
+      {{ info?.period?.startDate | date: 'dd.MM.yyyy' }} -
+      <span>
+        {{ info?.period?.endDate | date: 'dd.MM.yyyy' }}
+      </span> <br />
+      <span *ngIf="info?.vacation?.name">{{ info?.vacation?.name }}</span>
+    </div>
+    <div class="status-tags">
+      <app-issue-status
+        *ngIf="state"
+        [label]="state.name | translate"
+        [color]="state?.color"
+      ></app-issue-status>
+      <app-issue-status
+        *ngIf="info.period.type"
+        [label]="info.period.type?.label"
+        [color]="info.period.type?.color"
+      ></app-issue-status>
+    </div>
+    <div class="status-list">
+      <div class="point-info">
+        <div>{{ 'VACATION_START' | translate }}:</div>
+        <div>{{ info?.period?.startDate | date: 'dd.MM.yyyy' }}</div>
+      </div>
+      <div class="point-info">
+        <div>{{ 'VACATION_END' | translate }}:</div>
+        <div>{{ info?.period?.endDate | date: 'dd.MM.yyyy' }}</div>
+      </div>
+      <div class="point-info" *ngIf="info?.period?.daysLength">
+        <div>{{ 'VACATION_LENGTH' | translate }}:</div>
+        <div>
+          {{ info?.period?.daysLength }}
+        </div>
+      </div>
+    </div>
+    <div class="vacation-buttons">
+      <button
+        *ngIf="isRevokeAllowed(info?.period?.endDate)"
+        label="{{ 'BUTTON_VACATION_RECALL' | translate }}"
+        pButton
+        class="p-button-outlined"
+        (click)="close('leaveRequestEmployee')"
+      ></button>
+      <button
+        *ngIf="
+          info?.period.vacationConfirmationAvailable && !info?.period.issueId
+        "
+        label="{{ 'BUTTON_CONFIRM' | translate }}"
+        pButton
+        (click)="close('leave-plan')"
+      ></button>
+      <button
+        *ngIf="
+          info?.period.vacationReshedulingAvailable && !info?.period.issueId
+        "
+        label="{{ 'BUTTON_TRANSFER' | translate }}"
+        pButton
+        class="p-button-outlined"
+        (click)="close(info?.period.vacationReshedulingAlias)"
+      ></button>
+      <button
+        *ngIf="info?.period.issueId"
+        label="{{ 'TO_ISSUE_MANAGEMENT' | translate }}"
+        pButton
+        class="p-button-outlined"
+        [routerLink]="['', 'issues-management', info.period.issueId]"
+        (click)="toIssue()"
+      ></button>
+      <button
+        *ngIf="info?.period?.leaveRequest?.id"
+        label="{{ 'TO_ISSUE_MANAGEMENT' | translate }} {{
+          info?.period?.leaveRequest?.name
+        }}"
+        pButton
+        class="p-button-link"
+        [routerLink]="['', 'issues', 'list', info?.period?.leaveRequest?.id]"
+        (click)="toIssue()"
+      ></button>
+    </div>
+  </div>
+</div>

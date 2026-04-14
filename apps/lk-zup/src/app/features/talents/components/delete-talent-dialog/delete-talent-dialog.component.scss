@@ -1,0 +1,42 @@
+.modal-info {
+  height: auto;
+  border-radius: 5px;
+  flex-direction: row;
+  justify-content: stretch;
+
+  & .info-title {
+    font-size: 16px;
+    color: #989aa2;
+    padding-bottom: 5px;
+    margin-bottom: 16px;
+  }
+}
+.vacation-buttons {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+
+.mobile-v {
+  &.modal-info {
+    width: auto;
+  }
+
+  .info-body {
+    .item {
+      flex-direction: column;
+
+      .title {
+        color: var(--grey);
+      }
+    }
+  }
+
+  .vacation-buttons {
+    flex-wrap: wrap;
+    flex-direction: column;
+  }
+}

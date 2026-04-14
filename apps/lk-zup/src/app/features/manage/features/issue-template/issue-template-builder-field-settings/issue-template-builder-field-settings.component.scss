@@ -1,0 +1,403 @@
+.app-field-settings {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9999;
+  pointer-events: auto;
+
+  // Фон с блюром
+  .settings-backdrop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: 999;
+
+    &.visible {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  // Выезжающая панель
+  .settings-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 780px;
+    max-width: 90vw;
+    background: var(--bg-element);
+    border-left: 1px solid var(--sidebar-border);
+    box-shadow: var(--liquid-shadow);
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    z-index: 1000;
+
+    &.visible {
+      transform: translateX(0);
+    }
+  }
+
+  // Заголовок
+  .settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--sidebar-border);
+    background: var(--bg-primary);
+
+    .settings-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--foreground-color);
+    }
+
+    .settings-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+
+      &:hover {
+        background-color: var(--control-hover-bg);
+      }
+    }
+  }
+
+  // Основной контент
+  .settings-content {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-element);
+  }
+
+  // Стили для табов
+  .settings-tabs {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .p-tabview-panels {
+      flex: 1;
+      padding: 0;
+    }
+
+    .p-tabview-panel {
+      height: 100%;
+      padding: 0;
+    }
+
+    .p-tabview-nav {
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--sidebar-border);
+      margin: 0;
+
+      li {
+        margin-right: 0;
+
+        .p-tabview-nav-link {
+          border: none;
+          border-radius: 0;
+          background: transparent;
+          color: var(--foreground-color-secondary);
+          padding: 16px 24px;
+          font-weight: 500;
+          border-bottom: 2px solid transparent;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: var(--control-hover-bg);
+            color: var(--foreground-color);
+          }
+        }
+
+        &.p-highlight .p-tabview-nav-link {
+          background: var(--bg-element);
+          color: var(--button-primary-bg);
+          border-bottom-color: var(--button-primary-bg);
+        }
+      }
+    }
+  }
+
+  // Контент таба
+  .tab-content {
+    height: 100%;
+    padding: 24px;
+    overflow-y: auto;
+  }
+
+  // Контент для одного таба
+  .single-tab-content {
+    padding: 24px;
+    flex: 1;
+    overflow-y: auto;
+
+    .tab-title {
+      margin: 0 0 24px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--foreground-color);
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--sidebar-border);
+    }
+  }
+
+  // Заглушка для формы
+  .form-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 200px;
+    background: var(--bg-primary);
+    border: 2px dashed var(--sidebar-border);
+    border-radius: var(--radius-md);
+
+    .form-info {
+      text-align: center;
+      color: var(--foreground-color-secondary);
+
+      i {
+        font-size: 32px;
+        margin-bottom: 12px;
+        display: block;
+        color: var(--foreground-color-secondary);
+      }
+
+      p {
+        margin: 4px 0;
+        font-size: 14px;
+
+        &.fields-count {
+          font-size: 12px;
+          color: var(--foreground-color-secondary);
+        }
+      }
+    }
+  }
+
+  // Футер
+  .settings-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid var(--sidebar-border);
+    background: var(--bg-primary);
+
+    button {
+      min-width: 100px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      font-weight: 500;
+      transition: all 0.2s ease;
+
+      &.btn-secondary {
+        background: var(--bg-element);
+        border: 1px solid var(--sidebar-border);
+        color: var(--foreground-color-secondary);
+
+        &:hover {
+          background: var(--control-hover-bg);
+          border-color: var(--foreground-color-secondary);
+        }
+      }
+
+      &.btn-primary {
+        background: var(--button-primary-bg);
+        border: 1px solid var(--button-primary-bg);
+        color: var(--button-primary-text);
+
+        &:hover {
+          background: var(--button-primary-hover-bg);
+          border-color: var(--button-primary-hover-bg);
+        }
+      }
+    }
+  }
+
+  // Адаптивность
+  @media (max-width: 768px) {
+    .settings-panel {
+      width: 100vw;
+      max-width: none;
+    }
+
+    .settings-header,
+    .settings-footer {
+      padding: 16px 20px;
+    }
+
+    .tab-content,
+    .single-tab-content {
+      padding: 20px;
+    }
+  }
+
+  // Общие стили для редакторов полей
+  .field-editor {
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &.field-error {
+      .field-header .field-label {
+        color: var(--button-danger-bg);
+      }
+    }
+  }
+
+  .field-header {
+    margin-bottom: 8px;
+
+    .field-label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--foreground-color);
+      margin-bottom: 4px;
+
+      .required-marker {
+        color: var(--button-danger-bg);
+        font-weight: 700;
+        margin-left: 4px;
+      }
+    }
+
+    .field-description {
+      font-size: 12px;
+      color: var(--foreground-color-secondary);
+      line-height: 1.4;
+    }
+  }
+
+  .field-input {
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--sidebar-border);
+      border-radius: var(--radius);
+      font-size: 14px;
+      background: var(--bg-element);
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+
+      &:focus {
+        outline: none;
+        border-color: var(--button-primary-bg);
+        box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.25);
+      }
+
+      &.invalid {
+        border-color: var(--button-danger-bg);
+        box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+      }
+
+      &::placeholder {
+        color: var(--foreground-color-secondary);
+      }
+    }
+
+    .form-textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+  }
+
+  .field-error {
+    font-size: 12px;
+    color: var(--button-danger-bg);
+    margin-top: 4px;
+    padding: 4px 8px;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    border-radius: var(--radius);
+  }
+
+  .checkbox-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    .field-checkbox {
+      align-self: flex-start;
+    }
+
+    .checkbox-description {
+      font-size: 12px;
+      color: var(--foreground-color-secondary);
+      line-height: 1.4;
+      margin-left: 24px;
+    }
+  }
+
+  .input-with-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    .form-input {
+      flex: 1;
+    }
+  }
+
+  // Пустое состояние
+  .empty-state {
+    padding: 32px 16px;
+    text-align: center;
+    color: var(--foreground-color-secondary);
+    border: 2px dashed var(--sidebar-border);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    .pi {
+      font-size: 24px;
+      color: var(--button-primary-bg);
+      margin-bottom: 4px;
+    }
+
+    p {
+      margin: 0;
+      font-weight: 500;
+      color: var(--foreground-color);
+      font-size: 14px;
+    }
+
+    span {
+      font-size: 12px;
+      color: var(--foreground-color-secondary);
+    }
+  }
+
+  // Действия группы
+  .group-actions {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--sidebar-border);
+  }
+}

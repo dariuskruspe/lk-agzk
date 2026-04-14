@@ -1,0 +1,58 @@
+<div class="validation-container">
+  <div class="validation-container__description">
+    {{ 'CONFIRM_ISSUE_TEXT' | translate }}
+    {{ provider.ui?.name ? '(' + provider.ui?.name + ')' : '' }}
+  </div>
+  @if (personalData?.()?.length) {
+  <app-item-list
+    [items]="personalData()"
+    [isEmptyHighlighted]="true"
+  ></app-item-list>
+  }
+  <div
+    *ngIf="provider.ui.linkedIssueTypes?.length"
+    class="validation-container__block"
+  >
+    <div class="validation-container__description">
+      {{ 'SIGNATURE_CREATION_LINKS_DESCRIPTION' | translate }}
+    </div>
+    <div class="validation-container__link-box">
+      <button
+        *ngFor="let link of provider.ui.linkedIssueTypes"
+        pButton
+        [routerLink]="['', 'issues', 'types', link.id || link]"
+        (click)="close()"
+        class="p-button-link"
+        label="{{ link.name ?? link | translate }}"
+      ></button>
+    </div>
+  </div>
+  <div
+    *ngIf="provider.ui.blockingIssues?.length"
+    class="validation-container__block"
+  >
+    <div class="validation-container__description">
+      {{ 'SIGNATURE_CREATION_BLOCKING_ISSUES' | translate }}
+    </div>
+    <div
+      class="validation-container__link-box validation-container__link-box_error"
+    >
+      <button
+        *ngFor="let link of provider.ui.blockingIssues"
+        pButton
+        [routerLink]="['', 'issues', 'list', link.id]"
+        class="p-button-link"
+        (click)="close()"
+        label="{{ link.name | translate }}"
+      ></button>
+    </div>
+  </div>
+  <p-toolbar class="margin-top">
+    <p-button
+      label="{{ 'TO_ISSUE_MANAGEMENT' | translate }}"
+      [disabled]="!!provider.ui.blockingIssues?.length || disabledButton"
+      [loading]="loading | async"
+      (onClick)="goToIssueCreation(provider.metadata?.issueTypeAlias)"
+    ></p-button>
+  </p-toolbar>
+</div>

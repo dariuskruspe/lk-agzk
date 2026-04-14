@@ -1,0 +1,37 @@
+<div class="app-calendar-graph-cell">
+  @for (part of partsComputed(); track part.start) {
+    <div
+      class="app-calendar-graph-cell__part"
+      [style.background-color]="part.color"
+      [style.width]="part.size + '%'"
+      [style.left]="part.start + '%'"
+      [pTooltip]="part.tooltip"
+      [tooltipPosition]="'top'"
+      [attr.data-hovered]="part.groupId === hoveredGroupId() || null"
+      [attr.data-type-id]="part.period.typeId ?? null"
+      [ngClass]="{
+        'app-calendar-graph-cell__part--approving':
+          part.variant === 'approving',
+        'app-calendar-graph-cell__part--cancelled':
+          part.variant === 'cancelled'
+      }"
+      (mouseenter)="onPartMouseEnter(part.groupId)"
+      (mouseleave)="onPartMouseLeave()"
+      (click)="partClick.emit(part)"
+    >
+      @if (part.hasIntersection && part.intersectionTooltip) {
+        <lucide-icon
+          [name]="icon"
+          class="app-calendar-graph-cell__intersection-icon"
+          [pTooltip]="part.intersectionTooltip"
+          tooltipPosition="bottom"
+          (click)="$event.stopPropagation()"
+        ></lucide-icon>
+      }
+    </div>
+  }
+
+  <div class="app-calendar-graph-cell__content">
+    <ng-content></ng-content>
+  </div>
+</div>

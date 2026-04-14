@@ -1,0 +1,108 @@
+@if (isEnabled) {
+  <p-toolbar class="title">
+    <h2 class="dashboard-title mobile-title">
+      {{ 'TITLE_SALARY' | translate }}
+    </h2>
+    <span class="spacer"></span>
+    <button
+      pButton
+      id="cy-dashboard-salary-report-button"
+      type="button"
+      class="button-full-xs title-button"
+      label="{{ 'BUTTON_PDF' | translate }}"
+      (click)="onOpenSalaryImgDialog()"
+    ></button>
+  </p-toolbar>
+
+  <div class="salary__wrap">
+    <div class="salary">
+      <p-card class="main_item">
+        <div class="salary_divider">
+          <form [formGroup]="salaryDateForm" class="form__salary">
+            <ng-container
+              *map="
+                [
+                  workPeriods?.reports[0]?.dateBegin,
+                  workPeriods?.reports[0]?.dateEnd,
+                ];
+                handler: toDate;
+                let values
+              "
+            >
+              <span class="period-text">{{
+                'PERIOD_TOTAL_SUM' | translate
+              }}</span>
+              <p-calendar
+                #calendarRef
+                id="cy-dashboard-salary-report-calendar"
+                class="without-borders without-padding calendar_input"
+                formControlName="date"
+                view="month"
+                dateFormat="MM yy"
+                appendTo="body"
+                [readonlyInput]="true"
+                [minDate]="values[0]"
+                [maxDate]="values[1]"
+                [panelStyle]="{ 'min-width': '250px' }"
+                icon="pi pi-chevron-down"
+                [showIcon]="false"
+                (ngModelChange)="onChangeForm()"
+              ></p-calendar>
+            </ng-container>
+          </form>
+          <div
+            [ngClass]="
+              settingsSignal()?.dashboard?.payroll?.type === 'standart'
+                ? ''
+                : 'hidden'
+            "
+          >
+            <dd class="image-card">
+              <div class="image-card__icon">
+                @if (textShow) {
+                  <lucide-icon
+                    [name]="EyeIcon"
+                    (click)="toggleText()"
+                  ></lucide-icon>
+                } @else {
+                  <lucide-icon
+                    [name]="EyeOffIcon"
+                    (click)="toggleText()"
+                  ></lucide-icon>
+                }
+              </div>
+              <div>
+                <sub *ngIf="!textShow" [ngClass]="{ hide: !textShow }">***</sub>
+                <span *ngIf="textShow">{{ payslip?.accrued }}</span>
+              </div>
+            </dd>
+          </div>
+        </div>
+      </p-card>
+      <p-card
+        class="salary__item"
+        *ngIf="settingsSignal()?.dashboard?.payroll?.type === 'standart'"
+      >
+        <dt>
+          {{ 'SALARY_TOTAL_PAID' | translate }}
+        </dt>
+        <dd>
+          <sub *ngIf="!textShow" [ngClass]="{ hide: !textShow }">***</sub>
+          <span *ngIf="textShow">{{ payslip?.payout }}</span>
+        </dd>
+      </p-card>
+      <p-card
+        class="salary__item last_item"
+        *ngIf="settingsSignal()?.dashboard?.payroll?.type === 'standart'"
+      >
+        <dt>
+          {{ 'SALARY_REMAINING_PAYABLE' | translate }}
+        </dt>
+        <dd>
+          <sub *ngIf="!textShow" [ngClass]="{ hide: !textShow }">***</sub>
+          <span *ngIf="textShow">{{ payslip?.balance }}</span>
+        </dd>
+      </p-card>
+    </div>
+  </div>
+}

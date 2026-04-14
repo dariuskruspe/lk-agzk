@@ -1,0 +1,18 @@
+.crossing-container {
+  .crossing-list {
+    .crossing-item {
+      margin-bottom: 20px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      .issue-link {
+        min-width: 116px;
+      }
+    }
+  }
+  .crossing-buttons {
+    .confirm-button {
+      margin-right: 20px;
+    }
+  }
+}

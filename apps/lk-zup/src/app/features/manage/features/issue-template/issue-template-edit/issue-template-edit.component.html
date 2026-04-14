@@ -1,0 +1,10 @@
+@if (resource.data()) {
+  <app-issue-template-builder-form
+    [value]="template()"
+    [saving]="saving()"
+    (cancel)="onCancel()"
+    (save)="onSave($event)"
+  />
+} @else {
+  Загружаюсь
+}

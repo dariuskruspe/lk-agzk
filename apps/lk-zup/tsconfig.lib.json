@@ -1,0 +1,30 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "useDefineForClassFields": false,
+    "target": "es2022",
+    "module": "es2022",
+    "lib": [
+      "dom",
+      "es2022"
+    ],
+    "paths": {}
+  },
+  "exclude": [
+    "**/*.spec.ts"
+  ],
+  "include": [
+    "./src/**/*",
+    "./src/**/*.json"
+  ]
+}

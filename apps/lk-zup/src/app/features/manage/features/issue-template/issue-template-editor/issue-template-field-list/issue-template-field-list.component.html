@@ -1,0 +1,259 @@
+<div class="form-builder__fields-container">
+  <!-- Если список полей пуст - показать кнопку добавления -->
+  @if (!templates().length) {
+    <div class="drop-zone__empty">
+      <div class="drop-zone__placeholder">
+        <i class="pi pi-plus-circle drop-zone__placeholder-icon"></i>
+        <p class="drop-zone__placeholder-text">
+          Нажмите, чтобы добавить первое поле
+        </p>
+        <button
+          type="button"
+          class="p-button p-component p-button-primary p-button-rounded"
+          (click)="showAddFieldPopover($event, [], -1)"
+        >
+          <span class="p-button-icon p-button-icon-left pi pi-plus"></span>
+          <span class="p-button-label">Добавить поле</span>
+        </button>
+      </div>
+    </div>
+  } @else {
+    <div class="drop-zone__field-list">
+      <!-- Добавляем первую кнопку для добавления самого первого поля -->
+      <div class="field-preview__add-button field-preview__add-button--first">
+        <button
+          type="button"
+          class="add-field-button"
+          (click)="showAddFieldPopover($event, [], -1)"
+        >
+          <i class="pi pi-plus-circle"></i>
+          <span>Добавить поле в начало</span>
+        </button>
+      </div>
+
+      <!-- Список выбранных полей -->
+      @for (field of templates(); let i = $index; track field.formControlName) {
+        <div class="drop-zone__field-item-wrapper">
+          <div
+            class="drop-zone__field-item"
+            [attr.data-item]="i"
+            [pDroppable]="'fieldItems'"
+            [dragScope]="'fieldItems'"
+            (onDrop)="onDrop($event, i, [])"
+            (onDragEnter)="onDragEnter($event, field, [], i)"
+            (onDragLeave)="onDragLeave($event)"
+          >
+            @if (isPlaceholderAbove(field, [])) {
+              <div class="drop-zone__field-placeholder-above">
+                <i class="pi pi-arrow-up"></i>
+                <span>Перетащите сюда</span>
+              </div>
+            }
+            <div
+              class="field-preview"
+              [class.field-preview--group]="field.type === 'arr-smart'"
+              [class.field-preview--dragging]="draggedField === field"
+              [pDraggable]="'fieldItems'"
+              (onDragStart)="onDragStart($event, field, [], i)"
+              (onDragEnd)="onDragEnd()"
+              (mouseenter)="onFocusField([field.formControlName])"
+              (mouseleave)="onUnfocusField([field.formControlName])"
+            >
+              <div class="field-preview__content">
+                <span
+                  class="field-preview__drag-handle"
+                  pTooltip="Перетащите для изменения порядка"
+                  ><i class="pi pi-grip-lines"></i
+                ></span>
+                <span class="field-preview__name">{{
+                  getFieldLabel(field)
+                }}</span>
+                <app-issue-template-field-type-badge [type]="field.type" />
+              </div>
+              <div class="field-preview__actions">
+                <button
+                  class="field-action field-action--edit"
+                  (click)="onEditItem([field.formControlName])"
+                  pTooltip="Редактировать"
+                >
+                  <i class="pi pi-pencil"></i>
+                </button>
+                <button
+                  class="field-action field-action--delete"
+                  (click)="onRemoveItem([field.formControlName])"
+                  pTooltip="Удалить"
+                >
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            @if (field.arrSmartList && field.arrSmartList.length) {
+              <div class="field-group__nested">
+                @for (
+                  innerField of field.arrSmartList;
+                  let innerIndex = $index;
+                  track innerField.formControlName
+                ) {
+                  <div
+                    [pDroppable]="'nestedFieldItems-' + field.formControlName"
+                    [dragScope]="'nestedFieldItems-' + field.formControlName"
+                    (onDragEnter)="
+                      onDragEnter(
+                        $event,
+                        innerField,
+                        [field.formControlName],
+                        innerIndex
+                      )
+                    "
+                    (onDragLeave)="onDragLeave($event)"
+                    (onDrop)="
+                      onDrop($event, innerIndex, [field.formControlName])
+                    "
+                  >
+                    @if (
+                      isPlaceholderAbove(innerField, [field.formControlName])
+                    ) {
+                      <div class="drop-zone__field-placeholder-above">
+                        <i class="pi pi-arrow-up"></i>
+                        <span>Перетащите сюда</span>
+                      </div>
+                    }
+                    <div
+                      class="field-preview field-preview--nested"
+                      [attr.data-arr-index]="innerIndex"
+                      [pDraggable]="'nestedFieldItems-' + field.formControlName"
+                      (onDragStart)="
+                        onDragStart(
+                          $event,
+                          innerField,
+                          [field.formControlName],
+                          innerIndex
+                        )
+                      "
+                      (onDragOver)="
+                        onDragOver(
+                          $event,
+                          innerField,
+                          [field.formControlName],
+                          innerIndex
+                        )
+                      "
+                      (onDragEnd)="onDragEnd()"
+                      (onDragLeave)="onDragLeave($event)"
+                      [class.field-preview--drop-hover]="
+                        draggedField &&
+                        isDropAllowed([field.formControlName]) &&
+                        draggedField !== innerField
+                      "
+                      (mouseenter)="
+                        onFocusField([
+                          field.formControlName,
+                          innerField.formControlName,
+                        ]);
+                        $event.stopPropagation()
+                      "
+                      (mouseleave)="
+                        onUnfocusField([
+                          field.formControlName,
+                          innerField.formControlName,
+                        ]);
+                        $event.stopPropagation()
+                      "
+                    >
+                      <div class="field-preview__content">
+                        <span
+                          class="field-preview__drag-handle"
+                          pTooltip="Перетащите для изменения порядка"
+                          ><i class="pi pi-grip-lines"></i
+                        ></span>
+                        <span class="field-preview__name">{{
+                          innerField.label || innerField.formControlName
+                        }}</span>
+                        <app-issue-template-field-type-badge
+                          [type]="innerField.type"
+                        />
+                      </div>
+                      <div class="field-preview__actions">
+                        <button
+                          class="field-action field-action--edit"
+                          (click)="
+                            onEditItem([
+                              field.formControlName,
+                              innerField.formControlName,
+                            ])
+                          "
+                          pTooltip="Редактировать"
+                        >
+                          <i class="pi pi-pencil"></i>
+                        </button>
+                        <button
+                          class="field-action field-action--delete"
+                          (click)="
+                            onRemoveItem([
+                              field.formControlName,
+                              innerField.formControlName,
+                            ])
+                          "
+                          pTooltip="Удалить"
+                        >
+                          <i class="pi pi-trash"></i>
+                        </button>
+                      </div>
+                    </div>
+                    @if (
+                      isPlaceholderBelow(innerField, [field.formControlName])
+                    ) {
+                      <div class="drop-zone__field-placeholder-below">
+                        <i class="pi pi-arrow-down"></i>
+                        <span>Перетащите сюда</span>
+                      </div>
+                    }
+                  </div>
+                }
+                <!-- Добавляем кнопку внутри arr-smart группы -->
+                <div
+                  class="field-preview__add-button field-preview__add-button--nested"
+                >
+                  <button
+                    type="button"
+                    class="add-field-button add-field-button--nested"
+                    (click)="
+                      showAddFieldPopover(
+                        $event,
+                        [field.formControlName],
+                        field.arrSmartList.length
+                      )
+                    "
+                  >
+                    <i class="pi pi-plus-circle"></i>
+                    <span>Добавить вложенное поле</span>
+                  </button>
+                </div>
+              </div>
+            }
+
+            @if (isPlaceholderBelow(field, [])) {
+              <div class="drop-zone__field-placeholder-below">
+                <i class="pi pi-arrow-down"></i>
+                <span>Перетащите сюда</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Добавляем кнопку для добавления последнего поля -->
+      <div class="field-preview__add-button">
+        <button
+          type="button"
+          class="add-field-button"
+          (click)="showAddFieldPopover($event, [], templates().length)"
+        >
+          <i class="pi pi-plus-circle"></i>
+          <span>Добавить поле в конец</span>
+        </button>
+      </div>
+    </div>
+  }
+</div>

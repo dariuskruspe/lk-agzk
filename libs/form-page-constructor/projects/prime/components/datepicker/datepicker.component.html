@@ -1,0 +1,35 @@
+<div [formGroup]="form">
+  <label for="{{ item.formControlName }}" class="custom-form-field__label"
+    >{{ item.label }}{{ isRequired() ? ' *' : '' }}</label
+  >
+  <p-calendar
+    #pCalendar
+    [defaultDate]="defaultDateToOpen"
+    [inputId]="item.formControlName"
+    [showIcon]="true"
+    [readonlyInput]="isMobile"
+    [selectOtherMonths]="true"
+    [placeholder]="
+      item.placeholder && item.placeholder !== 'undefined'
+        ? item.placeholder
+        : ''
+    "
+    [formControlName]="item.formControlName"
+    [mask]="(view + 'DATE_MASK') | translate"
+    [firstDayOfWeek]="1"
+    [minDate]="minDate"
+    [maxDate]="maxDate"
+    [view]="view"
+    [dateFormat]="(view + 'PRIME_DATE_FORMAT') | translate"
+    (change)="dateBinding(item.formControlName, $event)"
+    (onSelect)="dateBinding(item.formControlName, $event)"
+    appendTo="body"
+    [disabledDates]="computedDisabledDates"
+  >
+    <ng-template pTemplate="date" let-date>
+      <span [ngClass]="{ weekend: isWeekend(date), holiday: isHoliday(date) }">
+        {{ date.day }}
+      </span>
+    </ng-template>
+  </p-calendar>
+</div>

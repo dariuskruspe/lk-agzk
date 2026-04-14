@@ -1,0 +1,58 @@
+<!-- Фильтр "Период" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">{{
+    'PERIOD' | translate
+    }}</label>
+  <p-dropdown
+    [(ngModel)]="filterValue.days"
+    (ngModelChange)="applyFilters.emit()"
+    class="dropdown-input"
+    [filter]="true"
+    optionLabel="title"
+    optionValue="value"
+    [options]="daysValueList"
+    placeholder="{{ 'PERIOD' | translate }}"
+    [showClear]="true"
+    styleClass="w-full"
+  ></p-dropdown>
+</div>
+
+<!-- Фильтр "Статус" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'VACATION_STATUS_TITLE' | translate }}
+  </label>
+  <p-dropdown
+    [options]="stateList.documentsStates"
+    [(ngModel)]="filterValue.state"
+    [showClear]="true"
+    [filter]="true"
+    optionLabel="name"
+    optionValue="id"
+    (ngModelChange)="applyFilters.emit()"
+    class="dropdown-input"
+    placeholder="{{ 'VACATION_STATUS_TITLE' | translate }}"
+    styleClass="w-full"
+  ></p-dropdown>
+</div>
+
+<!-- Фильтр "Тип документа" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'DOCUMENT_TYPE_TITLE' | translate }}
+  </label>
+  <p-dropdown
+    #docTypeDD
+    (onShow)="onDocTypeDDShow()"
+    [options]="documentTypesList?.documentsTypes || []"
+    [(ngModel)]="selectedType"
+    [showClear]="true"
+    [filter]="true"
+    optionLabel="documentsTypeName"
+    (ngModelChange)="applyFilters.emit(selectedType)"
+    class="dropdown-input"
+    [overlayOptions]="docTypeFilterOverlayOptions"
+    placeholder="{{ 'DOCUMENT_TYPE_TITLE' | translate }}"
+    styleClass="w-full"
+  ></p-dropdown>
+</div>

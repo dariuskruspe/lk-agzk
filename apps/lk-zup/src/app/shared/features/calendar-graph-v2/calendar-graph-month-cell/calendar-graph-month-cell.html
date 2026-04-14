@@ -1,0 +1,30 @@
+@if (cell()) {
+  <div
+    class="app-calendar-graph-month-cell app-calendar-graph-month-cell--filled"
+    [style.--cell-color]="cell()!.color"
+    [pTooltip]="tooltip()"
+    [tooltipPosition]="'top'"
+    [attr.data-hovered]="cell()!.groupId === hoveredGroupId() || null"
+    [ngClass]="{
+      'app-calendar-graph-month-cell--approving':
+        cell()!.variant === 'approving',
+      'app-calendar-graph-month-cell--cancelled':
+        cell()!.variant === 'cancelled',
+    }"
+    (mouseenter)="onMouseEnter()"
+    (mouseleave)="onMouseLeave()"
+  >
+    <div class="app-calendar-graph-month-cell__period"></div>
+
+    @if (cell()!.hasIntersection && cell()!.intersectionTooltip) {
+      <div
+        class="app-calendar-graph-month-cell__intersection-mark"
+        [pTooltip]="cell()!.intersectionTooltip"
+      >
+        <div>*</div>
+      </div>
+    }
+  </div>
+} @else {
+  <div class="app-calendar-graph-month-cell"></div>
+}

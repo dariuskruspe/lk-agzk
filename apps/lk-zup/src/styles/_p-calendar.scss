@@ -1,0 +1,72 @@
+.p-datepicker:not(.p-datepicker-inline) {
+  background: var(--card-background) !important;
+  color: var(--basic-color) !important;
+
+  .p-datepicker-header {
+    //background: var(--card-background) !important;
+    border-bottom: 1px solid var(--border-color) !important;
+
+    & * {
+      color: var(--title-color) !important;
+    }
+  }
+
+  th {
+    color: var(--title-color) !important;
+  }
+
+  td {
+    span:hover {
+      background: var(--hover) !important;
+    }
+    span.p-highlight {
+      color: var(--primary-color) !important;
+    }
+  }
+
+  .p-datepicker-today {
+    span {
+      color: var(--primary) !important;
+    }
+  }
+
+  .p-highlight {
+    color: var(--primary-color) !important;
+  }
+}
+
+.p-inputwrapper.without-borders {
+  .p-inputtext {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    text-align: right;
+
+    &:enabled:focus {
+      border: none;
+      box-shadow: none;
+    }
+  }
+  .p-datepicker-trigger {
+    background: transparent;
+    color: var(--basic-color);
+    border: none;
+
+    &:hover {
+      background: transparent;
+      color: var(--basic-color);
+    }
+
+    &:enabled:focus {
+      border: none;
+      box-shadow: none;
+    }
+  }
+}
+.p-inputwrapper.without-padding {
+  .p-inputtext {
+   padding: 0;
+   max-width: 120px;
+   text-align: left;
+  }
+}

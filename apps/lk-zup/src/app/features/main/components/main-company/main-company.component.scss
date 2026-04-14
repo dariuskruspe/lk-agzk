@@ -1,0 +1,220 @@
+.header__menu {
+  display: flex;
+  align-items: center;
+  padding: 0 0 0 21px;
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--secondary-color);
+  text-transform: uppercase;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  @media (max-width: 768px) {
+    padding: 0;
+    display: flex;
+    flex-grow: 1;
+    width: 100%;
+
+    span {
+      display: flex;
+      flex-grow: 1;
+      width: 100%;
+    }
+  }
+
+  & mat-icon {
+    font-size: medium;
+    line-height: 1.5;
+    color: var(--primary);
+  }
+}
+
+.company-name {
+  display: flex;
+  align-items: center;
+  padding: 0 21px;
+  font-size: 15px;
+  line-height: 20px;
+  color: var(--secondary-color);
+  text-transform: uppercase;
+  margin-bottom: 0;
+
+  @media (max-width: 768px) {
+    padding: 0;
+  }
+}
+
+.dropdown-employees {
+  // margin-left: 20px;
+}
+
+.small-text {
+  font-size: 10px;
+}
+
+:host ::ng-deep {
+  .p-dropdown .p-dropdown-label {
+    @media (max-width: 768px) {
+      width: 250px;
+    }
+  }
+}
+
+
+.select-box {
+  position: relative;
+  display: block;
+  width: var(--select-box-width, 300px);
+  margin: 0;
+  font-size: 18px;
+  color: var(--text-color);
+  z-index: 1000;
+  height: 59px;
+
+  :host-context(body[data-theme="millennium"]) & {
+    color: var(--header-icons-color) !important;
+  }
+
+  @media (max-width: 769px) {
+    width: 100%;
+  }
+}
+
+.select-box__title, .select-box__subtitle {
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+@media (min-width: 768px) {
+  .select-box {
+    width: 220px;
+  }
+}
+
+@media (min-width: 992px) {
+  .select-box {
+    width: 260px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .select-box {
+    width: 300px;
+  }
+}
+
+.select-box__current {
+  position: relative;
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  outline: none;
+  padding-right: 20px;
+}
+
+.select-box__current:focus + .select-box__list {
+  opacity: 1;
+  -webkit-animation-name: none;
+  animation-name: none;
+}
+
+.select-box__current:focus + .select-box__list .select-box__option {
+  cursor: pointer;
+}
+
+.select-box__current:focus .select-box__icon {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.select-box__icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  width: 20px;
+  opacity: 0.3;
+  transition: 0.2s ease;
+}
+
+.select-box__value {
+  display: flex;
+}
+
+.select-box__input {
+  display: none;
+}
+
+.select-box__input:checked + .select-box__input-text {
+  display: block;
+}
+
+.select-box__input-text {
+  display: none;
+  width: 100%;
+  margin: 0;
+  padding: 15px;
+  height: 59px;
+  background-color: var(--header-background, #ffffff);
+}
+
+.select-box__list {
+  position: absolute;
+  width: 100%;
+  padding: 0;
+  list-style: none;
+  opacity: 0;
+  -webkit-animation-name: HideList;
+  animation-name: HideList;
+  -webkit-animation-duration: 0.5s;
+  animation-duration: 0.5s;
+  -webkit-animation-delay: 0.5s;
+  animation-delay: 0.5s;
+  -webkit-animation-fill-mode: forwards;
+  animation-fill-mode: forwards;
+  -webkit-animation-timing-function: step-start;
+  animation-timing-function: step-start;
+  box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.1);
+}
+
+.select-box__option {
+  display: block;
+  padding: 15px;
+  background-color: var(--header-background, #ffffff);
+}
+
+.select-box__option:hover, .select-box__option:focus {
+  background-color: var(--hover, #fbfbfb);
+
+  :host-context(body[data-theme="millennium"]) & {
+    color: var(--text-color);
+  }
+
+  .secondary-text {
+    color: var(--text-color-secondary);
+  }
+}
+
+@-webkit-keyframes HideList {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0);
+  }
+}
+
+@keyframes HideList {
+  from {
+    transform: scaleY(1);
+  }
+  to {
+    transform: scaleY(0);
+  }
+}
+
+
+.secondary-text {
+  color: #999999;
+}

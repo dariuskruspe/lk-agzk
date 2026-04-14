@@ -1,0 +1,18 @@
+<div class="">
+  @for (item of items(); track item) {
+    <div class="row dgroup" [style.height]="item.height + 'px'">
+      @for (row of item.rows; track item) {
+        <div [class]="['col-' + row.size]">
+          <div class="dwidget">
+            <iframe
+              frameborder="0"
+              [src]="row.url"
+              width="100%"
+              [height]="item.height + 'px'"
+            ></iframe>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,27 @@
+<div class="custom-accordion">
+  <div (click)="isOpen = !isOpen" class="accordion-header">
+    <span class="title">{{title}}</span>
+    <span class="form">
+      <p-inputNumber
+        [(ngModel)]="count"
+        [showButtons]="true"
+        buttonLayout="horizontal"
+        [step]="1"
+        incrementButtonIcon="pi pi-plus"
+        decrementButtonIcon="pi pi-minus"
+        (click)="$event.stopPropagation()"
+        [min]="0"
+        class="counter"
+        (ngModelChange)="change()"
+      />
+
+    <i class="pi pi-angle-up arrow-icon" *ngIf="isOpen"></i>
+    <i class="pi pi-angle-down arrow-icon" *ngIf="!isOpen"></i>
+    </span>
+  </div>
+  <div *ngIf="isOpen">
+    <ng-content></ng-content>
+  </div>
+</div>
+
+

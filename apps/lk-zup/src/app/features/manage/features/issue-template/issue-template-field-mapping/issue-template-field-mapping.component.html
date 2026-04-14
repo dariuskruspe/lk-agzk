@@ -1,0 +1,392 @@
+<div class="field-mapping">
+  @if (!fields().length) {
+    <div class="field-mapping__placeholder">
+      <i class="pi pi-database field-mapping__placeholder-icon"></i>
+      <p>Нет доступных полей для сопоставления</p>
+    </div>
+  } @else {
+    <div class="field-mapping__container">
+      <div class="field-mapping__panels">
+        <!-- Панель полей формы -->
+        <div class="field-mapping__panel">
+          <div class="field-mapping__panel-header">
+            <div class="field-mapping__panel-header-content">
+              <i class="pi pi-list field-mapping__panel-icon"></i>
+              <h4 class="field-mapping__panel-title">Поля формы</h4>
+            </div>
+          </div>
+
+          <div class="field-mapping__panel-body">
+            @if (fields().length === 0) {
+              <div class="field-mapping__panel-empty">
+                <p>Нет полей формы</p>
+              </div>
+            } @else {
+              <div class="field-mapping__field-list">
+                <!-- Обычные поля -->
+                @for (field of fields(); track field.formControlName) {
+                  <div
+                    class="field-mapping__field-card"
+                    [class.field-mapping__field-card--mapped]="
+                      isFieldMapped(field.formControlName)
+                    "
+                    [class.field-mapping__field-card--selected]="
+                      selectedFormField === field.formControlName
+                    "
+                    (click)="selectFormField(field.formControlName)"
+                  >
+                    <div class="field-mapping__field-header">
+                      <div class="field-mapping__field-name">
+                        {{ field.label || field.formControlName }}
+                      </div>
+                      <app-issue-template-field-type-badge
+                        [type]="field.type"
+                      />
+                    </div>
+                    <div class="field-mapping__field-details">
+                      @if (field.placeholder) {
+                        <div class="field-mapping__field-placeholder">
+                          {{ field.placeholder }}
+                        </div>
+                      }
+                      @if (field.validations && field.validations.length) {
+                        <div class="field-mapping__field-required">
+                          Обязательное
+                        </div>
+                      }
+                      @if (isFieldMapped(field.formControlName)) {
+                        <div class="field-mapping__field-mapping-info">
+                          <i class="pi pi-link"></i>
+                          <span>{{
+                            getBackendFieldName(field.formControlName)
+                          }}</span>
+                        </div>
+                      }
+                    </div>
+
+                    @if (
+                      field.type === 'arr-smart' && field.arrSmartList?.length
+                    ) {
+                      <div class="field-mapping__field-children">
+                        <div class="field-mapping__field-children-header">
+                          <i class="pi pi-list"></i>
+                          <span
+                            >Вложенные поля ({{
+                              field.arrSmartList.length
+                            }})</span
+                          >
+                          <button
+                            class="field-mapping__field-children-toggle"
+                            (click)="
+                              toggleChildrenVisibility(
+                                field.formControlName,
+                                $event
+                              )
+                            "
+                          >
+                            <i
+                              class="pi"
+                              [ngClass]="{
+                                'pi-chevron-down': !isChildrenVisible(
+                                  field.formControlName
+                                ),
+                                'pi-chevron-up': isChildrenVisible(
+                                  field.formControlName
+                                ),
+                              }"
+                            ></i>
+                          </button>
+                        </div>
+
+                        @if (isChildrenVisible(field.formControlName)) {
+                          <div class="field-mapping__field-children-list">
+                            @for (
+                              childField of field.arrSmartList;
+                              track childField.formControlName
+                            ) {
+                              <div
+                                class="field-mapping__field-child-card"
+                                [class.field-mapping__field-child-card--mapped]="
+                                  isFieldMapped(childField.formControlName)
+                                "
+                                [class.field-mapping__field-child-card--selected]="
+                                  selectedFormField ===
+                                  childField.formControlName
+                                "
+                                [class.field-mapping__field-child-card--disabled]="
+                                  !isFieldMapped(field.formControlName)
+                                "
+                                (click)="
+                                  selectFormField(
+                                    childField.formControlName,
+                                    $event
+                                  )
+                                "
+                              >
+                                <div class="field-mapping__field-child-header">
+                                  <div class="field-mapping__field-child-name">
+                                    {{
+                                      childField.label ||
+                                        childField.formControlName
+                                    }}
+                                  </div>
+                                  <app-issue-template-field-type-badge
+                                    [type]="childField.type"
+                                  />
+                                </div>
+                                <div class="field-mapping__field-child-details">
+                                  @if (
+                                    isFieldMapped(childField.formControlName)
+                                  ) {
+                                    <div
+                                      class="field-mapping__field-child-mapping-info"
+                                    >
+                                      <i class="pi pi-link"></i>
+                                      <span>{{
+                                        getBackendFieldName(
+                                          childField.formControlName
+                                        )
+                                      }}</span>
+                                    </div>
+                                  }
+                                  @if (!isFieldMapped(field.formControlName)) {
+                                    <div
+                                      class="field-mapping__field-child-warning"
+                                    >
+                                      <i class="pi pi-exclamation-triangle"></i>
+                                      <span
+                                        >Сначала сопоставьте родительское
+                                        поле</span
+                                      >
+                                    </div>
+                                  }
+                                </div>
+                              </div>
+                            }
+                          </div>
+                        }
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- Панель сопоставлений -->
+        <div class="field-mapping__panel field-mapping__panel--mapping">
+          <div class="field-mapping__panel-header">
+            <div class="field-mapping__panel-header-content">
+              <i class="pi pi-link field-mapping__panel-icon"></i>
+              <h4 class="field-mapping__panel-title">Сопоставления</h4>
+            </div>
+          </div>
+
+          <div class="field-mapping__panel-body">
+            @if (!selectedFormField) {
+              <div class="field-mapping__mapping-placeholder">
+                <i class="pi pi-arrow-left"></i>
+                <p>Выберите поле формы слева для настройки сопоставления</p>
+              </div>
+            } @else {
+              <div class="field-mapping__mapping-form">
+                <div class="field-mapping__mapping-header">
+                  <div class="field-mapping__mapping-field-info">
+                    <div class="field-mapping__mapping-field-name">
+                      {{ getSelectedFieldLabel() }}
+                    </div>
+
+                    <app-issue-template-field-type-badge
+                      [type]="getSelectedFieldType()"
+                    />
+                  </div>
+
+                  @if (isFieldMapped(selectedFormField)) {
+                    <button
+                      class="field-mapping__mapping-delete"
+                      (click)="deleteMappingForField(selectedFormField)"
+                    >
+                      <i class="pi pi-trash"></i>
+                      <span>Удалить сопоставление</span>
+                    </button>
+                  }
+                </div>
+
+                <div class="field-mapping__mapping-inputs">
+                  <div class="field-mapping__mapping-input-group">
+                    <label class="field-mapping__mapping-label">Имя</label>
+                    <input
+                      type="text"
+                      class="field-mapping__mapping-input"
+                      [formControl]="getNameControl()"
+                      placeholder="Название поля"
+                    />
+                    @if (getNameControl().invalid && getNameControl().touched) {
+                      <div class="field-mapping__error">Введите имя поля</div>
+                    }
+                  </div>
+
+                  <div class="field-mapping__mapping-input-group">
+                    <label class="field-mapping__mapping-label"
+                      >Поле на бэкенде</label
+                    >
+                    <input
+                      type="text"
+                      class="field-mapping__mapping-input"
+                      [formControl]="getBackendFieldControl()"
+                      placeholder="Введите имя поля на бэкенде"
+                    />
+                    @if (
+                      getBackendFieldControl().invalid &&
+                      getBackendFieldControl().touched
+                    ) {
+                      <div class="field-mapping__error">
+                        Введите имя поля на бэкенде
+                      </div>
+                    }
+                  </div>
+
+                  <div class="field-mapping__mapping-options">
+                    <div class="field-mapping__mapping-option">
+                      <label class="field-mapping__mapping-checkbox-label">
+                        <p-checkbox
+                          [formControl]="getUniquenessControl()"
+                          [binary]="true"
+                          inputId="uniquenessControl"
+                          class="field-mapping__mapping-checkbox"
+                        ></p-checkbox>
+                        <span class="field-mapping__mapping-checkbox-text"
+                          >Контроль уникальности</span
+                        >
+                      </label>
+                      <i
+                        class="pi pi-info-circle field-mapping__mapping-info-icon"
+                        title="Поле будет проверяться на уникальность значения"
+                      ></i>
+                    </div>
+
+                    <div class="field-mapping__mapping-option">
+                      <label class="field-mapping__mapping-checkbox-label">
+                        <p-checkbox
+                          [formControl]="getFileForSignatureControl()"
+                          [binary]="true"
+                          inputId="fileForSignatureControl"
+                          class="field-mapping__mapping-checkbox"
+                        ></p-checkbox>
+                        <span class="field-mapping__mapping-checkbox-text"
+                          >Файл для подписания</span
+                        >
+                      </label>
+                      <i
+                        class="pi pi-info-circle field-mapping__mapping-info-icon"
+                        title="Файл будет использоваться для подписания"
+                      ></i>
+                    </div>
+
+                    <!-- Новый раздел для настройки доступности полей -->
+                    <div class="field-mapping__mapping-section">
+                      <h5 class="field-mapping__mapping-section-title">
+                        Настройка доступности полей
+                      </h5>
+
+                      @if (onApplicantEnabled()) {
+                        <!-- Настройки для оформления на заявителя -->
+                        <div class="field-mapping__mapping-option">
+                          <label class="field-mapping__mapping-checkbox-label">
+                            <p-checkbox
+                              [formControl]="getOnApplicantControl()"
+                              [binary]="true"
+                              label="Заявитель"
+                              inputId="onApplicantControl"
+                              styleClass="field-mapping__mapping-checkbox"
+                              [disabled]="!onApplicantEnabled()"
+                            ></p-checkbox>
+                          </label>
+                          <i
+                            class="pi pi-info-circle field-mapping__mapping-info-icon"
+                            title="Поле будет доступно при оформлении на заявителя"
+                          ></i>
+                        </div>
+
+                        <div
+                          class="field-mapping__mapping-option field-mapping__mapping-option--nested"
+                          [class.field-mapping__mapping-option--disabled]="
+                            !isOnApplicantIsEmpFieldEnabled()
+                          "
+                        >
+                          <label class="field-mapping__mapping-checkbox-label">
+                            <p-checkbox
+                              [formControl]="getOnApplicantIsEmpFieldControl()"
+                              [binary]="true"
+                              inputId="onApplicantIsEmpFieldControl"
+                              styleClass="field-mapping__mapping-checkbox"
+                              [disabled]="!isOnApplicantIsEmpFieldEnabled()"
+                            ></p-checkbox>
+                            <span class="field-mapping__mapping-checkbox-text"
+                              >Является полем сотрудник</span
+                            >
+                          </label>
+                          <i
+                            class="pi pi-info-circle field-mapping__mapping-info-icon"
+                            title="Указывает, что поле является полем сотрудник при оформлении на заявителя"
+                          ></i>
+                        </div>
+                      }
+                      @if (onOtherEmployeesEnabled()) {
+                        <!-- Настройки для оформления на других сотрудников -->
+                        <div class="field-mapping__mapping-option">
+                          <label class="field-mapping__mapping-checkbox-label">
+                            <p-checkbox
+                              [formControl]="getOnOtherEmployeesControl()"
+                              [binary]="true"
+                              label="Другие сотрудники"
+                              inputId="onOtherEmployeesControl"
+                              class="field-mapping__mapping-checkbox"
+                            ></p-checkbox>
+                          </label>
+                          <i
+                            class="pi pi-info-circle field-mapping__mapping-info-icon"
+                            title="Поле будет доступно при оформлении на других сотрудников"
+                          ></i>
+                        </div>
+
+                        <div
+                          class="field-mapping__mapping-option field-mapping__mapping-option--nested"
+                          [class.field-mapping__mapping-option--disabled]="
+                            !isOnOtherEmployeesIsEmpFieldEnabled()
+                          "
+                        >
+                          <label class="field-mapping__mapping-checkbox-label">
+                            <p-checkbox
+                              [formControl]="
+                                getOnOtherEmployeesIsEmpFieldControl()
+                              "
+                              [binary]="true"
+                              inputId="onOtherEmployeesIsEmpFieldControl"
+                              styleClass="field-mapping__mapping-checkbox"
+                              [disabled]="
+                                !isOnOtherEmployeesIsEmpFieldEnabled()
+                              "
+                            ></p-checkbox>
+                            <span class="field-mapping__mapping-checkbox-text"
+                              >Является полем сотрудник</span
+                            >
+                          </label>
+                          <i
+                            class="pi pi-info-circle field-mapping__mapping-info-icon"
+                            title="Указывает, что поле является полем сотрудник при оформлении на других сотрудников"
+                          ></i>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,19 @@
+<div [formGroup]="form">
+  <label class="custom-form-field__label"> {{ item.label }}{{ isRequired() ? ' *' : '' }}</label>
+  <!-- todo test radio group in prime -->
+  <div
+    *ngFor="let option of item.optionList"
+    class="custom-form-field__radio"
+  >
+    <p-radioButton
+      [inputId]="option.optionID?.toString() || option.value"
+      name="{{ item.formControlName }}"
+      [value]="option.value"
+      [formControlName]="item.formControlName"
+    ></p-radioButton>
+    <label [for]="option.optionID?.toString() || option.value">
+      {{ option.title }}
+    </label>
+  </div>
+</div>
+

@@ -1,0 +1,100 @@
+<div class="form-builder" [formGroup]="form">
+  <!-- Шапка с заголовком и действиями -->
+  <div class="form-builder__header">
+    <div class="form-builder__tabs">
+      @for (item of menuItems; track $index) {
+        <div
+          class="form-builder__tab"
+          [class.form-builder__tab--active]="activeTabIndex() === $index"
+          (click)="onTabChange($index)"
+        >
+          <span>{{ item.label }}</span>
+          @if (activeTabIndex() === $index) {
+            <div class="form-builder__tab-indicator"></div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-builder__actions">
+      <!-- Переключатель режима превью -->
+      <div class="preview-switch">
+        <span class="preview-switch__label">Превью</span>
+        <p-inputSwitch
+          styleClass="p-inputswitch-sm"
+          [formControl]="previewMode"
+        ></p-inputSwitch>
+      </div>
+
+      <p-button
+        label="Сохранить"
+        icon="pi pi-save"
+        styleClass="p-button-primary p-button-sm"
+        [loading]="saving()"
+        (onClick)="saveSection()"
+        [disabled]="loading()"
+      ></p-button>
+      <p-button
+        icon="pi pi-times"
+        styleClass="p-button-outlined p-button-sm"
+        (onClick)="cancelEdit()"
+        [disabled]="loading() || saving()"
+      ></p-button>
+    </div>
+  </div>
+
+  <div class="form-builder__container">
+    @if (loading()) {
+      <div class="loading-content">
+        <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+        <p>Загрузка содержимого раздела...</p>
+      </div>
+    } @else if (previewMode.value) {
+      <!-- Режим превью - показываем только превью контента -->
+      <div class="custom-sections-template-view-container">
+        <app-custom-sections-template-view
+          [template]="form.get('template')?.value"
+        ></app-custom-sections-template-view>
+      </div>
+    } @else {
+      <!-- Режим редактирования - показываем все поля редактора -->
+      <ng-container [ngSwitch]="activeTabIndex()">
+        <!-- Вкладка "Основное" -->
+        @if (activeTabIndex() === 0) {
+          <app-custom-sections-template-editor
+            formControlName="template"
+            [readOnly]="saving()"
+            placeholder="Введите содержимое раздела..."
+          ></app-custom-sections-template-editor>
+        }
+        <!-- Вкладка "Отображение в меню" -->
+        @if (activeTabIndex() === 1) {
+          <div class="editor-content">
+            <div class="field mb-12">
+              <label for="title">Название раздела</label>
+              <input
+                id="title"
+                type="text"
+                pInputText
+                formControlName="title"
+                class="w-full"
+              />
+              <small class="text-muted"
+                >Название раздела отображается в левом меню</small
+              >
+            </div>
+            <div class="field mb-12">
+              <label for="icon">Иконка</label>
+              <app-icon-picker
+                id="icon"
+                formControlName="icon"
+                class="w-full"
+              />
+              <small class="text-muted">Иконка отображается в левом меню</small>
+            </div>
+          </div>
+        }
+      </ng-container>
+    }
+  </div>
+</div>

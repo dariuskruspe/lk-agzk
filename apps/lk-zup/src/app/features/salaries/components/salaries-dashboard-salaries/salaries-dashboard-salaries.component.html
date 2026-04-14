@@ -1,0 +1,130 @@
+<p-card class="salaries">
+  <p-toolbar class="salaries-toolbar space-between">
+    <h3 class="title-text">
+      {{ 'SALARY_TOTAL_PAYABLE' | translate }}
+    </h3>
+    <form [formGroup]="salaryDateForm" class="form-salary">
+      <div class="custom-form-field">
+        <ng-container
+          *map="
+            [
+              workPeriods?.reports[0].dateBegin,
+              workPeriods?.reports[0].dateEnd
+            ];
+            handler: toDate;
+            let values
+          "
+        >
+          <p-calendar
+            class="without-borders"
+            formControlName="date"
+            view="month"
+            dateFormat="MM yy"
+            appendTo="body"
+            [locale]="locale[dateLocale]"
+            [readonlyInput]="true"
+            [minDate]="values[0]"
+            [maxDate]="values[1]"
+            icon="pi pi-chevron-down"
+            [showIcon]="true"
+            (ngModelChange)="onChangeForm()"
+          >
+            <ng-template pTemplate="date" let-date>
+                  <span [ngClass]="{'weekend': isWeekend(date)}">
+                    {{ date.day }}
+                  </span>
+            </ng-template>
+          </p-calendar>
+        </ng-container>
+      </div>
+    </form>
+  </p-toolbar>
+  <ng-container *ngIf="!loading; else spinner">
+    <div class="salary-total">
+      <p class="salary-total__sum">
+        <span *ngIf="textShow"
+          >{{
+            toNumberFormat(
+              payslip?.earnings?.total + payslip?.deductions?.total
+            ) || 0
+          }}&nbsp;{{ 'SALARY_CURRENCY' | translate }}</span
+        >
+        <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+      </p>
+      
+      <span (click)="onTextDisplayChange()" class="salary-total__btn">
+        <i class="pi pi-eye-slash" *ngIf="!textShow"></i>
+        <i class="pi pi-eye" *ngIf="textShow"></i>
+      </span>
+    </div>
+    <div>
+      <div class="salary-item">
+        <span class="salary-item__period_whole">{{
+          'SALARY_TOTAL_ACCRUED' | translate
+        }}</span>
+        <span class="spacer"></span>
+        <span class="salary-item__sum">
+          <span *ngIf="textShow"
+            >{{ toNumberFormat(payslip?.earnings?.total) }}&nbsp;{{
+              'SALARY_CURRENCY' | translate
+            }}</span
+          >
+          <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+        </span>
+      </div>
+      <div class="salary-item">
+        <span class="salary-item__period_whole">{{
+          'SALARY_TOTAL_WITHHELD' | translate
+        }}</span>
+        <span class="spacer"></span>
+        <span class="salary-item__sum">
+          <span *ngIf="textShow"
+            >{{ toNumberFormat(payslip?.deductions?.total) }}&nbsp;{{
+              'SALARY_CURRENCY' | translate
+            }}</span
+          >
+          <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+        </span>
+      </div>
+      <div class="salary-item">
+        <span class="salary-item__period_whole">{{
+          'SALARY_REMAINING_PAYABLE' | translate
+        }}</span>
+        <span class="spacer"></span>
+        <span class="salary-item__sum">
+          <span *ngIf="textShow && payslip?.netPaySum">
+            {{ toNumberFormat(payslip?.netPaySum) }}&nbsp;{{
+              'SALARY_CURRENCY' | translate
+            }}</span
+          >
+          <span *ngIf="textShow && !payslip?.netPaySum"
+            >0 {{ 'SALARY_CURRENCY' | translate }}</span
+          >
+          <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+        </span>
+      </div>
+    </div>
+    <p-toolbar class="buttons-wrapper">
+      <button
+        pButton
+        class="p-button-outlined button-full-xs salary-button"
+        label="{{ 'BUTTON_SAVE_PDF' | translate }}"
+        (click)="onOpenSalaryImgDialog()"
+      ></button>
+      <button
+        pButton
+        label="{{ 'BUTTON_VIEW_DETAILS' | translate }}"
+        [routerLink]="['', 'salaries', 'payroll']"
+        [queryParams]="{ date: workPeriodActiveValue }"
+        class="p-button-outlined p-button-secondary button-full-xs salary-button"
+      ></button>
+    </p-toolbar>
+  </ng-container>
+  <ng-template #spinner>
+    <div class="spinner-container">
+      <p-progressSpinner
+        [style]="{ width: '40px', height: '40px' }"
+      ></p-progressSpinner>
+    </div>
+  </ng-template>
+</p-card>

@@ -1,0 +1,68 @@
+<div [formGroup]="form">
+  <div class="custom-form-field__upload-container">
+    <div class="custom-form-field__upload-header">
+      <label for="{{ controlName }}" class="custom-form-field__label">{{
+        label
+      }}</label>
+
+      <p-button
+        class="custom-form-field__upload-button upload-button"
+        [label]="
+          (uploader.files.length ? 'REMOVE_UPLOADED_TITLE' : 'UPLOAD_TITLE')
+            | translate
+        "
+        size="small"
+      >
+        <p-fileUpload
+          #uploader
+          name="{{ controlName }}[]"
+          mode="basic"
+          [customUpload]="true"
+          [attr.aria-describedby]="controlName + '-error'"
+          [accept]="types"
+          (onSelect)="fileProcessing(controlName, label, $event)"
+          class="custom-form-field__uploader"
+          [multiple]="multi"
+          (onClear)="clear(controlName)"
+          (uploadHandler)="uploader.clear()"
+        ></p-fileUpload>
+      </p-button>
+    </div>
+
+    <ul class="custom-form-field__selected-files">
+      <li
+        *ngFor="let file of uploader.files"
+        class="custom-form-field__selected-file"
+      >
+        <i class="pi pi-file"></i>
+        {{ file.name }}
+      </li>
+    </ul>
+  </div>
+  <input type="hidden" [formControlName]="controlName" />
+  <small
+    *ngIf="
+      hint &&
+      !(
+        form.get(controlName).errors &&
+        getKeys(form.get(controlName).errors).length &&
+        form.get(controlName).touched
+      )
+    "
+    id="{{ controlName }}-hint"
+    class="block"
+  >
+    {{ hint }}
+  </small>
+  <small
+    *ngIf="
+      form.get(controlName).errors &&
+      getKeys(form.get(controlName).errors).length &&
+      form.get(controlName).touched
+    "
+    id="{{ controlName }}-error"
+    class="p-error block"
+  >
+    {{ errorMessage | translate }}
+  </small>
+</div>

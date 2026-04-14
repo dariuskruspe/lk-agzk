@@ -1,0 +1,32 @@
+.gc-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 300;
+  line-height: 22px;
+  font-size: 12px;
+}
+
+.gc-header-title {
+  color: var(--text-color-secondary);
+}
+
+.gc-header-value {
+  color: var(--primary-color);
+}
+
+.gc-progress {
+  display: block;
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: 5px;
+  overflow: hidden;
+  background: rgba(233, 233, 233, 1);
+
+  &>div {
+    position: absolute;
+    height: 100%;
+    background: var(--primary-color);
+  }
+}

@@ -1,0 +1,48 @@
+.vacations-page {
+  position: relative;
+  min-height: 320px;
+}
+
+.vacations-header {
+  &-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+
+  &-top-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+}
+
+.vacations-content {
+  min-height: 240px;
+}
+
+.vacations-btn-disabled {
+  app-button {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
+.app-calendar-graph-legend-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 20px 0;
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
+}

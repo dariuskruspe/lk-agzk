@@ -1,0 +1,52 @@
+<!-- Текст вида "Вы действительно хотите согласовать/отклонить отпуска указанным сотрудникам?" -->
+<div class="confirm-text-container mb-16">
+  <span>{{
+    (action === 'approve'
+      ? 'VACATIONS_APPROVE_CONFIRM'
+      : 'VACATIONS_DECLINE_CONFIRM'
+    ) | translate
+  }}</span>
+</div>
+
+<!-- Список выбранных сотрудников, отпуска которых подлежат согласованию/отклонению -->
+<div class="selected-vacations mb-16">
+  @for (vacation of
+  this.employeeVacationsService.selectedEmployeeVacationsSignal(); track
+  vacation.employeeId; let last = $last) {
+  <div class="vacation" [ngClass]="{ 'mb-16': !last }">
+    <div class="vacation-row">
+      <span class="employee-full-name">{{ vacation.name }}</span>
+    </div>
+
+    <div class="vacation-row">
+      <span class="employee-position grey">{{ vacation.position }}</span>
+    </div>
+  </div>
+  }
+</div>
+
+<!-- Комментарий -->
+<div class="comment-container flex flex-col mb-16">
+  <label>{{ 'COMMENT' | translate }}</label>
+  <textarea
+    pInputTextarea
+    class="comment"
+    [(ngModel)]="comment"
+    rows="3"
+    [autoResize]="false"
+  ></textarea>
+</div>
+
+<!-- Кнопка "Согласовать"/"Отклонить" (подтверждает согласование/отклонение отпусков) -->
+<div class="confirm-button-container flex jc-flex-end">
+  <p-button
+    (onClick)="confirmVacationsDecision()"
+    class="btn-confirm"
+    [disabled]="action === 'decline' && !comment"
+    [label]="
+      (action === 'approve' ? 'BUTTON_APPROVE' : 'BUTTON_REJECT') | translate
+    "
+    [loading]="loading"
+    [outlined]="action === 'decline'"
+  ></p-button>
+</div>

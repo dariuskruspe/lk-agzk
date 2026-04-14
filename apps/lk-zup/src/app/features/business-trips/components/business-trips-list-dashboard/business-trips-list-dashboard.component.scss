@@ -1,0 +1,91 @@
+:host {
+  .business-trip-schedule {
+    display: flex;
+    align-items: flex-end;
+
+    .scroll-container {
+      overflow: auto;
+    }
+
+    // Вика (дизайнер): "Добавить цветовое разделение фона (более светлый тон) по линии таба/и поиска с фильтрами, это визуально разделяет экран на информационную часть (на скрине обозначила синим маркером) и элементы управления (красным).
+    // Так же это решает проблему визуальной загруженности страницы Командировки, визуально разделяя на 2 части (календарь и информационная часть, а так же 2 фильтра).
+    // Цветовое разделение будет на каждой страничке где есть фильтр." (см. комментарии к https://jr.9958258.ru/browse/HRM-39812)
+    body:not([data-theme="dark"]) & {
+      &:not(.mobile-v)::before {
+        content: "";
+        position: absolute;
+        top: auto;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        background: linear-gradient(#E9F2FF, #F7FBFF);
+      }
+    }
+
+    ::ng-deep {
+      .empty-member,
+      .member,
+      .month-head {
+        body:not([data-theme="dark"]) & {
+          //background: var(--lavender-blue-gradient) !important;
+        }
+      }
+    }
+  }
+}
+
+.title-button {
+  display: flex !important;
+  align-items: center;
+  width: auto;
+  height: 50px;
+  padding: 14px 20px;
+  font-size: 16px;
+  line-height: 22px;
+
+  & mat-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+  }
+}
+.graph-table {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: auto;
+
+  .years {
+    display: flex;
+    position: absolute;
+    top: 6px;
+    z-index: 10;
+    flex-direction: row;
+    font-weight: bold;
+    color: var(--basic-color);
+    .arrow {
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+}
+.title-business-trips {
+  @media (max-width: 991px) {
+    margin-bottom: 15px;
+  }
+}
+.filter-icon-button {
+  @media (max-width: 991px) {
+    background: var(--card-background);
+    border: 1px solid #252F3F1A;
+    border-radius: 10px;
+    padding: 7px 10px 3px 10px;
+    margin-left: 10px;
+  }
+}
+.mobile-search-input {
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}

@@ -1,0 +1,129 @@
+<div class="result-container" *ngIf="result && !success">
+  <div class="result-list">
+   <div class="error-count-text">{{countOfErrors}} {{ 'APPROVING_MANAGEMENT_COUNT_FROM' | translate }} {{items.length}}
+     <span *ngIf="reject">
+       {{ 'APPROVING_MANAGEMENT_COUNT_TEXT_REJECT' | translate }}
+     </span>
+     <span *ngIf="!reject">
+       {{ 'APPROVING_MANAGEMENT_COUNT_TEXT' | translate }}
+     </span>
+   </div>
+    <div class="result-item" *ngFor="let item of items">
+      <div class="error" *ngIf="item.success === false">
+        <img src='assets/icons/error-icon.svg' alt='error'>
+        <div class="error-text">{{item.errorMsg}}</div>
+      </div>
+      <div class="issue">
+        <div class="issue-body">
+          <div class="icon">
+            <span
+              class="icon center"
+            >
+              <i class="{{(getTaskById(item.taskId)?.iconName || 'icon-doc') | iconPack}}"></i>
+            </span>
+
+          </div>
+          <div class="info">
+            <div class="name">{{getTaskById(item.taskId)?.employeeName}}</div>
+            <div class="title-info">{{getTaskById(item.taskId)?.typeShortName}}</div>
+            <div class="footer-info">
+              <div class="date">
+                {{getTaskById(item.taskId)?.date | date: 'dd.MM.yyyy'}}
+                #{{getTaskById(item.taskId)?.number}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    <button
+    pButton
+    label="{{ 'BUTTON_CLOSE' | translate }}"
+    class="p-button-outlined"
+    (click)="close()"
+    ></button>
+  </div>
+</div>
+<div class="result-container" *ngIf="!result && !success">
+  <div class="title" *ngIf="!reject">
+    {{ 'APPROVING_MANAGEMENT_TEXT' | translate }}
+  </div>
+  <div class="title" *ngIf="reject">
+    {{ 'APPROVING_MANAGEMENT_TEXT_REJECT' | translate }}
+  </div>
+  <div class="result-list">
+    <div class="result-item" *ngFor="let issue of tasks">
+      <div class="issue">
+        <div class="issue-body">
+          <div class="icon">
+            <span
+              class="icon center"
+            >
+              <i class="{{(issue?.iconName || 'icon-doc') | iconPack}}"></i>
+            </span>
+
+          </div>
+          <div class="info">
+            <div class="name">{{issue.employeeName}}</div>
+            <div class="title-info">{{issue.typeShortName}}</div>
+            <div class="footer-info">
+              <div class="date">
+                {{issue.date | date: 'dd.MM.yyyy'}}
+                #{{issue.number}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="comment-body">
+    <label>{{ 'ISSUE_COMMENT' | translate }}</label>
+    <textarea
+      pInputTextarea
+      class="comment-field"
+      [(ngModel)]="comment"
+      rows="3"
+      [autoResize]="true"
+    ></textarea>
+  </div>
+  <div class="buttons">
+    <button
+      *ngIf="!reject"
+      pButton
+      class="approve"
+      label="{{ 'BUTTON_APPROVE' | translate }}"
+      (click)="approve(true)"
+      [loading]="loading"
+    ></button>
+    <button
+      *ngIf="reject"
+      pButton
+      label="{{ 'BUTTON_REJECT' | translate }}"
+      [disabled]="!comment"
+      class="p-button-outlined"
+      (click)="approve(false)"
+      [loading]="loading"
+    ></button>
+  </div>
+</div>
+<div class="result-container" *ngIf="success">
+  <div class="success">
+    <span *ngIf="!reject">
+      {{ 'ISSUES_MANAGEMENT_SUCCESS_TEXT' | translate }}
+    </span>
+    <span *ngIf="reject">
+      {{ 'ISSUES_MANAGEMENT_REJECT_TEXT' | translate }}
+    </span>
+  </div>
+  <div>
+    <button
+      pButton
+      label="{{ 'BUTTON_CLOSE' | translate }}"
+      class="p-button-outlined"
+      (click)="close()"
+    ></button>
+  </div>
+</div>

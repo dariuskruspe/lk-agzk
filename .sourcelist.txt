@@ -1,0 +1,8 @@
+apps/
+libs/
+nx.json
+tsconfig.base.json
+.eslintrc.json
+.eslintignore
+package.json
+bun.lock

@@ -1,0 +1,13 @@
+<mat-progress-bar
+  class="absolute-top"
+  mode="indeterminate"
+  *ngIf="
+    (salariesDashboardIncomeFacade.loading$() | async) ||
+    (salariesDashboardIncomeFacade.loading$() | async)
+  "
+></mat-progress-bar>
+
+<app-salaries-income-details
+  [averageIncome]="salariesDashboardIncomeFacade.getData$() | async"
+  (textDisplayChange)="textDisplayChange()"
+></app-salaries-income-details>

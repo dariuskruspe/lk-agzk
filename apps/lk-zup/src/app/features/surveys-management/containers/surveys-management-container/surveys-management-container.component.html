@@ -1,0 +1,287 @@
+<!-- Страница "Управление опросами" -->
+
+<div class="employee-vacations-body">
+  <p-toolbar class="title">
+    <h1 class="mobile-title">{{ 'TITLE_SURVEYS_MANAGEMENT' | translate }}</h1>
+
+    <span class="spacer"></span>
+
+    <button
+      pButton
+      icon="pi pi-plus-circle"
+      iconPos="left"
+      label="{{ 'CREATE' | translate }}"
+      [routerLink]="['', 'surveys-management', 'create']"
+      [disabled]="!creationAvailable"
+    ></button>
+
+  </p-toolbar>
+
+  <!-- Панель вкладок, поиска и фильтрации -->
+  <div class="tabs-controls-panel">
+    <div class="tabs">
+      <div
+        class="tab-item"
+        (click)="changeTab('ALL_SURVEYS')"
+        [class.active]="activeTab === 'ALL_SURVEYS'"
+      >
+        <span class="tab-title">{{ 'ALL_SURVEYS' | translate }}</span>
+      </div>
+      <div
+        class="tab-item"
+        (click)="changeTab('MY_SURVEYS')"
+        [class.active]="activeTab === 'MY_SURVEYS'"
+      >
+        <span class="tab-title">{{ 'MY_SURVEYS' | translate }}</span>
+      </div>
+      <div
+        class="tab-item"
+        (click)="changeTab('SURVEYS_APPROVAL')"
+        [class.active]="activeTab === 'SURVEYS_APPROVAL'"
+      >
+        <span class="tab-title">{{ 'DOCUMENTS_AGREE' | translate }}</span>
+      </div>
+      <div
+        class="tab-item"
+        (click)="changeTab('ARCHIVE')"
+        [class.active]="activeTab === 'ARCHIVE'"
+      >
+        <span class="tab-title">{{ 'BUTTON_ARCHIVE' | translate }}</span>
+      </div>
+    </div>
+
+    <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+    <div class="filters">
+      <!-- Поиск -->
+      <div class="p-input-icon-left mobile-search-input">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          [(ngModel)]="filterValue.search"
+          (ngModelChange)="applySearchFilter()"
+          class="search-input"
+          [placeholder]="'ISSUE_SEARCH_FIELD' | translate"
+          type="text"
+        />
+      </div>
+
+      <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+      <div class="filter-icon-button">
+        <i
+          class="pi pi-sliders-h filter-icon"
+          (click)="showFilters = !showFilters; $event.stopPropagation()"
+        ></i>
+      </div>
+
+      <!-- <только для мобильной версии приложения> -->
+      <!-- Нижняя выпадающая панель (sidebar) с фильтрами -->
+      <ng-container *ngIf="isMobileV(); else filtersDialog">
+        <p-sidebar
+          #filterSidebar
+          [(visible)]="showFilters"
+          appendTo="body"
+          position="bottom"
+          [showCloseIcon]="false"
+          styleClass="filters-sidebar"
+        >
+          <!-- Тулбар с заголовком и кнопкой закрытия сайдбара в виде обычного "крестика" -->
+          <p-toolbar class="space-between">
+            <div class="sidebar-header font-size-26px">
+              {{ 'FILTER' | translate }}
+            </div>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-times"
+              class="p-button-rounded p-button-secondary p-button-text"
+              (click)="filterSidebar.close($event)"
+            ></button>
+          </p-toolbar>
+
+          <div class="sidebar-content">
+            <!-- Фильтры -->
+            <div class="sidebar-filters">
+              <ng-container *ngTemplateOutlet="filters"></ng-container>
+            </div>
+
+            <!-- Тулбар с кнопкой -->
+            <p-toolbar class="margin-top">
+              <!-- Кнопка "Применить" (ничего не делает по назначению, просто закрывает сайдбар) -->
+              <button
+                pButton
+                type="button"
+                label="{{ 'APPLY' | translate }}"
+                class="button-full-xs filter-button"
+                (click)="filterSidebar.close($event)"
+              ></button>
+            </p-toolbar>
+          </div>
+        </p-sidebar>
+      </ng-container>
+
+      <!-- <только для обычной (desktop'ной) версии приложения> -->
+      <!-- Диалоговое окно с фильтрами -->
+      <ng-template #filtersDialog>
+        <div *ngIf="showFilters" id="filters-dialog" class="filters-dialog">
+          <ng-container *ngTemplateOutlet="filters"></ng-container>
+
+          <!-- Панель с кнопками -->
+          <div class="filter-button-bar">
+            <!-- Кнопка "Закрыть" (закрывает диалоговое окно с фильтрами) -->
+            <button
+              pButton
+              label="{{ 'BUTTON_CLOSE' | translate }}"
+              class="p-button-outlined"
+              (click)="showFilters = false"
+            ></button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #filters>
+        <!-- Фильтр "Тип" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label grey">
+            {{ 'SURVEY_TYPE' | translate }}
+          </label>
+          <p-dropdown
+            [options]="[{ title: 'ANONYMOUS' | translate, value: 'anonymous' },{ title: 'NON_ANONYMOUS' | translate, value: 'nonAnonymous' }]"
+            [(ngModel)]="filterValue.type"
+            [showClear]="true"
+            optionLabel="title"
+            optionValue="value"
+            (ngModelChange)="applyFilters()"
+            class="dropdown-input"
+            placeholder=" {{ 'SURVEY_TYPE' | translate }}"
+            styleClass="w-full"
+          ></p-dropdown>
+        </div>
+        <!-- Фильтр "Период" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label grey">
+            {{ 'PERIOD' | translate }}
+          </label>
+          <p-dropdown
+            [options]="daysValueList"
+            [(ngModel)]="filterValue.days"
+            [showClear]="true"
+            optionLabel="title"
+            optionValue="value"
+            (ngModelChange)="applyFilters()"
+            class="dropdown-input"
+            placeholder="{{ 'PERIOD' | translate }}"
+            styleClass="w-full"
+          ></p-dropdown>
+        </div>
+        <!-- Фильтр "Статус" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label grey">
+            {{ 'SELECT_LABEL_STATE' | translate }}
+          </label>
+          <p-multiSelect
+            [options]="stateOptionList?.optionList || []"
+            [(ngModel)]="filterValue.state"
+            [filter]="true"
+            [showClear]="true"
+            optionLabel="representation"
+            optionValue="value"
+            (ngModelChange)="applyFilters()"
+            class="dropdown-input"
+            placeholder="{{ 'SELECT_LABEL_STATE' | translate }}"
+            styleClass="w-full"
+          ></p-multiSelect>
+        </div>
+        <!-- Фильтр "Ответственный" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label grey">
+            {{ 'RESPONSIBLE' | translate }}
+          </label>
+          <p-multiSelect
+            *ngIf="employeesList?.optionList"
+            [options]="employeesList.optionList || []"
+            [(ngModel)]="filterValue.author"
+            [filter]="true"
+            [showClear]="true"
+            optionLabel="representation"
+            optionValue="value"
+            (ngModelChange)="applyFilters()"
+            class="dropdown-input"
+            placeholder="{{ 'RESPONSIBLE' | translate }}"
+            styleClass="w-full"
+          ></p-multiSelect>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Содержимое -->
+  <div class="content">
+    <!-- Метки (chips — "чипы") фильтров -->
+    <div class="filter-chips">
+
+      <!-- Метки (chips — "чипы") поиска -->
+      <div class="filter-chip" *ngIf="filterValue.search">
+        {{ filterValue.search }}
+        <i
+          class="pi pi-times times-icon"
+          (click)="clearFilterByChips('search')"
+        ></i>
+      </div>
+
+      <!-- Метки (chips — "чипы") поиска -->
+      <div class="filter-chip" *ngIf="filterValue.type">
+        {{ getAnonName(filterValue.type) }}
+        <i
+          class="pi pi-times times-icon"
+          (click)="clearFilterByChips('type')"
+        ></i>
+      </div>
+      <div class="filter-chip" *ngIf="filterValue.days">
+        {{ getPeriodNameByValue(filterValue.days) }}
+        <i
+          class="pi pi-times times-icon"
+          (click)="clearFilterByChips('days')"
+        ></i>
+      </div>
+      <ng-container *ngIf="filterValue.state">
+        <div class="filter-chip" *ngFor="let state of filterValue.state">
+          {{ getStateNameById(state) }}
+          <i
+            class="pi pi-times times-icon"
+            (click)="clearFilterByChips('state', state)"
+          ></i>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="filterValue.author">
+        <div class="filter-chip" *ngFor="let author of filterValue.author">
+          {{ getAuthorNameById(author) }}
+          <i
+            class="pi pi-times times-icon"
+            (click)="clearFilterByChips('author', author)"
+          ></i>
+        </div>
+      </ng-container>
+    </div>
+
+    <div>
+      <loadable-list-container
+        [template]="dataLayout"
+        [dataList]="agreementsEmployeeList"
+        [dataConfig]="dataConfig"
+        [otherData]="stateList"
+        [filter]="null"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [loading]="this.loading$ | async"
+        [select]="false"
+        [selectButtonTitle]="''"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="handleOpenDocument($event)"
+        (clickSelectedList)="handleOpenDocument($event)"
+      ></loadable-list-container>
+
+    </div>
+
+  </div>
+</div>

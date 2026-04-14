@@ -1,0 +1,28 @@
+<div class="notification-item" (click)="clicked.emit(item)">
+  <div class="notification-item__icon">
+    <i class="{{ item.icon || 'icon-doc' | iconPack }}"></i>
+  </div>
+  <div class="notification-item__content">
+    <div class="notification-item__title">
+      <div *ngIf="item.title" class="notification-item__title_text">
+        <a>{{ item.title }}</a>
+      </div>
+      <i *ngIf="item.date" class="notification-item__title_point"></i>
+      <div
+        *ngIf="item.date" class="notification-item__title_date" [title]="item.date | date: 'dd.MM.yyyy HH:mm'"
+      >
+        {{ item.date | appDate }}
+      </div>
+    </div>
+    <div class="notification-item__message">
+      {{ item.message }}
+    </div>
+  </div>
+  <div *ngIf="!item.locked" class="notification-item__close">
+    <button
+      pButton type="button" icon="pi pi-times" class="p-button-rounded p-button-secondary p-button-text" (click)="
+        closed.emit(item); $event.preventDefault(); $event.stopPropagation()
+      "
+    ></button>
+  </div>
+</div>

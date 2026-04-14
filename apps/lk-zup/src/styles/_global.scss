@@ -1,0 +1,1274 @@
+@import 'mixins';
+@import 'variables';
+@import 'gridstack/dist/gridstack.min.css';
+@import 'gridstack/dist/gridstack-extra.min.css';
+
+/*********************/
+/* ROOT (HTML), BODY */
+/*********************/
+
+html,
+body {
+  height: 100%;
+  overflow-x: hidden;
+  max-width: 100%;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  font-family: $primary-font-family;
+  font-size: $base-font-size;
+  background-color: var(--background-color);
+  overflow: hidden;
+
+  &[data-overflow='auto'] {
+    overflow: auto;
+    overflow-x: hidden;
+  }
+}
+
+/***********/
+/* DISPLAY */
+/***********/
+
+.block {
+  display: block !important;
+}
+.inline-block {
+  display: inline-block !important;
+}
+.display-none {
+  display: none !important;
+}
+
+/************/
+/* POSITION */
+/************/
+
+.absolute {
+  position: absolute !important;
+}
+.fixed {
+  position: fixed !important;
+}
+.relative {
+  position: relative !important;
+}
+.sticky {
+  position: sticky !important;
+}
+.static {
+  position: static !important;
+}
+
+.sticky-top,
+.sticky-top-0,
+.sticky-top-0px {
+  position: sticky !important;
+  top: 0 !important;
+}
+.sticky-top-5px {
+  position: sticky !important;
+  top: 5px !important;
+}
+.sticky-top-10px {
+  position: sticky !important;
+  top: 10px !important;
+}
+
+.sticky-bottom,
+.sticky-bottom-0,
+.sticky-bottom-0px {
+  position: sticky !important;
+  bottom: 0 !important;
+}
+.sticky-bottom-5px {
+  position: sticky !important;
+  bottom: 5px !important;
+}
+.sticky-bottom-10px {
+  position: sticky !important;
+  bottom: 10px !important;
+}
+
+/**********/
+/* CURSOR */
+/**********/
+
+.cursor-pointer,
+.clickable {
+  cursor: pointer;
+}
+
+/********/
+/* FONT */
+/********/
+
+.font-size-0-875rem {
+  font-size: 0.875rem;
+} // (root 16px) -> 14px
+
+@for $i from 0 through 30 {
+  @if $i % 2 == 0 {
+    .font-size-#{$i}px {
+      font-size: #{$i}px !important;
+    }
+  }
+}
+
+@for $i from 100 through 900 {
+  @if $i % 100 == 0 {
+    .font-weight-#{$i} {
+      font-weight: #{$i} !important;
+    }
+  }
+}
+
+/***********/
+/* HEADERS */
+/***********/
+
+h1,
+h2 {
+  font-weight: 400;
+  color: var(--title-color);
+  font-family: $primary-font-family;
+}
+
+h1.h0 {
+  margin-bottom: 33px;
+  height: auto;
+  font-size: 34px;
+  line-height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+h1 {
+  font-size: 28px;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 300;
+
+  @media (max-width: $m-max-width) {
+    font-size: 22px;
+  }
+}
+
+h3,
+h4 {
+  font-weight: 400;
+  font-family: $primary-font-family;
+  color: var(--basic-color);
+}
+
+h3 {
+  margin-bottom: 10px;
+}
+
+/******/
+/* HR */
+/******/
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--surface-border);
+}
+
+/**********/
+/* LAYOUT */
+/**********/
+
+/* Colors */
+
+// ----------------
+// - Border color -
+// ----------------
+
+// by name
+.border-black {
+  border-color: black !important;
+}
+.border-blue {
+  border-color: blue !important;
+}
+.border-red {
+  border-color: red !important;
+}
+.border-gray {
+  border-color: var(--gray) !important;
+}
+.border-green {
+  border-color: green !important;
+}
+.border-grey {
+  border-color: var(--grey) !important;
+}
+.border-orange {
+  border-color: orange !important;
+}
+.border-violet {
+  border-color: violet !important;
+}
+.border-white {
+  border-color: white !important;
+}
+.border-yellow {
+  border-color: yellow !important;
+}
+.border-light-gray {
+  border-color: var(--light-gray) !important;
+}
+.border-light-grey {
+  border-color: var(--light-grey) !important;
+}
+
+// by type
+.border-color {
+  border-color: var(--border-color) !important;
+}
+
+// --------------
+// - Text color -
+// --------------
+
+// by name
+.black {
+  color: black !important;
+}
+.blue {
+  color: blue !important;
+}
+.red {
+  color: red !important;
+}
+.gray {
+  color: var(--gray) !important;
+}
+.green {
+  color: green !important;
+}
+.grey {
+  color: var(--grey) !important;
+}
+.orange {
+  color: orange !important;
+}
+.violet {
+  color: violet !important;
+}
+.white {
+  color: white !important;
+}
+.yellow {
+  color: yellow !important;
+}
+.light-gray {
+  color: var(--light-gray) !important;
+}
+.light-grey {
+  color: var(--light-grey) !important;
+}
+.pale-blue {
+  color: var(--pale-blue) !important;
+}
+.lavender-blue {
+  color: var(--lavender-blue) !important;
+}
+
+// by type
+.link-color {
+  color: var(--link-color) !important;
+}
+.text-color {
+  color: var(--background-color) !important;
+}
+.link-color {
+  color: var(--link-color) !important;
+}
+
+// --------------
+// - Background -
+// --------------
+
+.bg-lavender-blue-gradient {
+  background: var(--lavender-blue-gradient) !important;
+}
+
+// --------------------
+// - Background color -
+// --------------------
+
+// by name
+.bg-black {
+  background-color: black !important;
+}
+.bg-blue {
+  background-color: blue !important;
+}
+.bg-gray {
+  background-color: var(--gray) !important;
+}
+.bg-green {
+  background-color: green !important;
+}
+.bg-grey {
+  background-color: var(--grey) !important;
+}
+.bg-red {
+  background-color: red !important;
+}
+.bg-orange {
+  background-color: orange !important;
+}
+.bg-violet {
+  background-color: violet !important;
+}
+.bg-white {
+  background-color: white !important;
+}
+.bg-yellow {
+  background-color: yellow !important;
+}
+.bg-light-gray {
+  background-color: var(--light-gray) !important;
+}
+.bg-light-grey {
+  background-color: var(--light-grey) !important;
+}
+.bg-pale-blue {
+  background-color: var(--pale-blue) !important;
+}
+.bg-lavender-blue {
+  background-color: var(--lavender-blue) !important;
+}
+
+// by type
+.bg-color {
+  background-color: var(--background-color) !important;
+}
+.bg-canceled {
+  background-color: var(--canceled) !important;
+}
+.bg-cancelled {
+  background-color: var(--cancelled) !important;
+}
+
+// Отступы между блоками
+.wrapper {
+  margin-bottom: 50px;
+
+  @media (max-width: $s-max-width) {
+    margin-bottom: 30px;
+  }
+}
+
+// Для ширины в 100%
+.full,
+.full-width,
+.w-full {
+  width: 100% !important;
+}
+
+.full-height,
+.h-full {
+  height: 100% !important;
+}
+
+.min-h-full {
+  min-height: 100% !important;
+}
+.max-h-full {
+  max-height: 100% !important;
+}
+
+.auto-width,
+.width-auto,
+.w-auto {
+  width: auto !important;
+}
+
+.auto-height,
+.height-auto,
+.h-auto {
+  height: auto !important;
+}
+
+.spacer {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.text-align {
+  &-right {
+    text-align: right;
+  }
+
+  &-center {
+    text-align: center;
+  }
+}
+
+.ng-scroll-content {
+  width: 100%;
+
+  .ng-native-scrollbar-hider.ng-scroll-viewport {
+    --native-scrollbar-size: 0px;
+  }
+}
+
+a {
+  color: #3880ff;
+}
+
+.default-link {
+  color: #3880ff;
+  font-size: 16px;
+  font-weight: normal;
+  cursor: pointer;
+  line-height: 18px;
+
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+// Для динамического прелоадера
+.absolute-loading-spinner {
+  position: absolute !important;
+  height: 40px;
+  width: 40px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  .p-progress-spinner {
+    transform: translate(-25%, -25%);
+  }
+}
+
+// Для динамического прелоадера
+.loading-spinner-container {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  min-height: 40px;
+  display: block;
+  overflow: hidden;
+}
+
+// Progressbar in absolute
+.progress-bar-absolute-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+
+  .p-progressbar {
+    height: 4px;
+  }
+}
+
+.cdk-overlay-container {
+  z-index: 1111;
+}
+
+.p-dialog-mask {
+  z-index: 1000;
+}
+
+.display-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// Вторичный текст
+.secondary {
+  font-size: 14px;
+  line-height: 18px;
+  text-align: center;
+  color: var(--secondary-color);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.hidden {
+  visibility: hidden;
+  display: none;
+}
+
+.tooltip_text__fit {
+  max-width: fit-content;
+}
+
+.p-dropdown-max {
+  border-radius: 5px;
+  min-width: 100% !important;
+
+  .p-dropdown {
+    width: 100% !important;
+  }
+}
+
+$spacer: 1px;
+
+@for $i from 0 through 100 {
+  .m-#{$i} {
+    margin: $spacer * $i !important;
+  }
+
+  .mx-#{$i} {
+    margin-left: $spacer * $i !important;
+    margin-right: $spacer * $i !important;
+  }
+
+  .my-#{$i} {
+    margin-top: $spacer * $i !important;
+    margin-bottom: $spacer * $i !important;
+  }
+
+  .mt-#{$i} {
+    margin-top: $spacer * $i !important;
+  }
+
+  .ml-#{$i} {
+    margin-left: $spacer * $i !important;
+  }
+
+  .mr-#{$i} {
+    margin-right: $spacer * $i !important;
+  }
+
+  .mb-#{$i} {
+    margin-bottom: $spacer * $i !important;
+  }
+
+  .p-#{$i} {
+    padding: $spacer * $i !important;
+  }
+
+  .px-#{$i} {
+    padding-left: $spacer * $i !important;
+    padding-right: $spacer * $i !important;
+  }
+
+  .py-#{$i} {
+    padding-top: $spacer * $i !important;
+    padding-bottom: $spacer * $i !important;
+  }
+
+  .pt-#{$i} {
+    padding-top: $spacer * $i !important;
+  }
+
+  .pl-#{$i} {
+    padding-left: $spacer * $i !important;
+  }
+
+  .pr-#{$i} {
+    padding-right: $spacer * $i !important;
+  }
+
+  .pb-#{$i} {
+    padding-bottom: $spacer * $i !important;
+  }
+
+  .h-#{$i} {
+    height: $spacer * $i !important;
+  }
+
+  .gap-#{$i} {
+    gap: $spacer * $i !important;
+  }
+}
+
+// Ширина в пикселях от 0 до 1000px (c шагом в 10px)
+@for $i from 0 through 1000 {
+  @if $i % 10 == 0 {
+    .w-#{$i} {
+      width: #{$i}px !important;
+    }
+  }
+}
+
+.disabled-input {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+.tooltip_text__fit {
+  max-width: fit-content;
+}
+
+.disabled-input {
+  pointer-events: none !important;
+  opacity: 0.5 !important;
+}
+
+.comment {
+  margin: 10px 0;
+  border: 1px solid var(--comment-border);
+  background: var(--comment-background);
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 13px 15px;
+
+  &__title {
+    color: var(--comment-title-color);
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+
+    &_error {
+      color: var(--error);
+    }
+  }
+
+  &__text {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    color: var(--comment-font-color);
+  }
+
+  &_error {
+    border: 1px solid var(--error);
+  }
+
+  &_action {
+    border: 1px solid var(--action-comment-border);
+    background: var(--action-comment-background);
+  }
+
+  &_info {
+    border: 1px solid var(--info-comment-border);
+    background: var(--info-comment-background);
+  }
+}
+
+.switch-with-label {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+
+  label {
+    margin-right: 10px;
+    margin-bottom: 5px;
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+.skeleton-list-item {
+  width: 100%;
+  height: 74px;
+  margin-bottom: 3px;
+  border-radius: var(--border-radius);
+  padding: 25px;
+  background: var(--card-background);
+  display: flex;
+  align-items: center;
+
+  &__el {
+    margin-right: 15px;
+  }
+}
+
+.skeleton-menu-item {
+  width: 100%;
+  height: 58px;
+  padding: 1rem;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.scroll-main-container {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.scroll-main-container_onredirect {
+  scroll-behavior: auto;
+}
+
+.custom-list-item {
+  border-radius: var(--border-radius) !important;
+}
+
+.colored-number_positive {
+  color: var(--success);
+}
+
+.colored-number_negative {
+  color: var(--error);
+}
+
+.colored-number_neutral {
+  color: var(--basic-color);
+}
+
+.attention-point {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--error);
+  position: absolute;
+}
+
+.p-password {
+  eyeicon {
+    right: 0.75rem;
+  }
+
+  eyeslashicon {
+    right: 0.75rem;
+  }
+}
+
+// Это нужно, чтоб показывать заполненные динамически скрытые поля в режиме просмотра заявки
+.show-mode {
+  .hidden {
+    display: block;
+    visibility: visible;
+  }
+  .static-hidden {
+    display: none;
+    visibility: hidden;
+  }
+}
+
+/***********/
+/* PrimeNG */
+/***********/
+
+/* p-accordion*/
+
+.p-accordion-header-text {
+  word-break: break-all;
+}
+
+/* p-calendar */
+
+/* HRM-39074 */
+body:not([data-theme='dark']) {
+  .p-datepicker-header {
+    background-color: #f1f3f5 !important;
+  }
+}
+.p-datepicker {
+  // p-calendar -> overlay panel
+  --datepicker-border-radius: 14px;
+  border-radius: var(--datepicker-border-radius) !important;
+  padding: 0 !important;
+  min-width: auto !important;
+  width: auto !important;
+
+  .p-datepicker-calendar-container {
+    padding: 5px !important;
+  }
+
+  .p-datepicker-header {
+    border-radius: var(--datepicker-border-radius)
+      var(--datepicker-border-radius) 0 0 !important;
+
+    .p-datepicker-prev,
+    .p-datepicker-next {
+      border: 2px solid var(--surface-border) !important;
+      border-radius: 10px !important;
+    }
+  }
+
+  .p-datepicker-month {
+    margin-right: 0 !important;
+  }
+
+  table {
+    margin: 0 !important;
+    //margin: 0 0 10px 0 !important;
+
+    th,
+    td {
+      padding: 0 !important;
+      & > span {
+        display: flex;
+        width: 2.5rem;
+        height: 2.5rem;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+      }
+    }
+
+    th {
+      &:nth-child(6),
+      &:nth-child(7) {
+        span {
+          color: red;
+        }
+      }
+
+      span {
+        text-transform: uppercase;
+        //font-variant: all-small-caps;
+        font-size: 14px;
+        color: var(--grey);
+      }
+    }
+  }
+
+  /* Стили как в календаре графика отпусков [HRM-39347] */
+  /* (!) skuzminov: стили хитро украдены из FPC (Form Page Constructor): datepicker.component.scss ^_^ */
+  /* Кастомные стили для праздничных и выходных дней (ng-template pTemplate="date") */
+  .holiday {
+    color: red;
+  }
+
+  .weekend {
+    //opacity: 0.7;
+    color: red;
+  }
+}
+
+/* p-multiSelect */
+
+.p-multiselect-item {
+  white-space: normal; // добавляем переносы слов для длинных названий пунктов выпадающего списка
+}
+
+.multiselect-compact {
+  .p-multiselect-item {
+    span {
+      display: inline-block;
+      max-width: 300px;
+      white-space: normal;
+    }
+  }
+}
+
+/* Новые стили (закомментил до тех пор, пока не добавим их в FPC-календарь [или не избавимся от него]) */
+
+//.day-of-month {
+//  min-width: 2rem;
+//  min-height: 2rem;
+//  justify-content: center;
+//  align-items: center;
+//  border-radius: 50%;
+//}
+//
+/* (!) skuzminov: стили хитро украдены из FPC (Form Page Constructor): datepicker.component.scss, но изменены ^_^ */
+/* Кастомные стили для праздничных и выходных дней (ng-template pTemplate="date") */
+//.holiday {
+//  &:not(:hover) {
+//    background-color: red;
+//    color: white;
+//  }
+//}
+//
+//.weekend {
+//  &:not(.holiday) {
+//    color: red;
+//  }
+//  opacity: 0.7;
+//}
+//
+//.p-datepicker:not(.p-datepicker-inline) td span:hover {
+//  .holiday {
+//    background-color: initial;
+//    color: initial;
+//    font-weight: bold;
+//  }
+//}
+
+/* p-splitButton */
+
+.p-splitbutton-defaultbutton {
+  flex: 1 1 auto;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-right: 0 none !important;
+}
+
+.p-splitbutton-menubutton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+
+/* p-tabView */
+
+.mobile-v {
+  .p-tabview-nav {
+    background-color: var(--background-color) !important;
+  }
+}
+
+/***********/
+/* Flexbox */
+/***********/
+
+.flex {
+  display: flex;
+}
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-1 {
+  flex: 1;
+}
+
+.flex-col,
+.flex-column {
+  flex-direction: column;
+}
+.flex-row {
+  flex-direction: row;
+}
+
+.ai-center {
+  align-items: center;
+}
+.ai-flex-start {
+  align-items: flex-start;
+}
+.ai-flex-end {
+  align-items: flex-end;
+}
+.ai-stretch {
+  align-items: stretch;
+}
+.ai-baseline {
+  align-items: baseline;
+}
+
+.jc-center {
+  justify-content: center;
+}
+.jc-flex-start {
+  justify-content: flex-start;
+}
+.jc-flex-end {
+  justify-content: flex-end;
+}
+.jc-space-between {
+  justify-content: space-between;
+}
+.jc-space-around {
+  justify-content: space-around;
+}
+.jc-space-evenly {
+  justify-content: space-evenly;
+}
+.jc-stretch {
+  justify-content: stretch;
+}
+
+// промежуточные отступы (промежутки между элементами)
+@for $i from 0 through 100 {
+  .gap-#{$i}px {
+    gap: #{$i}px !important;
+  }
+}
+
+/***********/
+/* Фильтры */
+/***********/
+
+/* (!) skuzminov: стили хитро украдены со страницы "Мои заявки" (issues-list-dashboard.component.scss) ^_^ */
+
+// Панель вкладок и элементов управления (например, поиск и кнопка показа фильтров)
+.tabs-controls-panel {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  align-items: flex-end;
+
+  // Вика (дизайнер): "Добавить цветовое разделение фона (более светлый тон) по линии таба/и поиска с фильтрами, это визуально разделяет экран на информационную часть (на скрине обозначила синим маркером) и элементы управления (красным).
+  // Так же это решает проблему визуальной загруженности страницы Командировки, визуально разделяя на 2 части (календарь и информационная часть, а так же 2 фильтра).
+  // Цветовое разделение будет на каждой страничке где есть фильтр." (см. комментарии к https://jr.9958258.ru/browse/HRM-39812)
+  body:not([data-theme='dark']) & {
+    &:not(.no-gradient-before)::before {
+      content: '';
+      position: absolute;
+      top: auto;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      background: linear-gradient(#e9f2ff, #f7fbff);
+      @media (max-width: $s-max-width) {
+        width: 0;
+        height: 0;
+      }
+    }
+  }
+
+  @media (max-width: $m-max-width) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end; // (!) желательно это правило не менять, иначе съедет фон с градиентом позади tabs-controls-panel в мобильной версии ^_^
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: row;
+
+    .tab,
+    .tab-item {
+      cursor: pointer;
+      padding: 15px 20px;
+      color: #989aa2;
+      border-style: solid;
+      border-color: rgba(37, 47, 63, 0.1);
+      border-width: 0 0 2px 0;
+      text-decoration: none;
+      @media (max-width: $m-max-width) {
+        padding: 20px 35px;
+      }
+      @media (max-width: $s-max-width) {
+        padding: 20px 8px;
+        font-size: 15px;
+      }
+
+      .counter {
+        padding: 6px 20px;
+        border-radius: 20px;
+        background-color: $link-color;
+        color: white;
+      }
+    }
+
+    .active {
+      color: var(--link-color);
+      border-color: var(--link-color);
+    }
+  }
+
+  .filters {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+
+    position: relative;
+
+    @include media-breakpoint-mobile-v {
+      width: 100%;
+    }
+
+    @media (max-width: $m-max-width) {
+      padding-top: 12px;
+      align-items: unset;
+      gap: 0;
+    }
+
+    .search {
+      @include media-breakpoint-mobile-v {
+        flex: 1;
+      }
+    }
+
+    .search-input {
+      background: none;
+      border-width: 0 0 2px 0;
+      border-radius: 0;
+      box-shadow: none;
+      width: 250px;
+      border-color: rgba(37, 47, 63, 0.1);
+
+      @include media-breakpoint-mobile-v {
+        width: 100%;
+      }
+
+      @media (max-width: $m-min-width) {
+        background: var(--card-background);
+        border: 1px solid #252f3f1a;
+        border-radius: 10px;
+        min-width: 100%;
+      }
+    }
+
+    // Иконка для кнопки вызова диалогового окна с фильтрами
+    .filter-icon {
+      font-size: 26px;
+      color: #989aa2;
+      cursor: pointer;
+    }
+
+    // Маска диалогового окна с фильтрами
+    .filters-dialog-mask {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: black;
+      z-index: 99; // как в классе .p-dialog-mask (см. выше)
+      pointer-events: auto;
+      background-color: rgba(0, 0, 0, 0.4);
+
+      //.filters-dialog {
+      //  position: static;
+      //  box-shadow: none;
+      //}
+    }
+
+    // Диалоговое окно с фильтрами
+    .filters-dialog {
+      position: absolute;
+      top: 100%;
+      padding: 24px;
+      background-color: var(--card-background);
+      right: 0;
+      z-index: 100; // на 1 выше, чем у маски диалога, чтобы она не перекрывала сам диалог
+      width: 370px;
+      box-shadow: -4px 6px 8px 0 var(--issue-icon-background);
+      border-radius: 5px;
+
+      //@media (max-width: $m-max-width) {
+      //  left: -40px;
+      //}
+
+      .filter-item {
+        margin-bottom: 20px;
+        .dropdown-input {
+          display: grid;
+        }
+      }
+
+      .filter-button-bar {
+        text-align: end;
+      }
+    }
+  }
+}
+
+.filter-item {
+  margin-bottom: 1rem;
+
+  .dropdown-input {
+    display: grid;
+  }
+}
+
+.filters-sidebar {
+  background: var(--card-background);
+
+  .sidebar-content {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    flex: 1 0 100%;
+
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-item {
+      margin-bottom: 20px;
+
+      .checkbox-filter {
+        margin-right: 10px;
+      }
+    }
+
+    .filter-button {
+      margin-top: 100px;
+      width: 100%;
+    }
+  }
+}
+
+.filter-chips {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  column-gap: 20px;
+  margin-bottom: 20px;
+
+  // Метка (chip — "чип") фильтра
+  .filter-chip {
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    background: var(--card-background);
+    border-radius: 30px;
+    width: fit-content;
+    color: var(--link-color);
+
+    // Иконка удаления метки ("чипа") фильтра
+    .times-icon {
+      padding-left: 8px;
+      font-size: 13px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+  }
+}
+
+/*************/
+/* Gridstack */
+/*************/
+
+.grid-stack {
+  background: transparent;
+}
+
+.grid-stack-item-content {
+  //border: 1px solid var(--surface-border);
+  border-radius: 10px;
+  background-color: transparent;
+
+  //background-color: rgba(0, 0, 0, 0.01);
+}
+
+.editable {
+  .grid-stack-item-content {
+    border: 1px dashed var(--grey);
+    cursor: move;
+    * {
+      pointer-events: none;
+    }
+  }
+}
+
+/************/
+/* Анимации */
+/************/
+
+@keyframes highlight {
+  from {
+    background-color: black;
+  }
+}
+
+.highlight-animation {
+  animation: highlight 3000ms ease-out;
+}
+
+.app-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}

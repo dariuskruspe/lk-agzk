@@ -1,0 +1,112 @@
+<div class="calendar-graph-month" #viewport>
+  @if (hasHiddenDays()) {
+    <button
+      class="calendar-graph-month__nav calendar-graph-month__nav--left"
+      type="button"
+      [disabled]="!canShowPreviousDays()"
+      aria-label="Show previous days"
+      (click)="showPreviousDays()"
+    >
+      <lucide-icon [name]="ChevronLeftIcon"></lucide-icon>
+    </button>
+  }
+
+  <app-grid [config]="gridConfig">
+    <div
+      class="calendar-graph-month__header"
+      [class.calendar-graph-month__header--sticky]="hasStickyHeader()"
+      appBindStickyClass
+      [style.top]="headerStickyTop()"
+      [style.bottom]="headerStickyBottom()"
+    >
+      <app-grid-header>
+        <app-grid-row>
+          @if (config().targetCell) {
+            <app-grid-col
+              [styleClass]="config().targetCell.cellRender.styleClass"
+              [size]="getColSize(config().targetCell.cellRender.sizePx)"
+            >
+              <div>
+                {{ config().targetCell.header }}
+              </div>
+            </app-grid-col>
+          }
+          @for (item of visibleDays(); track item.day) {
+            <app-grid-col
+              [styleClass]="`calendar-graph-month__day-header ${item.isWeekend ? 'calendar-graph-month__day-header--weekend' : ''}`"
+            >
+              <div class="calendar-graph-month__day-number">
+                {{ item.name }}
+              </div>
+              <div class="calendar-graph-month__day-weekday">
+                {{ item.weekDay }}
+              </div>
+            </app-grid-col>
+          }
+          @if (config().summaryCell) {
+            <app-grid-col
+              [styleClass]="config().summaryCell.cellRender.styleClass"
+              [size]="getColSize(config().summaryCell.cellRender.sizePx)"
+            >
+              <div>
+                {{ config().summaryCell.header }}
+              </div>
+            </app-grid-col>
+          }
+        </app-grid-row>
+      </app-grid-header>
+    </div>
+    <app-grid-body>
+      @for (item of rowsComputed(); track rowTrackBy(item.row)) {
+        <app-grid-row>
+          @if (config().targetCell) {
+            @let targetCellRender = config().targetCell.cellRender;
+            <app-grid-col
+              [styleClass]="targetCellRender.styleClass"
+              [size]="getColSize(targetCellRender.sizePx)"
+            >
+              <ng-container
+                [ngComponentOutlet]="targetCellRender.component"
+                [ngComponentOutletInputs]="{
+                  row: item.row,
+                }"
+              ></ng-container>
+            </app-grid-col>
+          }
+          @for (cell of item.cells; track cell.day.day) {
+            <app-grid-col [styleClass]="cell.render.styleClass">
+              <ng-container
+                [ngComponentOutlet]="cell.render.component"
+                [ngComponentOutletInputs]="{ row: item.row, day: cell.day }"
+              ></ng-container>
+            </app-grid-col>
+          }
+          @if (config().summaryCell) {
+            @let summaryCellRender = config().summaryCell.cellRender;
+            <app-grid-col
+              [styleClass]="summaryCellRender.styleClass"
+              [size]="getColSize(summaryCellRender.sizePx)"
+            >
+              <ng-container
+                [ngComponentOutlet]="summaryCellRender.component"
+                [ngComponentOutletInputs]="{ row: item.row }"
+              ></ng-container>
+            </app-grid-col>
+          }
+        </app-grid-row>
+      }
+    </app-grid-body>
+  </app-grid>
+
+  @if (hasHiddenDays()) {
+    <button
+      class="calendar-graph-month__nav calendar-graph-month__nav--right"
+      type="button"
+      [disabled]="!canShowNextDays()"
+      aria-label="Show next days"
+      (click)="showNextDays()"
+    >
+      <lucide-icon [name]="ChevronRightIcon"></lucide-icon>
+    </button>
+  }
+</div>

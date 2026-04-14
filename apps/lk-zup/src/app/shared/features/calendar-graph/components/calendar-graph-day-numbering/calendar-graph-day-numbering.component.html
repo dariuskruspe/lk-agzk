@@ -1,0 +1,31 @@
+<div class="days-row">
+  <div
+    *ngFor="
+      let day of date.daysInMonth(
+        date.getYear(startDate),
+        date.getMonth(startDate) + monthInd
+      );
+      index as i
+    "
+    class="cel"
+    [ngClass]="{
+      'day-off':
+        showDaysOff &&
+        dayOffList &&
+        dayOffList[date.getDateStr(startDate, monthInd, i + 1)]
+    }"
+  >
+    <div>{{ i + 1 }}</div>
+    <div>
+      {{
+        dayNumberList[
+          date.dayNumberDate(
+            date.getYear(startDate),
+            date.getMonth(startDate) + monthInd,
+            i + 1
+          )
+        ]
+      }}
+    </div>
+  </div>
+</div>

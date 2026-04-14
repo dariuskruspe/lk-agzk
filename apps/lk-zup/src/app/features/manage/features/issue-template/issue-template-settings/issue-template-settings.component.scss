@@ -1,0 +1,88 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.settings {
+  background: var(--bg-element);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+
+  &__title {
+    font-size: 18px;
+    margin-top: 0;
+    margin-bottom: 16px;
+    font-weight: 600;
+    color: var(--foreground-color);
+  }
+
+  &__description {
+    color: var(--foreground-color-secondary);
+    margin-bottom: 24px;
+  }
+
+  &__form {
+    &-section {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--sidebar-border);
+
+      &:first-child {
+        margin-top: 0;
+        padding-top: 0;
+        border-top: none;
+      }
+    }
+
+    &-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--foreground-color);
+      margin: 0 0 16px 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &-row {
+      margin-bottom: 12px;
+    }
+    &-row-content-item {
+      margin-top: 10px;
+    }
+    &-input {
+      width: 100%;
+    }
+    &-textarea {
+      width: 100%;
+      min-height: 80px;
+      resize: vertical;
+
+      &:disabled {
+        background-color: var(--bg-primary);
+        color: var(--foreground-color-secondary);
+        opacity: 0.7;
+      }
+    }
+    &-label {
+      display: block;
+      margin-bottom: 4px;
+
+      &-text {
+        font-weight: 500;
+        color: var(--foreground-color);
+        display: block;
+        margin-bottom: 4px;
+      }
+
+      &-hint {
+        font-size: 12px;
+        color: var(--foreground-color-secondary);
+        font-weight: 400;
+        line-height: 1.4;
+        display: block;
+      }
+    }
+  }
+}

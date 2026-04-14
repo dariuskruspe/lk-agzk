@@ -1,0 +1,285 @@
+<div class="newsletter-create-container">
+  <div class="newsletter-create-header">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-arrow-left"
+      class="p-button-text back-button"
+      (click)="onCancel()"
+    ></button>
+    <h1 class="page-title">{{ 'NEWSLETTER_CREATE_NEWSLETTER' | translate }}</h1>
+  </div>
+
+  <p-card>
+    <form [formGroup]="newsletterForm" class="newsletter-form">
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="newsletterName">{{
+              'NEWSLETTER_EMAIL_SUBJECT' | translate
+            }}</label>
+            <input
+              type="text"
+              id="newsletterName"
+              pInputText
+              formControlName="newsletterName"
+              [placeholder]="'NEWSLETTER_ENTER_PLACEHOLDER' | translate"
+              class="form-input"
+            />
+            <div
+              class="field-error"
+              *ngIf="
+                newsletterForm.get('newsletterName')?.invalid &&
+                newsletterForm.get('newsletterName')?.touched
+              "
+            >
+              {{ 'NEWSLETTER_FIELD_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field p-fluid">
+            <label for="startDate">{{
+              'NEWSLETTER_START_DATE_TIME' | translate
+            }}</label>
+            <p-calendar
+              id="startDate"
+              formControlName="startDate"
+              [showTime]="true"
+              [showIcon]="true"
+              [placeholder]="'NEWSLETTER_SELECT_PLACEHOLDER' | translate"
+              class="form-calendar"
+              [maxDate]="newsletterForm.get('endDate')?.value"
+              [minDate]="currentDate"
+            >
+            </p-calendar>
+            <div
+              class="field-error"
+              *ngIf="
+                newsletterForm.get('startDate')?.invalid &&
+                newsletterForm.get('startDate')?.touched
+              "
+            >
+              {{ 'NEWSLETTER_FIELD_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field p-fluid">
+            <label for="endDate">{{
+              'NEWSLETTER_END_DATE_TIME' | translate
+            }}</label>
+            <p-calendar
+              id="endDate"
+              formControlName="endDate"
+              [showTime]="true"
+              [showIcon]="true"
+              [placeholder]="'NEWSLETTER_SELECT_PLACEHOLDER' | translate"
+              class="form-calendar"
+              [minDate]="newsletterForm.get('startDate')?.value || currentDate"
+            >
+            </p-calendar>
+            <div
+              class="field-error"
+              *ngIf="
+                newsletterForm.get('endDate')?.invalid &&
+                newsletterForm.get('endDate')?.touched
+              "
+            >
+              {{ 'NEWSLETTER_FIELD_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="description">{{
+              'NEWSLETTER_DESCRIPTION' | translate
+            }}</label>
+            <textarea
+              id="description"
+              pInputTextarea
+              formControlName="description"
+              [placeholder]="'NEWSLETTER_ENTER_PLACEHOLDER' | translate"
+              rows="3"
+              class="form-textarea"
+            >
+            </textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-row p-fluid">
+          <div class="form-field">
+            <label for="recipients">{{
+              'NEWSLETTER_RECIPIENTS' | translate
+            }}</label>
+            <div class="recipients-row">
+              <div class="recipients-select">
+                <p-multiSelect
+                  id="recipients"
+                  formControlName="recipients"
+                  [options]="recipientsOptionList?.optionList || []"
+                  optionLabel="representation"
+                  optionValue="value"
+                  [placeholder]="'NEWSLETTER_SELECT_PLACEHOLDER' | translate"
+                  class="form-dropdown"
+                  [showClear]="true"
+                >
+                </p-multiSelect>
+              </div>
+              <div class="recipients-actions">
+                <div class="recipients-action-item">
+                  <button
+                  pButton
+                  type="button"
+                  label="Скачать шаблон"
+                  icon="pi pi-download"
+                  class="p-button-outlined create-template-button errors-button recipients-action-item"
+                  (click)="downloadXLSXTemplate()"
+                ></button>
+                </div>
+                
+                <button
+                  pButton
+                  type="button"
+                  [label]="'Загрузить получателей'"
+                  icon="pi pi-upload"
+                  class="p-button-outlined create-template-button recipients-action-item"
+                  (click)="recipientsFileInput.click()"
+                ></button>
+                <input
+                  #recipientsFileInput
+                  type="file"
+                  accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  (change)="onRecipientsFileSelected($event)"
+                  hidden
+                />
+                <button
+                  *ngIf="resipientsFile()?.notFound?.length > 0"
+                  pButton
+                  type="button"
+                  label="Ошибки сопоставления"
+                  icon="pi pi-download"
+                  class="p-button-outlined create-template-button errors-button recipients-action-item"
+                  (click)="downloadXLSXNotFound()"
+                ></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <div class="form-row">
+          <div class="form-field">
+            <label for="messageTemplateId">{{
+              'NEWSLETTER_MESSAGE_TEMPLATE' | translate
+            }}</label>
+            <div class="template-selection">
+              <p-dropdown
+                id="templateId"
+                formControlName="templateId"
+                [options]="templatesOptionList"
+                optionLabel="templateName"
+                optionValue="templateId"
+                [placeholder]="
+                  'NEWSLETTER_SELECT_TEMPLATE_PLACEHOLDER' | translate
+                "
+                class="form-dropdown"
+                filter="true"
+                (onChange)="onTemplateChange($event.value)"
+              >
+              </p-dropdown>
+              <button
+                pButton
+                type="button"
+                [label]="'NEWSLETTER_CREATE_TEMPLATE' | translate"
+                icon="pi pi-plus"
+                class="p-button-outlined create-template-button"
+                (click)="onCreateTemplate()"
+              ></button>
+            </div>
+            <div
+              class="field-error"
+              *ngIf="
+                newsletterForm.get('messageTemplateId')?.invalid &&
+                newsletterForm.get('messageTemplateId')?.touched
+              "
+            >
+              {{ 'NEWSLETTER_FIELD_REQUIRED' | translate }}
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row" *ngIf="selectedTemplate">
+          <div class="form-field">
+            <div class="template-preview">
+              <!-- <div class="preview-header">
+              <span class="preview-title">{{
+                selectedTemplate.templateName
+              }}</span>
+            </div> -->
+              <div
+                class="preview-content"
+                [innerHTML]="
+                  selectedTemplate.newsletterTemplate | trustedHtml: false
+                "
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label for="smsTemplate">{{
+              'NEWSLETTER_SMS_TEMPLATE' | translate
+            }}</label>
+            <textarea
+              id="smsTemplate"
+              pInputTextarea
+              formControlName="smsTemplate"
+              [placeholder]="'NEWSLETTER_ENTER_PLACEHOLDER' | translate"
+              rows="3"
+              class="form-textarea"
+            >
+            </textarea>
+          </div>
+        </div>
+
+        <!-- <div class="form-row">
+        <div class="form-field checkbox-field">
+          <p-checkbox
+            formControlName="collectConfirmations"
+            [binary]="true"
+            inputId="collectConfirmations"
+          >
+          </p-checkbox>
+          <label for="collectConfirmations">Сбор подтверждений</label>
+        </div>
+      </div> -->
+      </div>
+
+      <div class="form-actions">
+        <button
+          pButton
+          type="button"
+          [label]="'NEWSLETTER_SAVE_DRAFT' | translate"
+          class="p-button-outlined save-draft-button"
+          [disabled]="isSubmitting"
+          (click)="onSaveDraft()"
+        ></button>
+        <button
+          pButton
+          (click)="onSubmit()"
+          [label]="'NEWSLETTER_SEND' | translate"
+          class="p-button-primary launch-button"
+          [disabled]="isSubmitting || newsletterForm.invalid"
+        ></button>
+      </div>
+    </form>
+  </p-card>
+</div>

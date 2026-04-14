@@ -1,0 +1,36 @@
+<div>
+  <img id="image" [ngStyle]="{ height: height }" [src]="sanitizedUrl">
+  <p-toolbar class="flex mt-10" styleClass="mb-0">
+    <div class="flex flex-1 flex-wrap gap-10 jc-space-between">
+      <div class="p-toolbar-group-start">
+        <!-- Кнопка "^" (сдвиг картинки вверх) -->
+        <p-button class="mr-10" styleClass="p-button-outlined" icon="pi pi-arrow-circle-up" (onClick)="moveY(-offset)"></p-button>
+
+        <!-- Кнопка "v" (сдвиг картинки вниз) -->
+        <p-button class="mr-10" styleClass="p-button-outlined" icon="pi pi-arrow-circle-down" (onClick)="moveY(offset)"></p-button>
+
+        <!-- Кнопка "<-" (сдвиг картинки влево) -->
+        <p-button class="mr-10" styleClass="p-button-outlined" icon="pi pi-arrow-circle-left" (onClick)="moveX(-offset)"></p-button>
+
+        <!-- Кнопка "->" (сдвиг картинки вправо) -->
+        <p-button class="mr-10" styleClass="p-button-outlined" icon="pi pi-arrow-circle-right" (onClick)="moveX(offset)"></p-button>
+      </div>
+
+      <div class="p-toolbar-group-center">
+        <!-- Кнопка "+" (приближение картинки, zoom+) -->
+        <p-button class="mr-10" styleClass="p-button-outlined" icon="pi pi-plus-circle" (onClick)="zoom(zoomRatio)"></p-button>
+
+        <!-- Кнопка "-" (отдаление картинки, zoom-) -->
+        <p-button class="mr-10" styleClass="p-button-outlined" icon="pi pi-minus-circle" (onClick)="zoom(-zoomRatio)"></p-button>
+      </div>
+
+      <div class="p-toolbar-group-end">
+        <!-- Кнопка "Сброс" -->
+        <p-button class="mr-10" styleClass="p-button-outlined" (onClick)="reset()">{{ 'BUTTON_RESET' | translate }}</p-button>
+
+        <!-- Кнопка "OK" -->
+        <p-button (onClick)="crop()">OK</p-button>
+      </div>
+    </div>
+  </p-toolbar>
+</div>

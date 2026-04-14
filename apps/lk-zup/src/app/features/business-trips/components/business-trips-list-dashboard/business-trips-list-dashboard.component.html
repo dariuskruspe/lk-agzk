@@ -1,0 +1,310 @@
+<!-- Страница "Командировки" -->
+
+<!-- Тулбар с заголовком и кнопками -->
+<p-toolbar class="title">
+  <!-- Заголовок "Командировки" -->
+  <h1 class="title-business-trips">{{ 'TITLE_BUSINESS_TRIPS' | translate }}</h1>
+
+  <span class="spacer"></span>
+
+  <!-- Кнопка "Скачать отчёт" -->
+  <p-splitButton
+    (onClick)="downloadReport()"
+    [label]="'DOWNLOAD_REPORT' | translate"
+    [disabled]="isReportLoadingSignal()"
+    [model]="saveReportButtonItems"
+    [outlined]="true"
+  />
+
+  <!-- Кнопка "Создать заявку" -->
+  <button
+    pButton
+    iconPos="left"
+    icon="pi pi-plus-circle"
+    class="button-full-xs ml-10"
+    label="{{ 'BUTTON_ISSUE_CREATE' | translate }}"
+    [disabled]="disableCreate"
+    (click)="goToCustomIssueAlias()"
+  ></button>
+</p-toolbar>
+
+<!-- График командировок -->
+<div
+  class="business-trip-schedule"
+  [ngClass]="{
+    'mobile-v': isMobileV(),
+  }"
+>
+  <div class="w-full">
+    <!-- Фильтры и легенда графика командировок -->
+    <app-calendar-graph-fullscreen-filters
+      [isBusinessTrips]="true"
+      [filterValues]="filterValues"
+      [employeeList]="employeeList"
+      [months]="months | translateObj"
+      [showFullscreenIcon]="false"
+      [types]="types"
+      [showEditButton]="false"
+      [trips]="sectionId"
+      [subtitleText]="'TRIPS_GRAPH_SUBTITLE'"
+      [ngClass]="{
+        'block sticky-top bg-color py-10': isMobileV(),
+      }"
+      (clearEmployee)="clearEmployeeFilter($event)"
+      (clearAllEmployee)="clearAllEmployeeFilter()"
+      (monthApply)="onFilterMonthApply()"
+      (yearChanged)="changeYear($event)"
+      (filterSubmit)="onFilterSubmit($event)"
+      (onlyMyTripsFilter)="onlyMyTrips($event)"
+    ></app-calendar-graph-fullscreen-filters>
+
+    <!-- <только для мобильной версии приложения> -->
+    <!-- График командировок в виде списка -->
+    <app-calendar-graph-mobile
+      *ngIf="isMobileV(); else desktopBusinessTrips"
+      class="graph-mobile"
+      [isBusinessTrips]="true"
+      [months]="months | translateObj"
+      [year]="year"
+      [monthIndex]="getMonthIndex()"
+      [view]="filterValues.showType"
+      [loading]="loading"
+      [vacations]="chosenBusinessTrips"
+      [types]="types"
+      [employees]="employeeList"
+      [filter]="filterConfig"
+      [states]="states"
+      (openEdit)="showInfo($event)"
+      [dialogComponent]="infoDialogComponent"
+    ></app-calendar-graph-mobile>
+
+    <!-- <только для обычной (desktop'ной) версии приложения> -->
+    <!-- График командировок в виде горизонтально прокручиваемого виджета -->
+    <ng-template #desktopBusinessTrips>
+      <div class="graph-table">
+        <!-- Стрелочки выбора года -->
+        <!--        <div class="years">-->
+        <!--          <i class="pi pi-angle-left arrow" (click)="changeYear(year - 1)"></i>-->
+        <!--          <span>{{ year }}</span>-->
+        <!--          <i class="pi pi-angle-right arrow" (click)="changeYear(year + 1)"></i>-->
+        <!--        </div>-->
+
+        <!-- Элементы управления: стрелочки переключения года и месяца -->
+        <div
+          class="years"
+          [ngClass]="{
+            'mobile-v': isMobileV(),
+            'static mb-10': !displayedVacationsSignal()?.length || this.loading,
+          }"
+        >
+          <i
+            class="pi pi-angle-left arrow"
+            (click)="
+              filterValues.showType === 'month' ? prevMonth() : prevYear()
+            "
+          ></i>
+          <span
+            class="month-year flex jc-center"
+            [ngStyle]="{
+              width: filterValues.showType === 'month' ? '120px' : 'auto',
+            }"
+            >{{
+              filterValues.showType === 'month'
+                ? (selectedDateSignal() | date: 'LLLL YYYY')
+                : selectedDateSignal()?.getFullYear()
+            }}</span
+          >
+          <i
+            class="pi pi-angle-right arrow"
+            (click)="
+              filterValues.showType === 'month' ? nextMonth() : nextYear()
+            "
+          ></i>
+        </div>
+
+        @if (!this.loading) {
+          <!-- <если имеются данные по командировкам сотрудников> -->
+          @if (businessTripsPeriod?.length) {
+            <!-- Горизонтально прокручиваемая временная шкала (timeline) графика командировок -->
+            <calendar-graph-time-line
+              [ngClass]="{
+                member: true,
+                work: false,
+              }"
+              [trips]="true"
+              [states]="states"
+              [types]="types"
+              [calendarConfig]="calendarConfig"
+              [vacations]="chosenBusinessTrips"
+              [daysOfWeek]="daysOfWeek | translateObj"
+              [months]="months | translateObj"
+              [dayOffList]="
+                vacationsGraphDayOffListFacade.getData() ||
+                (vacationsGraphDayOffListFacade.getData$() | async)
+              "
+              (showInfo)="showInfo($event)"
+              [currentUser]="currentUser"
+            ></calendar-graph-time-line>
+          } @else {
+            <app-info>{{ 'LIST_EMPTY' | translate }}</app-info>
+          }
+        } @else {
+          <!-- Чтобы не исчезало переключение года (стрелочками) во время загрузки -->
+          <app-info>{{ 'DATA_LOADING' | translate }}...</app-info>
+        }
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Заявки на командировку -->
+<div *ngIf="showIssuesList">
+  <!-- Панель поиска и фильтрации -->
+  <div class="tabs-controls-panel no-gradient-before">
+    <h2 class="mt-50">{{ 'BUSINESS_TRIP_ISSUES' | translate }}</h2>
+    <!--    <div class="tabs"></div>-->
+
+    <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+    <div class="filters">
+      <!-- Поиск -->
+      <div class="search p-input-icon-left mobile-search-input">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          class="search-input"
+          [(ngModel)]="filterValue.search"
+          (ngModelChange)="applySearchFilter()"
+          placeholder="{{ 'ISSUE_SEARCH_FIELD' | translate }}"
+          type="text"
+        />
+      </div>
+
+      <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+      <div class="filter-icon-button">
+        <i
+          class="pi pi-sliders-h filter-icon"
+          (click)="showFilters = !showFilters; $event.stopPropagation()"
+        ></i>
+      </div>
+
+      <!-- <только для мобильной версии приложения> -->
+      <!-- Нижняя выпадающая панель (sidebar) с фильтрами -->
+      <ng-container *ngIf="isMobileV(); else filtersDialog">
+        <p-sidebar
+          #filterSidebar
+          [(visible)]="showFilters"
+          appendTo="body"
+          position="bottom"
+          [showCloseIcon]="false"
+          styleClass="filters-sidebar"
+        >
+          <!-- Тулбар с заголовком и кнопкой закрытия сайдбара в виде обычного "крестика" -->
+          <p-toolbar class="space-between">
+            <div class="sidebar-header font-size-26px">
+              {{ 'FILTER' | translate }}
+            </div>
+            <button
+              pButton
+              pRipple
+              type="button"
+              icon="pi pi-times"
+              class="p-button-rounded p-button-secondary p-button-text"
+              (click)="filterSidebar.close($event)"
+            ></button>
+          </p-toolbar>
+
+          <div class="sidebar-content">
+            <!-- Фильтры -->
+            <div class="sidebar-filters">
+              <ng-container *ngTemplateOutlet="filters"></ng-container>
+            </div>
+
+            <!-- Тулбар с кнопкой -->
+            <p-toolbar class="margin-top">
+              <!-- Кнопка "Применить" (ничего не делает по назначению, просто закрывает сайдбар) -->
+              <button
+                pButton
+                type="button"
+                label="{{ 'APPLY' | translate }}"
+                class="button-full-xs filter-button"
+                (click)="filterSidebar.close($event)"
+              ></button>
+            </p-toolbar>
+          </div>
+        </p-sidebar>
+      </ng-container>
+
+      <!-- <только для обычной (desktop'ной) версии приложения> -->
+      <!-- Диалоговое окно с фильтрами -->
+      <ng-template #filtersDialog>
+        <div *ngIf="showFilters" id="filters-dialog" class="filters-dialog">
+          <ng-container *ngTemplateOutlet="filters"></ng-container>
+
+          <!-- Панель с кнопками -->
+          <div class="filter-button-bar">
+            <!-- Кнопка "Закрыть" (закрывает диалоговое окно с фильтрами) -->
+            <button
+              pButton
+              label="{{ 'BUTTON_CLOSE' | translate }}"
+              class="p-button-outlined"
+              (click)="showFilters = false"
+            ></button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #filters>
+        <!-- Фильтр "Период" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label grey">
+            {{ 'PERIOD' | translate }}
+          </label>
+          <p-dropdown
+            [options]="daysValueList"
+            [(ngModel)]="filterValue['days']"
+            [filter]="true"
+            [showClear]="true"
+            optionLabel="title"
+            optionValue="value"
+            (ngModelChange)="applyFilters()"
+            class="dropdown-input"
+            placeholder="{{ 'PERIOD' | translate }}"
+            styleClass="w-full"
+          ></p-dropdown>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <!-- Метки (chips) фильтров -->
+  <div class="filter-chips">
+    <div class="filter-chip" *ngIf="filterValue.search">
+      {{ filterValue.search }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('search')"
+      ></i>
+    </div>
+
+    <div class="filter-chip" *ngIf="filterValue.days">
+      {{ getPeriodTitleByValue(filterValue.days) }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('days')"
+      ></i>
+    </div>
+  </div>
+
+  <!-- [filter]="filterConfig" -->
+  <loadable-list-container
+    [template]="dataLayout"
+    [dataConfig]="dataConfig"
+    [dataList]="businessTripsList"
+    [scrollContainerClassCss]="scrollContainerClassCss"
+    [otherData]="{ businessTripsStatusList: businessTripsStatusList }"
+    [loading]="loading"
+    [appendFilterToQuery]="true"
+    (loadList)="onLoadList($event)"
+    (clickItem)="onGoDetails($event)"
+  ></loadable-list-container>
+</div>

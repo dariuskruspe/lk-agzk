@@ -1,0 +1,93 @@
+<p-card>
+  <h1 class="reference-information__title">
+    {{ blocks?.title }}
+  </h1>
+  <!-- конструктор -->
+  <div *ngFor="let block of blocks?.markup; let i = index">
+    <!-- collapse блок -->
+    <div *ngIf="block.type === 'collapse'">
+      <mat-expansion-panel
+        class="reference-information__panel"
+        hideToggle="true"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title class="reference-information__panel--title">
+            {{ block.content.introText }}
+          </mat-panel-title>
+          <mat-panel-description>
+            <mat-icon
+              class="blue-icon"
+              *ngIf="!panelInformationOpenState[block.id]"
+              >
+            </mat-icon>
+            <mat-icon *ngIf="panelInformationOpenState[block.id]"
+              >remove</mat-icon
+            >
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <p
+          [innerHTML]="block.content.body | trustedHtml"
+          class="reference-information__panel--text"
+        ></p>
+      </mat-expansion-panel>
+    </div>
+    <!-- Вставка -->
+    <div *ngIf="block.type === 'quote'">
+      <div class="reference-information__constructor shadow">
+        <div>
+          <div
+            class="reference-information__constructor--reference"
+            [innerHTML]="block.content.body | trustedHtml"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <!-- Заголовок -->
+    <div *ngIf="block.type === 'heading'">
+      <div class="reference-information__constructor">
+        <p
+          class="reference-information__constructor--title"
+          [innerHTML]="block.content.body | trustedHtml"
+        ></p>
+      </div>
+    </div>
+    <!--Основной контент-->
+    <div *ngIf="block.type === 'paragraph'">
+      <div
+        [innerHTML]="block.content.body | trustedHtml"
+        class="reference-information__constructor"
+      ></div>
+    </div>
+    <!-- Видео -->
+    <div *ngIf="block.type === 'video'">
+      <div class="reference-information__constructor">
+        <iframe
+          class="reference-information__constructor--video"
+          [src]="block.content.link | trustedUrl"
+          title="YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+        >
+        </iframe>
+      </div>
+    </div>
+    <!-- Картинка -->
+    <div *ngIf="block.type === 'image'">
+      <div class="reference-information__constructor">
+        <img
+          [src]="block.content.link | trustedUrl"
+          alt="{{ block.content.introText || 'Изображение' }}"
+        />
+      </div>
+    </div>
+    <!-- Файл -->
+    <div *ngIf="!block.type || block.type === 'file'">
+      <div
+        class="reference-information__constructor download-link"
+        (click)="downloadURI(i)"
+      >
+        {{ block.content.introText }}
+      </div>
+    </div>
+  </div>
+</p-card>

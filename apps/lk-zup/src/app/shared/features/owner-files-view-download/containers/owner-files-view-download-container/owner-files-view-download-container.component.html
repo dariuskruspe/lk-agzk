@@ -1,0 +1,6 @@
+<app-owner-files-view-download
+  [class.dashboard]="dashboard"
+  [ownerFilesList]="ownerFilesViewDownloadFacade.getData$() | async"
+  [fileItem]="ownerFilesViewDownloadItemFacade.getData$() | async"
+  (getFile)="onGetFile($event)"
+></app-owner-files-view-download>

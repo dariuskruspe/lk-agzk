@@ -1,0 +1,96 @@
+<p-toolbar class="margin-top-bottom p-toolbar-single-row">
+  <p-toolbar class="nowrap">
+    <p-button
+      icon="pi pi-arrow-left"
+      [link]="true"
+      (click)="onBackPage()"
+    ></p-button>
+    <h1>
+      {{feedback?.type}}
+    </h1>
+  </p-toolbar>
+  <span class="spacer"></span>
+</p-toolbar>
+<p-card *ngIf="feedback">
+  <div class="column">
+    <div class="header-row issue-title">
+      {{feedback.type}}
+    </div>
+
+    <div class="column grid-row">
+      <div
+        class="column"
+        [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+        <span
+          class="status"
+          [pTooltip]="getState().name"
+          [ngStyle]="{
+          backgroundColor: getColor(getState().color),
+          color: 'inherit',
+          textTransform: 'uppercase'
+        }">
+        {{ feedback.stateName || getState().name }}
+      </span>
+      </div>
+    </div>
+
+    <div class="column grid-row mb-0">
+      <div
+        class="column"
+        [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+        <span class="header-row">{{feedback.date | date: 'dd.MM.yyyy'}}</span>
+      </div>
+    </div>
+
+    <div class="column grid-row mb-0">
+      <div
+        class="column"
+        [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+        <span class="header-title">{{ 'RECIPIENT' | translate }}</span>
+        <span class="header-row">{{feedback.recipientName}}</span>
+      </div>
+    </div>
+
+    <div class="column grid-row mb-0">
+      <div
+        class="column"
+        [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+        <span class="header-title">{{ 'SENDER' | translate }}</span>
+        <span class="header-row">{{feedback.senderName}}</span>
+      </div>
+    </div>
+
+    <div class="column grid-row mb-0">
+      <div
+        class="column"
+        [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+        <span class="header-title">{{ 'TYPE' | translate }}</span>
+        <span class="header-row">{{feedback.isAnonymous ? 'Анонимный' : 'Не анонимный'}}</span>
+      </div>
+    </div>
+
+  </div>
+  <app-surveys-management-preview
+    [hideButtons]="!feedback.sendingAvailable"
+    [disableForm]="!feedback.sendingAvailable"
+    [questions]="questions"
+    (submitSurvey)="submit($event)"
+    (cancelSurvey)="onBackPage()"
+  ></app-surveys-management-preview>
+</p-card>
+

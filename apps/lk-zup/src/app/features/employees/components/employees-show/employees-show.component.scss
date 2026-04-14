@@ -1,0 +1,77 @@
+h2 {
+  text-transform: capitalize;
+}
+
+.profile-info {
+  display: flex;
+  margin-bottom: 40px;
+  color: var(--basic-color);
+  & > .photo {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    align-self: flex-start;
+    flex-shrink: 0;
+  }
+  & > .info {
+    padding-left: 20px;
+    align-self: center;
+
+    & > * {
+      line-height: 20px;
+      &:not(:last-child) {
+        margin-bottom: 5px;
+      }
+    }
+  }
+}
+
+mat-list {
+  padding: 0;
+
+  & div.infoValue {
+    color: var(--basic-color);
+    text-align: start;
+    width: 75%;
+    min-width: 200px;
+  }
+  & div.infoType {
+    color: var(--gray);
+    width: 21%;
+    min-width: 150px;
+    margin-right: 10px;
+    word-break: break-word;
+  }
+  & > mat-list-item {
+    min-height: 50px;
+    height: auto;
+    padding: 12px 0;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--border-color);
+    }
+  }
+
+  ::ng-deep .mat-list-item-content {
+    flex-wrap: wrap;
+  }
+}
+
+mat-toolbar.title {
+  justify-content: flex-start;
+
+  @media (max-width: 767px) {
+    flex-direction: row;
+    justify-content: initial;
+  }
+}
+
+a {
+  text-decoration: underline;
+  cursor: pointer;
+  color: var(--primary);
+}

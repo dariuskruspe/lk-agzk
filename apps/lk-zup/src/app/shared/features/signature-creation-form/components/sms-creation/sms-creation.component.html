@@ -1,0 +1,55 @@
+<div class="validation-container">
+  <div *ngIf="provider.metadata.confirmMethod === ProvidersAlias.emailSigningIssueRelease"
+    class="validation-container__description">
+    {{ 'PROFILE_INPUT_EMAIL_CODE_SIGNATURE' | translate }}
+  </div>
+  <div *ngIf="provider.metadata.confirmMethod !== ProvidersAlias.emailSigningIssueRelease"
+    class="validation-container__description">
+    {{ 'PROFILE_INPUT_SMS_CODE_SIGNATURE' | translate }}
+  </div>
+  <div class="validation-container__form">
+    <!-- Поле ввода SMS-кода (старое, FPC) -->
+<!--    <fpc-->
+<!--      [formData]="fpcConfig"-->
+<!--      (formSubmit)="validate($event)"-->
+<!--      [submit$]="submitForm$"-->
+<!--    ></fpc>-->
+
+    <!-- Поле ввода SMS-кода -->
+    <div class="form-control">
+      <p-inputMask [(ngModel)]="smsCode" (ngModelChange)="validateSMSCode($event)"
+                   [autoClear]="false"
+                   autoFocus="true"
+                   class="flex flex-1"
+                   [mask]="mask"
+                   [maxlength]="maxLength"
+                   [placeholder]="smsCodePlaceholder"
+                   required
+                   showClear="true"
+                   styleClass="flex flex-1"
+                   unmask="true"
+      ></p-inputMask>
+
+      <!-- Сообщения валидации -->
+      <div *ngIf="smsCodeValidation.errors.length" class="validation-messages">
+        <ng-container *ngFor="let error of smsCodeValidation.errors">
+          <div class="validation-message" [ngSwitch]="error.name">
+            <small *ngSwitchCase="'minLength'" class="red">{{ 'VALIDATOR_MIN_LENGTH' | translate }} {{ minLength }} {{ 'CHARACTER_MANY' | translate }}</small>
+            <small *ngSwitchCase="'maxLength'" class="red">{{ 'VALIDATOR_MAX_LENGTH' | translate }} {{ maxLength }} {{ 'CHARACTER_MANY' | translate }}</small>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+
+  <p-toolbar class="margin-top">
+    <!-- Кнопка "Подтвердить" -->
+    <!-- !!! для старого поля ввода с FPC: (onClick)="submitForm$.next()" -->
+    <p-button
+      [disabled]="!!smsCodeValidation.errors.length"
+      label="{{ 'SIGNATURE_SUBMIT_BUTTON' | translate }}"
+      [loading]="loading"
+      (onClick)="submitSMSCode()"
+    ></p-button>
+  </p-toolbar>
+</div>

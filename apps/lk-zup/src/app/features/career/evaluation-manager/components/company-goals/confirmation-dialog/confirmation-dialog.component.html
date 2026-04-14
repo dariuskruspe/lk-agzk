@@ -1,0 +1,20 @@
+<div class="confirmation-dialog">
+  <div class="dialog-content">
+    <div class="dialog-message">
+      {{ message }}
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <p-button
+      [label]="confirmButtonText"
+      class="p-button-primary"
+      (click)="onConfirm()"
+    ></p-button>
+    <p-button
+      [label]="cancelButtonText"
+      class="p-button-outlined"
+      (click)="onCancel()"
+    ></p-button>
+  </div>
+</div>

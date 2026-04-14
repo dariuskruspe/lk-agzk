@@ -1,0 +1,58 @@
+.validation-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__description {
+    margin-bottom: 10px;
+    color: var(--gray);
+
+    ::ng-deep &_full-width {
+      width: 100%;
+    }
+  }
+}
+
+
+.provider {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  padding: 16px;
+  background-color: var(--list-item-bg, transparent);
+  border: 1px solid var(--list-item-border, #D8DFE7);
+  border-radius: 5px;
+  margin-bottom: 6px;
+  cursor: pointer;
+
+  &:hover:not(.provider--active) {
+    background-color: var(--list-item-active-bg, #eee);
+    transition: background-color ease 0.3s;
+  }
+
+  &--active {
+    background-color: var(--list-item-active-bg, #F6FBFF);
+    border-color: var(--list-item-active-border, #3880FF);
+  }
+
+
+  &_logo {
+    width: 40px;
+    height: 40px;
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+  &_title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--title-color);
+    flex: 1;
+  }
+}

@@ -1,0 +1,79 @@
+.p-button {
+  font-family: $primary-font-family;
+  font-size: 14px !important;
+  line-height: 18px !important;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.p-button.p-button-lg {
+  font-size: 1.15rem!important;
+}
+
+.p-button .p-button-label {
+  font-weight: normal !important;
+}
+
+.p-button-link {
+  padding: 0 !important;
+  text-decoration: none !important;
+  line-height: 18px !important;
+  font-size: 14px !important;
+}
+
+button.mat-calendar-previous-button,
+button.mat-calendar-next-button {
+  height: 40px;
+}
+
+// Для ширины в 100%
+button.full {
+  width: 100% !important;
+
+  @media (max-width: 375px) {
+    display: block;
+    max-width: 345px;
+    margin: 0 auto;
+  }
+}
+
+// Кнопка размера S
+button.s {
+  height: 32px !important;
+}
+
+// 100% в мобильной версии
+.button-full-xs {
+  @media (max-width: 767px) {
+    width: 100%;
+    max-width: none;
+    flex: 1 1 auto;
+  }
+}
+
+.p-button.sm-light {
+  padding: 0.75rem 0.25rem;
+  font-size: 16px;
+
+  .p-button-label {
+    font-weight: 300!important;
+    font-size: 16px!important;
+  }
+}
+.p-button.sm {
+  padding: 11px 30px;
+  font-size: 16px;
+  font-weight: 400;
+
+  .p-button-label {
+    font-weight: 300!important;
+    font-size: 16px!important;
+  }
+}
+
+.p-button.p-button-action {
+  font-size: 1.1rem!important;
+  padding: 0.8rem 2rem!important;
+}

@@ -1,0 +1,16 @@
+.multi-select-group-head {
+  font-weight: bold;
+}
+
+:host ::ng-deep .p-overlay {
+  width: calc(100% - var(--bs-gutter-x)) !important;
+  top: 100% !important;
+  left: calc(var(--bs-gutter-x) * 0.5) !important;
+
+  .p-multiselect-items {
+    .p-multiselect-item {
+      width: 100% !important;
+      white-space: break-spaces !important;
+    }
+  }
+}

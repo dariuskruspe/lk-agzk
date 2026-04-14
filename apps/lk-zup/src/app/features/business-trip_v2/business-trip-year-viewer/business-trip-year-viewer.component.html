@@ -1,0 +1,46 @@
+<app-calendar-graph>
+  <app-grid class="app-calendar-graph-grid">
+    <app-grid-header>
+      <app-grid-row>
+        <app-grid-col size="150px"></app-grid-col>
+        @for (item of header(); track item.name) {
+          <app-grid-col>
+            {{ item.name }}
+          </app-grid-col>
+        }
+      </app-grid-row>
+    </app-grid-header>
+    <app-grid-body>
+      @for (item of value(); track item.employeeId) {
+        <app-grid-row>
+          <app-grid-col size="150px">
+            <app-calendar-graph-employee-name-cell
+              [data]="item.employee"
+            ></app-calendar-graph-employee-name-cell>
+          </app-grid-col>
+
+          @for (row of item.rows; track row) {
+            @for (cell of row.cells; track cell) {
+              <app-grid-col>
+                <app-calendar-graph-cell
+                  [parts]="cell.parts"
+                ></app-calendar-graph-cell>
+              </app-grid-col>
+            }
+          }
+        </app-grid-row>
+      }
+    </app-grid-body>
+  </app-grid>
+
+  <div class="app-calendar-graph-legend-container">
+    @for (item of legendItems(); track item.name) {
+      <app-calendar-graph-legend
+        [name]="item.name"
+        [color]="item.color"
+        [variant]="item.variant"
+        icon="plane"
+      ></app-calendar-graph-legend>
+    }
+  </div>
+</app-calendar-graph>

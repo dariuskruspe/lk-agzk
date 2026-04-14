@@ -1,0 +1,53 @@
+<div [formGroup]="form" class="p-2">
+  <app-form-field class="field mb-24">
+    <label>Подкатегория <span class="p-text-secondary">*</span></label>
+    <p-dropdown
+      [options]="categories()"
+      styleClass="w-full"
+      appendTo="body"
+      optionLabel="category"
+      optionValue="categoryID"
+      formControlName="category"
+    ></p-dropdown>
+    <app-form-error>Обязательное поле</app-form-error>
+  </app-form-field>
+
+  <app-form-field class="field mb-24">
+    <label>Цель <span class="p-text-secondary">*</span></label>
+    <input
+      pInputText
+      class="w-full"
+      formControlName="title"
+      placeholder="Введите короткое название цели"
+    />
+    <app-form-error>Обязательное поле</app-form-error>
+  </app-form-field>
+
+  <app-form-field class="field mb-24">
+    <label>Описание <span class="p-text-secondary">*</span></label>
+    <textarea
+      pInputTextarea
+      formControlName="description"
+      class="w-full"
+      [autoResize]="true"
+      rows="10"
+      placeholder="Введите подробное описание цели"
+    ></textarea>
+    <app-form-error>Обязательное поле</app-form-error>
+  </app-form-field>
+
+  <div class="flex">
+    <p-button
+      label="Сохранить"
+      styleClass="sm"
+      [loading]="loading()"
+      (click)="onSave()"
+    ></p-button>
+    <p-button
+      label="Отменить"
+      [text]="true"
+      styleClass="sm ml-15"
+      (click)="onCancel()"
+    ></p-button>
+  </div>
+</div>

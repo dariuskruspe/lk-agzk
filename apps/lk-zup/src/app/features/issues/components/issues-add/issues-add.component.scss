@@ -1,0 +1,68 @@
+h2 {
+  max-width: 60%;
+  white-space: normal;
+
+  @media (max-width: 767px) {
+    max-width: none;
+  }
+}
+
+.additional-info {
+  padding: 0 20px !important;
+
+  @media (max-width: 767px) {
+    padding: 0;
+  }
+}
+
+.button-full-xs {
+  margin-top: 0 !important;
+
+  @media (max-width: 767px) {
+    margin-left: 0;
+  }
+}
+
+.static-data__item {
+  font-size: 14px;
+}
+
+.issue-dynamic-form {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+:host {
+  p-card {
+    margin-bottom: 20px;
+  }
+}
+
+.issue-content {
+  padding: 24px;
+}
+
+.width-50 {
+  width: 50%;
+}
+.approver-title {
+  font-size: 13px;
+  color: var(--gray);
+  .value {
+    color: var(--basic-color);
+  }
+}
+.balance {
+  @media (max-width: 767px) {
+    display: none;
+  }
+  color: #989aa2;
+
+  .list {
+    margin-left: 20px;
+
+    li {
+      margin-top: 10px;
+    }
+  }
+}

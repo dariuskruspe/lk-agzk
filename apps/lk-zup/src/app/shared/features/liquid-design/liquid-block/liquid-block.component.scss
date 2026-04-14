@@ -1,0 +1,16 @@
+:host {
+  display: block;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    border-radius: var(--liquid-block-radius, var(--radius-lg));
+    backdrop-filter: var(--liquid-filter, blur(10px));
+    box-shadow: var(--liquid-shadow, none);
+    overflow: hidden;
+    isolation: isolate;
+  }
+}

@@ -1,0 +1,161 @@
+<!-- Страница "Таланты" -->
+<div class="employee-vacations-body">
+  <p-toolbar class="title">
+    <h1>{{ 'TALENTS' | translate }}</h1>
+    <span class="spacer"></span>
+
+    <button
+      pButton
+      icon="pi pi-plus-circle"
+      iconPos="left"
+      [label]="'DOWNLOAD_REPORT' | translate"
+      (click)="downloadReport('pdf')"
+      [loading]="isDownloadLoadingSignal()"
+    ></button>
+  </p-toolbar>
+
+  <!-- Панель вкладок, поиска и фильтрации -->
+  <div class="tabs-controls-panel">
+    <!-- Вкладки -->
+    <div class="tabs" *ngIf="this.settingsFacade.getData().talents.enable9boxGrid">
+      <!-- Вкладка "Таланты" -->
+      <div
+        class="tab-item"
+        (click)="changeTab('TALENTS')"
+        [class.active]="activeTab === 'TALENTS'"
+      >
+        <span class="tab-title">{{ 'TALENTS' | translate }}</span>
+      </div>
+
+      <!-- Вкладка "9-grid" -->
+      <div
+        class="tab-item active"
+        (click)="changeTab('9-GRID')"
+        [class.active]="activeTab === '9-GRID'"
+      >
+      <span class="tab-title">{{ '9-grid' | translate }}</span>
+      </div>
+    </div>
+    
+    <div class="tabs" *ngIf="!this.settingsFacade.getData().talents.enable9boxGrid"></div>
+
+    <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+    <div class="filters">
+      <!-- Поиск -->
+      <div class="p-input-icon-left mobile-search-input">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          [(ngModel)]="filterValue.fullName"
+          (ngModelChange)="applySearchFilter()"
+          class="search-input"
+          [placeholder]="'ISSUE_SEARCH_FIELD' | translate"
+          type="text"
+        />
+      </div>
+
+      <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+      <div class="filter-icon-button">
+        <i
+          class="pi pi-sliders-h filter-icon"
+          (click)="toggleFilters($event)"
+        ></i>
+      </div>
+
+      @if (isMobileV()) {
+      <!-- Нижняя выпадающая панель (сайдбар) с фильтрами -->
+      <app-filters-sidebar [visible]="showFilters">
+      <ng-container *ngTemplateOutlet="filters"></ng-container>
+      </app-filters-sidebar>
+      } @else {
+      <!-- Диалоговое окно с фильтрами -->
+      @if (showFilters) {
+      <app-filters-dialog (closeButtonClicked)="showFilters = false">
+        <ng-container *ngTemplateOutlet="filters"></ng-container>
+      </app-filters-dialog>
+      }
+      }
+
+      <ng-template #filters>
+
+        <!-- Фильтр "Подразделение" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label">{{
+            'COMPANY_SUBDIVISION' | translate
+            }}</label>
+          <p-dropdown
+            [(ngModel)]="filterValue.division"
+            (ngModelChange)="applyDivision()"
+            [appendTo]="isMobileV() ? 'body' : null"
+            class="dropdown-input"
+            [filter]="true"
+            optionLabel="representation"
+            optionValue="value"
+            [options]="divisionOptionList?.optionList || []"
+            placeholder="{{ 'COMPANY_SUBDIVISION' | translate }}"
+            [showClear]="true"
+          ></p-dropdown>
+        </div>
+
+        <!-- Фильтр "Должность" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label">
+            {{ 'COMPANY_JOB_POSITION' | translate }}
+          </label>
+          <p-dropdown
+            [options]="positionOptionList?.optionList || []"
+            [(ngModel)]="filterValue.position"
+            [appendTo]="isMobileV() ? 'body' : null"
+            [showClear]="true"
+            [filter]="true"
+            optionLabel="representation"
+            optionValue="value"
+            (ngModelChange)="applyFilters()"
+            class="dropdown-input"
+            placeholder="{{ 'COMPANY_JOB_POSITION' | translate }}"
+          ></p-dropdown>
+        </div>
+
+        <!-- Фильтр "Таланты" -->
+        <div class="filter-item">
+          <label class="custom-form-field__label">{{
+            'TALENTS' | translate
+            }}</label>
+          <p-dropdown
+            [(ngModel)]="filterValue.talent"
+            (ngModelChange)="applyFilters()"
+            [appendTo]="isMobileV() ? 'body' : null"
+            class="dropdown-input"
+            [filter]="true"
+            optionLabel="representation"
+            optionValue="value"
+            [options]="talentsOptionList?.optionList || []"
+            [placeholder]="'TALENTS' | translate"
+            [showClear]="true"
+          ></p-dropdown>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="content">
+    <div *ngIf="activeTab === 'TALENTS'">
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="talentsList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [otherData]="{ employeesStates: talentStates }"
+        [loading]="this.loading$ | async"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="onTalentItem($event)"
+      ></loadable-list-container>
+    </div>
+    <div *ngIf="activeTab === '9-GRID'">
+      <app-talents-9-grid
+        [grid]="grid"
+      ></app-talents-9-grid>
+    </div>
+  </div>
+</div>

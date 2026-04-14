@@ -1,0 +1,55 @@
+<section>
+  <!--  <h1 class="h0">{{ 'TITLE_AUTH' | translate }}</h1>-->
+  <form
+    class="display-flex-column"
+    [formGroup]="authForm"
+    (ngSubmit)="onSubmit()"
+    action=""
+  >
+    <div class="auth__form mb-20">
+      <div class="custom-form-field">
+        <label class="custom-form-field__label font-weight-300">{{
+          'AUTH_EMAIL' | translate
+        }}</label>
+        <input
+          pInputText
+          [formField]="authForm"
+          formControlName="login"
+          id="auth-input-email"
+        />
+      </div>
+      <div class="custom-form-field">
+        <label class="custom-form-field__label font-weight-300">{{
+          'AUTH_PASSWORD' | translate
+        }}</label>
+        <p-password
+          [toggleMask]="true"
+          [feedback]="false"
+          [formField]="authForm"
+          formControlName="pass"
+          id="auth-input-password"
+        ></p-password>
+      </div>
+    </div>
+
+    <button
+      pButton
+      label="{{ 'BUTTON_LOGIN' | translate }}"
+      type="submit"
+      class="full"
+      [disabled]="loading$"
+      id="auth-input-confirm-button"
+    ></button>
+
+    <span class="secondary">
+      {{ 'AUTH_FORGOT_PASSWORD' | translate }}
+      <button
+        pButton
+        routerLink="restorePass"
+        class="p-button-link"
+        label="{{ 'AUTH_RESTORE_LINK' | translate }}"
+        id="auth-input-restore-button"
+      ></button>
+    </span>
+  </form>
+</section>

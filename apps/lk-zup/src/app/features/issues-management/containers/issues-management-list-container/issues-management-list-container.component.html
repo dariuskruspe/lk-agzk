@@ -1,0 +1,12 @@
+<app-issues-management-list
+  [issuesManagementData$]="issuesManagementListFacade.getData$() | async"
+  [issuesManagementDataToApprove]="issuesManagementListApprovingFacade.getData$() | async"
+  [issuesManagementData]="issuesManagementListFacade.getData()"
+  [employeesSubordinates]="subordinatesFacade.getData$() | async"
+  [issuesStatusList]="issuesStatusListFacade.forcedData$| async"
+  [issuesLoading]="issuesManagementListFacade.loading$() | async"
+  [issueTypesList]="issuesTypeListFacade.getData() || (issuesTypeListFacade.getData$() | async)"
+  (loadList)="getIssuesManagementList($event)"
+  (loadListToApprove)="getIssuesManagementListApproving($event)"
+  (issueDetails)="onIssueDetails($event)"
+></app-issues-management-list>

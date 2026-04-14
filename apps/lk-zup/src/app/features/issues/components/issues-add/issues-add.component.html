@@ -1,0 +1,124 @@
+<p-toolbar class="nowrap">
+  <button
+    pButton
+    class="p-button-outlined p-button-rounded"
+    icon="pi pi-arrow-left"
+    (click)="onBackPage()"
+  ></button>
+  <h1 class="ml-6">
+    {{ issuesType?.FullName }}
+  </h1>
+</p-toolbar>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-8 p-0">
+      <p-card class="no-padding">
+        <p-tabView
+          *ngIf="this.issuesType?.onOtherEmployees"
+          styleClass="without-view"
+          [(activeIndex)]="activeIndex"
+          (activeIndexChange)="chooseTab($event)"
+        >
+          <p-tabPanel
+            class="width-50"
+            *ngFor="let tab of templates; let index = i"
+            [header]="tab.title | translate"
+          ></p-tabPanel>
+        </p-tabView>
+        <div class="issue-content">
+          <div class="issue-dynamic-form">
+            <ng-container *ngIf="!isOrder; else toAnotherPerson">
+              <fpc
+                [formData]="formData"
+                [dateLocale]="dateLocale"
+                [loading]="loading"
+                (formSubmit)="onCreateIssue($event)"
+                (formSubmitFailed)="onSubmitFormFailed($event)"
+                [submit$]="submit$"
+              ></fpc>
+            </ng-container>
+            <ng-template #toAnotherPerson>
+              <fpc
+                *ngIf="formData"
+                [formData]="formData"
+                [dateLocale]="dateLocale"
+                [loading]="loading"
+                (formSubmit)="onCreateIssue($event)"
+                [submit$]="submit$"
+              ></fpc>
+            </ng-template>
+          </div>
+          <p-toolbar class="no-margin" styleClass="app-buttons">
+            <button
+              pButton
+              label="{{ 'BUTTON_SEND' | translate }}"
+              (click)="submitForm()"
+              [loading]="loading || issuesService.loading()"
+            ></button>
+            <button
+              pButton
+              label="{{ 'BUTTON_CANCEL' | translate }}"
+              class="p-button-outlined"
+              [loading]="loading || issuesService.loading()"
+              (click)="onBackPage()"
+            ></button>
+          </p-toolbar>
+        </div>
+      </p-card>
+    </div>
+    <div class="additional-info col-md-4 mb-4 p-0">
+      <div class="balance" *ngIf="vacationBalance && this.issuesType?.options?.showVacationBalance">
+        {{ 'VACATION_BALANCE_TOTAL' | translate }}
+        {{ 'EMPLOYEE_VACATIONS_OF' | translate }}
+        {{ currentDay | date: 'dd.MM.yyyy' }}:
+        <span class="link">{{ vacationBalance.vacationsTotal }} {{ 'PLURAL_DAYS' | translate }}</span>
+        <ul class="list">
+          <li *ngFor="let vac of vacationBalance.vacations">{{ vac.vacationName }}
+            : <span class="link">{{ vac.vacationBalance }}</span></li>
+        </ul>
+      </div>
+      <app-item-list [items]="employeeDataModded" font="13px"></app-item-list>
+      <div
+        *ngIf="employeesApprovingPersons?.length && !isOrder"
+        class="approver-title"
+      >
+        <span *ngIf="employeesApprovingPersons.length === 1">{{
+          'EMPLOYEE_APPROVER' | translate
+        }}</span>
+        <span *ngIf="employeesApprovingPersons.length > 1">{{
+          'EMPLOYEE_APPROVERS' | translate
+        }}</span>
+        :
+        <div
+          *ngFor="let approvePerson of employeesApprovingPersons"
+          class="value"
+        >
+          {{ approvePerson }}
+        </div>
+      </div>
+      <app-item-list
+        [items]="issuesType?.options?.staticText"
+        font="13px"
+      ></app-item-list>
+      <app-item-link-list
+        [items]="issuesType?.crossPeriods || []"
+      ></app-item-link-list>
+      <button
+        *ngIf="issuesType?.options?.showProfileButton"
+        pButton
+        label="{{ 'BUTTON_VIEW_PROFILE' | translate }}"
+        icon="pi pi-external-link"
+        iconPos="right"
+        class="button-full-xs round p-button-text"
+        [routerLink]="['', 'users', 'profile', 'info']"
+      ></button>
+      <button
+        *ngIf="issuesType?.options.insuranceCalculator"
+        pButton
+        class="button-full-xs p-button-outlined"
+        label="{{ 'INSURANCE_CALCULATOR_LABEL' | translate }}"
+        (click)="openCalculator()"
+      ></button>
+    </div>
+  </div>
+</div>

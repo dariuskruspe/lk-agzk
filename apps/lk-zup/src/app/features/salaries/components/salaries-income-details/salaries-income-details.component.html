@@ -1,0 +1,224 @@
+<div class="container-fluid">
+  <p-toolbar class="title nowrap">
+    <button
+      pButton class="p-button-outlined p-button-rounded" icon="pi pi-arrow-left" [routerLink]="['', 'salaries']"
+    ></button>
+    <h1>
+      {{ 'BREADCRUMBS_AVERAGE_INCOME' | translate }}
+    </h1>
+  </p-toolbar>
+  <div class="salaries-wrap p-0">
+    <p-card *ngFor="let item of averageIncome?.averageIncomeLog?.slice(0, 1)">
+      <span class="secondary">
+        {{ 'SALARY_AVERAGE_INCOME' | translate }}
+        <span class="salary-item__period">{{ item?.periodName }}</span>
+      </span>
+
+      <div class="salary-total">
+        <p class="salary-total__sum">
+          <span
+            *ngIf="textShow"
+          >{{ item?.sum || 0 }}&nbsp;{{ 'SALARY_CURRENCY' | translate }}</span>
+          <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+        </p>
+
+        <button (click)="onTextDisplayChange()" class="salary-total__btn">
+          <mat-icon svgIcon="icon-eye-hide" *ngIf="!textShow"></mat-icon>
+          <mat-icon svgIcon="icon-eye-show" *ngIf="textShow"></mat-icon>
+        </button>
+      </div>
+
+      <span class="secondary">{{ 'SALARY_INCLUDE_BONUS' | translate }}</span>
+    </p-card>
+
+    <p-card *ngFor="let item of averageIncome?.averageIncomeLog?.slice(1, 3)">
+      <span class="secondary">
+        {{ 'SALARY_AVERAGE_INCOME' | translate }}
+        <span class="salary-item__period">{{ item?.periodName }}</span>
+      </span>
+      <p class="salary-total__sum">
+        <span
+          *ngIf="textShow"
+        >{{ item?.sum || 0 }}&nbsp;{{ 'SALARY_CURRENCY' | translate }}</span>
+        <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+      </p>
+      <span class="secondary">{{ 'SALARY_INCLUDE_BONUS' | translate }}</span>
+    </p-card>
+  </div>
+
+  <div class="salary-group">
+    <p-toolbar class="no-margin">
+      <h3>{{ 'SALARY_CHANGE_HISTORY' | translate }}</h3>
+    </p-toolbar>
+
+    <div>
+      <ng-container
+        *ngFor="let item of averageIncome?.changesSalaryLog; let i = index"
+      >
+        <div
+          class="salary-item" *ngIf="i <= 2 || issuesViewToggle?.changesSalaryLog"
+        >
+          <p-toolbar class="no-margin space-between align-center">
+            <span>{{ 'SALARIES_FROM' | translate }} {{ item?.startDate }}</span>
+            <span *ngIf="textShow">
+              {{ item?.sum || 0 }}&nbsp;{{ 'SALARY_CURRENCY' | translate }}
+              <span class="progress-wrap">
+                <ng-container *ngIf="item?.dynamics">
+                  <span
+                    class="progress-number" *coloredNumber="item?.dynamics; suffix '%'; let value"
+                  >{{ value }}</span>
+                </ng-container>
+              </span>
+            </span>
+            <span *ngIf="!textShow">
+              •••
+              <span class="progress-wrap">
+                <span class="progress" *ngIf="item?.dynamics">•••</span>
+              </span>
+            </span>
+          </p-toolbar>
+        </div>
+      </ng-container>
+    </div>
+
+    <p-toolbar
+      class="margin-top center"
+      *ngIf="averageIncome?.changesSalaryLog?.length > 3"
+      (click)="onIssuesViewToggle('changesSalaryLog')"
+    >
+      <button
+        pButton
+        *ngIf="!issuesViewToggle?.changesSalaryLog"
+        class="p-button-rounded p-button-outlined"
+        icon="pi pi-arrow-down"
+      ></button>
+      <button
+        pButton
+        *ngIf="issuesViewToggle?.changesSalaryLog"
+        class="p-button-rounded p-button-outlined"
+        icon="pi pi-arrow-up"
+      ></button>
+    </p-toolbar>
+  </div>
+
+  <div class="salary-group">
+    <p-toolbar class="no-margin">
+      <h3>
+        {{ 'SALARY_AVERAGE_INCOME' | translate }}
+      </h3>
+    </p-toolbar>
+    <p-toolbar class="no-margin">
+      <span class="secondary">{{ 'SALARY_INCLUDE_OTHER' | translate }}</span>
+    </p-toolbar>
+
+    <div>
+      <ng-container
+        *ngFor="let item of averageIncome?.averageIncomeLog; let i = index"
+      >
+        <div
+          class="salary-item" *ngIf="i <= 2 || issuesViewToggle?.averageIncomeLog"
+        >
+          <p-toolbar class="no-margin space-between align-center">
+            <span>{{ item?.periodName }}</span>
+            <span *ngIf="textShow">
+              {{ item?.sum || 0 }}&nbsp;{{ 'SALARY_CURRENCY' | translate }}
+              <span class="progress-wrap">
+                <ng-container *ngIf="item?.dynamics">
+                  <span
+                    class="progress-number" *coloredNumber="item?.dynamics; suffix '%'; let value"
+                  >{{ value }}</span>
+                </ng-container>
+              </span>
+            </span>
+            <span *ngIf="!textShow">
+              •••
+              <span class="progress-wrap">
+                <span class="progress" *ngIf="item?.dynamics">•••</span>
+              </span>
+            </span>
+          </p-toolbar>
+        </div>
+      </ng-container>
+    </div>
+    <p-toolbar
+      class="margin-top center"
+      *ngIf="averageIncome?.averageIncomeLog?.length > 3"
+      (click)="onIssuesViewToggle('averageIncomeLog')"
+    >
+      <button
+        pButton
+        *ngIf="!issuesViewToggle?.averageIncomeLog"
+        class="p-button-rounded p-button-outlined"
+        icon="pi pi-arrow-down"
+      ></button>
+      <button
+        pButton
+        *ngIf="issuesViewToggle?.averageIncomeLog"
+        class="p-button-rounded p-button-outlined"
+        icon="pi pi-arrow-up"
+      ></button>
+    </p-toolbar>
+  </div>
+
+  <div class="salary-group">
+    <p-toolbar class="no-margin">
+      <h3>
+        {{ 'SALARY_AVERAGE_QUARTERS' | translate }}
+      </h3>
+    </p-toolbar>
+    <p-toolbar class="no-margin">
+      <span class="secondary">{{ 'SALARY_INCLUDE_OTHER' | translate }}</span>
+    </p-toolbar>
+
+    <div>
+      <ng-container
+        *ngFor="
+          let item of averageIncome?.averageIncomeQuartersLog;
+          let i = index
+        "
+      >
+        <div
+          class="salary-item" *ngIf="(i <= 2 || issuesViewToggle?.averageIncomeQuartersLog) && item?.sum"
+        >
+          <p-toolbar class="no-margin space-between align-center">
+            <span>{{ 'SALARIES_FOR' | translate }} {{ item?.periodName }}</span>
+            <span *ngIf="textShow">
+              {{ item?.sum || 0 }}&nbsp;{{ 'SALARY_CURRENCY' | translate }}
+              <span class="progress-wrap">
+                <ng-container *ngIf="item?.dynamics">
+                  <span
+                    class="progress-number" *coloredNumber="item?.dynamics; suffix '%'; let value"
+                  >{{ value }}</span>
+                </ng-container>
+              </span>
+            </span>
+            <span *ngIf="!textShow">
+              •••
+              <span class="progress-wrap">
+                <span class="progress" *ngIf="item?.dynamics">•••</span>
+              </span>
+            </span>
+          </p-toolbar>
+        </div>
+      </ng-container>
+    </div>
+    <p-toolbar
+      class="margin-top center"
+      *ngIf="averageIncome?.averageIncomeQuartersLog?.length > 3"
+      (click)="onIssuesViewToggle('averageIncomeQuartersLog')"
+    >
+      <button
+        pButton
+        *ngIf="!issuesViewToggle?.averageIncomeQuartersLog"
+        class="p-button-rounded p-button-outlined"
+        icon="pi pi-arrow-down"
+      ></button>
+      <button
+        pButton
+        *ngIf="issuesViewToggle?.averageIncomeQuartersLog"
+        class="p-button-rounded p-button-outlined"
+        icon="pi pi-arrow-up"
+      ></button>
+    </p-toolbar>
+  </div>
+</div>

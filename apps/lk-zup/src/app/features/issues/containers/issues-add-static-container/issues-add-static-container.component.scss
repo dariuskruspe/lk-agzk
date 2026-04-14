@@ -1,0 +1,9 @@
+:host {
+  .additional-info {
+    padding: 0 20px !important;
+
+    @media (max-width: 767px) {
+      padding: 0;
+    }
+  }
+}

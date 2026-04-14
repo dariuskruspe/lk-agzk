@@ -1,0 +1,439 @@
+<div class="custom-form-array" [formGroup]="form">
+  <div class="custom-form-array__title array-title" *ngIf="item?.placeholder">
+    {{
+      item.placeholder && item.placeholder !== 'undefined'
+        ? item.placeholder
+        : ''
+    }}:
+  </div>
+
+  <ng-container [formArrayName]="item.formControlName">
+    <div
+      class="row arrRow custom-form-array__row"
+      *ngFor="
+        let controls of form?.controls[item.formControlName]['controls'];
+        let i = index
+      "
+      [formGroupName]="i"
+      [attr.data-arr-smart-index]="i"
+    >
+      <div class="custom-form-array__row-inputs row">
+        <ng-container *ngFor="let control of item.arrSmartList">
+          <div
+            class="custom-form-field custom-form-field__static"
+            *ngIf="control.type === 'static'"
+            [ngClass]="control.gridClasses"
+            [innerHTML]="
+              control.value ||
+              (formData.data[item.formControlName][i]
+                ? formData.data[item.formControlName][i][
+                    control.formControlName
+                  ]
+                : '')
+            "
+          ></div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'computed-static'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-computed
+              [form]="controls"
+              [item]="control"
+              [formData]="formData"
+              [daysOff]="daysOff"
+              [staticData]="staticData"
+              [staticDataManager]="staticDataManager"
+            ></fpc-computed>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'text'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-text-input
+              formField
+              [form]="controls"
+              [item]="control"
+              [formData]="formData"
+            ></fpc-text-input>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'number'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-number-input
+              formField
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+            ></fpc-number-input>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'textarea'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-textarea
+              formField
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+            ></fpc-textarea>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'file' || control.type === 'file-multi'"
+            [ngClass]="control.gridClasses"
+            [class]="
+              form
+                .get(item.formControlName)
+                ['controls'][i].get(control.formControlName)?.errors &&
+              keys(
+                form
+                  .get(item.formControlName)
+                  ['controls'][i].get(control.formControlName)?.errors
+              ).length &&
+              form
+                .get(item.formControlName)
+                ['controls'][i].get(control.formControlName)?.touched
+                ? 'custom-form-field__invalid'
+                : ''
+            "
+          >
+            <fpc-file-uploader
+              formField
+              [dateLocale]="dateLocale"
+              [item]="control"
+              [formData]="formData"
+              [form]="controls"
+            ></fpc-file-uploader>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'select'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-select
+              formField
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+              [options]="getOption(control, i)"
+              [hasFilter]="false"
+            ></fpc-select>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'select-filter'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-select
+              formField
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+              [options]="getOption(control, i)"
+              [hasFilter]="true"
+            ></fpc-select>
+          </div>
+
+          @if (control.type === 'timepicker') {
+            <div
+              class="custom-form-field"
+              [attr.data-custom-form-type]="control.type"
+              [ngClass]="control.gridClasses"
+            >
+              <fpc-timepicker
+                formField
+                [item]="control"
+                [form]="controls"
+                [formData]="formData"
+              ></fpc-timepicker>
+            </div>
+          }
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'datepicker'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-datepicker
+              formField
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+              [daysOff]="daysOff"
+              [schedule]="schedule"
+              [min]="getDatepickerMinForControl(control, i)"
+              [max]="getDatepickerMaxForControl(control, i)"
+              [enableDates]="item.availableDays"
+            ></fpc-datepicker>
+          </div>
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'datepicker-month'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-datepicker
+              formField
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+              [daysOff]="daysOff"
+              [schedule]="schedule"
+              period="month"
+              [min]="
+                control.startDateMathDay || control.startDateMathDay === 0
+                  ? mathCurrentDateDay(
+                      control.startDateMathDay,
+                      form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.minReferenceDateControl)
+                        ?.value
+                    )
+                  : ''
+              "
+              [max]="
+                control.endDateMathDay || control.endDateMathDay === 0
+                  ? mathCurrentDateDay(
+                      control.endDateMathDay,
+                      form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.maxReferenceDateControl)
+                        ?.value
+                    )
+                  : ''
+              "
+            ></fpc-datepicker>
+          </div>
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'datepicker-year'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-datepicker
+              formField
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+              [daysOff]="daysOff"
+              [schedule]="schedule"
+              period="year"
+              [min]="
+                control.startDateMathDay || control.startDateMathDay === 0
+                  ? mathCurrentDateDay(
+                      control.startDateMathDay,
+                      form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.minReferenceDateControl)
+                        ?.value
+                    )
+                  : ''
+              "
+              [max]="
+                control.endDateMathDay || control.endDateMathDay === 0
+                  ? mathCurrentDateDay(
+                      control.endDateMathDay,
+                      form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.maxReferenceDateControl)
+                        ?.value
+                    )
+                  : ''
+              "
+            ></fpc-datepicker>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'datepicker-range-start'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-datepicker
+              formField
+              [defaultDate]="
+                form
+                  .get(item.formControlName)
+                  ['controls'][i].get(control.endDateControl)?.value
+                  ? form
+                      .get(item.formControlName)
+                      ['controls'][i].get(control.endDateControl)?.value
+                  : control.startDateMathDay || control.startDateMathDay === 0
+                    ? mathCurrentDateDay(control.startDateMathDay)
+                    : ''
+              "
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+              [daysOff]="daysOff"
+              [schedule]="schedule"
+              [min]="
+                control.startDateMathDay || control.startDateMathDay === 0
+                  ? mathCurrentDateDay(
+                      control.startDateMathDay,
+                      form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.minReferenceDateControl)
+                        ?.value
+                    )
+                  : ''
+              "
+              [max]="
+                control.endDateMathDay || control.endDateMathDay === 0
+                  ? mathCurrentDateDay(
+                      control.endDateMathDay,
+                      form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.maxReferenceDateControl)
+                        ?.value
+                    )
+                  : form
+                      .get(item.formControlName)
+                      ['controls'][i].get(control.endDateControl)?.value
+              "
+              [enableDates]="item.availableDays"
+              [requiredWorkday]="control.requiredWorkday"
+            ></fpc-datepicker>
+          </div>
+
+          <div
+            class="custom-form-field"
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'datepicker-range-end'"
+            [ngClass]="control.gridClasses"
+          >
+            <fpc-datepicker
+              formField
+              [defaultDate]="
+                form
+                  .get(item.formControlName)
+                  ['controls'][i].get(control.startDateControl)?.value
+              "
+              [item]="control"
+              [form]="controls"
+              [formData]="formData"
+              [daysOff]="daysOff"
+              [schedule]="schedule"
+              [min]="
+                control.requiredWorkday &&
+                form
+                  .get(item.formControlName)
+                  ['controls'][i].get(control.startDateControl)?.value &&
+                form
+                  .get(item.formControlName)
+                  ['controls'][i].get(control.startDateControl)['_nextWorkDay']
+                  ? form
+                      .get(item.formControlName)
+                      ['controls'][i].get(control.startDateControl)[
+                      '_nextWorkDay'
+                    ]
+                  : form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.startDateControl)?.value
+                    ? form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.startDateControl)?.value
+                    : control.startDateMathDay || control.startDateMathDay === 0
+                      ? mathCurrentDateDay(
+                          control.startDateMathDay,
+                          form
+                            .get(item.formControlName)
+                            ['controls'][i].get(control.minReferenceDateControl)
+                            ?.value
+                        )
+                      : ''
+              "
+              [max]="
+                control.endDateMathDay || control.endDateMathDay === 0
+                  ? mathCurrentDateDay(
+                      control.endDateMathDay,
+                      form
+                        .get(item.formControlName)
+                        ['controls'][i].get(control.maxReferenceDateControl)
+                        ?.value
+                    )
+                  : ''
+              "
+              [enableDates]="item.availableDays"
+              [requiredWorkday]="control.requiredWorkday"
+            ></fpc-datepicker>
+          </div>
+
+          <div
+            [attr.data-custom-form-field]="control.formControlName"
+            [attr.data-custom-form-type]="control.type"
+            *ngIf="control.type === 'checkbox'"
+            [ngClass]="control.gridClasses"
+            class="custom-form-field"
+          >
+            <fpc-checkbox
+              formField
+              [item]="control"
+              [index]="i"
+              [form]="controls"
+              [formData]="formData"
+            ></fpc-checkbox>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="custom-form-array__row-tools tools">
+        <button
+          pButton
+          icon="pi pi-times"
+          [disabled]="disabledIndexes.has(i) || !canRemoveItems"
+          class="p-button-rounded p-button-text p-button-plain"
+          type="button"
+          (click)="removeSmartFormGroup(item.formControlName, i)"
+        ></button>
+      </div>
+    </div>
+  </ng-container>
+
+  <div
+    class="custom-form-array__add-row button-wrap"
+    *ngIf="!formData.options.hideAddButton && canAddItems"
+  >
+    <button
+      pButton
+      icon="pi pi-plus"
+      type="button"
+      iconPos="left"
+      class="p-button-outlined"
+      label="{{ item.label }}"
+      (click)="addSmartFormGroup(item.formControlName)"
+    ></button>
+  </div>
+</div>

@@ -1,0 +1,360 @@
+<!-- Шаги (steps) — компонент для отображения прогресса какого-либо процесса в виде шагов -->
+
+<!-- (!) Компонент хитро украден из раздела "Заявки сотрудников" (см. issues-status-steps.component.ts) и слегка видоизменён ^_^ -->
+<!-- (!!) В PrimeNG 17 появился компонент p-stepper, так что при желании можно будет попробовать прикрутить его сюда после того как обновим связку Angular+PrimeNG на проекте -->
+<!-- (+-) Нужно добавить возможность отображать шаги вертикально, особенно в мобильной версии, и/или если их будет много (p-stepper это уже умеет) -->
+<!-- (?) возможно вместо задания кастомных CSS-переменных стоит переделать на передачу частей конфига, связанных со стилизацией элементов (свойств style) напрямую в ngStyle соответствующих им элементов, тогда для таких элементов можно будет передавать любые стили, а не только те, для которых имеются кастомные CSS-переменные -->
+
+<!-- Отображаем предупреждения (например, если браузер не поддерживает селектор :has()) -->
+<div class="warnings">
+  <div class="warning-group no-support">
+    <!-- https://www.bram.us/2023/01/04/css-has-feature-detection-with-supportsselector-you-want-has-not-has/ -->
+    <div class="warning css-has-basic">
+      <span class="warning-sign">⚠️</span>
+      <span class="warning-text"
+        >Your browser does not support CSS <code>:has()</code>, so steps
+        component will not work correctly.</span
+      >
+    </div>
+
+    <div class="warning css-has-relative">
+      <span class="warning-sign">⚠️</span>
+      <span class="warning-text"
+        >Your browser does not support relative selectors in CSS
+        <code>:has()</code>, so steps component will not work correctly.</span
+      >
+    </div>
+  </div>
+</div>
+
+<div
+  *ngIf="optionsBuilt()"
+  class="steps-container"
+  [ngStyle]="helper.getStepsStyles(options)"
+>
+  <!-- Выбираем шаблон отображения шагов в зависимости от параметра layout: -->
+  <!-- [stepsD] дефолтный шаблон (layout: 'horizontal' | 'vertical'), ориентация шагов определяется значениями -->
+  <!--          'horizontal' | 'vertical' параметра layout в секции template.default -->
+  <!-- [stepsR] кружочек прогресса шагов (layout: 'circle'), заполняющийся радиально по окружности -->
+  <!-- [stepsT] таймлайн — временная шкала (layout: 'timeline'), ориентация шагов определяется значениями -->
+  <!--          'horizontal' | 'vertical' параметра layout в секции template.timeline -->
+  <ng-container [ngSwitch]="options.currentTemplate">
+    <ng-container *ngSwitchCase="'circle'">
+      <ng-container *ngTemplateOutlet="stepsC"></ng-container>
+    </ng-container>
+
+    <ng-container *ngSwitchCase="'timeline'">
+      <ng-container *ngTemplateOutlet="stepsT"></ng-container>
+    </ng-container>
+
+    <ng-container *ngSwitchDefault>
+      <ng-container *ngTemplateOutlet="stepsD"></ng-container>
+    </ng-container>
+  </ng-container>
+
+  <!-- Кружочек прогресса шагов (радиальное расположение значения индикатора в круге, соответствующего текущему -->
+  <!-- шагу, при этом надпись вида "<номер шага> из <количество шагов>" отображается в центре круга) -->
+  <!-- (!) В PrimeNG есть компонент p-knob, но в нём пока нет возможности отображать круг целиком (хотя у них же -->
+  <!--     [PrimeTek] этот функционал реализован в PrimeFaces [open source framework for JavaServer Faces]: -->
+  <!--     https://www.primefaces.org/showcase/ui/input/knob.xhtml?jfwid=46039) -->
+  <!--     Такой feature request для PrimeNG уже находится в open issues: -->
+  <!--     https://github.com/primefaces/primeng/issues/11541, так что если они это добавят, то при желании можно -->
+  <!--     будет переделать отображение с использованием p-knob (readonly) -->
+  <ng-template #stepsC>
+    <div class="steps steps-c">
+      <ng-container *ngFor="let step of steps; let i = index">
+        <ng-container
+          *ngIf="{
+            isActiveStep: step.active,
+          } as ctx"
+        >
+          <ng-container *ngIf="ctx.isActiveStep">
+            <!-- Прогресс шагов (окружность с заполняющейся линией) -->
+            <div
+              [attr.data-progress]="i + 1"
+              [attr.data-steps-count]="steps.length"
+              [ngStyle]="{
+                '--progress': ((i + 1) * 360) / steps.length + 'deg'
+              }"
+              class="outer-circle clickable"
+              (click)="progressCircleClicked.emit()"
+            >
+              <div class="inner-circle">
+                <span class="progress-text"
+                  >{{ i + 1 }} {{ 'OF' | translate }} {{ steps.length }}</span
+                >
+              </div>
+            </div>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-template>
+
+  <!-- Шаблоны с таймлайном (временной полосой прогресса шагов) -->
+
+  <!-- Горизонтальная ориентация шагов: -->
+  <!-- (маркер)----(маркер)----(маркер) (по умолчанию маркер содержит внутри себя иконку) -->
+  <!-- [Шаг 1]     [Шаг 2]     [Шаг 3]  (по умолчанию ширина меток [label] шага 80px — достаточно, чтобы поместить надпись "Step 9999" ^_^ при отсутствии внутренних горизонтальных отступов [padding-left: 0, padding-right: 0]... По крайней мере, надпись "Step 999" точно поместится ^_^) -->
+  <!-- Название    Название    Название -->
+  <!-- Описание    Описание    Описание (по умолчанию скрыто в горизонтальной ориентации)-->
+
+  <!-- Вертикальная ориентация шагов: -->
+  <!-- (маркер) [Шаг 1]  -->
+  <!--    |     Название -->
+  <!--    |     Описание -->
+  <!--    |              -->
+  <!-- (маркер) [Шаг 2]  -->
+  <!--    |     Название -->
+  <!--    |     Описание -->
+  <!--    |              -->
+  <!-- (маркер) [Шаг 3]  -->
+  <!--          Название -->
+  <!--          Описание -->
+
+  <!-- Шаги (шаблон по умолчанию: горизонтальное или вертикальное расположение в зависимости от соответствующего -->
+  <!-- значения параметра layout в секции template -> default) -->
+  <ng-template #stepsD>
+    <div
+      class="steps steps-d"
+      [ngClass]="{
+        'default-h': options.template.default.layout === 'horizontal',
+        'default-v': options.template.default.layout === 'vertical'
+      }"
+    >
+      <ng-container *ngFor="let step of steps; let i = index; let last = last">
+        <ng-container
+          *ngIf="{
+            step,
+            stepOptions: step.active
+              ? options.template[options.currentTemplate].stepA
+              : (step.highlight || isStep(step, highlightStepCondition, i))
+                ? options.template[options.currentTemplate].stepH
+                : options.template[options.currentTemplate].step,
+            isActiveStep: step.active,
+            isHighlightedStep: step.highlight || isStep(step, highlightStepCondition, i),
+            isHighlightedDivider: isStep(step, highlightStepDividerCondition, i),
+          } as ctx"
+        >
+          <!-- Шаг -->
+          <div
+            class="step"
+            [ngClass]="{
+              active: ctx.isActiveStep,
+              highlight: ctx.isHighlightedStep
+            }"
+          >
+            <!-- Секция таймлайна, соответствующая текущему шагу -->
+            <div class="step-timeline">
+              <div class="step-marker-container">
+                <div
+                  class="step-marker"
+                  [ngClass]="{
+                    active: ctx.isActiveStep,
+                    highlight: ctx.isHighlightedStep
+                  }"
+                  [pTooltip]="step.description"
+                  tooltipPosition="bottom"
+                >
+                  <!-- Маркер шага -->
+                  <ng-container
+                    *ngTemplateOutlet="
+                      step.customIcon ? customIconTemplate : iconTemplate;
+                      context: ctx
+                    "
+                  >
+                  </ng-container>
+                </div>
+              </div>
+
+              <!-- Линия, проходящая между соседними шагами -->
+              <div
+                *ngIf="!last"
+                class="step-divider"
+                [ngClass]="{
+                  active: ctx.isActiveStep,
+                  highlight: ctx.isHighlightedDivider
+                }"
+              ></div>
+            </div>
+
+            <!-- Содержимое шага -->
+            <div class="step-content">
+              <!-- Метка шага (по умолчанию: надпись "Шаг <номер шага>") -->
+              <div
+                class="step-label"
+                [ngClass]="{
+                  active: ctx.isActiveStep,
+                  highlight: ctx.isHighlightedStep
+                }"
+                [pTooltip]="step.description"
+                tooltipPosition="bottom"
+              >
+                <span>{{ step.title }}</span>
+              </div>
+
+              <!-- Название шага -->
+              <!-- <div
+                class="step-title mt-5"
+                [ngClass]="{
+                  active: ctx.isActiveStep,
+                  highlight: ctx.isHighlightedStep
+                }"
+              >
+                <span>{{ step.title }}</span>
+              </div> -->
+
+              <!-- Описание шага -->
+              <div
+                *ngIf="options.template.default.layout === 'vertical'"
+                class="step-description gray mt-5"
+              >
+                <span>{{ step.description }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </ng-template>
+
+  <!-- Шаги (с использованием таймлайна p-timeline) -->
+  <ng-template #stepsT>
+    <div class="steps steps-t">
+      <p-timeline
+        [align]="options.template.timeline.align"
+        [layout]="options.template.timeline.layout"
+        [ngClass]="{
+          'no-opposite': options.template.timeline.noOpposite,
+          'timeline-h': options.template.timeline.layout === 'horizontal',
+          'timeline-v': options.template.timeline.layout === 'vertical'
+        }"
+        styleClass="steps-t"
+        [value]="steps"
+      >
+        <!-- Маркер шага -->
+        <ng-template pTemplate="marker" let-step let-i>
+          <ng-container
+            *ngIf="{
+              step,
+              stepOptions: step.active
+              ? options.template[options.currentTemplate].stepA
+              : (step.highlight || isStep(step, highlightStepCondition, i))
+                ? options.template[options.currentTemplate].stepH
+                : options.template[options.currentTemplate].step,
+              isActiveStep: step.active,
+              isHighlightedStep: step.highlight || isStep(step, highlightStepCondition, i),
+              isHighlightedDivider: isStep(step, highlightStepDividerCondition, i),
+            } as ctx"
+          >
+            <div class="step-marker-container">
+              <div
+                class="step-marker"
+                [ngClass]="{
+                  active: ctx.isActiveStep,
+                  highlight: ctx.isHighlightedStep
+                }"
+                [pTooltip]="step.description"
+                tooltipPosition="bottom"
+              >
+                <!-- Иконка маркера шага -->
+                <ng-container
+                  *ngTemplateOutlet="
+                    step.customIcon ? customIconTemplate : iconTemplate;
+                    context: ctx
+                  "
+                >
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </ng-template>
+
+        <!-- Подробности шага (название, описание и т. д.) -->
+        <ng-template pTemplate="content" let-step let-i>
+          <ng-container
+            *ngIf="{
+              isActiveStep: step.active,
+              isHighlightedStep: step.highlight || isStep(step, highlightStepCondition, i),
+              isHighlightedDivider: isStep(step, highlightStepDividerCondition, i),
+              stepOptions: step.active
+              ? options.template[options.currentTemplate].stepA
+              : (step.highlight || isStep(step, highlightStepCondition, i))
+                ? options.template[options.currentTemplate].stepH
+                : options.template[options.currentTemplate].step,
+            } as ctx"
+          >
+            <!--            <p-card [header]="step.title" [subheader]="step.description"></p-card> -->
+
+            <!-- Метка шага (по умолчанию: надпись "Шаг <номер шага>") -->
+            <div
+              class="step-label"
+              [ngClass]="{
+                active: ctx.isActiveStep,
+                highlight: ctx.isHighlightedStep,
+              }"
+              [pTooltip]="step.description"
+              tooltipPosition="bottom"
+            >
+              <span>{{ 'STEP' | translate }} {{ getStepIndex(step) + 1 }}</span>
+            </div>
+
+            <!-- Название шага -->
+            <div class="step-title mt-5">
+              <span>{{ step.title }}</span>
+            </div>
+
+            <!-- Описание шага -->
+            <div
+              *ngIf="options.template.timeline.layout === 'vertical'"
+              class="step-description mt-5"
+            >
+              <span>{{ step.description }}</span>
+            </div>
+          </ng-container>
+        </ng-template>
+      </p-timeline>
+    </div>
+  </ng-template>
+
+  <!-- Обычная иконка маркера шага (см. свойства icon, iconA и iconH в StepInterface) -->
+  <ng-template
+    #iconTemplate
+    let-step="step"
+    let-stepOptions="stepOptions"
+    let-isActiveStep="isActiveStep"
+    let-isHighlightedStep="isHighlightedStep"
+  >
+    <i
+      *ngIf="stepOptions.marker.icon.show"
+      [class]="isActiveStep ? step.iconA || step.icon : step.icon"
+      [ngClass]="{
+        'step-marker-icon': true,
+        active: isActiveStep,
+        highlight: isHighlightedStep
+      }"
+    >
+    </i>
+  </ng-template>
+
+  <!-- Своя собственная иконка маркера шага (см. свойства customIcon, customIconA и customIconH в StepInterface) -->
+  <ng-template
+    #customIconTemplate
+    let-step="step"
+    let-stepOptions="stepOptions"
+    let-isActiveStep="isActiveStep"
+    let-isHighlightedStep="isHighlightedStep"
+  >
+    <div
+      *ngIf="stepOptions.marker.icon.show"
+      [outerHTML]="
+        (isActiveStep
+          ? step.customIconA || step.customIcon
+          : isHighlightedStep
+          ? step.customIconH || step.customIcon
+          : step.customIcon
+        ) | trustedHtml
+      "
+    ></div>
+  </ng-template>
+</div>

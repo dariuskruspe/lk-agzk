@@ -1,0 +1,144 @@
+<div
+  [ngClass]="{
+    'align-center':
+      !currentDocumentFileUint8Array || currentIsDocumentFileLoading,
+  }"
+  class="pdf-view-block"
+>
+  @if (currentDocumentFileUint8Array && !currentIsDocumentFileLoading) {
+    <!-- [value]="file?.base64" -->
+    <!-- ВАЖНО: Используем *ngIf с уникальным ключом для принудительного пересоздания pdf-viewer -->
+    <!-- Ключ состоит из ID документа, timestamp и размера файла -->
+    <!-- Это гарантирует пересоздание компонента при каждом обновлении файла -->
+    @if (currentDocument?.id) {
+      @if (
+        currentDocument.id +
+        '_' +
+        (fileTimestamp || 0) +
+        '_' +
+        currentDocumentFileUint8Array.length
+      ) {
+        <app-pdf-viewer
+          [value]="currentDocumentFileUint8Array"
+          [attr.data-file-id]="currentDocument.id"
+          [attr.data-file-size]="currentDocumentFileUint8Array.length"
+          [attr.data-file-timestamp]="fileTimestamp || 0"
+        ></app-pdf-viewer>
+      }
+    }
+
+    @if (hasAgreement) {
+      <p-checkbox
+        [(ngModel)]="checked"
+        [binary]="true"
+        class="checkbox mt-20"
+        [label]="'AGREE_DOCUMENT' | translate"
+      ></p-checkbox>
+    }
+  } @else {
+    <p-progressSpinner
+      class="d-flex justify-content-center"
+      styleClass="custom-spinner"
+    ></p-progressSpinner>
+  }
+</div>
+
+<p-toolbar class="margin-top" styleClass="flex gap-4">
+  @if (isSignatureRequired) {
+    <button
+      pButton
+      (click)="sign()"
+      class="p-button button-full-xs"
+      [disabled]="!isChecked || currentIsDocumentFileLoading || !providers || isSigning"
+      [label]="
+        buttonCaption || (isSignatureEnabled ? 'BUTTON_SIGN' : 'SIGN')
+          | translate
+      "
+      [loading]="currentIsDocumentFileLoading || isSigning"
+    ></button>
+
+    @if (currentDocument?.targetPresentationId) {
+      <button
+        pButton
+        (click)="rework()"
+        class="button-full-xs p-button-warning"
+        [disabled]="!isChecked || currentIsDocumentFileLoading || !providers || isSigning"
+        [label]="'BUTTON_REWORK_SIGN_PRESENTATION' | translate"
+        [loading]="currentIsDocumentFileLoading"
+      ></button>
+    }
+
+    <p-confirmDialog [style]="{ width: '50vw' }"></p-confirmDialog>
+
+    @if (refuseEnabled && currentDocument?.refuseSignatureEnabled) {
+      <button
+        pButton
+        (click)="refuseSign()"
+        class="p-button-outlined button-full-xs"
+        [disabled]="!isChecked || currentIsDocumentFileLoading || !providers || isSigning"
+        [label]="
+          (isSignatureEnabled ? 'BUTTON_REFUSE_SIGN' : 'BUTTON_REFUSE')
+            | translate
+        "
+        [loading]="currentIsDocumentFileLoading"
+      ></button>
+    }
+  }
+
+  <div
+    class="ml-10 mr-10"
+    *ngIf="
+      issueId &&
+      issueId !== '00000000-0000-0000-0000-000000000000' &&
+      !dialogRef
+    "
+  >
+    <button
+      pButton
+      (click)="openIssue()"
+      class="p-button button-full-xs"
+      label="Перейти к заявке"
+    ></button>
+  </div>
+
+  <div class="navigation-footer" *ngIf="showNextButton">
+    <button
+      pButton
+      type="button"
+      label="СЛЕДУЮЩИЙ ДОКУМЕНТ"
+      icon="pi pi-arrow-right"
+      iconPos="right"
+      (click)="onNavigateToNext()"
+      [disabled]="isLoadingNext || !hasNextDocument"
+      [loading]="isLoadingNext"
+      class="p-button-primary"
+    ></button>
+  </div>
+
+  <div #downloadButton class="download-button">
+    <button
+      pButton
+      (click)="openDownloadOptions()"
+      class="p-button-link button-full-xs"
+      iconPos="right"
+      icon="pi pi-download"
+      label="{{ 'BUTTON_DOWNLOAD' | translate }}"
+    ></button>
+
+    @if (openedDownloadMethod) {
+      <div class="download-button__files-list files-list">
+        <p-listbox
+          [options]="downloadOptions"
+          (onClick)="onClickDownload($event)"
+        >
+          <ng-template let-item pTemplate="item">
+            <div class="files-list__item">
+              <i class="{{ item.icon }}"></i>
+              <span> {{ item.title | translate }}</span>
+            </div>
+          </ng-template>
+        </p-listbox>
+      </div>
+    }
+  </div>
+</p-toolbar>

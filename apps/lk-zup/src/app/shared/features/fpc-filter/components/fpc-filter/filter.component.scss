@@ -1,0 +1,52 @@
+.filter-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 10px;
+  flex-wrap: nowrap;
+
+  &.mobile-v {
+    margin-bottom: 0;
+  }
+
+  &__fpc {
+    flex: 1 0 auto;
+    width: 83%;
+  }
+
+  &__buttons {
+    margin-left: 15px;
+  }
+}
+
+.sidebar-header {
+  font-size: 26px;
+}
+
+.sidebar-content {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  flex: 1 0 100%;
+
+  .filter-button {
+    margin-top: 100px;
+    width: 100%;
+  }
+}
+
+:host ::ng-deep {
+  .p-button .pi {
+    font-size: 1rem;
+    line-height: 25px;
+  }
+
+  .p-button.p-button-icon-only {
+    padding: 9px 0;
+  }
+}

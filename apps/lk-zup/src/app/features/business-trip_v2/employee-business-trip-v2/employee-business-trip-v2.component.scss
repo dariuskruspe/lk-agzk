@@ -1,0 +1,44 @@
+.business-trip-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.business-trip-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 15px;
+
+  h1 {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+}
+
+.business-trip-header-top-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.business-trip-header-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+// Кнопка "Скачать отчёт"
+::ng-deep .download-report-btn {
+  .p-button {
+    background-color: transparent;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+
+    &:hover {
+      background-color: var(--primary-color);
+      color: #fff;
+    }
+  }
+}

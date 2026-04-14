@@ -1,0 +1,12 @@
+<div class="validation-container">
+  <div class="validation-container__description">
+    {{ 'CONFIRM_SIGNATURE_CREATION' | translate }}
+  </div>
+  <p-toolbar class="margin-top">
+    <p-button
+      label="{{ 'BUTTON_CONFIRM' | translate }}"
+      [loading]="loading | async"
+      (onClick)="submit()"
+    ></p-button>
+  </p-toolbar>
+</div>

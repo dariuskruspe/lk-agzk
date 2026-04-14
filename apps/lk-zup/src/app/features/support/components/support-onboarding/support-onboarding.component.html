@@ -1,0 +1,19 @@
+<p-toolbar class="title">
+  <h2>
+    {{ 'ONBOARDINGS_COMPLETION' | translate }}
+  </h2>
+</p-toolbar>
+<p-card>
+  <div class="onb-description">
+    {{ 'WELCOME_ONB_DESCRIPTION' | translate }}
+  </div>
+  <button
+    pButton
+    [loading]="loading"
+    [disabled]="loading"
+    type="button"
+    label="{{ 'ONB_REPEAT' | translate }}"
+    (click)="repeatOnboarding('welcome')"
+  ></button>
+  <div class="onb-hint">* {{ 'WELCOME_ONB_HINT' | translate }}</div>
+</p-card>

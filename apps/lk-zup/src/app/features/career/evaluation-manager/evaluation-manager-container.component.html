@@ -1,0 +1,58 @@
+<div class="employee-vacations-body">
+  <p-toolbar class="title">
+    <h1>Оценка сотрудников</h1>
+    <span class="spacer"></span>
+  </p-toolbar>
+
+  <div class="tabs-controls-panel">
+    <div class="tabs">
+      <div
+        class="tab-item"
+        (click)="changeTab('TEAM_GOALS')"
+        [class.active]="activeTab === 'TEAM_GOALS'"
+      >
+        <span class="tab-title">{{ 'TEAM_GOALS' | translate }}</span>
+      </div>
+      <div
+        class="tab-item"
+        (click)="changeTab('NEED_ATTENTION')"
+        [class.active]="activeTab === 'NEED_ATTENTION'"
+      >
+        <span class="tab-title">{{ 'NEED_ATTENTION' | translate }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div *ngIf="activeTab === 'TEAM_GOALS'">
+      
+      <app-company-goals
+      (setNameSection)="setNameSection($event)"
+      ></app-company-goals>
+
+      <h2 class="section-title">{{ nameSection() }}</h2>
+
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="evaluationList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [loading]="false"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="onSuccessorItem($event)"
+      ></loadable-list-container>
+    </div>
+    <div *ngIf="activeTab === 'NEED_ATTENTION'">
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="evaluationNeedAttentionList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [loading]="false"
+        [appendFilterToQuery]="true"
+        (clickItem)="onSuccessorItem($event)"
+      ></loadable-list-container>
+    </div>
+  </div>
+</div>

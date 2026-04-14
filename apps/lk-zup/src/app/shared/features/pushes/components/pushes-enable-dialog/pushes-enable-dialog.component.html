@@ -1,0 +1,28 @@
+<div class="pushes-enable-dialog-container">
+  <app-pushes-icon></app-pushes-icon>
+
+  <h2 class="mb-30">Включите пуш уведомления</h2>
+
+  <p class="p-text-secondary mt-4" style="text-align: left">
+    Пожалуйста, включите уведомления, чтобы моментально узнавать статус
+    согласования заявок и подписания документов.
+  </p>
+
+  <div class="mt-20 pushes-actions">
+    <p-button
+      label="Подключить"
+      (click)="onAccept()"
+      styleClass="full sm-light"
+    ></p-button>
+    <p-button
+      label="Напомнить позже"
+      styleClass="p-button-outlined full sm-light"
+      (click)="onDecline()"
+    ></p-button>
+    <p-button
+      label="Больше не спрашивать"
+      styleClass="p-button-text full sm-light"
+      (click)="onNeverShow()"
+    ></p-button>
+  </div>
+</div>

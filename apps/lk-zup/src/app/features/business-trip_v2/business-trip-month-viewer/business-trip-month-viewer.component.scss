@@ -1,0 +1,25 @@
+.app-business-trip-month {
+  --calendar-graph-col-gap: 2px;
+  --calendar-graph-row-gap: 10px;
+}
+
+.business-trip-month-legend-container {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: var(
+    --calendar-graph-month-sticky-background,
+    var(--surface-ground, #fff)
+  );
+  backdrop-filter: var(--control-backdrop-filter, none);
+
+  &.is-stuck {
+    border-top: 1px solid
+      var(--calendar-graph-header-border, var(--surface-border, #eee));
+  }
+}

@@ -1,0 +1,197 @@
+<p-toolbar class="margin-top-bottom p-toolbar-single-row ml-20">
+  <p-toolbar class="nowrap">
+    <p-button
+      icon="pi pi-arrow-left"
+      [link]="true"
+      (click)="onBackPage()"
+    ></p-button>
+    <h1>
+      {{successorsItem?.employeeInfo?.fullName}}
+    </h1>
+  </p-toolbar>
+  <span class="spacer"></span>
+</p-toolbar>
+<div class="profile-info" *ngIf="successorsItem">
+  <div
+    class="photo"
+    [ngStyle]="{
+      backgroundImage: photo
+        ? 'url(' + encodeURI(photo) + ')'
+        : 'url(assets/img/svg/user-circle.svg)'
+    }"
+  ></div>
+  <div class="info">
+    <div>
+      <b>{{successorsItem.employeeInfo.position}}</b>
+    </div>
+
+    <div>
+      {{successorsItem.employeeInfo.division}}
+    </div>
+  </div>
+</div>
+
+
+<div class="tabs-controls-panel">
+  <div class="tabs">
+    <div
+      class="tab-item"
+      (click)="changeTab('SUCCESSION_PLAN')"
+      [class.active]="activeTab === 'SUCCESSION_PLAN'">
+      <span class="tab-title">{{ 'SUCCESSION_PLAN' | translate }}</span>
+    </div>
+
+    <div
+      class="tab-item active"
+      (click)="changeTab('ISSUE_CHANGES')"
+      [class.active]="activeTab === 'ISSUE_CHANGES'">
+      <span class="tab-title">{{ 'ISSUE_CHANGES' | translate }}</span>
+    </div>
+  </div>
+
+
+  <div class="filters">
+    <div class="p-input-icon-left mobile-search-input"></div>
+  </div>
+</div>
+
+<!-- Содержимое -->
+<div class="content" *ngIf="successorsItem">
+  <div *ngIf="activeTab === 'SUCCESSION_PLAN'">
+    <div class="potential-positions">
+      <div class="title">
+        {{ 'POTENTIAL_POSITIONS' | translate }}
+      </div>
+      <div *ngFor="let employee of successorsItem.successionPlan.potentialPositions">
+        <div class="successor-list-item">
+          <div class="name">
+            <span
+              class="avatar"
+              [ngStyle]="{
+      backgroundImage: employee.photo
+        ? 'url(' + encodeURI(employee.photo) + ')'
+        : 'url(assets/img/svg/user-circle.svg)'
+    }"
+            ></span>
+            <span class="full-name">
+                {{employee.position}}
+              </span>
+          </div>
+          <span class="division">
+              {{employee.division}}
+            </span>
+          <span class="best">
+              <i class="pi pi-star" *ngIf="employee.bestCandidate" [pTooltip]="'BEST_CANDIDATE' | translate"></i>
+          </span>
+          <span class="status">
+              <span
+                class="readiness-status"
+                [ngStyle]="{background: employee.colorReadinessStatus || 'var(--draft)'}">
+                {{employee.readinessStatus}}</span>
+              </span>
+          <span class="name division">
+              {{employee.fullName}}
+          </span>
+          <span class="buttons">
+              <i *ngIf="employee.editingAvailable" class="pi pi-pencil cursor-pointer" (click)="editPotential(employee)"></i>
+              <i *ngIf="employee.editingAvailable" class="pi pi-times cursor-pointer" (click)="removePotential(employee)"></i>
+            </span>
+        </div>
+      </div>
+      <div class="add-button">
+        <p-button
+          *ngIf="successorsItem.employeeInfo.editingAvailable"
+          icon="pi pi-plus"
+          label="{{ 'BUTTON_ADD' | translate }}"
+          [link]="true"
+          (click)="addPotential()"
+        ></p-button>
+      </div>
+    </div>
+    <div class="potential-positions">
+      <div class="title">
+        {{ 'SUCCESSORS' | translate }}
+      </div>
+      <div *ngFor="let employee of successorsItem.successionPlan.successors">
+        <div class="successor-list-item">
+          <div class="name">
+            <span
+              class="avatar"
+              [ngStyle]="{
+      backgroundImage: employee.photo
+        ? 'url(' + encodeURI(employee.photo) + ')'
+        : 'url(assets/img/svg/user-circle.svg)'
+    }"
+            ></span>
+            <span class="full-name">
+                {{employee.position}}
+              </span>
+          </div>
+          <span class="division">
+              {{employee.division}}
+            </span>
+          <span class="best">
+              <i class="pi pi-star" *ngIf="employee.bestCandidate" [pTooltip]="'BEST_CANDIDATE' | translate"></i>
+            </span>
+          <span class="status">
+              <span
+                class="readiness-status"
+                [ngStyle]="{background: employee.colorReadinessStatus || 'var(--draft)'}">
+                {{employee.readinessStatus}}
+              </span>
+          </span>
+          <span class="name">
+              {{employee.fullName}}
+            </span>
+          <span class="buttons">
+              <i *ngIf="employee.editingAvailable" class="pi pi-pencil cursor-pointer" (click)="editSuccessor(employee)"></i>
+              <i *ngIf="employee.editingAvailable" class="pi pi-times cursor-pointer" (click)="removeSuccessor(employee)"></i>
+            </span>
+        </div>
+      </div>
+      <div class="add-button">
+        <p-button
+          *ngIf="successorsItem.employeeInfo.editingAvailable"
+          icon="pi pi-plus"
+          label="{{ 'BUTTON_ADD' | translate }}"
+          [link]="true"
+          (click)="addSuccessor()"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="activeTab === 'ISSUE_CHANGES'">
+    <ng-container>
+      <div class="header-content">
+        <div *ngFor="let history of successorsItem.changeHistory" class="column">
+          <div class="history-row">
+            <div
+              class="history-row__column"
+            >
+              <div class="history-row__date">
+                {{history.date | date: 'dd.MM.yyyy'}}
+              </div>
+              <div
+                class="history-row__status"
+              >
+                <div
+                  class="history-row__status_tag"
+                  [ngStyle]="{
+                    backgroundColor: 'var(--draft)',
+                  }"
+                >
+                  Внесены изменения
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="history-comment" *ngIf="history.comment">
+            {{history.comment}}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>
+
+

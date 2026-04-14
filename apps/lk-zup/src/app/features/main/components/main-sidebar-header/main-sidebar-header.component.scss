@@ -1,0 +1,196 @@
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  color: var(--sidebar-menu-text);
+  border: none;
+  outline: none;
+  cursor: pointer;
+
+  app-logo {
+    width: 42px;
+    height: 60px;
+  }
+
+  &--single {
+    cursor: default;
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__logo {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    object-fit: contain;
+    flex-shrink: 0;
+  }
+}
+
+// Меню выбора компании (попап)
+.company-menu {
+  animation: companyMenuSlideIn 0.2s ease-out;
+
+  &__content {
+    min-width: 240px;
+    background: var(--sidebar-popover-bg);
+    backdrop-filter: var(--sidebar-popover-backdrop-filter);
+    border-radius: var(--sidebar-popover-radius);
+    box-shadow: var(--sidebar-popover-shadow);
+    border: var(--sidebar-popover-border);
+    padding: 12px;
+    max-height: inherit;
+    overflow-y: auto;
+  }
+
+  &__header {
+    padding: 8px 8px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--sidebar-submenu-text);
+    opacity: 0.7;
+    margin-bottom: 4px;
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__item {
+    margin: 0;
+  }
+
+  &__link {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    padding: 8px 10px;
+    color: var(--sidebar-submenu-text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    text-align: left;
+
+    &:not(&--active):hover {
+      background: var(--sidebar-submenu-hover-bg);
+    }
+
+    &--active {
+      background: var(--primary-color);
+      color: var(--primary-foreground);
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+  }
+
+  &__title {
+    font-size: 17px;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  &__subtitle {
+    font-size: 12px;
+    font-weight: 300;
+    line-height: 1.3;
+    opacity: 0.7;
+  }
+}
+
+// Мобильная версия - на весь экран
+::ng-deep .company-menu--mobile {
+  .company-menu {
+    animation: companyMenuMobileSlideIn 0.3s ease-out;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .company-menu__content {
+    width: 100%;
+    height: 100%;
+    max-height: 100vh;
+    border-radius: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .company-menu__header {
+    padding: 16px 20px;
+    font-size: 14px;
+    border-bottom: 1px solid var(--sidebar-submenu-line-color);
+    margin-bottom: 0;
+  }
+
+  .company-menu__list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px;
+  }
+
+  .company-menu__link {
+    padding: 16px 20px;
+  }
+
+  .company-menu__title {
+    font-size: 16px;
+  }
+
+  .company-menu__subtitle {
+    font-size: 13px;
+  }
+}
+
+// Десктопная версия - фиксированная ширина
+::ng-deep .company-menu--desktop {
+  .company-menu__content {
+    width: 375px;
+  }
+}
+
+@keyframes companyMenuSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes companyMenuMobileSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

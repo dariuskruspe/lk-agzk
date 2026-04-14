@@ -1,0 +1,15 @@
+<div class="custom-item-list">
+  <ng-container *ngFor="let item of items">
+    <div class="custom-item-list__item custom-item">
+      <div *ngIf="item" class="custom-item__value">
+        <div class="custom-item__title">{{item.type}}</div>
+        <div *ngFor="let link of item.data" [class.link]="link.issueId" (click)="openIssue(link.issueId)">
+          <span *ngIf="link.eventName">{{link.eventName}}</span>
+          <span *ngIf="!link.eventName">{{link.startDate| date: 'dd.MM.yyyy'}}
+            <span *ngIf="link.endDate">- {{link.endDate| date: 'dd.MM.yyyy'}}</span>
+          </span>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>

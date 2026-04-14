@@ -1,0 +1,41 @@
+@import 'default_legacy.css';
+
+body {
+  --menu-background: #ffffff;
+  --background-color: #ecf4fe;
+  --header-background: #00355f;
+  --card-background: #ffffff;
+  --card-shadow: 0 2px 4px 0 #dedae0;
+  --title-background: #798798FF;
+  --card-second-background: #f6fbff;
+  --hover: #daebfe;
+  --title-color: #1c2b36;
+  --secondary-color: #bababa;
+  --primary: #186ade;
+  --basic-color: #1c2b36;
+  --header-icons-color: #ffffff;
+  --border-color: #bababa;
+
+  --toast-color: #252F3F;
+  --toast-background-error: #FEE2E2;
+  --toast-background-success: #F2FEE0;
+  --toast-background-warn: #FFF8EB;
+  --toast-background-info: #D4E4FF;
+  --toast-icon-background-error: #ED4346;
+  --toast-icon-background-success: #A6CF00;
+  --toast-icon-background-warn: #FFAE00;
+  --toast-icon-background-info: #3880FF;
+  --toast-close: var(--gray);
+
+  --inprocess: #C3D9FF;
+  --done: #F1F8D4;
+  --onapproval: #FFE9C8;
+  --rejected: #FED6D6;
+  --canceled: var(--rejected);
+  --issuing: var(--inprocess);
+  --onsign: var(--onapproval);
+  --onmanager: var(--onapproval);
+  --draft: #DEDEDE;
+
+  --dialog-background: var(--surface-overlay);
+}

@@ -1,0 +1,36 @@
+<div class="wrapper">
+  <p-toolbar class="title">
+    <h1>
+      {{ 'TITLE_SUPPORT' | translate }}
+    </h1>
+    <span class="spacer"></span>
+    <!-- убрано по задаче HRM-34517 (функционал не реализован)
+    <button mat-flat-button color="primary" class="title-button">
+      {{ 'BUTTON_SUPPORT_ISSUE' | translate }}
+    </button>-->
+  </p-toolbar>
+  <p class="support__desc">
+    {{ 'SUPPORT_DESC' | translate }}
+  </p>
+  <div class="support__links-wrap support-link">
+    <p-card
+      class="hoverable"
+      *ngFor="let link of helpList"
+      [routerLink]="['', 'support', 'info', link?.groupId]"
+    >
+      <a> <span class="support-link__text">{{ link?.title }}</span> <span class="support-link__arrow">
+          <i class="pi pi-arrow-right"></i>
+        </span> </a>
+    </p-card>
+    <p-card
+      *ngIf="settings.general?.onboardingEnabled && !isMobile"
+      class="hoverable"
+      [routerLink]="['', 'support', 'onb']"
+    >
+      <a> <span class="support-link__text">{{ 'ONBOARDINGS_COMPLETION' | translate }}</span>
+        <span class="support-link__arrow">
+          <i class="pi pi-arrow-right"></i>
+        </span> </a>
+    </p-card>
+  </div>
+</div>

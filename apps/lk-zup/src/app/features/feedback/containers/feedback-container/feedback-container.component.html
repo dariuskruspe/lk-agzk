@@ -1,0 +1,117 @@
+<!-- Страница "Обратная связь" -->
+<div class="employee-vacations-body">
+  <p-toolbar class="title">
+    <h1>{{ 'FEEDBACK' | translate }}</h1>
+    <span class="spacer"></span>
+
+    <p-splitButton
+      (onClick)="downloadResultReport()"
+      [label]="'DOWNLOAD_REPORT' | translate"
+      [disabled]="isReportLoadingSignal()"
+      [model]="saveReportResultButtonItems"
+      [outlined]="true"
+      class="mr-10"
+    />
+
+    <button
+      pButton
+      icon="pi pi-plus-circle"
+      iconPos="left"
+      label="{{ 'CREATE' | translate }}"
+      [routerLink]="['', 'issues', 'types']"
+      [queryParams]="{ groupAlias: 'feedback' }"
+    ></button>
+  </p-toolbar>
+
+  <div class="tabs-controls-panel">
+    <div class="tabs">
+
+      <div
+        class="tab-item active"
+        (click)="changeTab('ALL_ISSUES')"
+        [class.active]="activeTab === 'ALL_ISSUES'"
+      >
+      {{ 'ALL_ISSUES' | translate }}
+      </div>
+
+
+      <div
+        class="tab-item"
+        (click)="changeTab('ATTENTION')"
+        [class.active]="activeTab === 'ATTENTION'"
+      >
+        {{ 'NEED_ATTENTION' | translate }}
+      </div>
+      <div
+        class="tab-item"
+        (click)="changeTab('ABOUT_ME')"
+        [class.active]="activeTab === 'ABOUT_ME'"
+      >
+        {{ 'ABOUT_ME' | translate }}
+      </div>
+      <div
+        class="tab-item"
+        (click)="changeTab('GRATITUDE')"
+        [class.active]="activeTab === 'GRATITUDE'"
+      >
+        {{ 'GRATITUDE' | translate }}
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div *ngIf="activeTab === 'ALL_ISSUES'">
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="agreementsEmployeeList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [otherData]="stateList"
+        [loading]="this.loading$ | async"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="onFeedbackItem($event)"
+      ></loadable-list-container>
+    </div>
+
+    <div *ngIf="activeTab === 'ATTENTION'">
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="agreementsEmployeeList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [otherData]="stateList"
+        [loading]="this.loading$ | async"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="onFeedbackItem($event)"
+      ></loadable-list-container>
+    </div>
+    <div *ngIf="activeTab === 'ABOUT_ME'">
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="agreementsEmployeeList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [otherData]="stateList"
+        [loading]="this.loading$ | async"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="onFeedbackItem($event)"
+      ></loadable-list-container>
+    </div>
+    <div *ngIf="activeTab === 'GRATITUDE'">
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="agreementsEmployeeList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [otherData]="stateList"
+        [loading]="this.loading$ | async"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="onFeedbackItem($event)"
+      ></loadable-list-container>
+    </div>
+  </div>
+</div>

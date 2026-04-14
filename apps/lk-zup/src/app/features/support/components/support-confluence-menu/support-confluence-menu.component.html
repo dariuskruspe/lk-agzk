@@ -1,0 +1,21 @@
+<div
+  class="support-menu"
+  [ngClass]="menuOpened ? 'open' : ''"
+>
+  <div class="support-menu__mobile-title">
+    <span>Навигация по разделу</span>
+    <button
+      class="support-menu__mobile-close"
+      aria-label="close"
+      (click)="closeMenu()"
+    >
+      <i class="pi pi-times"></i>
+    </button>
+  </div>
+  <p class="support-menu__title">{{ page?.title }}</p>
+  <ul>
+    <li *ngFor="let item of menu">
+      <a>{{ item?.title }}</a>
+    </li>
+  </ul>
+</div>

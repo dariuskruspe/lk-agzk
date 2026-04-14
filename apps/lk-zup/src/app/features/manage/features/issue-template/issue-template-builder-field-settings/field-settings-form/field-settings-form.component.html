@@ -1,0 +1,114 @@
+<div class="field-settings-form">
+  <!-- Хлебные крошки и контекст -->
+  <div class="form-header">
+    <div class="breadcrumb">
+      <span class="field-type">{{ getFieldTypeLabel() }}</span>
+      <span class="separator">→</span>
+      <span class="section-name">{{ getCurrentSectionData()?.title }}</span>
+    </div>
+  </div>
+
+  <!-- Навигация по секциям -->
+  <div class="sections-nav">
+    @for (section of visibleSections(); track section.name) {
+      <button
+        pButton
+        [text]="true"
+        [plain]="currentSection() !== section.name"
+        [outlined]="currentSection() === section.name"
+        class="section-tab"
+        [class.active]="currentSection() === section.name"
+        [class.has-changes]="sectionHasChanges(section)"
+        (click)="setCurrentSection(section.name)"
+      >
+        <i class="section-icon {{ section.icon }}"></i>
+        <span class="section-title">{{ section.title }}</span>
+        @if (sectionHasChanges(section)) {
+          <span class="changes-indicator">●</span>
+        }
+      </button>
+    }
+  </div>
+
+  <!-- Описание текущей секции -->
+  @if (getCurrentSectionData()?.description) {
+    <div class="section-description">
+      <i class="pi pi-info-circle"></i>
+      <span>{{ getCurrentSectionData()?.description }}</span>
+    </div>
+  }
+
+  <!-- Основной контент -->
+  <div class="form-content">
+    <!-- Динамический контент секции -->
+    <div class="section-editor">
+      @switch (currentSection()) {
+        @case ('basic') {
+          <app-basic-settings-editor
+            [fieldType]="fieldType()"
+            [value]="formValue()"
+            (valueChange)="updateFormValue($event)"
+          >
+          </app-basic-settings-editor>
+        }
+        @case ('options') {
+          <app-select-options-editor
+            [fieldType]="fieldType()"
+            [value]="formValue()"
+            (valueChange)="updateFormValue($event)"
+          >
+          </app-select-options-editor>
+        }
+        @case ('validation') {
+          <app-validation-rules-editor
+            [fieldType]="fieldType()"
+            [value]="formValue()"
+            (valueChange)="updateFormValue($event)"
+          >
+          </app-validation-rules-editor>
+        }
+        @case ('dependencies') {
+          <app-dependencies-editor
+            [value]="formValue()"
+            (valueChange)="updateFormValue($event)"
+          >
+          </app-dependencies-editor>
+        }
+        @case ('arrSmart') {
+          <div class="arr-smart-editor">
+            <h4>Настройки arr-smart</h4>
+            <p>Редактор настроек arr-smart будет реализован позже</p>
+          </div>
+        }
+        @case ('fileSettings') {
+          <div class="file-settings-editor">
+            <h4>Настройки файлов</h4>
+            <p>Редактор настроек файлов будет реализован позже</p>
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <!-- Футер с кнопками действий -->
+  <div class="form-footer">
+    <div class="left-actions">
+      <!-- Дополнительные действия могут быть здесь -->
+    </div>
+
+    <div class="right-actions">
+      <p-button
+        label="Отмена"
+        [text]="true"
+        class="btn-cancel"
+        (click)="onCancel()"
+      ></p-button>
+      <p-button
+        label="Сохранить"
+        class="btn-save"
+        (click)="onSave()"
+        [disabled]="!hasUnsavedChanges()"
+      ></p-button>
+    </div>
+  </div>
+</div>

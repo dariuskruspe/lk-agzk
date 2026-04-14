@@ -1,0 +1,5 @@
+<app-support-help
+  [currentUser]="currentUserFacade.getData()"
+  [settings]="settingsFacade.getData()"
+  [helpList]="supportHelpFacade.getData$() | async"
+></app-support-help>

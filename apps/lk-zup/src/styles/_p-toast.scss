@@ -1,0 +1,100 @@
+.p-toast {
+  z-index: 5000 !important;
+  opacity: 1 !important;
+  max-width: 90%;
+
+  .p-toast-message-icon {
+    color: var(--icon-with-background) !important;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: red;
+    border-radius: 50%;
+    border: var(--toast-border);
+    flex: 0 0 auto;
+    line-height: normal;
+  }
+}
+
+.toast-error-copy-button {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  margin-top: 10px;
+}
+
+.p-toast-icon-close-icon {
+  color: var(--toast-close) !important;
+}
+
+.p-toast-top-right {
+  top: 80px !important;
+
+  @media (max-width: 769px) {
+    top: 20px !important;
+  }
+}
+
+.p-toast .p-toast-message {
+  border: none !important;
+}
+
+.p-toast-message-content {
+  align-items: center !important;
+}
+
+.p-toast-detail, .p-toast-summary {
+  color: var(--toast-color) !important;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-icon {
+  font-size: 1.3rem !important;
+}
+
+.p-toast .p-toast-message .p-toast-message-content .p-toast-message-text {
+  overflow-wrap: anywhere;
+}
+
+.p-toast-icon-close {
+  flex: 0 0 auto;
+}
+
+.p-toast .p-toast-message.p-toast-message-error {
+  background: var(--toast-background-error) !important;
+  border: var(--toast-border) !important;
+
+  .p-toast-message-icon {
+    background: var(--toast-icon-background-error) !important;
+  }
+}
+
+.p-toast .p-toast-message.p-toast-message-success {
+  background: var(--toast-background-success) !important;
+  border: var(--toast-border) !important;
+
+  .p-toast-message-icon {
+    background: var(--toast-icon-background-success) !important;
+  }
+}
+
+.p-toast .p-toast-message.p-toast-message-info {
+  background: var(--toast-background-info) !important;
+  border: var(--toast-border) !important;
+
+  .p-toast-message-icon {
+    background: var(--toast-icon-background-info) !important;
+  }
+}
+
+.p-toast .p-toast-message.p-toast-message-warn {
+  background: var(--toast-background-warn) !important;
+  border: var(--toast-border) !important;
+
+  .p-toast-message-icon {
+    background: var(--toast-icon-background-warn) !important;
+  }
+}
+
+

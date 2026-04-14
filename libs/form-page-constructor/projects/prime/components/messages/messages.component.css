@@ -1,0 +1,14 @@
+.custom-form-field__hint {
+  color: var(--text-color-secondary, #6c757d);
+  margin-top: 4px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.custom-form-field__error {
+  margin-top: 4px;
+}
+
+.custom-form-field__hint + .custom-form-field__error {
+  margin-top: 2px;
+}

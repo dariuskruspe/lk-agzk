@@ -1,0 +1,37 @@
+<mat-toolbar *ngFor="let businessTrip of dataList.issues" class="custom-item">
+  <span
+    [ngStyle]="{
+      backgroundColor: businessTripState(businessTrip.stateID)?.color
+    }"
+  >
+    <mat-icon svgIcon="{{ businessTrip?.iconName }}"></mat-icon>
+  </span>
+  <h4>{{ businessTrip?.issueType }}</h4>
+  <div class="custom-item__wrap">
+    <p>
+      {{ 'PERIOD' | translate }}:
+      {{ businessTrip?.dateStart }}
+      -
+      {{ businessTrip?.dateEnd }}
+    </p>
+    <p>#{{ businessTrip?.number }}</p>
+
+    <div class="custom-item__crunch">
+      <mat-icon
+        *ngIf="businessTrip.attachedFiles"
+        svgIcon="pi-paperclip"
+      ></mat-icon>
+    </div>
+
+    <div class="custom-item__status">
+      <p
+        [ngStyle]="{
+          backgroundColor:
+            businessTripState(businessTrip?.stateID)?.color + '20'
+        }"
+      >
+        {{ businessTripState(businessTrip.stateID)?.name }}
+      </p>
+    </div>
+  </div>
+</mat-toolbar>

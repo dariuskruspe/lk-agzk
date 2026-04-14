@@ -1,0 +1,207 @@
+@if (calendarConfig && displayedVacationsSignal()) {
+<div class="calendar-container flex flex-col">
+  <div class="calendar-container-row flex flex-row">
+    <!-- Список сотрудников -->
+    <div
+      #employeeList
+      class="flex flex-col"
+      [ngStyle]="{
+        flexShrink: 0,
+        maxHeight: fullscreen ? '50vh' : '50vh',
+        overflow: 'hidden',
+        paddingBottom: '10px'
+      }"
+    >
+      <div
+        class="time-line__layout_sticky"
+        [ngStyle]="{
+          height: calendarConfig.showType === 'year' ? '30px' : '90px',
+          flexShrink: 0,
+          background: 'none'
+        }"
+      >
+        &nbsp;
+      </div>
+      <div class="time-line__layout time-line__layout_sticky-horizontal">
+        <calendar-graph-member-list
+          [vacations]="vacations"
+          [trips]="trips"
+          [calendarConfig]="calendarConfig"
+          [currentUser]="currentUser"
+          (editVacation)="onOpenApproval($event)"
+        ></calendar-graph-member-list>
+      </div>
+    </div>
+
+    <!-- График отпусков (отпуска в виде таймлайна) -->
+    <div
+      #timeLine
+      class="time-line"
+      [ngClass]="{
+        member: calendarConfig?.membersShow,
+        work: calendarConfig?.showWorkTime
+      }"
+      [style.max-height]="fullscreen ? '50vh' : '50vh'"
+    >
+      <div class="time-line__layout time-line__layout_sticky">
+        <!--        <div class="empty-member"></div>-->
+        <div
+          class="month month-head"
+          *ngFor="
+            let day of monthLength;
+            index as monthInd;
+            trackBy: trackByIndex
+          "
+          [id]="monthInd"
+          [ngStyle]="{ background: none }"
+        >
+          <div
+            *ngIf="calendarConfig.showType === 'year'; else monthsLayout"
+            class="member-row year"
+            [ngStyle]="{
+              width:
+                getDaysInMonth(date.getMonth(calendarConfig?.date) + monthInd)
+                  ?.length *
+                  defaultCalendarConfig.yearView.dayWidthInPixels +
+                'px'
+            }"
+          >
+            <calendar-graph-month-point
+              [startDate]="calendarConfig?.date"
+              [monthNameList]="months"
+              [monthInd]="monthInd"
+              [showType]="calendarConfig.showType"
+            ></calendar-graph-month-point>
+          </div>
+
+          <ng-template #monthsLayout>
+            @if (monthInd === selectedDateSignal()?.getMonth()) {
+            <calendar-graph-month-point
+              [startDate]="calendarConfig?.date"
+              [monthNameList]="months"
+              [monthInd]="monthInd"
+              [showType]="calendarConfig.showType"
+            ></calendar-graph-month-point>
+            <calendar-graph-day-numbering
+              [startDate]="calendarConfig?.date"
+              [dayNumberList]="daysOfWeek"
+              [monthInd]="monthInd"
+              [showDaysOff]="calendarConfig.showDaysOff"
+              [dayOffList]="dayOffList"
+              [showType]="calendarConfig.showType"
+            ></calendar-graph-day-numbering>
+            }
+          </ng-template>
+        </div>
+      </div>
+
+      <div class="time-line__layout">
+        <!--    <div class="time-line__layout time-line__layout_sticky-horizontal">-->
+        <!--      <calendar-graph-member-list-->
+        <!--        [vacations]="vacations"-->
+        <!--        [calendarConfig]="calendarConfig"-->
+        <!--        [currentUser]="currentUser"-->
+        <!--        (editVacation)="onOpenApproval($event)"-->
+        <!--      ></calendar-graph-member-list>-->
+        <!--    </div>-->
+
+        @for (day of monthLength; track monthInd; let monthInd = $index) {
+        <!-- <Для вида "Месяц" выводим только выбранный месяц> -->
+        @if (calendarConfig.showType === 'month' ? monthInd ===
+        selectedDateSignal()?.getMonth() : true) {
+
+        <div class="month" [ngClass]="{ 'mobile-members': monthInd === 0 }">
+          @for (vacation of vacations; track row; let row = $index) {
+          <div class="member-row-month">
+            <div
+              class="member-name"
+              [ngStyle]="{
+                transform: 'translate(' + namesOffset + ' , -100%)'
+              }"
+              (click)="openMemberVacation(vacation)"
+            >
+              {{ vacation.name }}
+            </div>
+
+            <ng-container *ngIf="calendarConfig.showType === 'month'">
+              <div class="member-row">
+                @for (day of getDaysInMonth(startMonth + monthInd); track i; let
+                i = $index) {
+                <div
+                  class="date-cel cel period
+                {{
+                    dayOffList[
+                      date.getDateStr(calendarConfig?.date, monthInd, i + 1)
+                    ]
+                  }}
+              "
+                ></div>
+                }
+              </div>
+            </ng-container>
+
+            <ng-container *ngIf="calendarConfig.showType === 'year'">
+              <div
+                class="member-row year"
+                [ngStyle]="{
+                  width:
+                    getDaysInMonth(
+                      date.getMonth(calendarConfig?.date) + monthInd
+                    )?.length *
+                      defaultCalendarConfig.yearView.dayWidthInPixels +
+                    'px'
+                }"
+              >
+                <div class="date-cel cel period"></div>
+              </div>
+            </ng-container>
+
+            <div
+              *ngFor="
+                let point of getPeriodsCoincidence(
+                  vacation.periods,
+                  date.getMonth(calendarConfig?.date) + monthInd
+                ) | periodType : types;
+                trackBy: trackByDates
+              "
+              [pTooltip]="point.tooltip || getPeriod(point)"
+              tooltipPosition="top"
+              class="vacation"
+              [ngClass]="{
+                liner: !trips ? !point.approved : point.status === 'onApproval',
+                'linear-red': !trips
+                  ? point.approved !== null && !point.approved
+                  : point.status === 'cancelled'
+              }"
+              [ngStyle]="{
+                width: getWidth(point) + 'px',
+                left: getOffset(point) + 'px',
+                'background-color': getColor(point)
+              }"
+              (click)="showDateInfo($event, vacation, point)"
+            >
+              <i class="pi pi-sun" *ngIf="!trips"></i>
+              <svg
+                *ngIf="trips"
+                class="sun-icon"
+                width="22"
+                height="18"
+                viewBox="0 0 22 18"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M18.1121 7.5C17.9528 7.5 17.4184 7.50469 17.2684 7.51406L14.2262 7.59375C14.1934 7.59375 14.1606 7.57969 14.1465 7.55156L9.58557 0.721875C9.44963 0.50625 9.20588 0.375 8.95276 0.375H7.84182C7.57932 0.375 7.49026 0.6375 7.58401 0.88125L9.93245 7.575C9.95588 7.63594 9.9137 7.70156 9.84807 7.70156L4.11057 7.78594C3.9887 7.79063 3.8762 7.73438 3.8012 7.64062L2.06682 5.53125C1.9262 5.34844 1.70589 5.24531 1.4762 5.24531H0.688699C0.557449 5.24531 0.468386 5.37187 0.510574 5.49375L1.44339 8.71406C1.5137 8.89219 1.5137 9.09375 1.44339 9.27188L0.510574 12.4922C0.468386 12.6141 0.557449 12.7406 0.688699 12.7406H1.47151C1.7012 12.7406 1.92151 12.6328 2.06214 12.4547L3.82932 10.3125C3.90432 10.2188 4.02151 10.1625 4.1387 10.1672L9.84338 10.2938C9.90901 10.2984 9.9512 10.3594 9.92776 10.4203L7.57932 17.1188C7.48557 17.3625 7.57464 17.625 7.83714 17.625H8.94807C9.20588 17.625 9.44495 17.4937 9.58088 17.2781L14.1465 10.4531C14.1653 10.425 14.1934 10.4109 14.2262 10.4109L17.2684 10.4906C17.4231 10.5 17.9528 10.5047 18.1121 10.5047C20.1887 10.5047 21.5012 9.83438 21.5012 9.00469C21.5012 8.175 20.1934 7.5 18.1121 7.5Z"
+                  fill="#3880FF"
+                />
+              </svg>
+            </div>
+          </div>
+          }
+        </div>
+        } }
+      </div>
+    </div>
+  </div>
+</div>
+}

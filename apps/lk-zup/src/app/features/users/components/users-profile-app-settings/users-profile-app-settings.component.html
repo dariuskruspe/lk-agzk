@@ -1,0 +1,133 @@
+<!-- Страница "Настройки приложения" -->
+@if (settingsSignal() && userSettingsSignal() && dashboardSettingsSignal()) {
+<div class="main-container">
+  <h1 class="heading_title">{{ 'SETTINGS' | translate }}</h1>
+  <h4 class="heading-description">{{ 'SETTINGS_DESCRIPTION' | translate }}</h4>
+  <div>
+    @for(setting of dashboardSettingsSignal(); track setting.id) {
+    <div class="main-item">
+      <div class="inner-item-icon icon-item">
+        <span class="icon-wrapper">
+          @if (setting.iconName) {
+            <i class="hrm-icons dashboard-icon {{ setting.iconName }}"></i>
+          } @else {
+            <i class="hrm-icons dashboard-icon pi pi-info"></i>
+          }
+          
+        </span>
+      </div>
+      <div class="inner-item name-item">
+        <p class="item-name">{{ setting.name | translate }}</p>
+        <p class="item-description">
+          {{ setting.description }}
+        </p>
+      </div>
+      @if (setting) {
+      <div
+        class="inner-item switch-item cy-settings-switch cy-settings-switch-{{
+          setting.id
+        }}"
+      >
+        <!-- <только если настройка должна отображаться> -->
+        @if (setting.visible) {
+        <p-inputSwitch [(ngModel)]="setting.enable"></p-inputSwitch>
+        }
+
+        <!-- <только если настройка включена> -->
+        @if ((setting.visible && !isMobileV()) || !setting.visible) {
+          @if (setting.enable) {
+          <span class="switch-label cy-settings-switch-on">{{
+            'ON' | translate
+          }}</span>
+          } @else {
+         <!-- <только если настройка выключена (или отсутствует значение у свойства enable)> -->
+         <span class="switch-label cy-settings-switch-off">{{
+            'OFF' | translate
+         }}</span>
+          }
+        }
+      </div>
+      }
+    </div>
+    }
+  </div>
+</div>
+
+<!-- Кнопка "Сохранить" (сохраняет настройки) -->
+<button
+  type="button"
+  class="p-ripple p-button p-component"
+  id="cy-settings-save-button"
+  (click)="saveSettings()"
+  [disabled]="!hasVisibleSettings()"
+>
+  <span class="p-button-label">{{ 'BUTTON_SAVE' | translate }}</span>
+</button>
+}
+
+
+<!-- Страница "Настройки приложения" -->
+@if (userSettingsSignal() && userSettingsSignal().dashboard.hasCustomWidgets && customWidgetsSignal().length) {
+  <div class="main-container mt-20">
+    <h1 class="heading_title">Кастомные виджеты</h1>
+    <div>
+      @for(widget of customWidgetsSignal(); track widget.id) {
+      <div class="main-item">
+        <div class="inner-item-icon icon-item">
+          <span class="icon-wrapper">
+            @if (widget.iconName) {
+              <i class="hrm-icons dashboard-icon {{ widget.iconName }}"></i>
+            } @else {
+              <i class="hrm-icons dashboard-icon pi pi-info"></i>
+            }
+            
+          </span>
+        </div>
+        <div class="inner-item name-item">
+          <p class="item-name">{{ widget.title}}</p>
+          <p class="item-description">
+            {{ widget.description }}
+          </p>
+        </div>
+        @if (widget) {
+        <div
+          class="inner-item switch-item cy-settings-switch cy-settings-switch-{{
+            widget.id
+          }}"
+        >
+          <!-- <только если настройка должна отображаться> -->
+          @if (widget.toggleAvailable) {
+          <p-inputSwitch [(ngModel)]="widget.display"></p-inputSwitch>
+          }
+  
+          <!-- <только если настройка включена> -->
+          @if (!widget.toggleAvailable) {
+            @if (widget.display) {
+            <span class="switch-label cy-settings-switch-on">{{
+              'ON' | translate
+            }}</span>
+            } @else {
+           <!-- <только если настройка выключена (или отсутствует значение у свойства enable)> -->
+           <span class="switch-label cy-settings-switch-off">{{
+              'OFF' | translate
+           }}</span>
+            }
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+  
+  <!-- Кнопка "Сохранить" (сохраняет настройки) -->
+  <button
+    type="button"
+    class="p-ripple p-button p-component"
+    id="cy-settings-save-button"
+    (click)="saveCustomWidgets()"
+  >
+    <span class="p-button-label">{{ 'BUTTON_SAVE' | translate }}</span>
+  </button>
+  }
+  

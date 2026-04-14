@@ -1,0 +1,36 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+
+const NC_AUTH = process.env.NC_AUTH;
+
+const [src, dst] = process.argv.slice(2);
+
+upload(path.resolve(src), dst)
+  .then(() => {
+    console.log(`Uploaded ${src} to ${dst}`);
+    process.exit(0);
+  })
+  .catch(e => {
+    console.log('error', e);
+    process.exit(1);
+  });
+
+
+async function upload(src, dst) {
+  const res = await fetch(`https://nc.9958258.ru/remote.php/dav/files/${dst}`, {
+    method: 'put',
+    headers: {
+      'Authorization': `Basic ${NC_AUTH}`,
+    },
+    body: fs.createReadStream(src),
+    duplex: 'half'
+  });
+
+  if (!res.ok) {
+    console.log('res', res);
+    throw new Error('Cannot upload files to nextcloud');
+  }
+
+}

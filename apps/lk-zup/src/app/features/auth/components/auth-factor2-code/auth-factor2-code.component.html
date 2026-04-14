@@ -1,0 +1,26 @@
+<section>
+  <h1 class="h0">{{ 'TITLE_AUTH' | translate }}</h1>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="display-flex-column">
+    <p-card class="auth__form mb">
+      <div class="custom-form-field">
+        <label class="custom-form-field__label">{{
+          'AUTH_CODE' | translate
+        }}</label>
+        <input
+          pInputText
+          type="tel"
+          mask="111 111"
+          [formField]="form"
+          formControlName="code"
+        />
+      </div>
+    </p-card>
+    <button
+      pButton
+      label="{{ 'BUTTON_CONFIRM' | translate }}"
+      type="submit"
+      class="full"
+      [disabled]="loading$"
+    ></button>
+  </form>
+</section>

@@ -1,0 +1,47 @@
+<section class="app-vacations-month">
+  <app-calendar-graph-month
+    [config]="calendarGraphMonthConfig()"
+    [month]="month()"
+    [rows]="rows()"
+  ></app-calendar-graph-month>
+
+  @if (!rows().length && !loading()) {
+    <div class="vacations-month-viewer__empty">
+      <div class="vacations-month-viewer__empty-icon">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path
+            d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"
+          />
+        </svg>
+      </div>
+      <div class="vacations-month-viewer__empty-title">
+        Нет данных об отпусках
+      </div>
+      <div class="vacations-month-viewer__empty-text">
+        В этом месяце не запланировано отпусков
+      </div>
+    </div>
+  }
+</section>
+
+@if (statusTypes().length) {
+  <div class="vacations-month-legend-container" appBindStickyClass>
+    @for (item of statusTypes(); track item.id) {
+      <app-calendar-graph-legend
+        [name]="item.label"
+        [color]="item.color"
+      ></app-calendar-graph-legend>
+    }
+  </div>
+}

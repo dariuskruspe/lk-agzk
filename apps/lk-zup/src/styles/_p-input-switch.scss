@@ -1,0 +1,43 @@
+.p-inputswitch.p-inputswitch-sm {
+  width: 2rem;
+  height: 1.2rem;
+
+  .p-inputswitch-slider {
+    border-radius: 30px;
+  }
+  .p-inputswitch-slider:before {
+    width: 0.8rem;
+    height: 0.8rem;
+    left: 0.1rem;
+    margin-top: -0.4rem;
+    border-radius: 50%;
+  }
+  &.p-inputswitch-checked .p-inputswitch-slider:before {
+    transform: translateX(0.8rem);
+  }
+}
+
+.p-inputswitch {
+  overflow: hidden;
+  position: relative;
+
+  .p-inputswitch-slider {
+    overflow: hidden;
+  }
+
+  @media (max-width: 767px) {
+    &.p-inputswitch-checked .p-inputswitch-slider:before {
+      transform: translateX(calc(3rem - 1.25rem - 0.25rem));
+      max-width: 1.25rem;
+    }
+
+    &.p-inputswitch-sm.p-inputswitch-checked .p-inputswitch-slider:before {
+      transform: translateX(calc(2rem - 0.8rem - 0.1rem));
+      max-width: 0.8rem;
+    }
+  }
+}
+
+p-inputswitch {
+  display: contents;
+}

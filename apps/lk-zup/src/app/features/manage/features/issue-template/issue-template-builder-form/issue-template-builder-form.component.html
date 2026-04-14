@@ -1,0 +1,121 @@
+<div class="form-builder">
+  <!-- Объединенная шапка с табами -->
+  <div class="form-builder__header">
+    <div class="form-builder__tabs">
+      @for (item of menuItems; track $index) {
+        <div
+          class="form-builder__tab"
+          [class.form-builder__tab--active]="activeTabIndex() === $index"
+          [class.form-builder__tab--disabled]="item.disabled"
+          (click)="item.disabled ? null : onTabChange($index)"
+        >
+          <i class="{{ item.icon }}"></i>
+          <span>{{ item.label }}</span>
+          @if (activeTabIndex() === $index) {
+            <div class="form-builder__tab-indicator"></div>
+          }
+        </div>
+      }
+    </div>
+
+    <div class="form-builder__actions">
+      <div class="form-builder__history-actions">
+        <p-button
+          icon="pi pi-undo"
+          styleClass="p-button-text p-button-sm"
+          [disabled]="!repository.canUndo()"
+          pTooltip="Отменить действие"
+          tooltipPosition="bottom"
+          (onClick)="repository.undo()"
+        ></p-button>
+        <p-button
+          icon="pi pi-refresh"
+          styleClass="p-button-text p-button-sm"
+          [disabled]="!repository.canRedo()"
+          pTooltip="Повторить действие"
+          tooltipPosition="bottom"
+          (onClick)="repository.redo()"
+        ></p-button>
+      </div>
+
+      @if (isAiAvailable()) {
+        <!-- Кнопка ИИ-ассистента -->
+        <p-button
+          [label]="showAiChat() ? 'Скрыть ИИ' : 'ИИ-Ассистент'"
+          icon="pi pi-sparkles"
+          [severity]="showAiChat() ? 'success' : 'secondary'"
+          styleClass="p-button-sm ai-chat-toggle"
+          [outlined]="!showAiChat()"
+          pTooltip="Открыть ИИ-ассистент для автогенерации схемы"
+          tooltipPosition="bottom"
+          (onClick)="toggleAiChat()"
+        ></p-button>
+      }
+
+      <p-button
+        label="Сохранить"
+        icon="pi pi-save"
+        styleClass="p-button-primary p-button-sm"
+        [disabled]="!hasChanged()"
+        [loading]="saving()"
+        (onClick)="saveForm()"
+      ></p-button>
+      <p-button
+        icon="pi pi-times"
+        styleClass="p-button-outlined p-button-sm"
+        (onClick)="onCancel()"
+      ></p-button>
+    </div>
+  </div>
+
+  <div
+    class="form-builder__body"
+    [class.form-builder__body--with-chat]="showAiChat()"
+  >
+    <!-- Основная область контента -->
+    <div class="form-builder__main-content">
+      <div class="form-builder__container">
+        @switch (activeTabIndex()) {
+          @case (0) {
+            <app-issue-template-settings
+              [repository]="repository"
+            ></app-issue-template-settings>
+          }
+          @case (1) {
+            <app-issue-template-editor
+              [repository]="repository"
+            ></app-issue-template-editor>
+          }
+          @case (2) {
+            <app-issue-template-field-mapping
+              [repository]="repository"
+            ></app-issue-template-field-mapping>
+          }
+        }
+      </div>
+    </div>
+
+    <!-- Боковая панель с чатом -->
+    @if (showAiChat()) {
+      <div class="form-builder__chat-panel">
+        <div class="chat-panel__header">
+          <h4>
+            <i class="pi pi-sparkles"></i>
+            ИИ-Ассистент
+          </h4>
+          <p-button
+            icon="pi pi-times"
+            styleClass="p-button-text p-button-sm"
+            (onClick)="toggleAiChat()"
+            pTooltip="Закрыть чат"
+          ></p-button>
+        </div>
+        <div class="chat-panel__content">
+          <app-issue-template-builder-chat
+            [rep]="repository"
+          ></app-issue-template-builder-chat>
+        </div>
+      </div>
+    }
+  </div>
+</div>

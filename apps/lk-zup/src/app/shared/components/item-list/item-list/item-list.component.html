@@ -1,0 +1,54 @@
+<div class="custom-item-list">
+  <ng-container *ngFor="let item of updatedItems | translateObj; let i = index">
+    <div
+      *ngIf="!((!item[titleKey] || !item[valueKey]) && !showEmpty)"
+      class="custom-item-list__item custom-item"
+      [ngClass]="{
+        'custom-item_expandable': item.items?.length
+      }"
+    >
+      <div
+        *ngIf="item[titleKey]"
+        class="custom-item__title"
+        [ngStyle]="{ 'font-size': font }"
+        (click)="expand(item, i)"
+        [ngClass]="{
+          'custom-item__title_highlighted':
+            !item[valueKey] && isEmptyHighlighted
+        }"
+      >
+        {{ item[titleKey] | translate }}
+      </div>
+      <div
+        *ngIf="item[valueKey] && !editOneByOne"
+        class="custom-item__value"
+        [ngStyle]="{ 'font-size': font }"
+        [innerHTML]="item[valueKey] | translateObj | trustedHtml : true"
+      ></div>
+      <div
+        *ngIf="item[valueKey] && editOneByOne"
+        class="custom-item__value"
+        [ngStyle]="{ 'font-size': font }"
+      >
+        <span>{{ item[valueKey] }}</span>
+        <i
+          class="pi pi-pencil pencil-icon"
+          (click)="editOne(item, i); $event.stopPropagation()"
+        ></i>
+      </div>
+      <div *ngIf="isOpened(i)" class="custom-item__subitems">
+        <app-item-list [items]="item.items"></app-item-list>
+      </div>
+      <div
+        *ngIf="item.items?.length"
+        class="custom-item__arrow"
+        (click)="expand(item, i)"
+      >
+        <i *ngIf="isOpened(i); else closed" class="pi pi-chevron-down"></i>
+        <ng-template #closed>
+          <i class="pi pi-chevron-left"></i>
+        </ng-template>
+      </div>
+    </div>
+  </ng-container>
+</div>

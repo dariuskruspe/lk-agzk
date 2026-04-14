@@ -1,0 +1,33 @@
+<div class="validation-container">
+  <div class="validation-container__description">
+    {{
+      (forEmployee() ? 'SIGNATURE_CHOICE' : 'ORG_SIGNATURE_CHOICE') | translate
+    }}
+  </div>
+  <div class="validation-container__description">
+    @for(provider of providers(); track provider) {
+    <div
+      class="provider"
+      (click)="chosenProvider.set(provider)"
+      [class.provider--active]="chosenProvider() === provider"
+    >
+      <div class="provider_logo">
+        @if(provider.ui.logo) {
+        <img [apiImg]="provider.ui.logo" />
+        } @else {
+        <img src="/assets/img/svg/docs-sign.svg" />
+        }
+      </div>
+      <div class="provider_title">{{ provider.ui.name }}</div>
+    </div>
+    }
+  </div>
+  <p-toolbar class="margin-top">
+    <p-button
+      styleClass="p-button-action"
+      label="{{ 'BUTTON_CONTINUE' | translate }}"
+      [disabled]="!chosenProvider"
+      (onClick)="choose()"
+    ></p-button>
+  </p-toolbar>
+</div>

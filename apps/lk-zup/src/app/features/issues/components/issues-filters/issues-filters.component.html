@@ -1,0 +1,57 @@
+<!-- Фильтр "Тип заявки" -->
+<div class="filter-item p-fluid" *ngIf="issuesTypes.length">
+  <label class="custom-form-field__label">
+    {{ 'ISSUE_TYPE' | translate }}
+  </label>
+  <p-multiSelect
+    [options]="issuesTypes"
+    [(ngModel)]="filterValue.type"
+    [showClear]="true"
+    [filter]="true"
+    optionLabel="issueTypeFullName"
+    optionValue="issueTypeID"
+    (ngModelChange)="applyFilters.emit()"
+    maxSelectedLabels="2"
+    placeholder="{{ 'ISSUE_TYPE' | translate }}"
+    [selectedItemsLabel]="'SELECTED_ITEMS_LABEL' | translate"
+    styleClass="multiselect-compact"
+    resetFilterOnHide="true"
+  >
+  </p-multiSelect>
+</div>
+
+<!-- Фильтр "Период" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'PERIOD' | translate }}
+  </label>
+  <p-dropdown
+    [options]="daysValueList"
+    [(ngModel)]="filterValue.days"
+    [filter]="true"
+    [showClear]="true"
+    optionLabel="title"
+    optionValue="value"
+    (ngModelChange)="applyFilters.emit()"
+    class="dropdown-input"
+    placeholder="{{ 'PERIOD' | translate }}"
+  ></p-dropdown>
+</div>
+
+<!-- Фильтр "Статус" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'VACATION_STATUS_TITLE' | translate }}
+  </label>
+  <p-dropdown
+    [options]="issuesStatusList?.states"
+    [(ngModel)]="filterValue.state"
+    [showClear]="true"
+    [filter]="true"
+    optionLabel="name"
+    optionValue="id"
+    (ngModelChange)="applyFilters.emit()"
+    class="dropdown-input"
+    placeholder="{{ 'VACATION_STATUS_TITLE' | translate }}"
+  ></p-dropdown>
+</div>

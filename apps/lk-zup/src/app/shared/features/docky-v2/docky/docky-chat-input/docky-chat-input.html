@@ -1,0 +1,29 @@
+<div class="docky-chat-input-root" (click)="onContainerClick($event)">
+  <div class="docky-chat-input" [class.docky-chat-input--multiline]="isMultiline()">
+    <textarea
+      #chatInput
+      rows="1"
+      placeholder="Напишите сообщение..."
+      [disabled]="isStreaming()"
+      (input)="onInput($event)"
+      (keydown)="onTextareaKeyDown($event)"
+    ></textarea>
+
+    <div class="docky-chat-input__submit">
+      <button
+        class="docky-chat-input__send"
+        [class.docky-chat-input__send--stop]="isStreaming()"
+        type="button"
+        [attr.aria-label]="isStreaming() ? 'Остановить ответ' : 'Отправить сообщение'"
+        (click)="onSendClick()"
+      >
+        <lucide-icon [name]="isStreaming() ? StopIcon : SendIcon"></lucide-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="docky-chat-input-hint">
+    @if (isMobileContext()) { Enter - перенос строки. Отправка - кнопкой } @else { Enter -
+    отправить, Shift + Enter - перенос строки }
+  </div>
+</div>

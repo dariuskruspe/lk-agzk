@@ -1,0 +1,72 @@
+<!-- Фильтр "Тип заявки" -->
+<div class="filter-item p-fluid" *ngIf="issuesTypes.length">
+  <label class="custom-form-field__label">
+    {{ 'ISSUE_TYPE' | translate }}
+  </label>
+  <p-multiSelect
+    [options]="issuesTypes"
+    [(ngModel)]="types"
+    [showClear]="true"
+    [filter]="true"
+    optionLabel="issueTypeFullName"
+    optionValue="issueTypeID"
+    (ngModelChange)="applyFilters.emit()"
+    maxSelectedLabels="2"
+    placeholder="{{ 'ISSUE_TYPE' | translate }}"
+    [selectedItemsLabel]="'SELECTED_ITEMS_LABEL' | translate"
+    styleClass="multiselect-compact"
+  >
+  </p-multiSelect>
+</div>
+
+<!-- Фильтр "Сотрудник" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'TITLE_GROUP_EMPLOYEE' | translate }}
+  </label>
+  <p-dropdown
+    [options]="employeesSubordinatesList"
+    [(ngModel)]="employee"
+    [showClear]="true"
+    [filter]="true"
+    optionLabel="title"
+    class="dropdown-input"
+    placeholder="{{ 'TITLE_GROUP_EMPLOYEE' | translate }}"
+    (onClick)="$event.stopPropagation()"
+    (ngModelChange)="applyFilters.emit()"
+  ></p-dropdown>
+</div>
+
+<!-- Фильтр "Статус" -->
+<div class="filter-item" *ngIf="activeTab === 'all'">
+  <label class="custom-form-field__label">
+    {{ 'VACATION_STATUS_TITLE' | translate }}
+  </label>
+  <p-dropdown
+    [options]="statusList"
+    [(ngModel)]="status"
+    [showClear]="true"
+    [filter]="true"
+    optionLabel="title"
+    (ngModelChange)="applyFilters.emit()"
+    class="dropdown-input"
+    placeholder="{{ 'VACATION_STATUS_TITLE' | translate }}"
+  ></p-dropdown>
+</div>
+
+<!-- Фильтр "Период" -->
+<div class="filter-item">
+  <label class="custom-form-field__label">
+    {{ 'PERIOD' | translate }}
+  </label>
+  <p-dropdown
+    [options]="daysValueList"
+    [(ngModel)]="period"
+    [filter]="true"
+    [showClear]="true"
+    optionLabel="title"
+    (ngModelChange)="applyFilters.emit()"
+    class="dropdown-input"
+    placeholder="{{ 'PERIOD' | translate }}"
+  ></p-dropdown>
+</div>

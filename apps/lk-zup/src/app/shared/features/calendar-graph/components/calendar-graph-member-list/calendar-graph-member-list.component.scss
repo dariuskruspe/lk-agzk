@@ -1,0 +1,120 @@
+$celHeight: 60px;
+$celHeightHeader: 50px;
+$monthHeight: 30px;
+$memberWidth: 350px;
+
+.graph-table {
+  display: flex;
+  flex-direction: row;
+}
+
+.checkbox-container {
+  background: var(--background-color);
+}
+
+.member-list,
+.math-work-time {
+  position: relative;
+
+  &.member-list {
+    width: $memberWidth;
+  }
+  &.math-work-time {
+    width: 30px;
+    & > * {
+      & .member {
+        padding: 0;
+      }
+    }
+  }
+
+  &__badge {
+    border-radius: 50%;
+    width: 5px !important;
+    height: 5px !important;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(50%, 50%);
+  }
+
+  & > * {
+    display: flex;
+    & .member {
+      padding: 5px;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      border-radius: 3px;
+      height: $celHeight;
+      justify-content: center;
+      align-items: flex-start;
+      position: relative;
+      margin: 1px 0;
+      cursor: pointer;
+      background: var(--background-color);
+      overflow: hidden;
+
+      &:hover {
+        background: var(--hover);
+      }
+
+      &.empty {
+        background-color: transparent;
+        border-color: transparent;
+        height: $celHeightHeader + $monthHeight;
+        &.min {
+          height: $monthHeight - 2px;
+        }
+      }
+      & > * {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;
+        line-height: 25px;
+      }
+      & > .name {
+        color: var(--basic-color);
+        font-size: 16px;
+      }
+      & > .position {
+        color: #989aa2;
+        font-size: 14px;
+      }
+      & > .add {
+        display: none;
+        position: absolute;
+        height: 60px;
+        right: -28px;
+        top: 0;
+        cursor: pointer;
+        width: 30px;
+        padding-left: 3px;
+        z-index: 10;
+        margin: -1px 0;
+
+        & > * {
+          height: 100%;
+          width: 100%;
+          border: 1px solid var(--primary);
+          border-radius: 3px;
+          color: var(--primary);
+          align-items: center;
+          display: flex;
+          background: #fff;
+        }
+      }
+      &:hover > .add {
+        display: block;
+      }
+    }
+  }
+}
+
+.cel {
+  height: $celHeight;
+  margin: 1px;
+  border: 1px solid #e0e0e0;
+}

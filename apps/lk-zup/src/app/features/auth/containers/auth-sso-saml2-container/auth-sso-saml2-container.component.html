@@ -1,0 +1,7 @@
+<div class="main-container">
+  <app-auth-sso
+    [authnRequestData]="authSsoSaml2Facade.getData$() | async"
+    [isLoading]="isLoading"
+    (authSooRequest)="authSooRequest()"
+  ></app-auth-sso>
+</div>

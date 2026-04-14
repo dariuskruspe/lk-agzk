@@ -1,0 +1,181 @@
+<div class="newsletter-view-container">
+  <div class="view-header">
+    <button
+      pButton
+      type="button"
+      icon="pi pi-arrow-left"
+      class="p-button-text back-button"
+      (click)="onBack()"
+    ></button>
+    <h1 class="page-title">{{ newsletter?.newsletterName }}</h1>
+  </div>
+
+  <p-card>
+    <div class="view-content">
+      <div class="status-section">
+        <!-- <p-tag
+          [value]="newsletter?.status"
+          [severity]="'success'"
+          class="status-tag"
+        ></p-tag> -->
+        <div
+          class="status-tag"
+          [style.background-color]="getStatusColor(newsletter?.statusColor)"
+        >
+          {{ newsletter?.status.toUpperCase() }}
+        </div>
+        <div class="header-actions">
+          <button
+            pButton
+            type="button"
+            icon="pi pi-copy"
+            class="p-button-text action-button"
+            pTooltip="Копировать"
+            (click)="onCopy()"
+          ></button>
+          @if (newsletter?.status.toUpperCase() !== 'ВЫПОЛНЕНА') {
+            <button
+              pButton
+              type="button"
+              icon="pi pi-pencil"
+              class="p-button-text action-button"
+              (click)="onEdit()"
+            ></button>
+
+            <button
+              pButton
+              type="button"
+              icon="pi pi-trash"
+              class="p-button-text action-button"
+              (click)="onDelete()"
+            ></button>
+          }
+        </div>
+      </div>
+
+      <div class="newsletter-details">
+        <div class="detail-item">
+          <label class="detail-label">{{
+            'NEWSLETTER_START_DATE_LABEL' | translate
+          }}</label>
+          <div class="detail-value-with-button">
+            <span class="detail-value">{{
+              newsletter?.startDate | date: 'dd.MM.yyyy (HH:mm)'
+            }}</span>
+            <button
+              pButton
+              type="button"
+              label="Выгрузить для sms"
+              icon="pi pi-download"
+              class="p-button-outlined download-button"
+              (click)="onDownloadRecipients()"
+            ></button>
+          </div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label">{{
+            'NEWSLETTER_END_DATE_LABEL' | translate
+          }}</label>
+          <div class="detail-value-with-button">  
+            <span class="detail-value">{{
+              newsletter?.endDate | date: 'dd.MM.yyyy (HH:mm)'
+            }}</span>
+            <button
+              *ngIf="(newsletter?.status.toUpperCase() === 'ВЫПОЛНЕНА' || newsletter?.status.toUpperCase() === 'ОЖИДАНИЕ') && newsletter?.collectConfirmations"
+              pButton
+              type="button"
+              label="Загрузить результаты SMS-рассылки"
+              icon="pi pi-upload"
+              class="p-button-outlined download-button"
+              (click)="recipientsSmsFileInput.click()"
+            ></button>
+            <input
+              #recipientsSmsFileInput
+              type="file"
+              accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              (change)="onLoadSmsResults($event)"
+              hidden
+            />
+
+            <button
+              *ngIf="notMatchedSmsResultsSignal()"
+              pButton
+              type="button"
+              label="Скачать несопоставленные записи"
+              icon="pi pi-download"
+              class="p-button-outlined download-button"
+              (click)="onDownloadNotMatchedSmsResults()"
+            ></button>
+          </div>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label">{{
+            'NEWSLETTER_DESCRIPTION_LABEL' | translate
+          }}</label>
+          <div class="detail-value-with-button">  
+            <span class="detail-value">{{
+              newsletter?.description || ('NEWSLETTER_NOT_SPECIFIED' | translate)
+            }}</span>
+            <p-splitButton
+              icon="pi pi-download"
+              (onClick)="downloadResultReport('pdf')"
+              label="Отчет по рассылке"
+              [model]="saveReportResultButtonItems"
+              [outlined]="true"
+            />
+          </div>
+        </div>
+        <div class="detail-item" *ngIf="newsletter?.authorName">
+          <label class="detail-label">{{
+            'NEWSLETTER_AUTHOR_LABEL' | translate
+          }}</label>
+          <span class="detail-value">{{
+            newsletter?.authorName
+          }}</span>
+        </div>
+        <div class="detail-item">
+          <label class="detail-label">{{
+            'NEWSLETTER_RECIPIENTS_LABEL' | translate
+          }}</label>
+          @for (recipient of newsletter?.recipients; track recipient.userID) {
+            <span class="detail-value">{{
+              recipient.fullName || recipient.userID
+            }}</span>
+          }
+        </div>
+        <div class="detail-item">
+          <label class="detail-label">{{
+            'NEWSLETTER_TEMPLATE_LABEL' | translate
+          }}</label>
+          <span class="detail-value">{{
+            template?.templateName ||
+              ('NEWSLETTER_NOT_SPECIFIED_TEMPLATE' | translate)
+          }}</span>
+        </div>
+      </div>
+
+      <div class="message-content">
+        <h3 class="content-title">
+          {{ 'NEWSLETTER_TEMPLATE_TEXT' | translate }}
+        </h3>
+        <div
+          class="message-text"
+          [innerHTML]="
+            (template?.newsletterTemplate | trustedHtml: false) ||
+            ('NEWSLETTER_TEMPLATE_NOT_FOUND' | translate)
+          "
+        ></div>
+      </div>
+
+      <div class="sms-content">
+        <h3 class="content-title">{{ 'NEWSLETTER_SMS_TEXT' | translate }}</h3>
+        <div class="sms-text">
+          {{
+            newsletter?.smsTemplate ||
+              ('NEWSLETTER_SMS_TEMPLATE_NOT_FOUND' | translate)
+          }}
+        </div>
+      </div>
+    </div>
+  </p-card>
+</div>

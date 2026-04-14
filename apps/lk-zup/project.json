@@ -1,0 +1,268 @@
+{
+  "name": "lk-zup",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "cli": {
+    "cache": {
+      "enabled": true
+    }
+  },
+  "projectType": "application",
+  "sourceRoot": "apps/lk-zup/src",
+  "prefix": "app",
+  "generators": {
+    "@schematics/angular:component": {
+      "style": "scss",
+      "name": ""
+    }
+  },
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser-esbuild",
+      "options": {
+        "preserveSymlinks": true,
+        "inlineStyleLanguage": "scss",
+        "outputPath": "dist/apps/lk-zup",
+        "index": "apps/lk-zup/src/index.html",
+        "main": "apps/lk-zup/src/main.ts",
+        "polyfills": "apps/lk-zup/src/polyfills.ts",
+        "tsConfig": "apps/lk-zup/tsconfig.app.json",
+        "assets": [
+          "apps/lk-zup/src/favicon.ico",
+          "apps/lk-zup/src/assets",
+          "apps/lk-zup/src/version",
+          "apps/lk-zup/src/onboarding",
+          "apps/lk-zup/src/manifest.webmanifest"
+        ],
+        "styles": [
+          {
+            "input": "apps/lk-zup/src/styles.scss"
+          },
+          {
+            "inject": false,
+            "bundleName": "default_legacy",
+            "input": "apps/lk-zup/src/styles/themes/default_legacy.css"
+          },
+          {
+            "inject": false,
+            "input": "apps/lk-zup/src/styles/themes/millennium.scss",
+            "bundleName": "millennium"
+          },
+          {
+            "inject": false,
+            "input": "apps/lk-zup/src/styles/themes/dark.css",
+            "bundleName": "dark"
+          },
+          {
+            "input": "node_modules/cropperjs/dist/cropper.css"
+          }
+        ],
+        "scripts": ["node_modules/cropperjs/dist/cropper.js"],
+        "allowedCommonJsDependencies": [
+          "cropperjs",
+          "crypto-js",
+          "crypto-pro",
+          "gerx",
+          "inputmask",
+          "lodash",
+          "md5",
+          "mime",
+          "moment",
+          "lottie-web",
+          "pulltorefreshjs",
+          "qrcode"
+        ],
+        "extractLicenses": false,
+        "buildOptimizer": false,
+        "sourceMap": true,
+        "optimization": false,
+        "serviceWorker": true,
+        "ngswConfigPath": "apps/lk-zup/ngsw-config.json"
+      },
+      "configurations": {
+        "ci": {
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment-ci.prod.ts"
+            }
+          ]
+        },
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "10kb",
+              "maximumError": "30kb"
+            }
+          ]
+        },
+        "common": {
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.common.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true
+        },
+        "develop": {
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.develop.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true
+        },
+        "cloud-develop": {
+          "aot": true,
+          "serviceWorker": false,
+          "ngswConfigPath": "",
+          "optimization": false,
+          "extractLicenses": false,
+
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.cloud-develop.ts"
+            }
+          ]
+        },
+        "cloud-prod": {
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.cloud-prod.ts"
+            }
+          ]
+        },
+        "release": {
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.release.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true
+        },
+        "current": {
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.current.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true
+        },
+        "lts": {
+          "fileReplacements": [
+            {
+              "replace": "apps/lk-zup/src/environments/environment.ts",
+              "with": "apps/lk-zup/src/environments/environment.lts.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false,
+          "buildOptimizer": true
+        }
+      },
+      "outputs": ["{options.outputPath}"]
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "options": {
+        "forceEsbuild": true,
+        "hmr": true,
+        "proxyConfig": "apps/lk-zup/proxy.conf.js",
+        "buildTarget": "lk-zup:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "lk-zup:build:production"
+        },
+        "cloud-develop": {
+          "buildTarget": "lk-zup:build:cloud-develop"
+        }
+      },
+      "defaultConfiguration": "cloud-develop"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "lk-zup:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "format": "gitlab",
+        "lintFilePatterns": [
+          "apps/lk-zup/src/main.ts",
+          "apps/lk-zup/src/**/*.ts",
+          "apps/lk-zup/src/**/*.html"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/lk-zup/jest.config.js",
+        "passWithNoTests": true
+      },
+      "outputs": ["{workspaceRoot}/coverage/apps/lk-zup"]
+    }
+  }
+}

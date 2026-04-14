@@ -1,0 +1,140 @@
+.aside-menu {
+  .aside-menu-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 14px;
+    color: var(--aside-color, #454e57);
+    cursor: pointer;
+    font-size: var(--aside-font-size, 16px);
+    font-weight: var(--aside-font-weight, 400);
+    text-decoration: none;
+    position: relative;
+    user-select: none;
+
+    .aside-menu-label {
+      flex: 1;
+    }
+
+    i {
+      font-size: var(--aside-icon-size);
+    }
+
+    &:hover {
+      background: var(--aside-hover-bg, #ecf4fe);
+    }
+
+    &.active {
+      background: var(--aside-hover-bg, #ecf4fe);
+
+      &::before {
+        display: block;
+        position: absolute;
+        content: '';
+        left: 0px;
+        top: 0px;
+        width: 5px;
+        height: 100%;
+        background: var(--aside-active-prefix-color, #3880ff);
+      }
+    }
+  }
+
+  & > ul > li {
+    & > .aside-menu-item {
+      border-top: 1px solid var(--aside-delimeter-color, #eef4fc);
+      border-bottom: 1px solid var(--aside-delimeter-color, #eef4fc);
+
+      i {
+        margin-right: 13px;
+      }
+    }
+
+    ul {
+      display: none;
+    }
+
+    .aside-menu-arrow {
+      transform: rotate(90deg);
+    }
+
+    &.expanded {
+      ul {
+        display: block;
+      }
+
+      .aside-menu-arrow {
+        transform: rotate(0deg);
+      }
+    }
+  }
+
+  .aside-menu-children {
+    & > li > .aside-menu-item {
+      padding: 8px 10px;
+      padding-left: 50px;
+      font-size: var(--aside-font-size-children, 14px);
+
+      i {
+        margin-right: 11px;
+      }
+    }
+  }
+}
+
+.mobile-wrapper {
+  height: auto;
+  min-height: 100%;
+  width: 100%;
+}
+
+.mobile-menu {
+  display: flex;
+  padding: 20px;
+  flex-direction: column;
+
+  &__group {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-columns: 1fr;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid var(--border-color);
+
+    &:first-of-type {
+      border-bottom: none;
+    }
+
+    &:last-of-type {
+      border-bottom: none;
+    }
+  }
+
+  &__item {
+    margin: 11px;
+    height: 140px;
+    box-shadow: var(--card-shadow);
+    background: var(--card-background);
+    display: flex;
+    cursor: pointer;
+    padding: 30px 10px;
+    text-align: center;
+    border-radius: var(--border-radius);
+    text-align: start;
+    color: var(--basic-color);
+
+    &:hover {
+      background: var(--hover);
+    }
+
+    & i {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+  }
+}
+
+.aside-menu-icon {
+  font-size: 13px;
+  width: 24px;
+}

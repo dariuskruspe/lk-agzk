@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<EntityDescriptor ID="_fbd0b491-8b00-42da-8fc3-c14893347b33" entityID="https://my-app.9958258.ru/sso-test-app-light/" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+	<RoleDescriptor xsi:type="fed:ApplicationServiceType" xmlns:fed="http://docs.oasis-open.org/wsfed/federation/200706" protocolSupportEnumeration="http://docs.oasis-open.org/wsfed/federation/200706" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		<fed:ClaimTypesRequested>
+			<auth:ClaimType Uri="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name" Optional="true" xmlns:auth="http://docs.oasis-open.org/wsfed/authorization/200706"/>
+			<auth:ClaimType Uri="http://schemas.microsoft.com/ws/2008/06/identity/claims/role" Optional="true" xmlns:auth="http://docs.oasis-open.org/wsfed/authorization/200706"/>
+			<auth:ClaimType Uri="http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress" Optional="true" xmlns:auth="http://docs.oasis-open.org/wsfed/authorization/200706"/>
+			<auth:ClaimType Uri="http://schemas.xmlsoap.org/claims/EmailAddress" Optional="true" xmlns:auth="http://docs.oasis-open.org/wsfed/authorization/200706"/>
+		</fed:ClaimTypesRequested>
+		<fed:TargetScopes>
+			<EndpointReference xmlns="http://www.w3.org/2005/08/addressing">
+				<Address>https://my-app.9958258.ru/sso-test-app-light/</Address>
+			</EndpointReference>
+		</fed:TargetScopes>
+		<fed:PassiveRequestorEndpoint>
+			<EndpointReference xmlns="http://www.w3.org/2005/08/addressing">
+				<Address>https://my-app.9958258.ru/sso-test-app-light/</Address>
+			</EndpointReference>
+		</fed:PassiveRequestorEndpoint>
+	</RoleDescriptor>
+</EntityDescriptor>

@@ -1,0 +1,81 @@
+<div class="wrapper" *ngIf="isEnabled">
+  <p-toolbar class="title">
+    <h2 class="dashboard-title mobile-dashboard-title">
+      {{ 'TITLE_ISSUES' | translate }}
+    </h2>
+    <span class="spacer"></span>
+    <button
+      pButton
+      type="button"
+      routerLink="employees"
+      class="title-button button-full-xs"
+      icon="pi pi-plus-circle"
+      iconPos="left"
+      label="{{ 'BUTTON_ISSUE_CREATE' | translate }}"
+      [routerLink]="['', 'issues', 'types']"
+    ></button>
+  </p-toolbar>
+
+  <ng-container *skeleton="loading === false; else skeleton; repeat: 3">
+    <ng-container *ngIf="!issueList?.issues.length; else issues">
+      <p-card>
+        <div class="empty-issues">
+          <div class="left-side">
+            <div class="empty-text">
+              {{ 'ISSUE_NO_ACTIVE' | translate }}
+            </div>
+            <div class="all-issues-btn">
+              <button
+                pButton
+                label="{{ 'BUTTON_ISSUE_APPLICATIONS' | translate }}"
+                class="p-button-outlined small-button"
+                [routerLink]="['', 'issues', 'list']"
+              ></button>
+            </div>
+          </div>
+          <div class="right-side">
+            <img
+              [src]="
+                isDarkTheme()
+                  ? 'assets/img/svg/empty-issues-dark.svg'
+                  : 'assets/img/svg/empty-issues.svg'
+              "
+              alt="empty-issues"
+            />
+          </div>
+        </div>
+      </p-card>
+    </ng-container>
+  </ng-container>
+
+  <ng-template #issues>
+    <loadable-list-container
+      [template]="dataLayout"
+      [dataList]="issueList"
+      [dataConfig]="dataConfig"
+      [otherData]="{
+        issuesStatusList: issuesStatusList,
+      }"
+      [pagination]="false"
+      [takeCount]="3"
+      (clickItem)="onOpenIssues($event)"
+    ></loadable-list-container>
+  </ng-template>
+  <p-toolbar class="center margin-top" *ngIf="issueList?.issues.length">
+    <button
+      pButton
+      class="p-button-outlined s"
+      label="{{ 'BUTTON_ISSUE_APPLICATIONS' | translate }}"
+      [routerLink]="['', 'issues', 'list']"
+    ></button>
+  </p-toolbar>
+</div>
+
+<ng-template #skeleton>
+  <div class="skeleton-list-item">
+    <div class="skeleton-list-item__el">
+      <p-skeleton height="36px" width="36px" borderRadius="50%"></p-skeleton>
+    </div>
+    <p-skeleton height="25px" width="250px"></p-skeleton>
+  </div>
+</ng-template>

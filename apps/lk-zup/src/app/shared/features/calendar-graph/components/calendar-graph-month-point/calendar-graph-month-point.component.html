@@ -1,0 +1,22 @@
+<div class="monthPoint">
+  {{
+    monthNameList[
+      date.getMonth(
+        date.dateConstruct(
+          date.getYear(startDate),
+          date.getMonth(startDate) + monthInd,
+          1
+        )
+      )
+    ]
+  }}
+  {{
+    date.getYear(
+      date.dateConstruct(
+        date.getYear(startDate),
+        date.getMonth(startDate) + monthInd,
+        1
+      )
+    )
+  }}
+</div>

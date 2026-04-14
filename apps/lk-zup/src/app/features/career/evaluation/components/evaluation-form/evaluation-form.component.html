@@ -1,0 +1,387 @@
+<div class="assessment-form">
+ <div class="flex space-between">
+    <div class="title">{{ evaluation.evaluationType }}</div>
+    <button
+      *ngIf="evaluation.nextStageAvailable"
+      class="p-button-outlined p-button-danger"
+      pButton
+      label="{{ 'NEXT_STAGE_EARLY_BUTTON' | translate }}"
+      (click)="setNextStage($event)"
+    ></button>
+  </div>
+  <div class="assessment-date">
+    {{ evaluation.startDate | date: 'dd.MM.yyyy' }}
+  </div>
+  <div class="assessment-header">
+    <div class="assessment-deadline">
+      {{ 'BUTTON_COMPLETE_TO' | translate }}
+      {{ evaluation.endDate | date: 'dd.MM.yyyy' }}
+    </div>
+    <div class="assessment-user">{{ evaluation.employee }}</div>
+  </div>
+
+  <div class="assessment-info" *ngIf="evaluation.description">
+    <p>
+      {{ evaluation.description }}
+    </p>
+  </div>
+
+  <form #form="ngForm">
+    <div
+      class="assessment-section"
+      *ngIf="
+        evaluation.meetingConfirmationAvailable ||
+        evaluation.meetingConfirmation === true ||
+        evaluation.meetingConfirmation === false
+      "
+    >
+      <div class="section-title" (click)="showAgreement = !showAgreement">
+        <span>{{ 'CONFIRMATION' | translate }}</span>
+        <span class="arrow" [class.open]="showAgreement">
+          <i class="pi pi-angle-up"></i>
+        </span>
+      </div>
+      <div class="section-content" *ngIf="showAgreement">
+        <div class="checkboxes flex">
+          <div
+            class="checkbox checkbox-yes flex"
+            [class.active]="confirmation"
+            [class.cursor-pointer]="evaluation.meetingConfirmationAvailable"
+            (click)="changeConfirmation(true)"
+          >
+            <div class="icon-confirmation">
+              <i class="pi pi-check-square blue-icon"></i>
+            </div>
+            <div>
+              {{ 'PERFORMANCE_CONVERSATION_YES' | translate }}
+            </div>
+          </div>
+          <div
+            class="checkbox checkbox-no flex cursor-pointer"
+            [class.active]="!confirmation"
+            [class.cursor-pointer]="evaluation.meetingConfirmationAvailable"
+            (click)="changeConfirmation(false)"
+          >
+            <div class="icon-confirmation">
+              <i class="pi pi-times-circle blue-icon"></i>
+            </div>
+            <div>
+              {{ 'PERFORMANCE_CONVERSATION_NO' | translate }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="assessment-section"
+      *ngFor="let category of evaluation.categories; let indexCategory = index"
+    >
+      <div class="section-title" (click)="category.open = !category.open">
+        <span>{{ category.categoryName }}</span>
+        <span class="arrow" [class.open]="category.open">
+          <i class="pi pi-angle-up"></i>
+        </span>
+      </div>
+      <div class="section-content" *ngIf="category.open">
+        <div
+          class="form-group"
+          *ngFor="let goal of category.goals; let i = index"
+        >
+          <label>
+            <div class="goal-title">Цель {{ i + 1 }}:</div>
+            <div class="goal-name">{{ goal.goalName }}</div>
+          </label>
+          <div class="goal-description" [innerHTML]="goal.description"></div>
+          <label *ngIf="goal.employeeResult">
+            <div>{{ 'EMPLOYEE_COMMENT' | translate }} *</div>
+          </label>
+          <textarea
+            *ngIf="goal.employeeResult"
+            pInputTextarea
+            [(ngModel)]="
+              formValue.categories[indexCategory].goals[i].employeeResult
+            "
+            rows="2"
+            [autoResize]="false"
+            name="comment1-{{ goal.goalID }}"
+            placeholder="Введите комментарий по достижению цели"
+            [disabled]="
+              !goal.employeeResult.editingAvailable ||
+              !evaluation.editingAvailable
+            "
+            [class.error]="
+              showError &&
+              !formValue.categories[indexCategory].goals[i].employeeResult
+            "
+          ></textarea>
+
+          <label class="mt-20" *ngIf="goal.managerResult">
+            <div>{{ 'MANAGER_COMMENT' | translate }}</div>
+          </label>
+          <textarea
+            *ngIf="goal.managerResult"
+            pInputTextarea
+            [(ngModel)]="
+              formValue.categories[indexCategory].goals[i].managerResult
+            "
+            rows="2"
+            [autoResize]="false"
+            name="comment3-{{ goal.goalID }}"
+            [disabled]="
+              !goal.managerResult.editingAvailable ||
+              !evaluation.editingAvailable
+            "
+            placeholder="{{ 'ENTER_GOAL_COMMENT' | translate }}"
+          ></textarea>
+        </div>
+        <div class="ratings flex" *ngIf="evaluation.useRatings">
+          <div class="form-group rating-section">
+            <label class="mt-20">
+              <div>{{ 'RATING' | translate }} самооценки</div>
+            </label>
+            <p-dropdown
+              [(ngModel)]="formValue.categories[indexCategory].employeeRating"
+              [ngModelOptions]="{ standalone: true }"
+              class="dropdown-input"
+              optionLabel="name"
+              optionValue="ratingID"
+              [options]="ratingList.evaluationRatings"
+              placeholder="{{ 'RATING' | translate }}"
+              styleClass="w-full"
+              [disabled]="!evaluation.editingAvailable || !category.employeeRating?.editingAvailable"
+              (ngModelChange)="
+                changeRating(
+                  $event,
+                  formValue.categories[indexCategory].categoryID,
+                  false
+                )
+              "
+              [ngClass]="{
+                'ng-dirty':
+                  showError && !formValue.categories[indexCategory].employeeRating,
+                'ng-invalid':
+                  showError && !formValue.categories[indexCategory].employeeRating,
+              }"
+            ></p-dropdown>
+            <label>
+              <div class="mt-20">{{ 'EMPLOYEE_COMMENT' | translate }}</div>
+            </label>
+            <textarea
+              pInputTextarea
+              [value]="getCategoryResult(indexCategory, false)"
+              (input)="setCategoryResult(indexCategory, $event.target.value, false)"
+              rows="4"
+              [autoResize]="false"
+              name="comment1-1"
+              placeholder="{{ 'ENTER_CATEGORY_COMMENT' | translate }}"
+              [disabled]="!evaluation.editingAvailable || !category.employeeResult?.editingAvailable"
+              [class.error]="
+                showError && !formValue.categories[indexCategory].employeeResult
+              "
+            ></textarea>
+          </div>
+
+          <div class="form-group rating-section" *ngIf="category.managerRating || category.managerResult">
+            <label class="mt-20">
+              <div>{{ 'RATING' | translate }} оценки менеджера</div>
+            </label>
+            <p-dropdown
+              *ngIf="category.managerRating"
+              [(ngModel)]="formValue.categories[indexCategory].managerRating"
+              [ngModelOptions]="{ standalone: true }"
+              class="dropdown-input"
+              optionLabel="name"
+              optionValue="ratingID"
+              [options]="ratingList.evaluationRatings"
+              placeholder="{{ 'RATING' | translate }}"
+              styleClass="w-full"
+              [disabled]="!evaluation.editingAvailable || !category.managerRating?.editingAvailable"
+              (ngModelChange)="
+                changeRating(
+                  $event,
+                  formValue.categories[indexCategory].categoryID,
+                  true
+                )
+              "
+              [ngClass]="{
+                'ng-dirty':
+                  showError && !formValue.categories[indexCategory].managerRating,
+                'ng-invalid':
+                  showError && !formValue.categories[indexCategory].managerRating,
+              }"
+            ></p-dropdown>
+            <label *ngIf="category.managerResult">
+              <div class="mt-20">{{ 'MANAGER_COMMENT' | translate }}</div>
+            </label>
+            <textarea
+              *ngIf="category.managerResult"
+              pInputTextarea
+              [value]="getCategoryResult(indexCategory, true)"
+              (input)="setCategoryResult(indexCategory, $event.target.value, true)"
+              rows="4"
+              [autoResize]="false"
+              name="comment1-1"
+              placeholder="{{ 'ENTER_CATEGORY_COMMENT' | translate }}"
+              [disabled]="!evaluation.editingAvailable || !category.managerResult?.editingAvailable"
+              [class.error]="
+                showError && !formValue.categories[indexCategory].managerResult
+              "
+            ></textarea>
+          </div>
+
+        </div>
+      </div>
+    </div>
+    <div class="assessment-section" *ngIf="evaluation.useRatings">
+      <div
+        class="section-title"
+        (click)="showOverallRating = !showOverallRating"
+      >
+        <span>{{ 'GENERAL_RATING' | translate }}</span>
+        <span class="arrow" [class.open]="showOverallRating">
+          <i class="pi pi-angle-up"></i>
+        </span>
+      </div>
+      <div class="section-content" *ngIf="showOverallRating">
+        <div class="width-100 mb-20">
+          <div class="total-rating-title">{{ 'EMPLOYEE' | translate }}</div>
+          <div>{{ evaluation.employee }}</div>
+        </div>
+
+        <div class="flex space-between">
+          <div class="width-100">
+            Рейтинг самооценки
+            <div class="flex space-between">
+              <div class="width-100" *ngFor="let rating of totalRatingEmployee">
+                <div class="total-rating-title">
+                  {{ rating.attributeName }} рейтинг
+                </div>
+                <div>{{ rating.averageValue }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="width-100" *ngIf="totalRatingManager && totalRatingManager.length > 0">
+            Рейтинг оценки менеджера
+            <div class="flex space-between">
+              <div class="width-100" *ngFor="let rating of totalRatingManager">
+                <div class="total-rating-title">
+                  {{ rating.attributeName }} рейтинг
+                </div>
+                <div>{{ rating.averageValue }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="assessment-section">
+      <div class="section-title" (click)="showDocuments = !showDocuments">
+        <span>{{ 'SUPPORTING_DOCUMENTS' | translate }}</span>
+        <span class="arrow" [class.open]="showDocuments">
+          <i class="pi pi-angle-up"></i>
+        </span>
+      </div>
+      <div class="section-content" *ngIf="showDocuments">
+        <div class="form-group">
+          <div class="goal-description">
+            {{ 'OPTIONAL_SECTION_INFO' | translate }}
+          </div>
+        </div>
+        <app-evaluation-file-upload
+          [editingAvailable]="evaluation.editingAvailable && !isManager"
+          [employeeFiles]="evaluation.files"
+          (changeFiles)="changeFiles($event)"
+        ></app-evaluation-file-upload>
+      </div>
+    </div>
+    <div *ngIf="evaluation.managerComment">
+      <label>
+        <div class="mb-10">{{ 'SUPERVISOR_COMMENT' | translate }}</div>
+      </label>
+      <div class="manager-comment">
+        <p>
+          {{ evaluation.managerComment }}
+        </p>
+      </div>
+    </div>
+
+    <p-toolbar class="buttons margin-top" *ngIf="evaluation.editingAvailable">
+      <button
+        *ngIf="isManager"
+        pButton
+        label="{{ 'SEND_TO_EMPLOYEE' | translate }}"
+        class="col-12 col-md-auto"
+        (click)="onSubmit()"
+      ></button>
+      <button
+        *ngIf="!isManager"
+        pButton
+        label="{{ 'SEND_FOR_APPROVAL' | translate }}"
+        class="col-12 col-md-auto"
+        (click)="onSubmit()"
+      ></button>
+      <button
+        *ngIf="evaluation.draftAvailable"
+        pButton
+        label="{{ 'SAVE_IN_DRAFT' | translate }}"
+        class="col-12 col-md-auto p-button-outlined ml-8"
+        (click)="onSubmitDraft()"
+      ></button>
+      <p-button
+        label="{{ 'BUTTON_CANCEL' | translate }}"
+        class="col-12 col-md-auto p-button-outlined ml-8"
+        [link]="true"
+        (click)="backPage()"
+      ></p-button>
+    </p-toolbar>
+    <div *ngIf="isManager && evaluation.approvalAvailable">
+      <div class="form-group">
+        <label>
+          <div class="mt-20">{{ 'SUPERVISOR_COMMENT' | translate }}</div>
+        </label>
+        <textarea
+          pInputTextarea
+          [(ngModel)]="approvalComment"
+          rows="4"
+          [autoResize]="false"
+          name="comment1-2"
+          placeholder="Введите комментарий"
+        ></textarea>
+      </div>
+      <p-toolbar class="buttons margin-top">
+        <button
+          pButton
+          label="{{ 'BUTTON_APPROVE' | translate }}"
+          class="col-12 col-md-auto"
+          (click)="approveEvaluation(true)"
+        ></button>
+        <button
+          pButton
+          label="{{ 'BUTTON_REJECT' | translate }}"
+          class="col-12 col-md-auto p-button-outlined ml-8"
+          (click)="approveEvaluation(false)"
+        ></button>
+        <p-button
+          label="{{ 'BUTTON_CANCEL' | translate }}"
+          class="col-12 col-md-auto p-button-outlined ml-8"
+          [link]="true"
+          (click)="backPage()"
+        ></p-button>
+      </p-toolbar>
+    </div>
+    <p-toolbar
+      class="buttons margin-top"
+      *ngIf="
+        !evaluation.editingAvailable &&
+        !(isManager && evaluation.approvalAvailable)
+      "
+    >
+      <p-button
+        label="{{ 'BUTTON_CANCEL' | translate }}"
+        class="col-12 col-md-auto p-button-outlined ml-8"
+        [link]="true"
+        (click)="backPage()"
+      ></p-button>
+    </p-toolbar>
+  </form>
+</div>

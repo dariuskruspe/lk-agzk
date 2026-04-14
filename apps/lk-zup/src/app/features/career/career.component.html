@@ -1,0 +1,39 @@
+<p-toolbar class="title">
+  <h1>{{ 'Карьера' | translate }}</h1>
+  <span class="spacer"></span>
+  <p-splitButton
+    (onClick)="downloadResultReport()"
+    [label]="'DOWNLOAD_REPORT' | translate"
+    [disabled]="isReportLoadingSignal()"
+    [model]="saveReportResultButtonItems"
+    [outlined]="true"
+  />
+</p-toolbar>
+
+<div
+  class="tabs-controls-panel"
+  [ngClass]="{ 'no-gradient-before': theme() === 'dark' }"
+>
+  <div class="tabs">
+    <a class="tab-item" routerLink="goals" routerLinkActive="active">Цели</a>
+    <a
+      *ngIf="settingsSignal()?.evaluation?.enable && userSettingsSignal()?.evaluation?.enable"
+      class="tab-item"
+      routerLink="evaluation"
+      routerLinkActive="active"
+    >Оценка</a>
+    <a
+      *ngIf="settingsSignal()?.evaluation?.enable && userSettingsSignal()?.evaluation?.enable"
+      class="tab-item"
+      routerLink="evaluation-archive"
+      routerLinkActive="active"
+    >Архив</a>
+    <!-- <a class="tab-item" routerLink="issues" routerLinkActive="active"
+      >Заявки по оценке</a
+    >-->
+  </div>
+</div>
+
+<div>
+  <router-outlet></router-outlet>
+</div>

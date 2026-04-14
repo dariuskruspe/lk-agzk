@@ -1,0 +1,25 @@
+<div *ngIf="docsToSign.length && !loading" class="docs-to-sign">
+  <div class="docs-to-sign__header">
+    {{ 'DOCUMENTS_TO_SIGN' | translate }}
+  </div>
+  <div class="docs-to-sign__list">
+    <div
+      *ngFor="let doc of docsToSign"
+      class="docs-to-sign__item"
+    >
+      <div class="docs-to-sign__item-icon">
+        <i class="pi pi-file"></i>
+      </div>
+      <div class="docs-to-sign__item-name">
+        {{ doc.name }} ({{ 'FROM' | translate | lowercase }} {{ doc.stateDate | date: 'dd.MM.yyyy' }})
+      </div>
+      <div class="docs-to-sign__item-action">
+        <p-button
+          label="{{ 'BUTTON_SIGN' | translate }}"
+          [outlined]="true"
+          (click)="openSignature(doc)"
+        ></p-button>
+      </div>
+    </div>
+  </div>
+</div>

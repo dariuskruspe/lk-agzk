@@ -1,0 +1,19 @@
+<div class="crossing-container">
+  <div class="crossing-list">
+    {{text}}
+  </div>
+  <div class="crossing-buttons">
+    <button
+      pButton
+      label="{{ 'YES_BUTTON' | translate }}"
+      class="confirm-button"
+      (click)="close(true)"
+    ></button>
+    <button
+      pButton
+      label="{{ 'NO_BUTTON' | translate }}"
+      class="p-button-outlined"
+      (click)="close(false)"
+    ></button>
+  </div>
+</div>

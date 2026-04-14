@@ -1,0 +1,348 @@
+@let user = sidebarService.user();
+
+@if (user) {
+  <aside
+    [ngClass]="sidebarClasses()"
+    [attr.data-mobile-open]="isMobileMenuOpen()"
+  >
+    <!-- Шапка с логотипом и кнопкой сворачивания -->
+    <header class="sidebar__header" (mouseenter)="closePopover()">
+      <app-main-sidebar-header
+        [employees]="user.employees"
+        [selectedEmployeeId]="user.currentEmployeeId"
+        (changeEmployee)="sidebarService.setActiveEmployeeId($event)"
+      ></app-main-sidebar-header>
+    </header>
+
+    @if (isCollapsable()) {
+      <button
+        class="sidebar__toggle"
+        (click)="toggleSidebar()"
+        type="button"
+        aria-label="Переключить сайдбар"
+      >
+        <lucide-icon [name]="ChevronRightIcon"></lucide-icon>
+      </button>
+    }
+
+    <!-- Основная навигация -->
+    <nav class="sidebar__nav">
+      <ul class="sidebar__menu">
+        @for (item of items(); track item.id) {
+          @if (item.type !== 'bottom') {
+            <li
+              class="sidebar__menu-item"
+              [attr.data-expanded]="isSubmenuExpanded(item.id)"
+            >
+              <!-- Обычный пункт меню без подменю -->
+              @if (!item.children?.length) {
+                <a
+                  [routerLink]="item.link"
+                  [class.sidebar__menu-link--active]="item.isActive"
+                  class="sidebar__menu-link"
+                  (mouseenter)="onItemHover(item, $any($event.target))"
+                  (click)="onMenuItemClick()"
+                >
+                  @if (item.icon) {
+                    <lucide-icon
+                      [img]="item.icon"
+                      class="sidebar__menu-icon"
+                    ></lucide-icon>
+                  }
+                  @if (!isCollapsed()) {
+                    <span class="sidebar__menu-text">{{ item.title }}</span>
+                  }
+                </a>
+              }
+
+              <!-- Пункт меню с подменю -->
+              @if (item.children?.length) {
+                <button
+                  class="sidebar__menu-link sidebar__menu-link--expandable"
+                  [class.sidebar__menu-link--active]="item.isActive"
+                  [class.sidebar__menu-link--expanded]="
+                    isSubmenuExpanded(item.id)
+                  "
+                  (click)="toggleSubmenu(item.id)"
+                  (mouseenter)="onItemHover(item, $any($event.target))"
+                  type="button"
+                >
+                  @if (item.icon) {
+                    <lucide-icon
+                      [img]="item.icon"
+                      class="sidebar__menu-icon"
+                    ></lucide-icon>
+                  }
+                  @if (!isCollapsed()) {
+                    <span class="sidebar__menu-text">{{ item.title }}</span>
+                    <svg
+                      class="sidebar__menu-arrow"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                    >
+                      <path
+                        d="M4 6L8 10L12 6"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        fill="none"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      />
+                    </svg>
+                  }
+                </button>
+
+                <!-- Подменю -->
+                @if (isSubmenuExpanded(item.id) && !isCollapsed()) {
+                  <ul class="sidebar__submenu">
+                    @for (child of item.children; track child.id) {
+                      <li class="sidebar__submenu-item">
+                        <a
+                          [routerLink]="child.link"
+                          [class.sidebar__submenu-link--active]="child.isActive"
+                          class="sidebar__submenu-link"
+                          (click)="onChildClick()"
+                        >
+                          {{ child.title }}
+                        </a>
+                      </li>
+                    }
+                  </ul>
+                }
+              }
+            </li>
+          }
+        }
+      </ul>
+    </nav>
+
+    <!-- Нижняя секция -->
+    <footer class="sidebar__footer" (mouseenter)="closePopover()">
+      <ul class="sidebar__menu sidebar__menu--bottom">
+        <!-- Кнопка уведомлений -->
+        @if (!isMobile()) {
+          <li class="sidebar__menu-item">
+            <button
+              type="button"
+              class="sidebar__menu-link sidebar__notifications-btn"
+              [class.sidebar__menu-link--active]="
+                sidebarService.showNotificationsOverlay()
+              "
+              [disabled]="sidebarService.showUserMenuOverlay()"
+              (click)="sidebarService.showNotifications()"
+            >
+              <lucide-icon
+                [img]="BellIcon"
+                class="sidebar__menu-icon"
+              ></lucide-icon>
+              @if (sidebarService.unreadNotificationsCount() > 0) {
+                <i class="sidebar__notifications-btn-badge">{{
+                  sidebarService.unreadNotificationsCount()
+                }}</i>
+              }
+              @if (!isCollapsed()) {
+                <span class="sidebar__menu-text">{{
+                  'TITLE_NOTIFICATIONS' | translate
+                }}</span>
+              }
+            </button>
+          </li>
+        }
+
+        @if (sidebarService.langButtonEnabled()) {
+          <li class="sidebar__menu-item">
+            <button
+              type="button"
+              class="sidebar__menu-link sidebar__lang-btn"
+              [disabled]="
+                sidebarService.showNotificationsOverlay() ||
+                sidebarService.showUserMenuOverlay()
+              "
+              (click)="showLangMenuPopover($event)"
+            >
+              <lucide-icon
+                [img]="GlobeIcon"
+                class="sidebar__menu-icon"
+              ></lucide-icon>
+              @if (!isCollapsed()) {
+                <span class="sidebar__menu-text">{{
+                  'LANGUAGE' | translate
+                }}</span>
+              }
+            </button>
+          </li>
+        }
+
+        <li class="sidebar__menu-item">
+          <button
+            type="button"
+            class="sidebar__menu-link sidebar__theme-btn"
+            [disabled]="
+              sidebarService.showNotificationsOverlay() ||
+              sidebarService.showUserMenuOverlay()
+            "
+            (click)="showThemeMenuPopover($event)"
+          >
+            <lucide-icon
+              [img]="PaletteIcon"
+              class="sidebar__menu-icon"
+            ></lucide-icon>
+            @if (!isCollapsed()) {
+              <span class="sidebar__menu-text">{{
+                'TITLE_THEME' | translate
+              }}</span>
+            }
+          </button>
+        </li>
+        @if (!isMobile()) {
+          <li class="sidebar__menu-item sidebar__menu-item_profile">
+            <button
+              type="button"
+              class="sidebar__profile"
+              [disabled]="
+                sidebarService.showNotificationsOverlay() ||
+                sidebarService.showUserMenuOverlay()
+              "
+              (click)="sidebarService.showUserMenu()"
+            >
+              <div class="sidebar__profile-avatar">
+                @if (user.avatar) {
+                  <img [src]="user.avatar" alt="avatar" />
+                } @else {
+                  <lucide-icon
+                    [img]="CircleUserIcon"
+                    class="sidebar__profile-avatar-icon"
+                  ></lucide-icon>
+                }
+              </div>
+              @if (!isCollapsed()) {
+                <div class="sidebar__profile-text">
+                  <span class="sidebar__menu-text">
+                    {{ user.displayName }}
+                  </span>
+                  <lucide-icon
+                    [img]="ChevronUpDownIcon"
+                    class="sidebar__menu-icon"
+                  ></lucide-icon>
+                </div>
+              }
+            </button>
+          </li>
+        }
+
+        <div class="sidebar__version">
+          <span>{{ sidebarService.appVersion() }}</span>
+          @if (!isCollapsed()) {
+            <button type="button" class="sidebar__version-copy">
+              <lucide-icon
+                [img]="CopyIcon"
+                (click)="sidebarService.copyAppVersion()"
+              ></lucide-icon>
+            </button>
+          }
+        </div>
+      </ul>
+    </footer>
+  </aside>
+
+  @if (isMobile() && isMobileMenuOpen()) {
+    <div
+      class="sidebar__mobile-overlay"
+      (click)="sidebarService.closeMobileMenu()"
+    >
+      <button
+        class="sidebar__mobile-close-button"
+        (click)="sidebarService.closeMobileMenu()"
+      >
+        <lucide-icon [name]="XIcon"></lucide-icon>
+      </button>
+    </div>
+  }
+}
+
+<!-- CDK Popover Template -->
+<ng-template #popoverTemplate>
+  @if (currentPopoverItem(); as item) {
+    <div class="sidebar__popover">
+      <div class="sidebar__popover-header">
+        {{ item.title }}
+      </div>
+      @if (item.children?.length) {
+        <div class="sidebar__popover-content">
+          <ul class="sidebar__popover-menu">
+            @for (child of item.children; track child.id) {
+              <li class="sidebar__popover-item">
+                <a
+                  [routerLink]="child.link"
+                  [class.sidebar__popover-link--active]="child.isActive"
+                  class="sidebar__popover-link"
+                  (click)="onChildClick()"
+                >
+                  {{ child.title }}
+                </a>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  }
+</ng-template>
+
+<!-- CDK Popover Template -->
+<ng-template #themeMenuTemplate>
+  <div class="sidebar__theme-menu">
+    <div class="sidebar__theme-menu-content">
+      <ul class="sidebar__theme-menu-menu">
+        @for (item of sidebarService.themes(); track item.value) {
+          <li class="sidebar__theme-menu-item">
+            <a
+              class="sidebar__theme-menu-link"
+              [class.sidebar__theme-menu-link--active]="item.isActive"
+              (click)="selectTheme(item.value)"
+            >
+              <span>{{ item.title }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</ng-template>
+
+<!-- CDK Popover Template -->
+<ng-template #langMenuTemplate>
+  <div class="sidebar__lang-menu">
+    <div class="sidebar__lang-menu-content">
+      <ul class="sidebar__lang-menu-menu">
+        @for (item of sidebarService.languages(); track item.value) {
+          <li class="sidebar__lang-menu-item">
+            <a
+              class="sidebar__lang-menu-link"
+              [class.sidebar__lang-menu-link--active]="item.isActive"
+              (click)="selectLang(item.value)"
+            >
+              <span>{{ item.title }}</span>
+            </a>
+          </li>
+        }
+      </ul>
+    </div>
+  </div>
+</ng-template>
+
+@if (sidebarService.showNotificationsOverlay()) {
+  <app-main-notifications-overlay
+    [left]="isCollapsed() ? '64px' : 'var(--sidebar-width)'"
+    (close)="sidebarService.closeNotifications()"
+  ></app-main-notifications-overlay>
+}
+
+@if (sidebarService.showUserMenuOverlay()) {
+  <app-main-user-menu-overlay
+    [left]="isCollapsed() ? '64px' : 'var(--sidebar-width)'"
+    (close)="sidebarService.closeUserMenu()"
+    (logout)="logout.emit($event)"
+  ></app-main-user-menu-overlay>
+}

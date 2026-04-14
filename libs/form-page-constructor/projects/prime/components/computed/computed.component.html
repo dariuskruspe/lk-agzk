@@ -1,0 +1,7 @@
+
+<div [formGroup]="form">
+  <div class="custom-list__line label">{{ item.label }}</div>
+  <div class="custom-list__line">
+    <input class="custom-list__implicit-input" [formControlName]="item.formControlName" [disabled]="true" >
+  </div>
+</div>

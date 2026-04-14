@@ -1,0 +1,120 @@
+<p-toolbar class="margin-top-bottom p-toolbar-single-row ml-20" *ngIf="subordinateEmployee">
+  <p-toolbar class="nowrap">
+    <p-button
+      icon="pi pi-arrow-left"
+      [link]="true"
+      (click)="onBackPage()"
+    ></p-button>
+    <h1>
+      {{subordinateEmployee.employeeName}}
+    </h1>
+  </p-toolbar>
+  <span class="spacer"></span>
+</p-toolbar>
+<div class="profile-info" *ngIf="subordinateEmployee">
+  <div
+    class="photo"
+    [ngStyle]="{
+      backgroundImage: photo
+        ? 'url(' + encodeURI(photo) + ')'
+        : 'url(assets/img/svg/user-circle.svg)'
+    }"
+  ></div>
+  <div class="info">
+    <div>
+      <b>{{subordinateEmployee.position}}</b>
+    </div>
+
+    <div>
+      {{ subordinateEmployee.division}}
+    </div>
+  </div>
+</div>
+
+
+<div class="tabs-controls-panel" *ngIf="subordinateEmployee">
+  <div class="tabs">
+    <div
+      class="tab-item"
+      [class.active]="activeTab === 'MAIN'"
+      (click)="changeTab('MAIN')"
+      >
+      <span class="tab-title">Основное</span>
+    </div>
+
+<!--    <div-->
+<!--      class="tab-item active"-->
+<!--      (click)="changeTab('ISSUE_CHANGES')"-->
+<!--      [class.active]="activeTab === 'ISSUE_CHANGES'">-->
+<!--      <span class="tab-title">{{ 'ISSUE_CHANGES' | translate }}</span>-->
+<!--    </div>-->
+    <div
+      class="tab-item"
+      [class.active]="activeTab === 'ARCHIVE'"
+      (click)="changeTab('ARCHIVE')"
+      >
+      <span class="tab-title">Архив</span>
+    </div>
+  </div>
+
+
+  <div class="filters">
+    <div class="p-input-icon-left mobile-search-input"></div>
+  </div>
+</div>
+
+<p-card *ngIf="subordinateEmployee && activeTab !== 'ARCHIVE'">
+  <div class="categories-list">
+    <div
+      class="category"
+      *ngFor="let category of subordinateEmployee.categories; let i = index"
+    >
+      <div class="category-title" (click)="toggle(i)">
+        {{ category.categoryName }}
+        <span class="arrow" [class.open]="category.open"><i class="pi pi-angle-up"></i></span>
+      </div>
+      <div class="category-content" *ngIf="category.open">
+        <div
+          class="goal"
+          *ngFor="let goal of category.goals"
+        >
+          <div class="goal-title">{{ goal.goalName }}</div>
+          <div class="goal-description" [innerHtml]="goal.description"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</p-card>
+
+<!-- Содержимое -->
+<div class="content" *ngIf="subordinateEmployee">
+  <div>
+    <div class="potential-positions">
+      <div class="title">
+        Цели сотрудника
+      </div>
+      <div *ngFor="let evaluation of subordinateEmployee.evaluations" (click)="toEvaluationPage(evaluation.evaluationID)">
+        <div class="successor-list-item cursor-pointer">
+          <div class="name">
+            <i class="pi pi-chart-line"></i>
+            <span class="full-name">
+                {{evaluation.stageName}}
+              </span>
+          </div>
+          <span class="division">
+            {{evaluation.representation}}
+            </span>
+          <span class="status">
+              <span
+                class="readiness-status"
+                [ngStyle]="{background: 'var(--inprocess)'}">
+                {{evaluation.stateName}}</span>
+              </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

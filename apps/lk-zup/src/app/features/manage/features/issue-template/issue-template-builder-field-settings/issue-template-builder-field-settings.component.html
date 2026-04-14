@@ -1,0 +1,25 @@
+<div class="app-field-settings">
+  <!-- Фон с блюром -->
+  <div
+    class="settings-backdrop"
+    [class.visible]="isVisible()"
+    (click)="onCancel()"
+  ></div>
+
+  <!-- Выезжающая панель -->
+  <div
+    class="settings-panel"
+    [class.visible]="isVisible()"
+    (click)="$event.stopPropagation()"
+  >
+    <!-- Новая система настроек -->
+    <app-field-settings-form
+      [fieldType]="value().type"
+      [initialValue]="value()"
+      (valueChange)="onValueChange($event)"
+      (save)="onSave($event)"
+      (cancel)="onCancel()"
+    >
+    </app-field-settings-form>
+  </div>
+</div>

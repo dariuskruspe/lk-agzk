@@ -1,0 +1,24 @@
+.holiday {
+  color: red;
+}
+
+.weekend {
+  //opacity: 0.6;
+  color: red;
+}
+
+/* Фиксированная высота по умолчанию для всех календарей */
+::ng-deep .p-datepicker-group-container {
+  min-height: 340px; /* 6 строк по ~42px, подберите под ваш дизайн */
+  max-height: 340px;
+}
+
+/* Убираем фиксированную высоту для календарей с типом 'month' и 'year' */
+/* Если после p-datepicker-group-container есть p-monthpicker или p-yearpicker, то свойства не применяются */
+::ng-deep .p-datepicker-group-container:has(+ .p-monthpicker),
+::ng-deep .p-datepicker-group-container:has(+ .p-yearpicker),
+::ng-deep .p-datepicker-group-container:has(~ .p-monthpicker),
+::ng-deep .p-datepicker-group-container:has(~ .p-yearpicker) {
+  min-height: auto !important;
+  max-height: none !important;
+}

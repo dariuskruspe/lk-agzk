@@ -1,0 +1,33 @@
+<div class="settings-group" [class.expanded]="isExpanded()">
+  <!-- Заголовок группы -->
+  <div
+    class="group-header"
+    [class.has-changes]="hasChanges()"
+    (click)="toggleExpanded()"
+  >
+    <div class="group-info">
+      <i class="group-icon {{ group().icon }}"></i>
+      <span class="group-title">{{ group().title }}</span>
+      @if (hasChanges()) {
+        <span class="changes-badge">Изменено</span>
+      }
+    </div>
+    <i
+      class="expand-icon pi"
+      [class.pi-chevron-down]="!isExpanded()"
+      [class.pi-chevron-up]="isExpanded()"
+    ></i>
+  </div>
+
+  <!-- Содержимое группы -->
+  @if (isExpanded()) {
+    <div class="group-content">
+      @if (group().description) {
+        <div class="group-description">{{ group().description }}</div>
+      }
+
+      <!-- Проецируем содержимое -->
+      <ng-content></ng-content>
+    </div>
+  }
+</div>

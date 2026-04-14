@@ -1,0 +1,72 @@
+<div class="container-fluid">
+  <p-toolbar class="title nowrap">
+    <button
+      pButton
+      class="p-button-outlined p-button-rounded"
+      icon="pi pi-arrow-left"
+      (click)="onBackPage()"
+    ></button>
+    <h1>
+      {{ issuesType?.FullName }}
+    </h1>
+  </p-toolbar>
+  <div class="row">
+    <p-card class="card mb">
+      <fpc
+        [formData$]="sourceFormData$"
+        [dateLocale]="dateLocale"
+        [loading]="loading"
+        (formBuilt)="onFormBuilt($event)"
+        (formSubmit)="handleSubmit($event)"
+        [submit$]="submit$"
+        class="m-t-15 additional-fields p-0"
+      ></fpc>
+      <p-toolbar class="buttons margin-top">
+        <button
+          pButton
+          label="{{ 'BUTTON_SEND' | translate }}"
+          type="submit"
+          class="col-12 col-md-auto"
+          [disabled]="loading"
+          (click)="onSubmit()"
+        ></button>
+        <button
+          pButton
+          label="{{ 'BUTTON_CANCEL' | translate }}"
+          class="col-12 col-md-auto p-button-outlined"
+          [routerLink]="['', 'issues', 'types']"
+          (click)="onBackPage()"
+        ></button>
+      </p-toolbar>
+    </p-card>
+    <div
+      class="additional-info col-md-4 mb-4"
+    >
+      <app-item-list
+        *ngIf="issuesType?.options?.staticText"
+        [items]="issuesType?.options?.staticText"
+        font="13px"
+      ></app-item-list>
+      <div *ngIf="employeesApprovingPersons?.length" class="approver-title">
+        <span *ngIf="employeesApprovingPersons.length === 1">{{ 'EMPLOYEE_APPROVER' | translate }}</span>
+        <span *ngIf="employeesApprovingPersons.length > 1">{{ 'EMPLOYEE_APPROVERS' | translate }}</span>
+        :
+        <div *ngFor="let approvePerson of employeesApprovingPersons" class="value">
+          {{approvePerson}}
+        </div>
+      </div>
+      <app-item-link-list
+        [items]="issuesType?.crossPeriods || []"
+      ></app-item-link-list>
+      <button
+        *ngIf="issuesType?.options?.showProfileButton"
+        pButton
+        label="{{ 'BUTTON_VIEW_PROFILE' | translate }}"
+        class="button-full-xs round p-button-text"
+        icon="pi pi-external-link"
+        iconPos="right"
+        [routerLink]="['', 'users', 'profile']"
+      ></button>
+    </div>
+  </div>
+</div>

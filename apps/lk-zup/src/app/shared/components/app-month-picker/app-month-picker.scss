@@ -1,0 +1,97 @@
+.app-month-picker__trigger {
+  cursor: pointer;
+  user-select: none;
+  display: inline-flex;
+}
+
+.app-month-picker__dropdown {
+  min-width: 280px;
+  background-color: var(--control-bg, #ffffff);
+  box-shadow: var(--control-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+  backdrop-filter: var(--control-backdrop-filter, blur(10px));
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.app-month-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--control-border-color, rgba(0, 0, 0, 0.1));
+}
+
+.app-month-picker__nav-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  background-color: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--foreground-color);
+  transition: all 0.2s ease;
+
+  &:hover:not(:disabled) {
+    background-color: var(--control-hover-bg, rgba(0, 0, 0, 0.05));
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  &:focus {
+    outline: 2px solid var(--control-focus-color, rgba(0, 123, 255, 0.5));
+    outline-offset: 2px;
+  }
+}
+
+.app-month-picker__year {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--foreground-color);
+  user-select: none;
+}
+
+.app-month-picker__months-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.app-month-picker__month {
+  padding: 10px 8px;
+  border: none;
+  background-color: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  color: var(--foreground-color);
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  user-select: none;
+
+  &:hover:not(:disabled) {
+    background-color: var(--control-hover-bg, rgba(0, 0, 0, 0.05));
+  }
+
+  &--selected {
+    background-color: var(--control-active-bg, rgba(0, 123, 255, 0.1));
+    color: var(--control-active-color, rgba(0, 123, 255, 1));
+    font-weight: 600;
+  }
+
+  &--disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  &:focus:not(:disabled) {
+    outline: 2px solid var(--control-focus-color, rgba(0, 123, 255, 0.5));
+    outline-offset: 2px;
+  }
+}

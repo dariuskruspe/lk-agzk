@@ -1,0 +1,150 @@
+<div class="settings">
+  <h3 class="settings__title">Настройки</h3>
+  <div class="settings__form">
+    <!-- Основные настройки -->
+    <div class="settings__form-section">
+      <h4 class="settings__form-section-title">⚙️ Основные настройки</h4>
+
+      <div class="settings__form-row">
+        <label class="settings__form-label" for="fullName">
+          <span class="settings__form-label-text">Наименование</span>
+        </label>
+        <div class="settings__form-row-content">
+          <input
+            pInputText
+            id="fullName"
+            class="settings__form-input"
+            [ngModel]="settings().FullName"
+            (ngModelChange)="patchSettings({ FullName: $event })"
+          />
+        </div>
+      </div>
+
+      <div class="settings__form-row">
+        <label class="settings__form-label" for="shortName">
+          <span class="settings__form-label-text">Представление полное</span>
+        </label>
+        <div class="settings__form-row-content">
+          <input
+            pInputText
+            id="shortName"
+            class="settings__form-input"
+            [ngModel]="settings().ShortName"
+            (ngModelChange)="patchSettings({ ShortName: $event })"
+          />
+        </div>
+      </div>
+
+      <div class="settings__form-row">
+        <label class="settings__form-label">
+          <span class="settings__form-label-text">Иконка</span>
+        </label>
+        <div class="settings__form-row-content">
+          <div class="settings__form-row-content-item">
+            <app-icon-picker
+              [ngModel]="settings().iconName"
+              (ngModelChange)="patchSettings({ iconName: $event })"
+            ></app-icon-picker>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings__form-row">
+        <div class="settings__form-row-content">
+          <div class="settings__form-row-content-item">
+            <p-checkbox
+              [ngModel]="settings().showInSelectionList"
+              (ngModelChange)="patchSettings({ showInSelectionList: $event })"
+              label="Отображать в списке выбора"
+              [binary]="true"
+            ></p-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings__form-row">
+        <div class="settings__form-row-content">
+          <div class="settings__form-row-content-item">
+            <p-checkbox
+              [ngModel]="settings().quickAccess"
+              (ngModelChange)="patchSettings({ quickAccess: $event })"
+              label="Быстрый доступ"
+              [binary]="true"
+            ></p-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Доступность заявки -->
+    <div class="settings__form-section">
+      <h4 class="settings__form-section-title">🔐 Доступность заявки</h4>
+
+      <div class="settings__form-row">
+        <label class="settings__form-label">
+          <span class="settings__form-label-text">Кому доступна заявка</span>
+        </label>
+        <div class="settings__form-row-content">
+          <div class="settings__form-row-content-item">
+            <p-checkbox
+              [ngModel]="settings().onApplicant"
+              (ngModelChange)="patchSettings({ onApplicant: $event })"
+              [binary]="true"
+              label="Заявитель"
+            ></p-checkbox>
+          </div>
+          <div class="settings__form-row-content-item">
+            <p-checkbox
+              [ngModel]="settings().onOtherEmployees"
+              (ngModelChange)="patchSettings({ onOtherEmployees: $event })"
+              [binary]="true"
+              label="Другие сотрудники"
+            ></p-checkbox>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Секция ИИ ассистента -->
+    <div class="settings__form-section">
+      <h4 class="settings__form-section-title">🤖 ИИ ассистент</h4>
+
+      <div class="settings__form-row">
+        <div class="settings__form-row-content">
+          <div class="settings__form-row-content-item">
+            <p-checkbox
+              [ngModel]="settings().createByAssistant"
+              (ngModelChange)="patchSettings({ createByAssistant: $event })"
+              label="Включить создание заявки через ИИ ассистента"
+              [binary]="true"
+            ></p-checkbox>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings__form-row">
+        <label class="settings__form-label" for="aiPrompt">
+          <span class="settings__form-label-text"
+            >Дополнительная информация для ИИ</span
+          >
+          <span class="settings__form-label-hint">
+            Опишите специфику заявки, чтобы ИИ лучше понимал контекст и задавал
+            правильные вопросы
+          </span>
+        </label>
+        <div class="settings__form-row-content">
+          <textarea
+            pInputTextarea
+            id="aiPrompt"
+            class="settings__form-textarea"
+            rows="4"
+            placeholder="Например: Эта заявка используется для оформления командировок. ИИ должен уточнить даты, место назначения, цель поездки..."
+            [ngModel]="settings().aiPrompt"
+            (ngModelChange)="patchSettings({ aiPrompt: $event })"
+            [disabled]="!settings().createByAssistant"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

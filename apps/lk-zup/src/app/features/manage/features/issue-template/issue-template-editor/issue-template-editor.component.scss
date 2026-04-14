@@ -1,0 +1,615 @@
+// Миксины
+@mixin card {
+  background-color: var(--bg-element);
+  border-radius: var(--radius-md);
+  box-shadow: var(--card-shadow);
+  padding: 16px;
+  border: 1px solid var(--sidebar-border);
+}
+
+@mixin hover-transition {
+  transition: all 0.25s ease;
+}
+
+:host {
+  @include card;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  flex: 1;
+  padding: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--liquid-shadow);
+  border: 1px solid var(--sidebar-border);
+}
+
+.form-builder__workspace {
+  display: flex;
+  flex: 1;
+}
+
+.form-builder__fields-section {
+  flex: 0 0 350px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--sidebar-border);
+  background-color: var(--bg-element);
+}
+
+.form-builder__preview-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-element);
+}
+
+.form-builder__section-header {
+  padding: 14px 16px;
+  height: 50px;
+  background-color: var(--control-hover-bg);
+  color: var(--button-primary-bg);
+  border-bottom: 1px solid var(--sidebar-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-builder__section-header-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  i {
+    font-size: 16px;
+  }
+}
+
+.form-builder__section-title {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.form-builder__section-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.form-builder__section-button {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: rgba(56, 128, 255, 0.1);
+  color: var(--button-primary-bg);
+  border-radius: var(--radius);
+  cursor: pointer;
+  @include hover-transition;
+
+  &:hover {
+    background-color: rgba(56, 128, 255, 0.2);
+  }
+}
+
+.form-builder__fields-container {
+  flex: 1 1 0;
+  overflow-y: auto;
+  user-select: none;
+}
+
+.form-builder__preview-container {
+  flex: 1 1 0;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: var(--bg-primary);
+}
+
+// Стили для дропзоны
+.drop-zone {
+  &__empty {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 200px;
+    user-select: none;
+  }
+
+  &__placeholder {
+    text-align: center;
+    color: var(--foreground-color-secondary);
+    padding: 30px;
+    border: 2px dashed var(--sidebar-border);
+    border-radius: var(--radius-md);
+    width: 100%;
+
+    &-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: var(--button-primary-bg);
+      opacity: 0.7;
+    }
+
+    &-text {
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+// Стили для групп полей
+.field-group {
+  &__nested {
+    padding-left: 16px;
+    margin-left: 12px;
+    border-left: 2px solid var(--button-primary-bg);
+    background-color: rgba(56, 128, 255, 0.1);
+    border-radius: 0 0 var(--radius-md) var(--radius-md);
+    margin-bottom: 8px;
+  }
+}
+
+// Стили для превью поля
+.field-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  background-color: var(--bg-element);
+  position: relative;
+  border: 1px solid transparent;
+  user-select: none;
+  margin-bottom: 1px;
+  @include hover-transition;
+
+  &:hover {
+    border: 1px dashed var(--button-primary-bg);
+    background-color: var(--control-hover-bg);
+  }
+
+  &--group {
+    color: var(--button-primary-bg);
+    font-weight: 500;
+    border-left: 3px solid var(--button-primary-bg);
+    &:hover {
+      border-left: 3px solid var(--button-primary-bg);
+    }
+  }
+
+  &--nested {
+    margin-top: 2px;
+    padding: 10px 10px 10px 20px;
+    background-color: rgba(56, 128, 255, 0.1);
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    margin-bottom: 4px;
+
+    &:hover {
+      border: 1px dashed var(--button-primary-bg);
+      background-color: rgba(56, 128, 255, 0.15);
+    }
+
+    &:last-child {
+      margin-bottom: 4px;
+    }
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 2;
+  }
+
+  &__type {
+    font-size: 11px;
+    color: var(--foreground-color-secondary);
+    background-color: var(--control-hover-bg);
+    padding: 2px 6px;
+    border-radius: var(--radius);
+    display: inline-block;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-clamp: 1;
+  }
+
+  &__actions {
+    opacity: 0;
+    transform: translateX(10px);
+    transition: all 0.2s ease;
+    display: flex;
+    gap: 8px;
+  }
+
+  &:hover &__actions {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Стили для кнопок действий
+.field-action {
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  @include hover-transition;
+
+  &--edit {
+    color: var(--button-primary-bg);
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+    }
+  }
+
+  &--delete {
+    color: var(--button-danger-bg);
+
+    &:hover {
+      background-color: rgba(239, 68, 68, 0.1);
+    }
+  }
+}
+
+// Стили для панели добавления полей
+.add-field-popover {
+  width: 400px;
+  padding: 16px;
+  max-height: 500px;
+  overflow-y: auto;
+
+  &__title {
+    margin: 0 0 16px;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--button-primary-bg);
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--sidebar-border);
+  }
+
+  &__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__group {
+    &-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    &-icon {
+      font-size: 16px;
+      color: var(--button-primary-bg);
+    }
+
+    &-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--foreground-color);
+    }
+
+    &-items {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+
+  &__item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background-color: var(--bg-element);
+    border: 1px solid var(--sidebar-border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    user-select: none;
+    @include hover-transition;
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+      border-color: var(--button-primary-bg);
+      transform: translateY(-1px);
+      box-shadow: var(--control-shadow);
+    }
+
+    &-name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    &-type {
+      font-size: 11px;
+      color: var(--foreground-color-secondary);
+      background-color: var(--control-hover-bg);
+      padding: 2px 6px;
+      border-radius: var(--radius);
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+::ng-deep {
+  .add-field-popover-wrapper {
+    border-radius: var(--radius-md) !important;
+    box-shadow: var(--liquid-shadow) !important;
+    overflow: hidden;
+    border: 1px solid var(--sidebar-border);
+
+    .p-overlaypanel-content {
+      padding: 0 !important;
+    }
+
+    &:before,
+    &:after {
+      display: none !important;
+    }
+  }
+
+  .p-button.p-button-outlined.p-button-primary.field-action--add {
+    background-color: var(--bg-element);
+    border: 1px dashed var(--button-primary-bg);
+    color: var(--button-primary-bg);
+    height: 24px;
+    padding: 0;
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .p-button-icon {
+      font-size: 12px;
+      margin: 0;
+    }
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+      border-color: var(--button-primary-bg);
+    }
+  }
+}
+
+// Стиль для кнопки добавления
+.field-preview__add-button {
+  display: flex;
+  justify-content: center;
+  padding: 4px 16px;
+  position: relative;
+
+  &::before {
+    display: none;
+  }
+
+  button {
+    position: relative;
+    z-index: 1;
+    background-color: var(--bg-element);
+    width: 100%;
+  }
+
+  &--nested {
+    margin-left: 20px;
+    padding-left: 0;
+    padding-right: 16px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+}
+
+.drop-zone__field-list {
+  width: 100%;
+  padding: 8px;
+  overflow-y: auto;
+  background-color: var(--bg-element);
+  user-select: none;
+}
+
+.drop-zone__field-item {
+  background-color: var(--bg-element);
+  margin-bottom: 0;
+  width: 100%;
+  user-select: none;
+}
+
+.drop-zone__field-item-wrapper {
+  margin-bottom: 8px;
+}
+
+// Стили для боковой панели инструментов
+.form-builder__tools-panel {
+  width: 64px;
+  background-color: var(--bg-element);
+  border-left: 1px solid var(--sidebar-border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 12px 0;
+
+  .tools-panel__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 12px;
+    margin-bottom: 8px;
+    border-bottom: 1px solid var(--sidebar-border);
+    width: 100%;
+
+    i {
+      font-size: 18px;
+      color: var(--button-primary-bg);
+      margin-bottom: 4px;
+    }
+
+    span {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--foreground-color-secondary);
+    }
+  }
+
+  .tools-panel__group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 16px;
+    width: 100%;
+
+    &-title {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--foreground-color-secondary);
+      margin-bottom: 8px;
+      opacity: 0.7;
+    }
+  }
+
+  .tools-panel__button {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: var(--radius-md);
+    background-color: transparent;
+    color: var(--foreground-color-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+    cursor: pointer;
+    @include hover-transition;
+
+    i {
+      font-size: 16px;
+    }
+
+    &:hover {
+      background-color: var(--control-hover-bg);
+      color: var(--button-primary-bg);
+    }
+
+    &--active {
+      background-color: var(--control-hover-bg);
+      color: var(--button-primary-bg);
+    }
+  }
+
+  .tools-panel__divider {
+    width: 70%;
+    height: 1px;
+    background-color: var(--sidebar-border);
+    margin: 8px 0 12px;
+  }
+}
+
+// Стили для переключателя режима предпросмотра
+.view-mode-switcher {
+  display: flex;
+  gap: 4px;
+}
+
+.view-mode-button {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius);
+  border: none;
+  background-color: rgba(56, 128, 255, 0.1);
+  color: var(--button-primary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  @include hover-transition;
+
+  i {
+    font-size: 16px;
+  }
+
+  &:hover {
+    background-color: rgba(56, 128, 255, 0.2);
+  }
+
+  &--active {
+    background-color: var(--button-primary-bg);
+    color: var(--button-primary-text);
+
+    &:hover {
+      background-color: var(--button-primary-hover-bg);
+    }
+  }
+}
+
+// Стили для мобильного режима предпросмотра
+.form-builder__preview-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: var(--bg-primary);
+
+  app-issue-template-builder-preview {
+    display: block;
+    background-color: var(--bg-element);
+    box-shadow: var(--liquid-shadow);
+    border-radius: var(--radius-md);
+    padding: 16px;
+    width: 100%;
+    max-width: 800px;
+  }
+
+  &--mobile {
+    app-issue-template-builder-preview {
+      width: 390px;
+    }
+  }
+}
+
+.view-mode-divider {
+  width: 1px;
+  height: 30px;
+  background-color: var(--sidebar-border);
+  margin: 0 10px;
+  display: inline-block;
+}
+
+.inspector-toggle {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 16px;
+}
+
+.inspector-label {
+  font-size: 0.9rem;
+  margin-left: 5px;
+  white-space: nowrap;
+}

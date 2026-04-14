@@ -1,0 +1,157 @@
+<div class="custom-array-view">
+  <div class="array-title col-12" *ngIf="item?.placeholder">
+    {{ item.placeholder && item.placeholder !== 'undefined' ? item.placeholder : '' }}:
+  </div>
+  <div
+    class="row arrRow"
+    *ngFor="let groupData of formData?.data[item.formControlName]; let i = index"
+  >
+    <ng-container *ngFor="let control of item.arrSmartList" [ngSwitch]="true">
+      <ng-container
+        *ngIf="groupData[control.formControlName] || !formData?.options?.hideShowEmptyField"
+      >
+        <div class="custom-list__item"
+             [ngClass]="control.gridClasses"
+             *ngSwitchCase="
+          control.type === 'select' || control.type === 'select-filter'
+        "
+        >
+          <div class="custom-list__line label">{{ control.label }}</div>
+          <div class="custom-list__line">
+            <ng-container
+              *ngIf="
+              control.optionListRequestAlias &&
+              optionList &&
+              optionList[getAlias(control, i)]
+            "
+            >
+              {{
+              showSelectItem(
+                groupData[control.formControlName],
+                getOption(control, i)
+              )
+              }}
+            </ng-container>
+
+            <ng-container *ngIf="!control.optionListRequestAlias">
+              {{
+              showSelectItem(
+                formData?.data[control.formControlName],
+                control.optionList
+              )
+              }}
+            </ng-container>
+          </div>
+        </div>
+
+        <div
+          *ngSwitchCase="control.type === 'file' || control.type === 'file-multi'"
+          [ngClass]="control.gridClasses"
+          class="custom-list__item"
+        >
+          <div class="custom-list__line label">{{ control.label }}</div>
+          <div class="custom-list__line">
+            <fpc-files
+              [loading]="fileOpeningInProcess"
+              [files]="groupData[control.formControlName]"
+              (openFile)="openFile($event)"
+            ></fpc-files>
+          </div>
+        </div>
+
+        <div class="custom-list__item"
+             [ngClass]="control.gridClasses"
+             *ngSwitchCase="
+          control.type === 'datepicker' ||
+          control.type === 'datepicker-range-start' ||
+          control.type === 'datepicker-range-end'
+        "
+        >
+          <div class="custom-list__line label">{{ control.label }}</div>
+          <div class="custom-list__line">
+            <ng-container *ngIf="dateLocale === 'ru'">
+              {{ groupData[control.formControlName] | date: 'dd.MM.yyyy' }}
+            </ng-container>
+            <ng-container *ngIf="dateLocale === 'en'">
+              {{ groupData[control.formControlName] | date: 'MM/dd/yyyy' }}
+            </ng-container>
+          </div>
+        </div>
+
+        <div class="custom-list__item"
+             [ngClass]="control.gridClasses"
+             *ngSwitchCase="
+                control.type === 'datepicker-year'
+              "
+        >
+          <div
+            class="custom-list__line label"
+          >
+            {{ control.label }}
+          </div>
+          <div
+            class="custom-list__line"
+          >
+            {{ isDateInvalid(groupData[control.formControlName])
+              ? groupData[control.formControlName]
+              : (groupData[control.formControlName] | date: control.format ?? 'yyyy')
+            }}
+          </div>
+        </div>
+
+        <div class="custom-list__item"
+             [ngClass]="control.gridClasses"
+             *ngSwitchCase="
+                control.type === 'datepicker-month'
+              "
+        >
+          <div
+            class="custom-list__line label"
+          >
+            {{ control.label }}
+          </div>
+          <div
+            class="custom-list__line"
+          >
+            {{ isDateInvalid(groupData[control.formControlName])
+              ? groupData[control.formControlName]
+              : (groupData[control.formControlName] | date: control.format ?? 'MMMM yyyy')
+            }}
+          </div>
+        </div>
+
+        <div class="custom-list__item"
+             [ngClass]="control.gridClasses"
+             *ngSwitchCase="
+                control.type === 'timepicker'
+              "
+        >
+          <div
+            class="custom-list__line label"
+          >
+            {{ control.label }}
+          </div>
+          <div
+            class="custom-list__line"
+          >
+            {{ groupData[control.formControlName] | timeFormat }}
+          </div>
+        </div>
+
+        @if (groupData[control.formControlName]) {
+          <div [ngClass]="control.gridClasses" class="custom-list__item" *ngSwitchCase="control.type === 'static'">
+            <div class="custom-list__line label">{{ control.label }}</div>
+            <div class="custom-list__line" [innerHTML]="groupData[control.formControlName]"></div>
+          </div>
+        }
+
+        <div [ngClass]="control.gridClasses" class="custom-list__item" *ngSwitchDefault>
+          <div class="custom-list__line label">{{ control.label }}</div>
+          <div class="custom-list__line">{{ groupData[control.formControlName] }}</div>
+        </div>
+      </ng-container>
+
+    </ng-container>
+    <span class="array-separator custom-list__separator"></span>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<div [formGroup]="form">
+  <div class="custom-form-field__upload-container">
+    <div class="fpc-upload-files-header custom-form-field__upload-header">
+      <label
+        for="{{ item.formControlName }}"
+        class="custom-form-field__label"
+      >{{ item.label }}{{ isRequired() ? ' *' : '' }}</label>
+
+      <input
+        #uploader
+        [id]="item.formControlName"
+        type="file"
+        style="display: none;"
+        [multiple]="item.type === 'file-multi'"
+        [accept]="item.fileTypesAccept"
+        (change)="onFilesAdd($event)"
+      >
+
+      <div class="fpc-upload-buttons-container custom-form-field__upload-button-container">
+        <button
+          pButton
+          type="button"
+          iconPos="left"
+          class="custom-form-field__upload-button"
+          [icon]="'pi pi-plus-circle'"
+          [label]="'UPLOAD_TITLE' | translate"
+          [disabled]="
+            form.get(item.formControlName)?.disabled
+            || (files.length && item.type === 'file')
+          "
+          (click)="select()"
+        ></button>
+        <button
+          pButton
+          *ngIf="files.length"
+          type="button"
+          iconPos="left"
+          icon="pi pi-trash"
+          class="p-button-outlined custom-form-field__upload-button custom-form-field__upload-button_remove"
+          [label]="'REMOVE_UPLOADED_TITLE' | translate"
+          (click)="removeFiles()"
+        ></button>
+      </div>
+    </div>
+
+    <ul class="custom-form-field__selected-files">
+      <li
+        *ngFor="let file of files; let index = index"
+        class="custom-form-field__selected-file"
+      >
+        <i class="pi pi-file"></i>
+        {{ file.fileName }}
+        <i (click)="removeFiles(index)" class="pi pi-trash fpc-delete-file-icon"></i>
+      </li>
+    </ul>
+  </div>
+  <input type="hidden" [formControlName]="item.formControlName" />
+  <small
+    *ngIf="
+      item.hintMessage &&
+        !(
+          item.errorMessage &&
+          form.get(item.formControlName).errors &&
+          getKeys(form.get(item.formControlName).errors).length &&
+          form.get(item.formControlName).touched
+        )
+    "
+    id="{{ item.formControlName }}-hint"
+    class="block"
+  >
+    {{ item.hintMessage }}
+  </small>
+  <small
+    *ngIf="
+      item.errorMessage &&
+      form.get(item.formControlName).errors &&
+      getKeys(form.get(item.formControlName).errors).length &&
+      form.get(item.formControlName).touched
+    "
+    id="{{ item.formControlName }}-error"
+    class="p-error block"
+  >
+    {{ item.errorMessage }}
+  </small>
+</div>

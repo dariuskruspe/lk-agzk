@@ -1,0 +1,83 @@
+.mat-stroked-button {
+  border-color: #989aa2;
+
+  @media (max-width: 767px) {
+    margin-top: 10px;
+  }
+}
+
+.row-form {
+  padding: 0 15px;
+}
+
+mat-card {
+  h3 {
+    padding: 0 15px;
+  }
+}
+
+.additional-fields {
+  display: block;
+}
+
+.static-data__item {
+  font-size: 14px;
+}
+
+.pay-row {
+  margin: 0 !important;
+}
+
+.tools {
+  & > button {
+    min-width: auto;
+    width: 100%;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.factory-item {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.tools-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &__button_remove {
+  }
+}
+
+mat-list.employee-data {
+  margin-bottom: 15px;
+  & mat-list-item {
+    height: auto;
+
+    &:not(:last-child) {
+      margin-bottom: 15px;
+    }
+  }
+
+  @media (max-width: 767px) {
+    margin-left: 0;
+  }
+}
+
+.weekend-work-form {
+  .custom-form-field:last-of-type {
+    margin-bottom: 15px;
+  }
+}
+.approver-title {
+  font-size: 13px;
+  color: var(--gray);
+  .value {
+    color: var(--basic-color);
+  }
+}

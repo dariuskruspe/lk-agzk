@@ -1,0 +1,75 @@
+<div class="company-goals-container">
+  @if (!loading()) {
+    <!-- Цели компании -->
+    @if (companyGoalsSection()) {
+      <div class="goals-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            {{ companyGoalsSection()?.sectionName || 'Цели компании' }}
+          </h2>
+          @if (canAddCompanyGoal) {
+            <button
+              pButton
+              icon="pi pi-plus"
+              class="p-button-outlined p-button-rounded"
+              (click)="onAddCompanyGoal()"
+            ></button>
+          }
+        </div>
+        <div class="goals-grid">
+          <div
+            class="goal-card"
+            *ngFor="let goal of companyGoals"
+            [class.clickable]="companyGoalsSection()?.editingAvailable"
+            (click)="
+              companyGoalsSection()?.editingAvailable &&
+                onGoalClick(goal, 'company')
+            "
+          >
+            <div class="goal-background"></div>
+            <div class="goal-content">
+              <div class="goal-title">{{ goal.goalName }}</div>
+              <div class="goal-category">{{ goal.categoryName }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Цели подразделения -->
+    @if (departmentGoalsSection()) {
+      <div class="goals-section">
+        <div class="section-header">
+          <h2 class="section-title">
+            {{ departmentGoalsSection()?.sectionName || 'Цели подразделения' }}
+          </h2>
+          @if (canAddDepartmentGoal) {
+            <button
+              pButton
+              icon="pi pi-plus"
+              class="p-button-outlined p-button-rounded"
+              (click)="onAddDepartmentGoal()"
+            ></button>
+          }
+        </div>
+        <div class="goals-grid">
+          <div
+            class="goal-card"
+            *ngFor="let goal of departmentGoals"
+            [class.clickable]="departmentGoalsSection()?.editingAvailable"
+            (click)="
+              departmentGoalsSection()?.editingAvailable &&
+                onGoalClick(goal, 'department')
+            "
+          >
+            <div class="goal-background"></div>
+            <div class="goal-content">
+              <div class="goal-title">{{ goal.goalName }}</div>
+              <div class="goal-category">{{ goal.categoryName }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

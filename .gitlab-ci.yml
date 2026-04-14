@@ -1,0 +1,91 @@
+stages:
+  - actions
+  - install_dependencies
+  - build
+  - deploy
+  - dist
+
+default:
+  tags:
+    - direct
+
+.node:
+  cache:
+    - key:
+        files:
+          - bun.lock
+      paths:
+        - node_modules/
+      policy: pull
+  interruptible: true
+
+.init-ssh-script: &init-ssh-script
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+
+.init-ssh-script_docker-gitlab: &init-ssh-script_docker-gitlab
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY_DOCKER_EXECUTOR")
+  - mkdir -p ~/.ssh
+  - echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
+  - echo "${CI_KNOWN_HOSTS}" > ~/.ssh/known_hosts
+  - chmod 644 ~/.ssh/known_hosts
+
+.install:
+  stage: install_dependencies
+  extends:
+    - .node
+  cache:
+    - key:
+        files:
+          - bun.lock
+      paths:
+        - node_modules
+      policy: pull-push
+  script:
+    - bun install --frozen-lockfile
+
+include:
+  - '/ci/app.yml'
+
+install:
+  stage: actions
+  extends: .install
+  rules:
+    - changes:
+        - package.json
+        - bun.lock
+      when: always
+    - when: manual
+  allow_failure: true
+
+release:patch:
+  stage: actions
+  extends:
+    - .node
+  script:
+    - node ci/scripts/release patch
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - if: $CI_COMMIT_TAG == null && $CI_COMMIT_MESSAGE =~ /\[fix\]/ && $CI_MERGE_REQUEST_ID == null && $CI_COMMIT_REF_NAME =~ /^(release|develop|current|lts|city)$/
+      when: always
+    - if: $CI_COMMIT_TAG == null
+      when: manual
+  allow_failure: true
+  resource_group: release
+
+release:minor:
+  stage: actions
+  extends:
+    - .node
+  script:
+    - node ci/scripts/release minor
+  rules:
+    - if: $CI_MERGE_REQUEST_ID
+      when: never
+    - if: $CI_COMMIT_TAG == null
+      when: manual
+  allow_failure: true
+  resource_group: release

@@ -1,0 +1,43 @@
+<div class="insurance-container">
+  <p-toolbar class="title">
+    <h1 class="calculator-button">{{ 'TITLE_MY_INSURANCE' | translate }}</h1>
+    <span class="spacer"></span>
+    <button
+      *ngIf="currentInsuranceType && currentInsuranceType.insuranceCalculator"
+      pButton
+      class="button-full-xs p-button-outlined calculator-button mr-20"
+      label="{{ 'INSURANCE_CALCULATOR_LABEL' | translate }}"
+      (click)="openCalculator()"
+    ></button>
+    <button
+      pButton
+      icon="pi pi-plus-circle"
+      class="button-full-xs"
+      iconPos="left"
+      label="{{ 'BUTTON_ISSUE_CREATE' | translate }}"
+      [routerLink]="['', 'issues', 'types']"
+      [queryParams]="{ groupAlias: 'insurance' }"
+    ></button>
+  </p-toolbar>
+  <span class="mb-8 title-text">{{ 'INSURANCE_CHOOSE' | translate }}</span>
+  <app-insurance-card
+    [insurance]="insuranceFacade.forcedData$ | async"
+    (changeClinic)="changeClinicDialog($event)"
+    (deleteInsuranceProgram)="deleteInsuranceDialog($event)"
+    (changeInsuranceType)="changeInsuranceType($event)"
+  ></app-insurance-card>
+
+  <app-insurance-issues
+    [insuranceIssues]="insuranceIssuesFacade.forcedData$ | async"
+    [issuesStatusList]="
+      issuesStatusListFacade.getData() ||
+      (issuesStatusListFacade.getData$() | async)
+    "
+    [loading]="
+      (issuesListFacade.loading$() | async) ||
+      (issuesStatusListFacade.loading$() | async)
+    "
+    (goDetails)="onIssueDetails($event)"
+  >
+  </app-insurance-issues>
+</div>

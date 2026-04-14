@@ -1,0 +1,43 @@
+<div class="validation-container">
+  <div class="validation-container__description">
+    {{ 'CONFIRM_SIGNATURE_REFUSAL' | translate }}
+  </div>
+
+  <div class="validation-container__description">
+    <form [formGroup]="group">
+      <div class="custom-form-field">
+        <p-progressSpinner
+          *ngIf="loading"
+          styleClass="w-2rem h-2rem"
+        ></p-progressSpinner>
+        <p-dropdown
+          *ngIf="!loading && useDropdown"
+          [formControlName]="controlName"
+          [options]="refuseReasonList?.optionList || []"
+          optionLabel="representation"
+          optionValue="value"
+          [formField]="group"
+          placeholder="{{ 'CHOOSE' | translate }}"
+          styleClass="w-full"
+          appendTo="body"
+        ></p-dropdown>
+        <textarea
+          *ngIf="!loading && !useDropdown"
+          class="validation-container__description_comment"
+          [formField]="group"
+          pInputTextarea
+          rows="5"
+          [autoResize]="true"
+          [formControlName]="controlName"
+        ></textarea>
+      </div>
+    </form>
+  </div>
+
+  <p-toolbar class="margin-top">
+    <p-button
+      label="{{ 'BUTTON_CONFIRM' | translate }}"
+      (onClick)="refuse()"
+    ></p-button>
+  </p-toolbar>
+</div>

@@ -1,0 +1,127 @@
+.mobile {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-left: 1px solid #ececec;
+
+  @media (max-width: 767px) {
+    border: none;
+    align-items: initial;
+    flex-direction: column;
+  }
+}
+
+.panel {
+  position: relative;
+  z-index: 99;
+  width: var(--aside-width, 260px);
+  height: 100%;
+  background: var(--menu-background);
+  box-shadow: var(--card-shadow);
+  transform: translateZ(0);
+
+  @media (max-width: 767px) {
+    width: 100%;
+    position: absolute;
+    z-index: 60;
+    height: calc(100% - 75px);
+  }
+
+  .menu-container {
+    height: calc(100% - 39px);
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    @media (max-width: 767px) {
+      height: 100%;
+    }
+
+    ::ng-deep .first-list-item {
+      height: 50px;
+      position: relative;
+      left: 3px;
+    }
+  }
+
+  .version {
+    padding: 10px 1.25rem;
+    color: gray;
+
+    @media (max-width: 767px) {
+      display: none;
+    }
+  }
+
+  &.isMobile {
+    position: fixed;
+    z-index: 49;
+    box-shadow: 5px 0 10px rgb(0 0 0 / 10%);
+  }
+}
+
+.mobile-btn-menu-wrapper {
+  position: absolute;
+  top: 17px;
+  left: 15px;
+  z-index: 60;
+}
+
+.header__toggle-menu {
+  position: relative;
+  display: block;
+  width: 26px;
+  height: 20px;
+  background-color: transparent;
+  border: none;
+  transform: rotate(0deg);
+  cursor: pointer;
+  z-index: 6;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.header__toggle-menu span {
+  display: block;
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background: var(--header-icons-color);
+  opacity: 1;
+  left: 0;
+  transform: rotate(0deg);
+  transition: 0.25s ease-in-out;
+}
+
+.header__toggle-menu span:nth-child(1) {
+  top: 0;
+  transform-origin: left center;
+}
+
+.header__toggle-menu span:nth-child(2) {
+  top: 8px;
+  transform-origin: left center;
+}
+
+.header__toggle-menu span:nth-child(3) {
+  top: 16px;
+  transform-origin: left center;
+}
+
+.header__toggle-menu.open span:nth-child(1) {
+  transform: rotate(45deg);
+  top: -3px;
+  left: 8px;
+}
+
+.header__toggle-menu.open span:nth-child(2) {
+  width: 0;
+  opacity: 0;
+}
+
+.header__toggle-menu.open span:nth-child(3) {
+  transform: rotate(-45deg);
+  top: 16px;
+  left: 8px;
+}

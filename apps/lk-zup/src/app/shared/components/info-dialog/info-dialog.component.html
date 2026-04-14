@@ -1,0 +1,10 @@
+<p [innerHTML]="config?.data['body']"></p>
+
+<p-toolbar class="margin-top">
+  <button
+    pButton
+    class="button-full-xs"
+    label="{{ config?.data['buttonText'] }}"
+    (click)="dialogRef.close(); $event.preventDefault()"
+  ></button>
+</p-toolbar>

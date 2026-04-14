@@ -1,0 +1,106 @@
+/* Базовые стили select-button */
+.app-select-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--select-button-bg, rgba(255, 255, 255, 0.1));
+  border: var(--select-button-border, 1px solid transparent);
+  box-shadow: var(
+    --select-button-shadow,
+    2px 8px 20px 0px rgba(22, 28, 35, 0.35)
+  );
+  padding: var(--select-button-padding, 0.143em);
+  position: relative;
+  font-family: inherit;
+  transition: var(--select-button-option-transition, all 150ms ease);
+  border-radius: var(--select-button-radius, 1.071em);
+  user-select: none;
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+
+  /* Внутренняя тень для контейнера */
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow: var(--select-button-inner-shadow, none);
+  }
+
+  /* Размеры - все рассчитывается от font-size */
+  &--xs {
+    font-size: 11px;
+  }
+
+  &--sm {
+    font-size: 12px;
+  }
+
+  &--md {
+    font-size: 14px;
+  }
+
+  &--lg {
+    font-size: 16px;
+  }
+
+  &--xl {
+    font-size: 18px;
+  }
+
+  /* Стили для опций - применяются через ::ng-deep для правильного наследования размеров */
+  ::ng-deep app-select-button-option {
+    display: inline-flex;
+    font-size: inherit;
+  }
+
+  ::ng-deep .app-select-button-option {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.86em;
+    padding: 0.286em 1em;
+    border-radius: var(--select-button-radius, 1.071em);
+    background-color: var(--select-button-option-bg, transparent);
+    color: var(--select-button-option-text, rgba(255, 255, 255, 0.7));
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: var(
+      --select-button-option-transition,
+      all 150ms cubic-bezier(0.4, 0, 0.2, 1)
+    );
+    font-family: inherit;
+    font-size: inherit;
+    outline: none;
+    text-decoration: none;
+    user-select: none;
+    white-space: nowrap;
+    position: relative;
+    z-index: 1;
+
+    &:hover:not(.active):not([data-active='true']) {
+      background-color: var(
+        --select-button-option-bg-hover,
+        rgba(255, 255, 255, 0.06)
+      );
+    }
+
+    &.active,
+    &[data-active='true'] {
+      background-color: var(
+        --select-button-option-bg-active,
+        rgba(255, 255, 255, 0.15)
+      );
+      color: var(--select-button-option-text-active, rgba(255, 255, 255, 1));
+      border-color: var(--select-button-option-border-active, transparent);
+      box-shadow: var(--select-button-option-shadow-active, none);
+      z-index: 2;
+    }
+
+    &:focus-visible {
+      outline: 2px solid rgba(0, 122, 255, 0.5);
+      outline-offset: 2px;
+    }
+  }
+}

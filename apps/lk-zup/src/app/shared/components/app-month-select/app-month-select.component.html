@@ -1,0 +1,47 @@
+<div class="app-month-select">
+  <button
+    class="app-month-select__button"
+    (click)="onDecreaseMonth()"
+    aria-label="Предыдущий месяц"
+  >
+    <lucide-icon [name]="ChevronLeftIcon"></lucide-icon>
+  </button>
+  <div
+    class="app-month-select__value"
+    [class.app-month-select__value--open]="isOpen()"
+    [class.app-month-select__value--position-top]="dropdownPosition() === 'top'"
+    [class.app-month-select__value--position-bottom]="dropdownPosition() === 'bottom'"
+    [class.app-month-select__value--position-center]="dropdownPosition() === 'center'"
+    [style.--active-month-index]="value()[1]"
+    (click)="toggleDropdown()"
+    role="combobox"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="listbox"
+    [attr.aria-label]="'Выбор месяца'"
+    tabindex="0"
+  >
+    <div class="app-month-select__value-container">
+      <div class="app-month-select__value-list" role="listbox">
+        @for (month of monthNames(); track $index) {
+          <div
+            class="app-month-select__value-item"
+            [class.app-month-select__value-item--active]="value()[1] === $index"
+            (click)="isOpen() && selectMonth($index, $event)"
+            role="option"
+            [attr.aria-selected]="value()[1] === $index"
+            tabindex="0"
+          >
+            {{ month.charAt(0).toUpperCase() + month.slice(1) + ' ' + value()[0] }}
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+  <button
+    class="app-month-select__button"
+    (click)="onIncreaseMonth()"
+    aria-label="Следующий месяц"
+  >
+    <lucide-icon [name]="ChevronRightIcon"></lucide-icon>
+  </button>
+</div>

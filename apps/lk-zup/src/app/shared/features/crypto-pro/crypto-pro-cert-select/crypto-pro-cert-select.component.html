@@ -1,0 +1,30 @@
+<div class="validation-container__form">
+  @for(cert of certificates(); track cert.thumbprint) {
+  <div
+    class="cert"
+    [class.cert--active]="value() === cert.thumbprint"
+    (click)="onSelect(cert)"
+  >
+    <div class="cert__title">
+      {{ cert.subjectPersonName }}
+      @if(cert.subjectOrgName) {
+      <div class="cert__subtitle">{{ cert.subjectOrgName }}</div>
+      }
+    </div>
+    <div class="cert__secondary">
+      {{ 'CRYPTO_PRO_SELECT_EXPIRE' | translate }}
+    </div>
+    <div class="cert__primary">
+      {{ cert.validFrom | date : 'dd.MM.YYYY' }} -
+      {{ cert.validTo | date : 'dd.MM.YYYY' }}
+    </div>
+    <div class="cert__secondary">
+      {{ 'CRYPTO_PRO_SELECT_CERTIFICATE' | translate }}
+    </div>
+    <div class="cert__primary">{{ cert.thumbprint }}</div>
+
+    <div class="cert__text">{{ cert.issuerName }}</div>
+    <div class="cert__text">{{ cert.subjectName }}</div>
+  </div>
+  }
+</div>

@@ -1,0 +1,45 @@
+@let d = dayVm();
+
+<div
+  class="timesheet-cell"
+  [class.timesheet-cell--clickable]="true"
+  [class.timesheet-cell--big-icon]="d.variant === 'big-icon'"
+  [class.timesheet-cell--small-icon]="d.variant === 'small-icon'"
+  [class.timesheet-cell--text]="d.variant === 'text'"
+  [class.timesheet-cell--dayoff]="d.variant === 'dayoff'"
+  [class.timesheet-cell--empty]="d.variant === 'empty'"
+  [class.timesheet-cell--has-unapproved-issues]="d.hasUnapprovedIssues"
+  [style]="{ '--cell-color': d.color, '--cell-bg-color': d.bgColor }"
+  [pTooltip]="tooltipText()"
+  [escape]="false"
+  role="button"
+  tabindex="0"
+  (click)="onCellClick()"
+  (keydown.enter)="onCellClick()"
+  (keydown.space)="onCellKeydown($event)"
+>
+  @switch (d.variant) {
+    @case ('big-icon') {
+      <app-icon [kind]="d.iconKind" [icon]="d.icon"></app-icon>
+    }
+    @case ('small-icon') {
+      <app-icon [kind]="d.iconKind" [icon]="d.icon"></app-icon>
+      <span class="timesheet-cell__value">{{ d.hours }}</span>
+      @if (d.hoursFact !== d.hours) {
+        <span class="timesheet-cell__value-fact">ф{{ d.hoursFact }}</span>
+      }
+    }
+    @case ('text') {
+      <span class="timesheet-cell__value">{{ d.hours }}</span>
+      @if (d.hoursFact !== d.hours) {
+        <span class="timesheet-cell__value-fact">ф{{ d.hoursFact }}</span>
+      }
+    }
+    @case ('dayoff') {
+      <div class=""></div>
+    }
+    @case ('empty') {
+      <div class=""></div>
+    }
+  }
+</div>

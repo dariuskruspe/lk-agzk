@@ -1,0 +1,394 @@
+// Переменные заменены на CSS переменные из themes_v2
+$border-radius: var(--radius-md);
+$transition: all 0.2s ease;
+
+.validation-rules-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  // Заголовок секции
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--control-hover-bg) 100%);
+    border: 1px solid var(--sidebar-border);
+    border-radius: $border-radius;
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+
+      i {
+        font-size: 18px;
+        color: var(--button-primary-bg);
+      }
+
+      .title {
+        font-size: 16px;
+        font-weight: 600;
+        color: var(--foreground-color);
+      }
+
+      .rules-count {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 20px;
+        height: 20px;
+        background: var(--button-primary-bg);
+        color: var(--button-primary-text);
+        font-size: 11px;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 0 6px;
+      }
+    }
+
+    .toggle-all {
+      ::ng-deep .p-checkbox-label {
+        font-size: 12px;
+        color: var(--foreground-color-secondary);
+      }
+    }
+  }
+
+  // Активные правила
+  .active-rules {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 30px 20px;
+      background: var(--bg-primary);
+      border: 2px dashed var(--sidebar-border);
+      border-radius: $border-radius;
+      text-align: center;
+
+      i {
+        font-size: 28px;
+        color: var(--button-info-bg);
+        margin-bottom: 10px;
+        opacity: 0.6;
+      }
+
+      span {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--foreground-color);
+        margin-bottom: 6px;
+      }
+
+      p {
+        font-size: 12px;
+        color: var(--foreground-color-secondary);
+        margin: 0;
+        max-width: 300px;
+        line-height: 1.4;
+      }
+    }
+
+    .rule-card {
+      background: var(--bg-element);
+      border: 1px solid var(--sidebar-border);
+      border-radius: $border-radius;
+      overflow: hidden;
+      transition: $transition;
+
+      &:hover {
+        box-shadow: var(--control-shadow);
+      }
+
+      &.disabled {
+        opacity: 0.6;
+        background: var(--bg-primary);
+      }
+
+      .rule-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--sidebar-border);
+
+        .rule-toggle {
+          flex-shrink: 0;
+        }
+
+        .rule-info {
+          flex: 1;
+          min-width: 0;
+
+          .rule-title {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 2px;
+
+            i {
+              font-size: 14px;
+              color: var(--button-primary-bg);
+              flex-shrink: 0;
+            }
+
+            .rule-name {
+              font-size: 13px;
+              font-weight: 500;
+              color: var(--foreground-color);
+            }
+          }
+
+          .rule-description {
+            font-size: 11px;
+            color: var(--foreground-color-secondary);
+            line-height: 1.3;
+          }
+        }
+
+        .btn-remove {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 28px;
+          height: 28px;
+          border: 1px solid transparent;
+          border-radius: var(--radius);
+          background: transparent;
+          color: var(--foreground-color-secondary);
+          cursor: pointer;
+          transition: $transition;
+          flex-shrink: 0;
+          opacity: 0.7;
+
+          &:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--button-danger-bg);
+            border-color: rgba(239, 68, 68, 0.3);
+            opacity: 1;
+            transform: scale(1.05);
+          }
+
+          &:active {
+            transform: scale(0.95);
+          }
+
+          i {
+            font-size: 14px;
+            font-weight: bold;
+          }
+        }
+      }
+
+      .rule-config {
+        padding: 14px 16px;
+        background: var(--bg-element);
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        .config-field {
+          label {
+            display: block;
+            margin-bottom: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--foreground-color);
+          }
+
+          .form-input {
+            width: 100%;
+            padding: 6px 10px;
+            border: 1px solid var(--sidebar-border);
+            border-radius: var(--radius);
+            font-size: 13px;
+            transition: $transition;
+
+            &:focus {
+              outline: none;
+              border-color: var(--button-primary-bg);
+              box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.1);
+            }
+
+            &::placeholder {
+              color: var(--foreground-color-secondary);
+              font-size: 12px;
+            }
+          }
+        }
+
+        // Специальные стили для диапазона дат
+        .range-config {
+          .range-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 16px;
+          }
+
+          .range-description {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--sidebar-border);
+            border-radius: var(--radius);
+            font-size: 11px;
+            color: var(--foreground-color-secondary);
+
+            i {
+              color: var(--button-info-bg);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Доступные правила
+  .available-rules {
+    .section-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+
+      span {
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--foreground-color);
+      }
+
+      small {
+        font-size: 11px;
+        color: var(--foreground-color-secondary);
+      }
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 8px;
+
+      .rule-option {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        background: var(--bg-element);
+        border: 1px solid var(--sidebar-border);
+        border-radius: $border-radius;
+        cursor: pointer;
+        transition: $transition;
+        text-align: left;
+
+        &:hover:not([disabled]) {
+          border-color: var(--button-primary-bg);
+          background: var(--control-hover-bg);
+          transform: translateY(-1px);
+        }
+
+        &[disabled] {
+          opacity: 0.5;
+          cursor: not-allowed;
+          background: var(--bg-primary);
+        }
+
+        &.added {
+          background: rgba(16, 185, 129, 0.1);
+          border-color: var(--button-success-bg);
+
+          .rule-icon i {
+            color: var(--button-success-bg);
+          }
+        }
+
+        .rule-icon {
+          position: relative;
+          flex-shrink: 0;
+
+          i {
+            font-size: 16px;
+            color: var(--foreground-color-secondary);
+            transition: $transition;
+          }
+
+          .check-overlay {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            font-size: 10px;
+            color: var(--button-success-bg);
+            background: var(--bg-element);
+            border-radius: 50%;
+          }
+        }
+
+        .rule-content {
+          flex: 1;
+          min-width: 0;
+
+          .rule-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--foreground-color);
+            margin-bottom: 2px;
+          }
+
+          .rule-desc {
+            font-size: 11px;
+            color: var(--foreground-color-secondary);
+            line-height: 1.3;
+          }
+        }
+      }
+    }
+  }
+
+  // Глобальные стили для p-checkbox
+  ::ng-deep {
+    .p-checkbox {
+      .p-checkbox-box {
+        width: 16px !important;
+        height: 16px !important;
+        border-width: 1px !important;
+      }
+
+      .p-checkbox-icon {
+        font-size: 10px !important;
+      }
+    }
+
+    .p-checkbox-label {
+      font-size: 12px !important;
+      margin-left: 6px !important;
+    }
+
+    .toggle-all-checkbox {
+      .p-checkbox-label {
+        font-size: 11px !important;
+      }
+    }
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .validation-rules-editor {
+    .available-rules {
+      .rules-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

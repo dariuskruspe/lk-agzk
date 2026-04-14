@@ -1,0 +1,57 @@
+@if (showTrigger()) {
+<div
+  #trigger
+  class="app-date-picker__trigger"
+  (click)="toggle()"
+  role="combobox"
+  [attr.aria-expanded]="isOpen()"
+  aria-haspopup="dialog"
+  [attr.aria-label]="'Выбор даты'"
+  tabindex="0"
+>
+  @if(templateTrigger()) {
+  <ng-container
+    *ngTemplateOutlet="templateTrigger(); context: { displayValue: displayValue() }"
+  ></ng-container>
+  } @else { {{ displayValue() }} }
+</div>
+}
+
+<ng-template
+  cdkConnectedOverlay
+  [cdkConnectedOverlayOrigin]="overlayOrigin()!"
+  [cdkConnectedOverlayOpen]="isOpen()"
+  [cdkConnectedOverlayPositions]="[
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ]"
+  [cdkConnectedOverlayHasBackdrop]="true"
+  (backdropClick)="onOverlayDetach()"
+  (detach)="onOverlayDetach()"
+>
+  <div class="app-date-picker__dropdown">
+    <p-calendar
+      [(ngModel)]="selectedDate"
+      [inline]="true"
+      [firstDayOfWeek]="firstDayOfWeek()"
+      [minDate]="min()"
+      [maxDate]="max()"
+      dateFormat="dd.mm.yy"
+      (onSelect)="onDateSelect()"
+      styleClass="app-date-picker__calendar"
+    ></p-calendar>
+  </div>
+</ng-template>
+

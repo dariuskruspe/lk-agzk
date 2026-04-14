@@ -1,0 +1,8 @@
+@if(myTeamService.mode() === 'full') {
+<iframe [src]="myTeamService.fullModeUrl()" frameborder="0" width="100%" [height]="height()"
+  class="datalense-frame"></iframe>
+} @else if(myTeamService.mode() === 'widgets') {
+  <app-datalens [config]="myTeamService.widgetModePages()"></app-datalens>
+} @else {
+<app-loader></app-loader>
+}

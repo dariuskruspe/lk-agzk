@@ -1,0 +1,12 @@
+<div [formGroup]="form">
+  <div class="checkbox-block">
+    <p-checkbox
+      [binary]="true"
+      [inputId]="index || index === 0 ? item.formControlName + '-' + index : item.formControlName"
+      [formControlName]="item.formControlName"
+      class="checkbox-item"
+    ></p-checkbox>
+    <label class="custom-form-field__checkbox-label" for="{{ index || index === 0 ? item.formControlName + '-' + index : item.formControlName }}"> {{ item.label }}{{ isRequired() ? ' *' : '' }}</label>
+  </div>
+</div>
+

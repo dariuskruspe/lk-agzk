@@ -1,0 +1,54 @@
+<div class="dialog-content">
+  <p-progressSpinner
+    class="d-flex justify-content-center"
+    styleClass="custom-spinner"
+    *ngIf="agreementEmployeeSigningListFacade.loading$() | async"
+  >
+  </p-progressSpinner>
+  <div class="content">
+    <div class="docs-list" *ngIf="agreementEmployeeSigningListFacade.getData$() | async">
+      <div class="file" (click)="openFile(file)" *ngFor=" let file of agreementEmployeeSigningListFacade.getData()">
+        <i class="pi pi-file-pdf file-icon"></i>
+        <span class="file-name">{{file.fileName}}</span>
+      </div>
+    </div>
+  </div>
+  <p-dropdown
+    *ngIf="certificates"
+    [options]="certificates"
+    [(ngModel)]="choosenCertificate"
+    optionLabel="name"
+    placeholder="{{ 'CHOOSE_CERTIFICATE_PLACEHOLDER' | translate }}"
+    class="validation-container__form_dropdown p-fluid"
+    appendTo="body"
+  >
+    <ng-template let-signature pTemplate="item">
+      <div class="local-signatures">
+        <div>
+          <div class="local-signatures__title">
+            {{ signature.name }}
+          </div>
+          <div class="local-signatures__text">
+            ({{ signature.validFrom | date:'dd.MM.YYYY' }} - {{ signature.validTo | date:'dd.MM.YYYY' }})
+          </div>
+        </div>
+        <div class="local-signatures__text">{{ signature.issuerName }}</div>
+        <div class="local-signatures__text">{{ signature.thumbprint }}</div>
+      </div>
+    </ng-template>
+  </p-dropdown>
+  <div *ngIf="!certificates || !certificates.length" class="error-text">
+    {{ 'EMPTY_CERTIFICATES' | translate }}
+  </div>
+
+  <div class="sign-button">
+    <button
+    pButton
+    label="{{ 'BUTTON_SIGN' | translate }}"
+    (click)="signFiles()"
+    [disabled]="!choosenCertificate"
+    [loading]="loading"
+    >
+    </button>
+  </div>
+</div>

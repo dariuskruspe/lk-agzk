@@ -1,0 +1,27 @@
+<div [formGroup]="form">
+  <label
+    for="{{ item.formControlName }}"
+    class="custom-form-field__label"
+  >{{ item.label }}{{ isRequired() ? ' *' : '' }}</label>
+  <input
+    #element
+    pInputText
+    autocomplete="on"
+    [mask]="item.mask"
+    [placeholder]="item.placeholder && item.placeholder !== 'undefined' ? item.placeholder : ''"
+    [formControlName]="item.formControlName"
+    (change)="valueBinding(item.formControlName, $event)"
+    [ngClass]="{
+      'custom-form-field__with-clearance':
+        item.icon && item.icon.clearMode && element.value
+    }"
+  />
+  <button
+    *ngIf="item.icon && item.icon.clearMode && element.value"
+    pButton
+    type="button"
+    icon="pi pi-times"
+    class="p-button-rounded p-button-text p-button-plain custom-form-field__clearance"
+    (click)="form.get(item.formControlName).patchValue('')"
+  ></button>
+</div>

@@ -1,0 +1,20 @@
+<section class="app-business-trip-month">
+  <app-calendar-graph-month
+    [config]="calendarGraphMonthConfig()"
+    [month]="month()"
+    [rows]="rows()"
+  ></app-calendar-graph-month>
+</section>
+
+@if (legendItems().length) {
+  <div class="business-trip-month-legend-container" appBindStickyClass>
+    @for (item of legendItems(); track item.name) {
+      <app-calendar-graph-legend
+        [name]="item.name"
+        [color]="item.color"
+        [variant]="item.variant"
+        icon="plane"
+      ></app-calendar-graph-legend>
+    }
+  </div>
+}

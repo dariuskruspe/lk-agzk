@@ -1,0 +1,143 @@
+.header {
+  position: relative;
+  background: var(--header-background);
+  box-shadow: var(--header-shadow);
+  box-sizing: border-box;
+  z-index: 12;
+
+  @media (max-width: 991px) {
+    display: flex;
+  }
+
+  & img.logo {
+    height: 47px;
+    width: auto;
+    margin-top: 6px;
+  }
+
+  & mat-icon {
+    &.logo {
+      display: inline-block;
+      height: 18px;
+      width: 128px;
+      margin-top: 6px;
+    }
+  }
+
+  & .logo__wrap {
+    text-align: center;
+    width: var(--aside-width, 260px);
+
+    @media (max-width: 991px) {
+      padding-left: 0;
+    }
+  }
+}
+
+.header__wrapper {
+  padding: 0;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  justify-content: space-between;
+
+  @media (max-width: 1190px) {
+    width: 100%;
+  }
+
+  @media (max-width: 991px) {
+    padding: 0 13px;
+  }
+
+  @media (max-width: 769px) {
+    padding: 5px 13px;
+    justify-content: center;
+    position: relative;
+    box-shadow: 5px 0px 10px 0px rgba(69, 151, 255, 0.25);
+    height: 75px;
+  }
+}
+
+.header__wrap {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  @media (max-width: 991px) {
+    position: initial;
+  }
+}
+
+.header__logo {
+  margin-right: 21px;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.logo-company {
+  display: flex;
+  align-items: center;
+}
+
+.disable {
+  pointer-events: none;
+}
+
+.mobile-header-menu {
+  display: flex;
+  width: 100%;
+  height: 65px;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+
+  &__item {
+    display: flex;
+    height: 100%;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+
+    i {
+      font-size: 32px;
+      color: var(--header-icons-color, #a3b3c1);
+    }
+
+    button {
+      ::ng-deep .pi {
+        font-size: 22px;
+      }
+    }
+
+    &_active {
+      position: relative;
+
+      &:before {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        content: "";
+        width: 60px;
+        height: 60px;
+        background: var(--title-background);
+        z-index: -1;
+        border-radius: 50%;
+      }
+    }
+  }
+}
+
+
+.docky-btn {
+  width: 75px;
+  height: 75px;
+  background: url('../../../../../assets/img/docky/sphere.png');
+  background-color: transparent;
+  background-size: cover;
+  border: none;
+}

@@ -1,0 +1,287 @@
+<!-- <только если в настройках включено отображение виджета отпусков> -->
+<!-- Виджет отпусков -->
+<div *ngIf="isEnabled">
+  <!-- Остатки отпусков -->
+  @if (showVacationBalances) {
+    <p-toolbar class="title">
+      <!-- Заголовок "Отпуска" -->
+      <h2 class="dashboard-title mobile-title">
+        {{ 'TITLE_LEAVE_DAY_OFF' | translate }}
+      </h2>
+
+      <span class="spacer"></span>
+
+      <!-- Кнопка "Скачать отчёт и историю" -->
+      <button
+        *ngIf="settings?.dashboard?.vacations?.vacationBalanceAvailible"
+        pButton
+        type="button"
+        class="button-full-xs title-button"
+        label="{{ 'BUTTON_LEAVE_DETAILS' | translate }}"
+        (click)="onOpenVacationImgDialog()"
+      ></button>
+    </p-toolbar>
+
+    <div class="row vacations-block">
+      <div class="main-leave col-md-12">
+        <app-card [withPaddings]="false">
+          <div class="vacation__block">
+            <div>
+              <div class="vacation__days" [pTooltip]="tooltipText">
+                {{ vacationTotal?.vacationsTotal }}{{ 'D' | translate }}
+              </div>
+              <div class="text-vacation">
+                {{ vacationTotal?.header || 'LEAVE_AFFORDABLE' | translate }}
+              </div>
+            </div>
+            <div>
+              <form [formGroup]="vacationBalanceDateForm" class="form">
+                <p-calendar
+                  #datePicker
+                  [firstDayOfWeek]="1"
+                  formControlName="date"
+                  [minDate]="minDate"
+                  [maxDate]="maxDate"
+                  [readonlyInput]="true"
+                  dateFormat="dd.mm.yy"
+                  appendTo="body"
+                  [mask]="'DATE_MASK' | translate"
+                  (change)="dateBinding('date', $event)"
+                  (onSelect)="onChangeForm()"
+                >
+                  <ng-template pTemplate="date" let-date>
+                    <span [ngClass]="{ weekend: isWeekend(date) }">
+                      {{ date.day }}
+                    </span>
+                  </ng-template>
+                </p-calendar>
+                <span class="vacation__date" (click)="datePicker.toggle()">
+                  {{ formatDate(vacationBalanceDateForm.get('date').value)
+                  }}<i
+                    class="pi pi-angle-down"
+                    style="color: var(--primary-color)"
+                  ></i>
+                </span>
+              </form>
+            </div>
+
+            <img
+              src="/assets/img/svg/vacation-balance.svg"
+              [style.width]="'70px'"
+            />
+          </div>
+        </app-card>
+      </div>
+      <!--  <div class="col-lg-6 col-md-12">-->
+      <!--    <app-card [withPaddings]="false">-->
+      <!--      <div class="vacation__block">-->
+      <!--        <div>{{ 'LEAVE_DAY_OFF' | translate }}</div>-->
+      <!--        <p-badge [value]="'2'" severity="warning" styleClass="p-badge"></p-badge>-->
+      <!--      </div>-->
+      <!--    </app-card>-->
+      <!--  </div>-->
+    </div>
+  }
+
+  <!-- Мой график отпусков -->
+  @if (showMyVacationSchedule) {
+    <p-toolbar>
+      <!-- Заголовок "Мой график отпусков" -->
+      <h2 class="mobile-title">
+        {{ 'MY_VACATION_SCHEDULE' | translate }}
+      </h2>
+
+      <span class="spacer"></span>
+
+      <!-- Кнопка "Перейти к графику отпусков" -->
+      <button
+        pButton
+        type="button"
+        class="button-full-xs title-button"
+        label="{{ 'TO_VACATIONS_GRAPH' | translate }}"
+        [routerLink]="['', 'vacations']"
+      ></button>
+    </p-toolbar>
+
+    <p-card class="vacation-widget-card wrapper block mb-30">
+      <div class="vacation__descWrap">
+        <ng-container *skeleton="vacationArray; else skeletonText">
+          <p *ngIf="vacationArray?.vacationsCount" class="vacation__desc">
+            {{ 'LEAVE_PLAN' | translate }}"{{ 'BUTTON_CONFIRM' | translate }}".
+            <br />{{ 'LEAVE_MOVE_PERIOD_1' | translate
+            }}{{ 'LEAVE_MOVE_PERIOD_2' | translate
+            }}{{ 'LEAVE_MOVE_PERIOD_3' | translate }}
+            <br />
+            <span
+              *ngIf="
+                settingsFacade.getData().dashboard?.vacations
+                  ?.vacationsOneTimeReschedulling
+              "
+              class="vacation__desc_allowed-once"
+            >
+              {{ 'LEAVE_ALLOWED_ONCE' | translate }}
+            </span>
+          </p>
+          <p *ngIf="!vacationArray?.vacationsCount" class="vacation__desc">
+            {{ 'LEAVE_NOT_PLAN' | translate }}
+            @if (settings.unscheduledVacationIssueTypeID) {
+              <a
+                [routerLink]="[
+                  '',
+                  'issues',
+                  'types',
+                  settings.unscheduledVacationIssueTypeID,
+                ]"
+              >
+                {{ 'LEAVE_LINK_ISSUE_CREATE' | translate }}
+              </a>
+            } @else {
+              <a
+                [routerLink]="[
+                  '',
+                  'issues',
+                  'types',
+                  'unscheduledVacation',
+                  'custom',
+                ]"
+              >
+                {{ 'LEAVE_LINK_ISSUE_CREATE' | translate }}
+              </a>
+            }
+            .
+          </p>
+        </ng-container>
+      </div>
+
+      <!-- Карточки моих отпусков -->
+      <ng-container *skeleton="vacationArray; else skeleton; repeat: 4">
+        <div
+          class="vacation-card"
+          *ngFor="let vacation of vacationArray?.vacations; let i = index"
+        >
+          <p-toolbar class="no-margin">
+            <div class="vacation-mobile-wrapper">
+              <div class="vacation-card__title">
+                <div *ngIf="langFacade.getLang()">
+                  <span>{{
+                    vacation?.vacationBegin | date: ('DATE_PIPE' | translate)
+                  }}</span>
+                  <span> - </span>
+                  <span>{{
+                    vacation?.vacationEnd | date: ('DATE_PIPE' | translate)
+                  }}</span>
+                  <span class="ml-4"
+                    >({{ vacation?.vacationDays }}{{ 'D' | translate }})</span
+                  >
+                </div>
+
+                <!-- Тип отпуска -->
+                <span
+                  *ngIf="
+                    getVacationType(vacation.vacationTypeId) as vacationType
+                  "
+                  class="font-size-0-875rem gray ml-10"
+                  >{{ vacationType.representation }}</span
+                >
+              </div>
+              <div class="spacer">
+                <!-- Статус заявки -->
+                <div class="status-column">
+                  <app-issue-status
+                    *ngIf="
+                      vacation.stateId && getVacationStatus(vacation.stateId)
+                    "
+                    [label]="getVacationStatus(vacation.stateId).name"
+                    [fontColor]="'var(--basic-color)'"
+                    [color]="getVacationStatus(vacation.stateId).color"
+                    [pTooltip]="getVacationStatus(vacation.stateId).description"
+                    tooltipPosition="bottom"
+                  ></app-issue-status>
+                </div>
+              </div>
+
+              <div
+                *ngIf="!vacation?.issueId; else issueExists"
+                class="vacation-card__buttons"
+              >
+                <!-- Кнопка "Перенести" -->
+                <button
+                  *ngIf="vacation.vacationReshedulingAvailable"
+                  pButton
+                  label="{{ 'BUTTON_TRANSFER' | translate }}"
+                  class="p-button-outlined button-full-xs py-6 w-160 mobile-button"
+                  (click)="
+                    openIssueDialog({
+                      alias: vacation.vacationReshedulingAlias,
+                      formData: {
+                        dateBegin: vacation?.vacationBegin,
+                        dateEnd: vacation?.vacationEnd,
+                        vacationRescheduled: vacation?.vacationRescheduled,
+                        vacationTypeID: vacation?.vacationTypeId,
+                      },
+                    })
+                  "
+                ></button>
+
+                <!-- Кнопка "Подтвердить" -->
+                <button
+                  *ngIf="vacation.vacationConfirmationAvailable"
+                  pButton
+                  class="p-button-outlined button-full-xs py-6 w-160 mobile-button"
+                  label="{{ 'BUTTON_CONFIRM' | translate }}"
+                  (click)="
+                    openIssueDialog({
+                      alias: 'leave-plan',
+                      formData: {
+                        dateBegin: vacation?.vacationBegin,
+                        dateEnd: vacation?.vacationEnd,
+                        vacationRescheduled: vacation?.vacationRescheduled,
+                        vacationTypeID: vacation?.vacationTypeId,
+                      },
+                    })
+                  "
+                ></button>
+              </div>
+            </div>
+
+            <ng-template #issueExists>
+              <!-- Кнопка "Открыть заявку" -->
+              <button
+                pButton
+                class="p-button-outlined button-full-xs py-6 w-160 mobile-button"
+                label="{{ 'BUTTON_ISSUE_OPEN' | translate }}"
+                (click)="openCreatedIssueDialog(vacation.issueId)"
+              ></button>
+              <!--            <i-->
+              <!--              class="pi pi-check mobile-center-icon" style="color: var(&#45;&#45;success)"-->
+              <!--            ></i>-->
+            </ng-template>
+
+            <!-- <только если заявка находится в статусе "Выполнена" и отпуск предоставлен> -->
+            <!-- Надпись "Отпуск предоставлен" -->
+            <span
+              *ngIf="
+                vacation.vacationIsActual &&
+                getVacationStatus(vacation.stateId)?.code === 9
+              "
+              class="font-size-0-875rem gray ml-10"
+              >{{ 'VACATION_IS_ACTUAL' | translate }}</span
+            >
+          </p-toolbar>
+        </div>
+      </ng-container>
+    </p-card>
+  }
+</div>
+
+<ng-template #skeletonText>
+  <div style="margin-bottom: 10px">
+    <p-skeleton height="25px" width="200px"></p-skeleton>
+  </div>
+</ng-template>
+
+<ng-template #skeleton>
+  <div class="skeleton-list-item">
+    <p-skeleton height="25px" width="300px"></p-skeleton>
+  </div>
+</ng-template>

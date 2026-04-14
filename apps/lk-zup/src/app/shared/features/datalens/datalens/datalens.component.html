@@ -1,0 +1,7 @@
+<p-tabView class="w-full">
+  @for (page of config().pages; track page) {
+    <p-tabPanel [header]="page.title">
+      <app-datalens-page [config]="page"></app-datalens-page>
+    </p-tabPanel>
+  }
+</p-tabView>

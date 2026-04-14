@@ -1,0 +1,42 @@
+.button_ok {
+  width: 100%;
+}
+
+.success-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.ok-icon {
+  display: block;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: #a6cf00;
+  margin: 40px 0;
+  position: relative;
+
+  &::after,
+  &::before {
+    display: block;
+    position: absolute;
+    content: '';
+    background-color: #fff;
+    height: 4px;
+    border-radius: 5px;
+    top: 50%;
+    left: 50%;
+  }
+
+  &::before {
+    width: 20px;
+    transform: translate(-21px, 6px) rotateZ(45deg);
+  }
+
+  &::after {
+    width: 40px;
+    transform: translate(-12px, 0px) rotateZ(-45deg);
+  }
+}

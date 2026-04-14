@@ -1,0 +1,32 @@
+<p-toolbar class="margin-top-bottom p-toolbar-single-row" *ngIf="survey">
+  <p-toolbar class="nowrap">
+    <p-button
+      icon="pi pi-arrow-left"
+      [link]="true"
+      (click)="onBackPage()"
+    ></p-button>
+    <h1>
+      {{survey.name}}
+    </h1>
+  </p-toolbar>
+  <span class="spacer"></span>
+</p-toolbar>
+<p-card *ngIf="survey">
+  <div>
+    <app-status
+      [color]="'onapproval'"
+      [label]="'Пройти до '+ endDate"
+      [ngStyle]="{ order: isMobileV() ? -1 : 0 }"
+      [pTooltip]="''"
+      fontColor="var(--basic-color)"
+    ></app-status>
+  </div>
+  <app-surveys-management-preview
+    [hideButtons]="false"
+    [questions]="survey.questions"
+    [setting]="survey"
+    (submitSurvey)="submitSurvey($event)"
+    (cancelSurvey)="onBackPage()"
+  ></app-surveys-management-preview>
+</p-card>
+

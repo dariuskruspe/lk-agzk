@@ -1,0 +1,14 @@
+<app-agreements-list
+  (loadList)="onLoadList($event)"
+  (openDocumentDialog)="openDocument($event)"
+  [agreementsList]="
+    documentListFacade.forcedData$ | async
+  "
+  [documentTypesList]="
+    agreementTypesListFacade.forcedData$ | async
+  "
+  [loading]="documentListFacade.loading$() | async"
+  [stateList]="documentStateFacade.getData()"
+  [title]="title"
+  [providers]="providersFacade.forcedData$ | async"
+></app-agreements-list>

@@ -1,0 +1,41 @@
+<button 
+  [class]="classNames()"
+  [type]="type()"
+  [disabled]="isDisabled()"
+  (click)="onClick($event)"
+>
+  <!-- Loader -->
+  @if (loading()) {
+    <div class="app-button__loader"></div>
+  }
+  
+  <!-- Content -->
+  <div class="app-button__content">
+    <!-- Left Icon -->
+    @if (showIconLeft()) {
+      <span class="app-button__icon">
+        @if (isLucideIcon()) {
+          <lucide-icon [name]="icon()"></lucide-icon>
+        } @else {
+          <i [class]="icon()"></i>
+        }
+      </span>
+    }
+    
+    <!-- Label -->
+    @if (label()) {
+      <span>{{ label() }}</span>
+    }
+    
+    <!-- Right Icon -->
+    @if (showIconRight()) {
+      <span class="app-button__icon">
+        @if (isLucideIcon()) {
+          <lucide-icon [name]="icon()"></lucide-icon>
+        } @else {
+          <i [class]="icon()"></i>
+        }
+      </span>
+    }
+  </div>
+</button>

@@ -1,0 +1,17 @@
+:host {
+  display: block;
+  width: 100%;
+  height: max-content;
+}
+
+.common-pdf-viewer {
+  height: 65vh !important;
+  width: 100%;
+  border: none;
+
+  @media (max-width: 767px) {
+    height: 50vh !important;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+  }
+}

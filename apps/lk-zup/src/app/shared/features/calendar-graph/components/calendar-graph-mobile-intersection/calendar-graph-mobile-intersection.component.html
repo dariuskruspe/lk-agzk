@@ -1,0 +1,17 @@
+<div class="current-date">{{month}} {{year}}</div>
+<div class="calendar-body">
+  <div class="calendar static-calendar">
+    <div *ngFor="let day of monthDays" class="block-item">
+      <div class="date-number">{{day.number}}</div>
+      <div class="date-week">{{day.dayOfWeek}}</div>
+    </div>
+  </div>
+
+  <div *ngFor="let period of periodsByDays">
+    <div class="employee-name">{{period.employeeName}}</div>
+    <div class="calendar">
+      <div *ngFor="let day of period.days" class="block-item color-block" [style.background-color]="day?.color"></div>
+    </div>
+  </div>
+</div>
+

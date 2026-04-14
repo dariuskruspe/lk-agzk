@@ -1,0 +1,58 @@
+@layer reset, primeng-min;
+@import url('styles/_reset.scss') layer(reset);
+
+* {
+  font-family: 'Roboto', sans-serif;
+}
+
+@import 'bootstrap/dist/css/bootstrap-grid.css';
+@import '@fontsource/roboto/400.css';
+@import '@fontsource/roboto/700.css';
+@import 'custom-theme.scss';
+@import '../../../libs/form-page-constructor/projects/prime/styles/custom-elements.scss';
+@import 'assets/onboarding-welcome/styles.css';
+
+@import 'styles/fonts';
+@import 'styles/mixins';
+@import 'styles/global';
+@import 'styles/variables';
+@import 'styles/mfpc';
+
+@import 'styles/p-dialog';
+@import 'styles/p-card';
+@import 'styles/p-toolbar';
+@import 'styles/p-sidebar';
+@import 'styles/p-button';
+@import 'styles/p-badge';
+@import 'styles/p-calendar';
+@import 'styles/p-multiselect';
+@import 'styles/p-tab';
+@import 'styles/p-toast';
+@import 'styles/p-accordition';
+@import 'styles/mat-form-field';
+@import 'styles/list';
+@import 'styles/mat-progress-bar';
+@import 'styles/snack-bar';
+@import 'styles/toolbar';
+@import 'styles/p-input-switch';
+@import 'styles/p-editor';
+@import 'styles/employee-data';
+@import 'styles/input';
+@import 'styles/onboarding';
+@import 'styles/scrollbar';
+@import 'styles/animations';
+@import 'styles/icons';
+@import 'styles/markdown-content';
+
+@import 'primeicons/primeicons.css';
+
+@import url('primeng/resources/primeng.min.css');
+
+@import 'assets/icons/custom/style.css';
+
+lucide-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+@import 'styles/themes_v2/index.scss';

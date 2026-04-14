@@ -1,0 +1,22 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 522px;
+  margin: 0 auto;
+  height: calc(100% - 60px - 31px); // вычитаем высоту шапки и футера
+  //overflow: auto;
+
+  // для сенсорных экранов добавляем возможность прокрутки элементов, но при этом саму полосу прокрутки визуально скрываем
+  //@media (pointer: coarse) {
+  //  flex-wrap: nowrap;
+  //  overflow: auto;
+  //
+  //  -ms-overflow-style: none;  /* IE and Edge */
+  //  scrollbar-width: none;  /* Firefox */
+  //  /* Hide scrollbar for Chrome, Safari and Opera */
+  //  &::-webkit-scrollbar {
+  //    display: none;
+  //  }
+  //}
+}

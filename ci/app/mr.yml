@@ -1,0 +1,33 @@
+app:mr:lint:
+  extends:
+    - .base-mr
+    - .app:lint
+
+# на все коммиты кроме релизов и RC
+app:mr:build:
+  extends:
+    - .base-mr
+    - .app:build
+  variables:
+    CI_COMMIT_TAG: mr-$CI_MERGE_REQUEST_ID
+    APP_ENV_NAME: cloud-develop
+
+app:mr:deploy:
+  stage: deploy
+  extends:
+    - .base-mr
+  interruptible: true
+  before_script:
+    - !reference [ .init-ssh-script ]
+    - DEPLOY_SSH=root@91.105.198.143
+    - APP_DIR=/var/www/fe/emplmr/$CI_MERGE_REQUEST_ID
+  script:
+    - ssh $DEPLOY_SSH "rm -rf $APP_DIR && exit"
+    - scp -r ./dist/apps/lk-zup $DEPLOY_SSH:$APP_DIR
+  environment:
+    name: $CI_COMMIT_REF_SLUG
+    url: https://emplmr-$CI_MERGE_REQUEST_ID.test-wa.ru
+
+.base-mr:
+  only:
+    - merge_requests

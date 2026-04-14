@@ -1,0 +1,151 @@
+.custom-sections-template-view {
+  // Восстановление дефолтных стилей для заголовков
+  h1 {
+    font-size: 2em;
+    font-weight: bold;
+    margin: 0.67em 0;
+  }
+
+  h2 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0.75em 0;
+  }
+
+  h3 {
+    font-size: 1.17em;
+    font-weight: bold;
+    margin: 0.83em 0;
+  }
+
+  h4 {
+    font-size: 1em;
+    font-weight: bold;
+    margin: 1.12em 0;
+  }
+
+  h5 {
+    font-size: 0.83em;
+    font-weight: bold;
+    margin: 1.5em 0;
+  }
+
+  h6 {
+    font-size: 0.75em;
+    font-weight: bold;
+    margin: 1.67em 0;
+  }
+
+  // Восстановление дефолтных стилей для параграфов
+  p {
+    margin: 1em 0;
+  }
+
+  // Восстановление дефолтных стилей для списков
+  ul,
+  ol {
+    margin: 1em 0;
+    padding-left: 40px;
+  }
+
+  ul {
+    list-style-type: disc;
+  }
+
+  ol {
+    list-style-type: decimal;
+  }
+
+  li {
+    display: list-item;
+  }
+
+  // Восстановление дефолтных стилей для ссылок
+  a {
+    color: #0000ee;
+    text-decoration: underline;
+    cursor: pointer;
+
+    &:visited {
+      color: #551a8b;
+    }
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  // Восстановление дефолтных стилей для выделенного текста
+  strong,
+  b {
+    font-weight: bold;
+  }
+
+  em,
+  i {
+    font-style: italic;
+  }
+
+  // Восстановление дефолтных стилей для блочных элементов
+  div,
+  section,
+  article,
+  aside,
+  nav,
+  header,
+  footer {
+    display: block;
+  }
+
+  // Восстановление дефолтных стилей для цитат
+  blockquote {
+    margin: 1em 40px;
+  }
+
+  // Восстановление дефолтных стилей для кода
+  code {
+    font-family: monospace;
+  }
+
+  pre {
+    font-family: monospace;
+    white-space: pre;
+    margin: 1em 0;
+  }
+
+  // Восстановление дефолтных стилей для HR
+  hr {
+    border: 1px inset;
+    margin: 0.5em auto;
+  }
+
+  // Восстановление дефолтных стилей для таблиц
+  table {
+    border-collapse: separate;
+    border-spacing: 2px;
+  }
+
+  th,
+  td {
+    padding: 1px;
+    vertical-align: inherit;
+  }
+
+  th {
+    font-weight: bold;
+    text-align: center;
+  }
+
+  // Восстановление дефолтных стилей для форм
+  input,
+  button,
+  select,
+  textarea {
+    font-family: inherit;
+    font-size: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+}

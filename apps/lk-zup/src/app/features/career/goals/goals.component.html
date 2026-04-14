@@ -1,0 +1,75 @@
+@if (goals.loading()) {
+  Загрузка...
+} @else if (goals.data() && settingsSignal()) {
+  <h3>Мои цели</h3>
+  <p class="text-small" [innerHTML]="settingsSignal().goals.tooltip">
+  </p>
+  <app-card class="block mt-15">
+    @if (goals.hasPendingGoals()) {
+      <p-message
+        severity="warn"
+        text="Цели на согласовании. Вы можете скорректировать их после завершения процесса согласования!"
+      ></p-message>
+    }
+
+    @for (cat of goals.categories(); track cat.categoryID) {
+      <div class="flex flex-col gap-2 py-24">
+        <div class="category-header">
+          <h4 class="category-title">{{ cat.category }}</h4>
+
+<!--          <div *ngIf="cat.min_amount">(Минимум {{ cat.min_amount }})</div>-->
+          <!--<app-goal-category-progress
+            class="block"
+            style="width: 170px"
+            [category]="cat"
+          ></app-goal-category-progress>-->
+        </div>
+        <div class="flex flex-col gap-2">
+          @for (goal of cat.goals; track goal.goalID) {
+            @if (!goal.isDeleted) {
+              <app-goal-item
+                class="block mt-15"
+                [goal]="goal"
+                [canEdit]="!goals.hasPendingGoals()"
+                [canDelete]="!goals.hasPendingGoals()"
+                (edit)="onEdit(cat, goal)"
+                (delete)="onDelete(cat, goal)"
+              ></app-goal-item>
+            }
+          }
+        </div>
+
+        <button
+          class="goal-add-button mt-15"
+          (click)="openCreateDialog(cat)"
+          [disabled]="goals.hasPendingGoals()"
+        >
+          <i class="pi pi-plus"></i>
+          <span>Запланировать цель</span>
+        </button>
+      </div>
+    }
+
+    <div class="flex">
+      <div class="flex-1"></div>
+      <div class="flex gap-15">
+        @if (goals.canSave()) {
+          <p-button
+            label="Сохранить"
+            [disabled]="!goals.isTouched()"
+            (click)="onSave()"
+            [loading]="goals.save.loading()"
+          ></p-button>
+        }
+
+        <p-button
+          label="Отправить руководителю"
+          [disabled]="!goals.canSubmit()"
+          [outlined]="true"
+          [loading]="goals.submit.loading()"
+          (click)="onSubmit()"
+        ></p-button>
+      </div>
+    </div>
+  </app-card>
+}

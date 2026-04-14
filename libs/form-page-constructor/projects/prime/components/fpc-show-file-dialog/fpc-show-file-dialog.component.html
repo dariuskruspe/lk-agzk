@@ -1,0 +1,38 @@
+<div class="download-container">
+  <ng-container [ngSwitch]="true">
+    <div
+      class="img"
+      *ngSwitchCase="
+            data?.fileBase64?.fileExtension === 'png' ||
+            data?.fileBase64?.fileExtension === 'jpg' ||
+            data?.fileBase64?.fileExtension === 'gif' ||
+            data?.fileBase64?.fileExtension === 'jpeg' ||
+            data?.fileBase64?.fileExtension === 'svg'
+          "
+    >
+      <img [src]="imageSrc" alt="" />
+      <span>{{ data?.fileBase64?.fileName }}</span>
+    </div>
+
+    <div class="doc" *ngSwitchDefault>
+      <img [src]="icon || 'assets/files/file.svg'"/>
+      <span>{{ data?.fileBase64?.fileName }}</span>
+    </div>
+  </ng-container>
+</div>
+<div class="buttons">
+  <button
+    pButton
+    label="{{ 'BUTTON_DOWNLOAD' | translate }}"
+    icon="pi pi-download"
+    iconPos="left"
+    class="button"
+    (click)="downloadImg()"
+  ></button>
+  <button
+    pButton
+    class="button p-button-outlined"
+    label="{{ 'BUTTON_CLOSE' | translate }}"
+    (click)="onCloseDialog()"
+  ></button>
+</div>

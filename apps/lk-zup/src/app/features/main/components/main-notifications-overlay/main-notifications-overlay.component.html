@@ -1,0 +1,48 @@
+<div class="main-notifications-overlay" [style.left]="left()">
+  @if (loading()) {
+    <div class="main-notifications-overlay__loading">
+      <div class="main-notifications-overlay__loading-card">
+        <h3 class="main-notifications-overlay__loading-title">
+          Подготавливаем уведомления
+        </h3>
+        <p class="main-notifications-overlay__loading-subtitle">
+          Мы проверяем новые события и собираем их в вашей ленте.
+        </p>
+        <div class="main-notifications-overlay__skeleton-list">
+          @for (item of skeletonPlaceholders; track item) {
+            <div class="main-notifications-overlay__skeleton-item">
+              <div class="main-notifications-overlay__skeleton-avatar"></div>
+              <div class="main-notifications-overlay__skeleton-content">
+                <span
+                  class="main-notifications-overlay__skeleton-line main-notifications-overlay__skeleton-line--primary"
+                ></span>
+                <span class="main-notifications-overlay__skeleton-line"></span>
+              </div>
+            </div>
+          }
+        </div>
+        <div class="main-notifications-overlay__loading-progress">
+          <span class="main-notifications-overlay__loading-progress-bar"></span>
+        </div>
+      </div>
+    </div>
+  } @else if (error()) {
+    <div class="main-notifications-overlay__error">
+      {{ error() }}
+    </div>
+  } @else {
+    <app-notifications-window
+      [pushesLoading]="pushes.pushesLoadingSignal()"
+      [pushesAvailable]="pushes.isAvailableSignal()"
+      [pushesEnabled]="pushes.pushesEnabledSignal()"
+      (clicked)="openNotification($event)"
+      (viewed)="setNotificationsViewed($event)"
+      (closed)="onDeleteNotification($event)"
+      (windowClosed)="close.emit()"
+      (enablePushes)="enablePushes()"
+      (disablePushes)="disablePushes()"
+      [items]="normalizedNotifications()"
+    ></app-notifications-window>
+  }
+</div>
+<div class="main-notifications-backdrop" (click)="close.emit()"></div>

@@ -1,0 +1,403 @@
+::ng-deep {
+  .p-tooltip {
+    max-width: 500px;
+  }
+
+  .vacation-widget-card {
+    overflow: auto;
+    //max-height: 250px;
+  }
+
+  // Центрирование календаря в мобильной версии
+  @media (max-width: 767px) {
+    .p-datepicker {
+      // position: fixed !important;
+      top: 50% !important;
+      left: 50% !important;
+      transform: translate(-50%, -50%) !important;
+      z-index: 1000 !important;
+      margin: 0 !important;
+      max-width: 90vw !important;
+      width: auto !important;
+      min-width: 280px !important;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    Затемнение фона при открытии календаря .p-component-overlay {
+      background-color: rgba(0, 0, 0, 0.4) !important;
+      z-index: 999 !important;
+    }
+  }
+}
+
+.title {
+  ::ng-deep .p-toolbar {
+    width: 100%;
+  }
+
+  ::ng-deep .p-toolbar.p-component {
+    padding: 0 !important;
+  }
+  display: flex;
+  flex-direction: column;
+  .second {
+    order: 2;
+    margin-left: auto;
+  }
+}
+.title_header {
+}
+
+.vacation {
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+
+  &__block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: 400;
+    width: 100%;
+    //height: 60px;
+    padding: 20px;
+    cursor: pointer;
+    color: var(--basic-color);
+    margin-bottom: 15px;
+  }
+
+  ::ng-deep .p-badge {
+    color: white;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+  }
+}
+
+:host {
+  ::ng-deep .p-calendar {
+    input {
+      opacity: 0;
+    }
+  }
+}
+
+.vacation__date {
+  position: relative;
+  bottom: 0;
+  color: var(--primary);
+  white-space: nowrap;
+}
+
+.vacation-link {
+  display: block;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  border-radius: 5px;
+  padding: 5px 14px;
+  margin: 20px auto;
+}
+
+.title-button {
+  margin-bottom: 15px !important;
+  margin-top: 0 !important;
+}
+
+.vacations-block {
+  margin-bottom: 30px;
+  align-items: flex-end;
+}
+
+.title.leave {
+  @media (max-width: 767px) {
+    display: block;
+  }
+}
+
+.vacation__days {
+  padding-bottom: 11px;
+  line-height: 16px;
+  border-radius: 31px;
+  white-space: nowrap;
+  font-size: 32px;
+  text-align: left;
+  color: var(--title-color);
+  /* color: var(--primary-text); */
+  /* background: var(--primary); */
+}
+
+.title-button__wrap {
+  @media (max-width: 767px) {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.vacation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+
+  @media (max-width: 767px) {
+    flex-direction: column;
+  }
+}
+
+.vacation-days__wrap {
+  margin-bottom: 20px;
+
+  @media (max-width: 767px) {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}
+
+.vacation__desc {
+  font-size: 0.875rem; // (root 16px) -> 14px
+  line-height: 17px;
+  color: var(--secondary-color);
+
+  & a {
+    color: var(--primary);
+    text-decoration-line: underline;
+  }
+
+  & span:not(.vacation__desc_allowed-once) {
+    color: #a6cf00;
+  }
+}
+
+.custom-item.vacation-period {
+  max-width: none;
+  height: 51px;
+  padding-left: 20px !important;
+  padding-right: 7px !important;
+  padding-top: 8px;
+  padding-bottom: 9px;
+
+  @media (max-width: 767px) {
+    height: auto;
+    padding: 15px !important;
+    flex-direction: column;
+  }
+
+  & h4 {
+    flex-grow: 1;
+    font-weight: 600;
+
+    @media (max-width: 767px) {
+      width: 100%;
+      text-align: left;
+    }
+  }
+
+  & div {
+    flex-grow: 0;
+  }
+}
+
+.custom-item.vacation-period .vacation-days__buttons {
+  display: none;
+
+  @media (max-width: 767px) {
+    margin-top: 10px;
+    width: 100%;
+  }
+
+  & button {
+    margin-right: 10px;
+    min-width: 171px;
+
+    @media (max-width: 767px) {
+      margin: 0 0 10px;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    @media (max-width: 767px) {
+      width: 100%;
+      margin: 0 auto 10px;
+    }
+
+    &.no-active {
+      color: #c1d8fe;
+
+      &:hover {
+        color: var(--primary);
+      }
+    }
+
+    &:last-of-type {
+      margin-right: 0;
+
+      @media (max-width: 767px) {
+        margin: 0 auto;
+      }
+    }
+  }
+}
+
+.cdk-focused.cdk-mouse-focused {
+  outline: 0;
+}
+
+.mat-list-option:hover .custom-item.vacation-period {
+  background-color: #fff;
+  &:hover {
+    background: #f5f5f5;
+  }
+  @media (min-width: 768px) {
+    & .vacation-days__buttons {
+      display: flex;
+    }
+  }
+
+  .mat-list-single-selected-option {
+    background: transparent;
+  }
+}
+
+@media (max-width: 767px) {
+  .mat-list-single-selected-option {
+    & .custom-item.vacation-period {
+      background-color: #fff;
+
+      & .vacation-days__buttons {
+        display: flex;
+        flex-direction: column;
+      }
+
+      & h4 {
+        font-weight: 700;
+      }
+    }
+  }
+}
+
+.mat-list-base .mat-list-item,
+.mat-list-base .mat-list-option {
+  height: 51px;
+
+  @media (max-width: 767px) {
+    height: auto;
+  }
+}
+
+.custom-item__wrapper {
+  @media (max-width: 767px) {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+}
+
+.mat-toolbar.custom-item {
+  margin-right: 15px;
+
+  @media (max-width: 767px) {
+    max-width: none;
+    padding: 22px 15px;
+    margin: 0 0 7px;
+  }
+
+  & .custom-item__wrap {
+    justify-content: flex-start;
+    height: 64px;
+
+    @media (max-width: 767px) {
+      flex-direction: row;
+      align-items: center;
+    }
+  }
+
+  & h4 {
+    margin-right: 10px;
+  }
+}
+
+.form {
+  max-width: 110px;
+
+  & input.mat-input-element {
+    font-weight: 700;
+    color: #000;
+    cursor: pointer;
+  }
+
+  & ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    display: none !important;
+  }
+
+  & .mat-icon {
+    font-size: 20px !important;
+    color: #000;
+    margin-bottom: 2px;
+  }
+}
+
+.vacation-card {
+  background: var(--card-background);
+  padding: 5px 0;
+  margin-top: 5px;
+  border-radius: 5px;
+
+  .vacation-mobile-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: inherit;
+    @media (max-width: 767px) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  &__title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+
+  &__buttons {
+    display: flex;
+    align-items: center;
+    @media (max-width: 900px) {
+      flex-direction: column;
+      // width: 100%;
+    }
+    .mobile-button {
+      @media (max-width: 767px) {
+        margin: 10px 0;
+      }
+    }
+  }
+  .status-column {
+    max-width: 200px;
+    width: 100%;
+    display: flex;
+    justify-content: end;
+  }
+}
+
+.mobile-center-icon {
+  @media (max-width: 767px) {
+    margin: 0 auto;
+  }
+}
+.subtitle {
+  color: var(--secondary-color);
+}
+.text-vacation {
+  max-width: 376px;
+}
+.mobile-title {
+  @media (max-width: 767px) {
+    margin-bottom: 10px;
+  }
+}

@@ -1,0 +1,14 @@
+:host ::ng-deep {
+  .p-dialog {
+    padding: 10px;
+    position: absolute;
+    //top: 200px;
+    //right: 68px;
+    .p-dialog-header {
+      display: none;
+    }
+  }
+  .p-listbox {
+    border: none;
+  }
+}

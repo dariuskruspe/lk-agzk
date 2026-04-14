@@ -1,0 +1,154 @@
+@mixin font($font-size, $line-height) {
+  font-size: $font-size;
+  line-height: $line-height;
+}
+
+@mixin reset-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin media-breakpoint-xs {
+  @media (max-width: $s-max-width) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-sm {
+  @media (min-width: $s-min-width) and (max-width: $s-max-width) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-m {
+  @media (min-width: $m-min-width) and (max-width: $m-max-width) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-l {
+  @media (min-width: $l-min-width) and (max-width: $l-max-width) {
+    @content;
+  }
+}
+
+@mixin media-breakpoint-xl {
+  @media (min-width: $xl-min-width) {
+    @content;
+  }
+}
+
+// На случай, если вдруг зачем-то ^_^ захотим перейти обратно на Bootstrap'овские breakpoints
+
+//@mixin media-breakpoint-xl {
+//  @media (min-width: $xl-min-width) and (max-width: $xl-max-width) {
+//    @content;
+//  }
+//}
+
+//@mixin media-breakpoint-xxl {
+//  @media (min-width: $xxl-min-width) {
+//    @content;
+//  }
+//}
+
+
+/********************************************/
+/* Angular (Angular CDK BreakpointObserver) */
+/********************************************/
+
+// (!) Желательно (см. https://blog.angular-university.io/angular-responsive-design/) обходиться сигналами из
+// app.service.ts -> storage -> screen и просто "навешивать" на HTML-элементы классы, содержащие необходимые стили для
+// соответствующих размеров экранов устройств (например, 'mobile-v'), поскольку это позволяет полностью отказаться от
+// необходимости написания медиа-запросов. Однако на случай, если кто-то вдруг жить не может без медиа-запросов ^_^,
+// ниже присутствуют примешивания (примеси) с медиа-запросами CSS из Angular CDK Breakpoint Observer.
+
+// Web (min-width: 840px) and (orientation: portrait), (min-width: 1280px) and (orientation: landscape)
+@mixin media-breakpoint-desktop {
+  @media (min-width: 840px) and (orientation: portrait), (min-width: 1280px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// WebLandscape (min-width: 1280px) and (orientation: landscape)
+@mixin media-breakpoint-desktop-h {
+  @media (min-width: 1280px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// WebPortrait (min-width: 840px) and (orientation: portrait)
+@mixin media-breakpoint-desktop-v {
+  @media (min-width: 840px) and (orientation: portrait) {
+    @content;
+  }
+}
+
+// Tablet (min-width: 600px) and (max-width: 839.98px) and (orientation: portrait), (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape)
+@mixin media-breakpoint-tablet {
+  @media (min-width: 600px) and (max-width: 839.98px) and (orientation: portrait), (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// TabletPortrait (min-width: 600px) and (max-width: 839.98px) and (orientation: portrait)
+@mixin media-breakpoint-tablet-v {
+  @media (min-width: 600px) and (max-width: 839.98px) and (orientation: portrait) {
+    @content;
+  }
+}
+
+// TabletLandscape (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape)
+@mixin media-breakpoint-tablet-h {
+  @media (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// Handset (max-width: 599.98px) and (orientation: portrait), (max-width: 959.98px) and (orientation: landscape)
+@mixin media-breakpoint-handset {
+  @media (max-width: 599.98px) and (orientation: portrait), (max-width: 959.98px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// HandsetLandscape (max-width: 959.98px) and (orientation: landscape)
+@mixin media-breakpoint-handset-h {
+  @media (max-width: 959.98px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// HandsetPortrait (max-width: 599.98px) and (orientation: portrait)
+@mixin media-breakpoint-handset-v {
+  @media (max-width: 599.98px) and (orientation: portrait) {
+    @content;
+  }
+}
+
+// Mobile (handset or tablet)
+@mixin media-breakpoint-mobile {
+  @media (max-width: 599.98px) and (orientation: portrait),
+         (max-width: 959.98px) and (orientation: landscape),
+         (min-width: 600px) and (max-width: 839.98px) and (orientation: portrait),
+         (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// MobileLandscape (handset-h or tablet-h)
+@mixin media-breakpoint-mobile-h {
+  @media (max-width: 959.98px) and (orientation: landscape),
+         (min-width: 960px) and (max-width: 1279.98px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+// MobilePortrait (handset-v or tablet-v)
+@mixin media-breakpoint-mobile-v {
+  @media (max-width: 599.98px) and (orientation: portrait),
+         (min-width: 600px) and (max-width: 839.98px) and (orientation: portrait) {
+    @content;
+  }
+}

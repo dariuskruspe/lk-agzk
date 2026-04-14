@@ -1,0 +1,15 @@
+<div class="unable-status">
+  {{ (forEmployee ? 'SIGNATURE_CREATION_NEED' : 'ORG_SIGNATURE_DOESNT_EXIST') | translate }}
+</div>
+<p-button
+  *ngIf="forEmployee; else closeTemplate"
+  label="{{ 'SIGNATURE_SIDE_LINK' | translate }}"
+  (onClick)="goToSignatures()"
+></p-button>
+<ng-template #closeTemplate>
+  <p-button
+    label="{{ 'BUTTON_CLOSE' | translate }}"
+    (onClick)="close()"
+  ></p-button>
+</ng-template>
+

@@ -1,0 +1,474 @@
+<div class="container-fluid">
+  <p-toolbar class="title nowrap">
+    <button
+      pButton
+      class="p-button-rounded p-button-outlined"
+      icon="pi pi-arrow-left"
+      (click)="onBackPage()"
+    ></button>
+    <h1>
+      {{ issuesType?.FullName }}
+    </h1>
+  </p-toolbar>
+  <div class="row">
+    <form
+      [formGroup]="form"
+      (ngSubmit)="onSubmit()"
+      class="col-md-8 p-0"
+    >
+      <p-card class="card mb">
+        <div
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('dateBegin')?.gridClasses"
+        >
+          <label
+            class="custom-form-field__label"
+            for="dateBegin"
+          >
+            {{ findTemplateItem('dateBegin')?.label }}
+          </label>
+          <ng-container
+            *map="
+            [
+              findTemplateItem('dateBegin')?.startDateMathDay
+                ? mathDayUtils.mathCurrentDateDay(
+                    findTemplateItem('dateBegin')?.startDateMathDay
+                  )
+                : mathDayUtils.getCurrentDate(),
+              findTemplateItem('dateBegin')?.endDateMathDay
+                ? mathDayUtils.mathCurrentDateDay(
+                    findTemplateItem('dateBegin')?.endDateMathDay
+                  )
+                : form.get('dateEnd').value
+            ];
+            handler: toDate;
+            let values
+          "
+          >
+            <p-calendar
+              [formField]="form"
+              [firstDayOfWeek]="1"
+              [showIcon]="true"
+              inputId="dateBegin"
+              appendTo="body"
+              formControlName="dateBegin"
+              [readonlyInput]="isMobile"
+              [minDate]="values[0]"
+              [maxDate]="values[1]"
+              [selectOtherMonths]="true"
+              (ngModelChange)="dateBinding('payType1', $event)"
+            >
+              <ng-template pTemplate="date" let-date>
+                  <span [ngClass]="{'weekend': isWeekend(date)}">
+                    {{ date.day }}
+                  </span>
+              </ng-template>
+            </p-calendar>
+          </ng-container>
+        </div>
+        <div
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('dateEnd')?.gridClasses"
+        >
+          <label
+            class="custom-form-field__label"
+            for="dateEnd"
+          >
+            {{ findTemplateItem('dateEnd')?.label }}
+          </label>
+          <ng-container
+            *map="
+            [
+              findTemplateItem('dateEnd')?.startDateMathDay
+                ? mathDayUtils.mathCurrentDateDay(
+                    findTemplateItem('dateEnd')?.startDateMathDay
+                  )
+                : form.get('dateBegin').value,
+              findTemplateItem('dateEnd')?.endDateMathDay
+                ? mathDayUtils.mathCurrentDateDay(
+                    findTemplateItem('dateEnd')?.endDateMathDay
+                  )
+                : ''
+            ];
+            handler: toDate;
+            let values
+          "
+          >
+            <p-calendar
+              [formField]="form"
+              [firstDayOfWeek]="1"
+              [showIcon]="true"
+              inputId="dateEnd"
+              appendTo="body"
+              formControlName="dateEnd"
+              [readonlyInput]="isMobile"
+              [minDate]="values[0]"
+              [maxDate]="values[1]"
+              [selectOtherMonths]="true"
+              (ngModelChange)="dateBinding('payType2', $event)"
+            >
+              <ng-template pTemplate="date" let-date>
+                  <span [ngClass]="{'weekend': isWeekend(date)}">
+                    {{ date.day }}
+                  </span>
+              </ng-template>
+            </p-calendar>
+          </ng-container>
+        </div>
+      </p-card>
+      <p-card
+        class="card mb"
+        *ngIf="
+        (form.controls['payType1'] || form.controls['payType2']) &&
+        form.get('dateEnd').value
+      "
+      >
+        <h3>
+          {{ 'COMPENSATION_WEEKEND' | translate }}
+        </h3>
+        <div class="row">
+          <div
+            *ngIf="form.controls['payType1']"
+            class="custom-form-field"
+            [ngClass]="
+            form.controls.dayOff1
+              ? findTemplateItem('payType1')?.gridClasses
+              : ['col-12']
+          "
+          >
+            <label class="custom-form-field__label">
+              {{findTemplateItem('payType1')?.label ||
+            findTemplateItem('payType1')?.placeholder}}
+            </label>
+            <p-dropdown
+              [formControl]="form.controls['payType1']"
+              [autoDisplayFirst]="false"
+              [placeholder]="findTemplateItem('payType1')?.placeholder"
+              [options]="
+              issuesOptionLists['weekendCompensation']['optionList'] || []
+            "
+              optionValue="value"
+              optionLabel="representation"
+              (onChange)="changePayType($event, 1)"
+            ></p-dropdown>
+          </div>
+          <div
+            *ngIf="form.controls.dayOff1"
+            class="custom-form-field"
+            [ngClass]="findTemplateItem('dayOff1')?.gridClasses"
+          >
+            <label class="custom-form-field__label">
+              {{ findTemplateItem('dayOff1')?.label }}
+            </label>
+            <ng-container
+              *map="form.get('dateEnd').value; handler: getNextDay; let value"
+            >
+              <p-calendar
+                [formField]="form"
+                [firstDayOfWeek]="1"
+                [showIcon]="true"
+                appendTo="body"
+                [readonlyInput]="isMobile"
+                [formControl]="form.controls['dayOff1']"
+                [minDate]="value"
+                [selectOtherMonths]="true"
+                (ngModelChange)="dateBinding('dayOff1', $event)"
+              >
+                <ng-template pTemplate="date" let-date>
+                  <span [ngClass]="{'weekend': isWeekend(date)}">
+                    {{ date.day }}
+                  </span>
+                </ng-template>
+              </p-calendar>
+            </ng-container>
+          </div>
+          <div
+            *ngIf="form.controls['payType2']"
+            class="custom-form-field"
+            [ngClass]="
+            form.controls.dayOff2
+              ? findTemplateItem('payType2')?.gridClasses
+              : ['col-12']
+          "
+          >
+            <label class="custom-form-field__label">
+              {{findTemplateItem('payType2')?.label ||
+            findTemplateItem('payType2')?.placeholder}}
+            </label>
+            <p-dropdown
+              [formControl]="form.controls['payType2']"
+              [autoDisplayFirst]="false"
+              [options]="
+              issuesOptionLists['weekendCompensation']['optionList'] || []
+            "
+              optionValue="value"
+              optionLabel="representation"
+              (onChange)="changePayType($event, 2)"
+              [placeholder]="findTemplateItem('payType2')?.placeholder"
+            ></p-dropdown>
+          </div>
+          <div
+            *ngIf="form.controls.dayOff2"
+            class="custom-form-field"
+            [ngClass]="findTemplateItem('dayOff2')?.gridClasses"
+          >
+            <label class="custom-form-field__label">
+              {{ findTemplateItem('dayOff2')?.label }}
+            </label>
+            <ng-container
+              *map="form.get('dateEnd').value; handler: getNextDay; let value"
+            >
+              <p-calendar
+                [formField]="form"
+                [firstDayOfWeek]="1"
+                [showIcon]="true"
+                appendTo="body"
+                [readonlyInput]="isMobile"
+                [formControl]="form.controls['dayOff2']"
+                [minDate]="value"
+                [selectOtherMonths]="true"
+                (ngModelChange)="dateBinding('dayOff2', $event)"
+              >
+                <ng-template pTemplate="date" let-date>
+                  <span [ngClass]="{'weekend': isWeekend(date)}">
+                    {{ date.day }}
+                  </span>
+                </ng-template>
+              </p-calendar>
+            </ng-container>
+          </div>
+        </div>
+      </p-card>
+      <p-card>
+        <!-- Поле страна, город -->
+        <div
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('stateCity')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('stateCity')?.label }}
+          </label> <input
+          pInputText
+          [formField]="form"
+          formControlName="stateCity"
+        />
+        </div>
+        <!-- Поле цель -->
+        <div
+          *ngIf="issuesOptionLists && issuesOptionLists['purpose']"
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('purpose')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('purpose')?.label }}
+          </label>
+          <p-dropdown
+            [formField]="form"
+            formControlName="purpose"
+            [placeholder]="
+            findTemplateItem('purpose')?.placeholder ||
+            findTemplateItem('purpose')?.label ||
+            ''
+          "
+            [options]="issuesOptionLists['purpose']['optionList'] || []"
+            optionValue="value"
+            optionLabel="representation"
+            [autoDisplayFirst]="false"
+            (onChange)="
+            this.toggleOtherControl(
+              'purposeOther',
+              this.form.get('purpose').value,
+              'purpose'
+            )
+          "
+          ></p-dropdown>
+        </div>
+        <!-- Поле цель коммандировки (появляеться если в селекте цель выбран пункт - другое) -->
+        <div
+          *ngIf="form.controls['purposeOther']"
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('purposeOther')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('purposeOther')?.label }}
+          </label> <input
+          pInputText
+          [formField]="form"
+          formControlName="purposeOther"
+        />
+        </div>
+        <!-- Поле организация -->
+        <div
+          *ngIf="form.controls['organization']"
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('organization')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('organization')?.label }}
+          </label> <input
+          pInputText
+          [formField]="form"
+          formControlName="organization"
+        />
+        </div>
+        <!-- Поле  За счет средств -->
+        <div
+          *ngIf="
+          form.controls['expenses'] &&
+          issuesOptionLists &&
+          issuesOptionLists['expenses']
+        "
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('expenses')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('expenses')?.label }}
+          </label>
+          <p-dropdown
+            [formField]="form"
+            [autoDisplayFirst]="false"
+            formControlName="expenses"
+            [placeholder]="
+            findTemplateItem('expenses')?.placeholder ||
+            findTemplateItem('expenses')?.label
+          "
+            [options]="issuesOptionLists['expenses']['optionList'] || []"
+            optionValue="value"
+            optionLabel="representation"
+          ></p-dropdown>
+        </div>
+        <!-- Поле Основание коммандировки -->
+        <div
+          *ngIf="
+          form.controls['basis'] &&
+          issuesOptionLists &&
+          issuesOptionLists['basis']
+        "
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('basis')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('basis')?.label }}
+          </label>
+          <p-dropdown
+            [formField]="form"
+            [autoDisplayFirst]="false"
+            formControlName="basis"
+            [placeholder]="
+            findTemplateItem('basis')?.placeholder ||
+            findTemplateItem('basis')?.label
+          "
+            [options]="issuesOptionLists['basis']['optionList'] || []"
+            optionValue="value"
+            optionLabel="representation"
+            (onChange)="
+            this.toggleOtherControl(
+              'basisOther',
+              this.form.get('basis').value,
+              'basis'
+            )
+          "
+          ></p-dropdown>
+        </div>
+        <!-- Поле Основание коммандировки (свой вариант) появляеться если в поле Основание коммандировки выбран пункт - другое-->
+        <div
+          *ngIf="form.controls['basisOther']"
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('basisOther')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('basisOther')?.label }}
+          </label> <input
+          pInputText
+          [formField]="form"
+          formControlName="basisOther"
+        />
+        </div>
+        <!-- Загрузка файла -->
+        <div
+          *ngIf="form.controls['files']"
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('files')?.gridClasses"
+        >
+          <app-file-uploader
+            [template]="issuesType?.template"
+            [hint]="findTemplateItem('files')?.hintMessage"
+            [label]="findTemplateItem('files')?.label"
+            [types]="findTemplateItem('files')?.fileTypesAccept"
+            [controlName]="'files'"
+            [form]="form"
+          ></app-file-uploader>
+        </div>
+        <!-- Поле комментарий -->
+        <div
+          class="custom-form-field"
+          [ngClass]="findTemplateItem('message')?.gridClasses"
+        >
+          <label class="custom-form-field__label">
+            {{ findTemplateItem('message')?.label }}
+          </label> <textarea
+          pInputTextarea
+          formControlName="message"
+          rows="5"
+          [autoResize]="true"
+        ></textarea>
+        </div>
+        <fpc
+          [formData]="modifiedFormData"
+          [dateLocale]="dateLocale"
+          [loading]="loading"
+          (formSubmit)="handleSubmit($event)"
+          [submit$]="submit$"
+          class="additional-fields p-0"
+        ></fpc>
+        <!-- кнопки -->
+        <p-toolbar class="buttons margin-top">
+          <button
+            pButton
+            label="{{ 'BUTTON_SEND' | translate }}"
+            class="col-12 col-md-auto"
+            type="submit"
+            [disabled]="loading"
+          ></button>
+          <button
+            pButton
+            label="{{ 'BUTTON_CANCEL' | translate }}"
+            class="col-12 col-md-auto p-button-outlined"
+            [routerLink]="['', 'issues', 'types']"
+          ></button>
+        </p-toolbar>
+      </p-card>
+    </form>
+    <div
+      class="additional-info col-md-4 mb-4"
+    >
+      <app-item-list
+        *ngIf="issuesType?.options?.staticText"
+        [items]="issuesType?.options?.staticText"
+        font="13px"
+      ></app-item-list>
+      <div *ngIf="employeesApprovingPersons?.length" class="approver-title">
+        <span *ngIf="employeesApprovingPersons.length === 1">{{ 'EMPLOYEE_APPROVER' | translate }}</span>
+        <span *ngIf="employeesApprovingPersons.length > 1">{{ 'EMPLOYEE_APPROVERS' | translate }}</span>
+        :
+        <div *ngFor="let approvePerson of employeesApprovingPersons" class="value">
+          {{approvePerson}}
+        </div>
+      </div>
+      <app-item-link-list
+        [items]="issuesType?.crossPeriods || []"
+      ></app-item-link-list>
+      <button
+        *ngIf="issuesType?.options?.showProfileButton"
+        pButton
+        label="{{ 'BUTTON_VIEW_PROFILE' | translate }}"
+        icon="pi pi-external-link"
+        iconPos="right"
+        class="button-full-xs round p-button-text"
+        [routerLink]="['', 'users', 'profile']"
+      ></button>
+
+    </div>
+  </div>
+
+</div>

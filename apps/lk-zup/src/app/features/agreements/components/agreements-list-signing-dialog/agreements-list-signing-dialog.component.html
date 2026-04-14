@@ -1,0 +1,44 @@
+<div class="dialog-content">
+  <p-progressSpinner
+    class="d-flex justify-content-center"
+    styleClass="custom-spinner"
+    *ngIf="(agreementSigningListFacade.loading$() | async) || !agreementSigningListFacade.getData()?.length"
+  >
+  </p-progressSpinner>
+  <div class="content">
+    <div
+      class="docs-list"
+      *ngIf="(agreementSigningListFacade.getData$() | async) || agreementSigningListFacade.getData()"
+    >
+      <div
+        class="file"
+        (click)="openFile(file)"
+        *ngFor="let file of agreementSigningListFacade.getData()"
+      >
+        <i class="pi pi-file-pdf file-icon"></i>
+        <span class="file-name">{{ file.fileName }}</span>
+      </div>
+    </div>
+  </div>
+
+  <app-crypto-pro-cert-select
+    *ngIf="localSigning"
+    [certificates]="certificates"
+    [value]="choosenCertificate"
+    (valueChange)="choosenCertificate = $event"
+  ></app-crypto-pro-cert-select>
+
+  <div *ngIf="localSigning && (!certificates || !certificates.length)" class="error-text">
+    {{ 'EMPTY_CERTIFICATES' | translate }}
+  </div>
+
+  <div class="sign-button">
+    <button
+      pButton
+      label="{{ 'BUTTON_SIGN' | translate }}"
+      (click)="signFiles()"
+      [disabled]="(localSigning && !choosenCertificate) || (agreementSigningListFacade.loading$() | async) || !agreementSigningListFacade.getData()?.length"
+      [loading]="loading"
+    ></button>
+  </div>
+</div>

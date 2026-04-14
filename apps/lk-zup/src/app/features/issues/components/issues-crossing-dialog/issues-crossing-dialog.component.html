@@ -1,0 +1,30 @@
+<div class="crossing-container">
+  <div class="crossing-list">
+    <div class="crossing-item" *ngFor="let item of crossingInfo.periodCrossingData">
+      <div>{{item.text}}</div>
+      <div class="issue-link" *ngIf="item.issueID">
+        <button
+        pButton
+        class="p-button-link"
+        label="{{ 'TO_ISSUE_MANAGEMENT' | translate }}"
+        (click)="toUrl(item.issueID)"
+      ></button>
+      </div>
+    </div>
+  </div>
+  <div class="crossing-buttons" *ngIf="!crossingInfo.block">
+    <button
+      pButton
+      label="{{ 'ISSUE_CREATE_ANYWAY' | translate }}"
+      class="confirm-button"
+      [loading]="loading()"
+      (click)="anywayCreateIssue()"
+    ></button>
+    <button
+      pButton
+      label="{{ 'ISSUE_CREATE_CANCEL' | translate }}"
+      class="p-button-outlined"
+      (click)="close()"
+    ></button>
+  </div>
+</div>

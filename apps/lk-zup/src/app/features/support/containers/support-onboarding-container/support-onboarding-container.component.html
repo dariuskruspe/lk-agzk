@@ -1,0 +1,5 @@
+<app-support-onboarding
+  *ngIf="initialized"
+  [loading]="onboardingFacade?.forcedLoading$ | async"
+  (repeat)="onboardingHelper.repeat($event)"
+></app-support-onboarding>

@@ -1,0 +1,9 @@
+<div
+  *ngIf="(clonedEl$ | async) as cloned"
+  class="target onboarding-target"
+  [ngStyle]="position"
+  [ngClass]="{ 'target-alert': isHighlighted, 'untouchable': item.untouchableTarget }"
+  [innerHTML]="(item.untouchableTarget ? '' : cloned.outerHTML) | safeHtml"
+  (click)="clickTarget()"
+>
+</div>

@@ -1,0 +1,224 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+
+  .description {
+    margin-top: 15px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: left;
+    color: var(--title-color);
+  }
+  .card-container {
+    display: inline-flex;
+    flex-wrap: wrap;
+    margin: -20px 0 0 -20px;
+    width: calc(100% + 12px);
+    .p-card {
+      width: 48%;
+      margin: 20px 0 0 20px;
+      height: auto;
+      box-shadow: var(--card-shadow) !important;
+      border-radius: 5px;
+      background: var(--card-background) !important;
+      display: flex;
+      padding: 0 !important;
+      flex-direction: column;
+      .hat {
+        background-color: var(--card-second-background);
+        border-top-right-radius: 8px;
+        border-top-left-radius: 8px;
+        padding: 6px;
+        display: flex;
+        flex-direction: row;
+        .status {
+          order: 2;
+          padding: 4px;
+          margin-left: auto;
+          background-color: #f1f8d4;
+          font-weight: 700;
+          font-size: 11px;
+          line-height: 14px;
+          text-transform: uppercase;
+          margin-right: 20px;
+          color: #252f3f;
+          border-radius: 5px;
+        }
+      }
+      .inner-list {
+        display: flex;
+        flex-direction: row;
+        padding: 11px 24px;
+        height: auto;
+        font-weight: 400;
+        line-height: 18px;
+        .title {
+          color: var(--gray);
+          margin-right: 20px;
+          width: 170px;
+        }
+        .title-value {
+          color: var(--basic-color);
+          text-align: left;
+        }
+        .link {
+          cursor: pointer;
+          color: #3880ff;
+          padding-bottom: 5px;
+          position: relative;
+          text-decoration-line: underline;
+        }
+      }
+    }
+  }
+}
+.p-card {
+  @media (max-width: 1420px) {
+    width: 45% !important;
+  }
+  @media (max-width: 1200px) {
+    width: 100% !important;
+  }
+}
+
+.url-img {
+  color: #3880ff;
+  margin-left: 5px;
+  position: absolute;
+  bottom: 2px;
+}
+
+.price-container {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  background-color: var(--card-second-background);
+  margin-top: 24px;
+  margin-bottom: 24px;
+  .price-item {
+    display: flex;
+    flex-direction: row;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 20px;
+    padding: 10px;
+    .price-title {
+      color: var(--basic-color);
+      margin-right: 20px;
+    }
+    .price-value {
+      color: var(--title-color);
+    }
+  }
+}
+.inline {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 5px;
+  .price {
+    margin-right: 20px;
+    display: flex;
+    align-items: center;
+  }
+  .price-image {
+    width: 38px;
+    height: 38px;
+    background-color: #989aa2;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+  }
+  .warning {
+    background-color: #ed4346 !important;
+  }
+  .price-title {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 22px;
+    color: var(--title-color);
+  }
+  .price-name {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--gray);
+  }
+  .price-value {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--gray);
+  }
+  .price-date {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--gray);
+  }
+  .price-id {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--gray);
+  }
+  .price-link {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-decoration-line: underline;
+    color: #3880ff;
+    cursor: pointer;
+  }
+  .status-pending {
+    order: 2;
+    padding: 4px;
+    margin-left: auto;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 14px;
+    background-color: #f1f2f5;
+    text-transform: uppercase;
+    margin-right: 20px;
+    color: #252f3f;
+    border-radius: 5px;
+  }
+  .status-cancelled {
+    order: 2;
+    padding: 4px;
+    margin-left: auto;
+    background-color: #ffeaea;
+    font-weight: 700;
+    font-size: 11px;
+    line-height: 14px;
+    text-transform: uppercase;
+    margin-right: 20px;
+    color: #252f3f;
+    border-radius: 5px;
+  }
+}
+.inline {
+  @media (max-width: 1420px) {
+    width: 100% !important;
+  }
+  @media (max-width: 1200px) {
+    flex-direction: column;
+  }
+}
+.price {
+  @media (max-width: 1200px) {
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: center;
+  }
+}
+.issue-container {
+  margin-top: 10px;
+}
+.issues-title {
+  color: var(--basic-color);
+  font-weight: 300;
+  font-size: 28px;
+  margin-bottom: 24px;
+}

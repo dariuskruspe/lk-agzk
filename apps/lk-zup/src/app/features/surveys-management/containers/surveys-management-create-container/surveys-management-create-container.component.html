@@ -1,0 +1,45 @@
+<!-- Страница создания опроса" -->
+<div class="employee-vacations-body">
+  <!-- Тулбар с заголовком и кнопками -->
+  <p-toolbar class="title">
+    <p-button
+      iconPos="left"
+      icon="pi pi-arrow-left"
+      [link]="true"
+      (click)="back()"
+    ></p-button>
+    <h1>{{ 'CREATE_SURVEY' | translate }}</h1>
+
+    <span class="spacer"></span>
+
+<!--    <p-button-->
+<!--      (onClick)="showDialog()"-->
+<!--      icon="pi pi-plus-circle"-->
+<!--      iconPos="left"-->
+<!--      label="{{ 'BUTTON_ADD' | translate }}"-->
+<!--    />-->
+<!--    <p-dialog [(visible)]="visible" modal="true" dismissableMask="true">-->
+<!--      <ng-template pTemplate="header">-->
+<!--      </ng-template>-->
+<!--      <p-listbox-->
+<!--        *ngIf="fieldTypes.length"-->
+<!--        [options]="fieldTypes"-->
+<!--        [(ngModel)]="selectedType"-->
+<!--        optionLabel="name"-->
+<!--        optionValue="value"-->
+<!--        (ngModelChange)="addField()"-->
+<!--        [listStyle]="{'max-height': '320px'}"-->
+<!--      />-->
+<!--    </p-dialog>-->
+
+  </p-toolbar>
+
+
+  <!-- Содержимое -->
+  <div class="content">
+    <p-card>
+      <app-surveys-management-create-form
+      ></app-surveys-management-create-form>
+    </p-card>
+  </div>
+</div>

@@ -1,0 +1,30 @@
+<div class="pushes-hint-dialog-container">
+  <app-pushes-icon></app-pushes-icon>
+
+  <h2 class="mb-24">Включите пуш уведомления</h2>
+
+  <div class="push-hint">
+    <p>
+      Для того, чтобы включить браузерные пуш уведомления, необходимо разрешить
+      это в настройках Вашего браузера:
+    </p>
+    <img src="/assets/img/pushes/hint-disabled.png" />
+  </div>
+
+  <div class="push-hint mt-24">
+    <p>
+      После этого перезагрузите страницу и разрешите показ уведомлений в верхнем
+      левом углу:
+    </p>
+
+    <img src="/assets/img/pushes/hint-disabled-2.png" />
+  </div>
+
+  <div style="margin-top: 34px">
+    <p-button
+      label="Понятно"
+      styleClass="p-button-lg sm-light"
+      (click)="onClose()"
+    ></p-button>
+  </div>
+</div>

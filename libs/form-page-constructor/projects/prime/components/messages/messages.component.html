@@ -1,0 +1,26 @@
+@if (hint) {
+  <small id="{{ controlName }}-hint" class="block custom-form-field__hint">
+    {{ hint }}
+  </small>
+}
+
+@if (errorMessage) {
+  @switch (errorKey) {
+    @case ('minlength') {
+      <small class="p-error block custom-form-field__error">
+        {{ errorMessage | translate: { minLength: error?.requiredLength || 8 } }}
+      </small>
+    }
+    @case ('maxlength') {
+      <small class="p-error block custom-form-field__error">
+        {{ errorMessage | translate: { maxLength: error?.requiredLength || 20 } }}
+      </small>
+    }
+    @default {
+      <small class="p-error block custom-form-field__error">
+        {{ errorMessage | translate }}
+      </small>
+    }
+  }
+}
+

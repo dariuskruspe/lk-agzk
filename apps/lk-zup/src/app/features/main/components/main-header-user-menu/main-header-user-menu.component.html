@@ -1,0 +1,153 @@
+<div class="header__user-wrap" [@panelMobile]="isMobile ? state : ''">
+  <app-main-company
+    *ngIf="isMobile && currentUser && currentUser.employees.length > 1"
+    [currentUser]="currentUser"
+    [employeeId]="employeeId"
+    [settings]="settings"
+    (changeEmployee)="changeEmployee.emit($event)"
+  ></app-main-company>
+  <a
+    class="header__user"
+    [routerLink]="['', 'users', 'profile']"
+    (click)="isMobile ? onToggleMenu() : ''"
+  >
+    <app-avatar [width]="'32px'" [height]="'32px'" class="mr-10"></app-avatar>
+
+    <span
+      *ngIf="initLoading.isWelcome$() | async; else name"
+      class="header__user-name"
+    >
+      {{ 'WELCOME_TITLE' | translate }} <b>{{ currentUser?.forename }}!</b>
+    </span>
+    <ng-template #name>
+      <span class="header__user-name">
+        {{ currentUser?.forename }} {{ currentUser?.surname }}
+      </span>
+    </ng-template>
+  </a>
+  <div class="header__select-wrapper" #notificationsPanel>
+    <button
+      *attention="!!alertsSignal()?.actions?.length"
+      class="header__button header__button--lang"
+      [class.header__button--active]="openNotifications"
+      (click)="toggleMenu('openNotifications')"
+    >
+      <i class="header-icon hrm-icons icon-bell">
+        <div
+          *ngIf="countNotifications"
+          class="header-icon-badge"
+          [class.plus10]="countNotifications >= 10 && countNotifications < 100"
+          [class.plus99]="countNotifications > 99"
+        >
+          {{ countNotifications > 99 ? '99+' : countNotifications }}
+        </div>
+      </i>
+    </button>
+  </div>
+  <div class="header__select-wrapper" #langPanel>
+    <button
+      *ngIf="settings?.header?.langButton?.enable"
+      class="header__button header__button--lang"
+      (click)="toggleMenu('showLanguages')"
+    >
+      <i class="header-icon icon-lang"></i>
+      <span class="header__mobile-txt header__ml-10" *ngIf="isMobile">{{
+        'LANGUAGE' | translate
+      }}</span>
+    </button>
+    <div *ngIf="showLanguagesSignal()" class="header__select">
+      <p-listbox
+        [options]="languages"
+        optionValue="value"
+        optionLabel="title"
+        (onChange)="onChangeLang($event)"
+      ></p-listbox>
+    </div>
+  </div>
+  <div class="header__select-wrapper">
+    <button
+      *ngIf="settings?.header?.supportButton?.enable"
+      class="header__button header__button--support"
+      (click)="closeModal()"
+      [routerLink]="['', 'support']"
+    >
+      <i class="header-icon hrm-icons icon-support"></i>
+      <span>{{ 'BUTTON_SUPPORT' | translate }}</span>
+    </button>
+  </div>
+  <div class="header__select-wrapper" #themePanel>
+    <button
+      *ngIf="settings?.header?.themeButton?.enable"
+      class="header__button header__button--lang"
+      (click)="toggleMenu('openTheme')"
+    >
+      <i class="header-icon hrm-icons icon-palette"></i>
+      <span class="header__mobile-txt">{{ 'THEME' | translate }}</span>
+    </button>
+    <div *ngIf="openTheme" class="header__select">
+      <p-listbox
+        [options]="themes | translateObj"
+        optionValue="value"
+        optionLabel="title"
+        (onChange)="onChangeTheme($event)"
+      ></p-listbox>
+    </div>
+  </div>
+  <div class="header__select-wrapper" #logoutPanel>
+    <button (click)="onOpenLogout(currentUser?.userID)" class="header__button">
+      <i class="header-icon hrm-icons icon-quit"></i>
+      <span>{{ 'BUTTON_LOGOUT' | translate }}</span>
+    </button>
+    <div *ngIf="openLogout" class="header__select">
+      <p-listbox
+        [options]="logoutOptions | translateObj"
+        optionValue="value"
+        optionLabel="title"
+        (onChange)="onLogout(currentUser?.userID, $event)"
+      ></p-listbox>
+    </div>
+  </div>
+</div>
+
+<!-- <div *ngIf="isMobile" class="menu_toggler" (click)="onToggleMenu()">
+  <span
+    class="img"
+    *ngIf="currentUserFacade.getData()?.photo; else userIcon"
+    [ngStyle]="{
+      'background-image':
+        'url(' +
+        apiUrl +
+        currentUserFacade.getData()?.photo +
+        '?size=60x60' +
+        ')'
+    }"
+  ></span>
+  <ng-template #userIcon>
+    <i class="header-icon hrm-icons icon-profile"></i>
+  </ng-template>
+</div> -->
+
+<p-dialog
+  [(visible)]="openNotifications"
+  position="right"
+  [style]="{ width: '100%', maxWidth: '522px' }"
+  [showHeader]="false"
+>
+  <div
+    [mobileFull]="75"
+    class="header__select notificationsList"
+    *ngIf="openNotifications"
+  >
+    <app-notifications-window
+      [pushesLoading]="pushesLoading"
+      [pushesAvailable]="pushesAvailable"
+      [pushesEnabled]="pushesEnabled"
+      [items]="normalizedNotifications"
+      (clicked)="openNotification($event)"
+      (viewed)="setNotificationsViewed($event)"
+      (closed)="onDeleteNotification($event)"
+      (enablePushes)="pushesEnable.emit()"
+      (disablePushes)="pushesDisable.emit()"
+    ></app-notifications-window>
+  </div>
+</p-dialog>

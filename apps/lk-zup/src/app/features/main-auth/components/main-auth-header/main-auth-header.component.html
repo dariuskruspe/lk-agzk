@@ -1,0 +1,45 @@
+<header class="header">
+  <div class="header__wrapper">
+    <button
+      *ngIf="settings?.header?.themeButton?.enable"
+      class="header__button header__button--lang"
+      (click)="toggleMenu('openTheme')"
+    >
+      <i class="header-icon hrm-icons icon-palette"></i>
+    </button>
+    <div class="header__select" *ngIf="openTheme">
+      <p-listbox
+        [options]="themes | translateObj"
+        optionValue="value"
+        optionLabel="title"
+        (onChange)="onChangeTheme($event)"
+      ></p-listbox>
+    </div>
+
+    <button
+      *ngIf="settings?.header?.langButton?.enable"
+      class="header__button header__button--lang"
+      (click)="toggleMenu('openLanguages')"
+    >
+      {{ langFacade.getLang() }}
+    </button>
+    <div class="header__select" *ngIf="openLanguages">
+      <p-listbox
+        [options]="languages"
+        optionValue="value"
+        optionLabel="title"
+        (onChange)="onChangeLang($event)"
+      ></p-listbox>
+    </div>
+
+    <button *ngIf="isQuitPossible" (click)="onQuit()" class="header__button">
+      <i class="header-icon hrm-icons icon-quit"></i>
+    </button>
+  </div>
+</header>
+
+<div
+  (click)="toggleMenu('overlay')"
+  *ngIf="openLanguages || openTheme"
+  class="listbox-overlay"
+></div>

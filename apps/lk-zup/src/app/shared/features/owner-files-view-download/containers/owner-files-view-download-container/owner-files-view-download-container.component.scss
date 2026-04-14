@@ -1,0 +1,5 @@
+:host ::ng-deep {
+  .dashboard mat-list.show-mode > div > mat-list-item .label {
+    background-color: #f3f5f8 !important;
+  }
+}

@@ -1,0 +1,228 @@
+<!-- Страница "Заявки сотрудников" -->
+
+<!-- Тулбар с заголовком -->
+<p-toolbar class="title">
+  <h1>
+    {{ 'TITLE_ISSUES_MANAGEMENT' | translate }}
+  </h1>
+  <span class="spacer"></span>
+</p-toolbar>
+
+<!-- Панель вкладок, поиска и фильтрации -->
+<div class="tabs-controls-panel">
+  <div class="tabs">
+    <!-- Вкладка "Все заявки" -->
+    <div
+      class="tab-item active"
+      (click)="changeTab('ALL_ISSUES')"
+      [class.active]="activeTab === 'ALL_ISSUES'"
+    >
+      <span class="tab-title">{{ 'ALL_ISSUES' | translate }}</span>
+    </div>
+
+    <!-- Вкладка "К согласованию" -->
+    <div
+      class="tab-item"
+      (click)="changeTab('ISSUES_TO_BE_APPROVED')"
+      [class.active]="activeTab === 'ISSUES_TO_BE_APPROVED'"
+    >
+      <span class="tab-title">{{ 'TO_BE_APPROVED' | translate }}</span
+      ><span class="counter ml-20">{{
+        toBeApprovedCount()?.toString() || '...'
+      }}</span>
+    </div>
+  </div>
+
+  <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+  <div class="filters">
+    <!-- Поиск -->
+    <div class="p-input-icon-left mobile-search-input">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchText"
+        placeholder="{{ 'ISSUE_SEARCH_FIELD' | translate }}"
+        class="search-input"
+        (ngModelChange)="applySearchFilter()"
+      />
+    </div>
+
+    <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+    <div class="filter-icon-button">
+      <i
+        class="pi pi-sliders-h filter-icon"
+        (click)="toggleFilters($event)"
+      ></i>
+    </div>
+
+    @if (isMobileV()) {
+      <!-- Нижняя выпадающая панель (сайдбар) с фильтрами -->
+      <app-filters-sidebar [visible]="showFilters">
+        <ng-container *ngTemplateOutlet="filters"></ng-container>
+      </app-filters-sidebar>
+    } @else {
+      <!-- Диалоговое окно с фильтрами -->
+      @if (showFilters) {
+        <app-filters-dialog (closeButtonClicked)="showFilters = false">
+          <ng-container *ngTemplateOutlet="filters"></ng-container>
+        </app-filters-dialog>
+      }
+    }
+
+    <ng-template #filters>
+      <!-- (!) чтобы переделать на компонент app-issues-management-filters, нужно запихнуть все значения фильтров в объект filterValues -->
+      <!-- пока вернул старую вёрстку, т. к. с новой фильтры не работали -->
+
+      <!-- Фильтр "Тип заявки" -->
+      <div class="filter-item p-fluid" *ngIf="issuesTypes.length">
+        <label class="custom-form-field__label">
+          {{ 'ISSUE_TYPE' | translate }}
+        </label>
+        <p-multiSelect
+          [options]="issuesTypes"
+          [(ngModel)]="types"
+          [showClear]="true"
+          [filter]="true"
+          optionLabel="issueTypeFullName"
+          optionValue="issueTypeID"
+          (ngModelChange)="applyFilters()"
+          maxSelectedLabels="2"
+          placeholder="{{ 'ISSUE_TYPE' | translate }}"
+          [selectedItemsLabel]="'SELECTED_ITEMS_LABEL' | translate"
+          styleClass="multiselect-compact"
+        >
+        </p-multiSelect>
+      </div>
+
+      <!-- Фильтр "Сотрудник" -->
+      <div class="filter-item">
+        <label class="custom-form-field__label">
+          {{ 'TITLE_GROUP_EMPLOYEE' | translate }}
+        </label>
+        <p-dropdown
+          [options]="employeesSubordinatesList"
+          [(ngModel)]="employee"
+          [showClear]="true"
+          [filter]="true"
+          optionLabel="title"
+          class="dropdown-input"
+          placeholder="{{ 'TITLE_GROUP_EMPLOYEE' | translate }}"
+          (onClick)="$event.stopPropagation()"
+          (ngModelChange)="applyFilters()"
+        ></p-dropdown>
+      </div>
+
+      <!-- Фильтр "Статус" -->
+      <div class="filter-item" *ngIf="activeTab === 'ALL_ISSUES'">
+        <label class="custom-form-field__label">
+          {{ 'VACATION_STATUS_TITLE' | translate }}
+        </label>
+        <p-dropdown
+          [options]="statusList"
+          [(ngModel)]="status"
+          [showClear]="true"
+          [filter]="true"
+          optionLabel="title"
+          (ngModelChange)="applyFilters()"
+          class="dropdown-input"
+          placeholder="{{ 'VACATION_STATUS_TITLE' | translate }}"
+        ></p-dropdown>
+      </div>
+
+      <!-- Фильтр "Период" -->
+      <div class="filter-item">
+        <label class="custom-form-field__label">
+          {{ 'PERIOD' | translate }}
+        </label>
+        <p-dropdown
+          [options]="daysValueList"
+          [(ngModel)]="period"
+          [filter]="true"
+          [showClear]="true"
+          optionLabel="title"
+          (ngModelChange)="applyFilters()"
+          class="dropdown-input"
+          placeholder="{{ 'PERIOD' | translate }}"
+        ></p-dropdown>
+      </div>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Содержимое -->
+<div class="content">
+  <!-- Метки (chips — "чипы") фильтров -->
+  <div class="filter-chips">
+    <!-- Метки (chips — "чипы") поиска -->
+    <div class="filter-chip" *ngIf="searchText">
+      {{ searchText }}
+      <i class="pi pi-times times-icon" (click)="clearSearchByChip()"></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Сотрудник" -->
+    <div class="filter-chip" *ngIf="employee">
+      {{ employee.title }}
+      <i class="pi pi-times times-icon" (click)="clearEmployeeByChip()"></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Статус" -->
+    <div class="filter-chip" *ngIf="status">
+      {{ status.title }}
+      <i class="pi pi-times times-icon" (click)="clearStatusByChip()"></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Период" -->
+    <div class="filter-chip" *ngIf="period">
+      {{ period.title }}
+      <i class="pi pi-times times-icon" (click)="clearPeriodByChip()"></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Тип заявки" -->
+    <ng-container *ngIf="types?.length">
+      <div class="filter-chip" *ngFor="let type of types">
+        {{ getTypeTitleByValue(type) }}
+        <i class="pi pi-times times-icon" (click)="clearTypeByChip(type)"></i>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- <только если активна вкладка "Все заявки"> -->
+  <!-- Контейнер с загружаемым списком -->
+  <div *ngIf="activeTab === 'ALL_ISSUES'">
+    <loadable-list-container
+      [template]="dataLayout"
+      [dataConfig]="dataConfig"
+      [dataList]="cashedIssuesList"
+      [highlight]="highlight"
+      [otherData]="{ issuesStatusList: issuesStatusList }"
+      [scrollContainerClassCss]="scrollContainerClassCss"
+      [loading]="issuesLoading"
+      [appendFilterToQuery]="true"
+      (loadList)="onLoadList($event)"
+      (clickItem)="onIssueDetails($event)"
+    ></loadable-list-container>
+  </div>
+
+  <!-- <только если активна вкладка "К согласованию"> -->
+  <!-- Контейнер с загружаемым списком -->
+  <div *ngIf="activeTab === 'ISSUES_TO_BE_APPROVED'">
+    <loadable-list-container
+      [template]="dataLayout"
+      [dataConfig]="dataConfigToApprove"
+      [dataList]="issuesManagementDataToApprove"
+      [pagination]="false"
+      [highlight]="highlight"
+      [otherData]="{ issuesStatusList: issuesStatusList }"
+      [scrollContainerClassCss]="scrollContainerClassCss"
+      [loading]="issuesLoading"
+      [select]="true"
+      [selectButtonTitle]="'BUTTON_APPROVE'"
+      [rejectButtonTitle]="'BUTTON_REJECT'"
+      [appendFilterToQuery]="true"
+      (loadList)="onLoadListApproving($event)"
+      (clickItem)="onIssueDetails($event)"
+      (clickSelectedList)="approveList($event)"
+    ></loadable-list-container>
+  </div>
+</div>

@@ -1,0 +1,292 @@
+<p-toolbar class="margin-top-bottom p-toolbar-single-row" *ngIf="survey">
+  <p-toolbar class="nowrap">
+    <p-button
+      icon="pi pi-arrow-left"
+      [link]="true"
+      (click)="onBackPage()"
+    ></p-button>
+    <h1>
+      {{survey.name}}
+    </h1>
+  </p-toolbar>
+  <span class="spacer"></span>
+  <p-button
+    *ngIf="this.getState().alias === 'draft' || this.getState().alias === 'rework' || this.getState().alias === 'surveyDraft'"
+    class="button-full-xs"
+    label="{{ 'BUTTON_EDIT' | translate }}"
+    (click)="openEditDialog()"
+    [disabled]="!this.survey?.editingAvailable"
+  ></p-button>
+  <p-button
+    *ngIf="!surveysManagementCreateService.disableEditForm()"
+    outlined="true"
+    class="button-full-xs ml-10"
+    label="{{ 'DELETE' | translate }}"
+    (click)="deleteSurvey()"
+  ></p-button>
+</p-toolbar>
+<p-card class="no-padding" *ngIf="survey">
+  <p-tabView [class.mobile-v]="isMobileV()">
+    <p-tabPanel header="{{ 'SURVEY' | translate }}">
+      <div class="column">
+        <div
+          class="header-row issue-title"
+        >
+          {{survey.name}}
+        </div>
+
+        <div class="column grid-row">
+          <div
+            class="column"
+            [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }"
+          >
+            <app-status
+              *ngIf="survey.state"
+              [customBackground]="getColor(getState().color)"
+              [title]="survey.stateName || getState().name"
+              [ngStyle]="{ order: isMobileV() ? -1 : 0 }"
+              [pTooltip]="getState().name"
+            ></app-status>
+          </div>
+          <p-splitButton
+            (onClick)="downloadStatReport()"
+            [label]="'SURVEY_STATISTICS' | translate"
+            [disabled]="isReportLoadingSignal()"
+            [model]="saveReportStatButtonItems"
+            [outlined]="true"
+          />
+        </div>
+
+        <div class="column grid-row mb-0">
+          <div
+            class="column"
+            [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+            <span class="header-title">{{ 'INTRODUCTION' | translate }}</span>
+            <span class="header-row">{{survey.description}}</span>
+          </div>
+        </div>
+
+        <div class="column grid-row mb-0">
+          <div
+            class="column"
+            [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }"
+          >
+            <span class="header-title">{{ 'SURVEY_START_DATE' | translate }}</span>
+            <span class="header-row">{{survey.startDate | date: 'dd.MM.yyyy'}}</span>
+
+            <!-- Статус заявки -->
+            <!--          <app-status-->
+            <!--            *ngIf="issuesStatusList?.states && issueState?.color"-->
+            <!--            [color]="issueState?.color"-->
+            <!--            [label]="issueState?.name"-->
+            <!--            [ngStyle]="{ order: isMobileV() ? -1 : 0 }"-->
+            <!--            [pTooltip]="issueState.description"-->
+            <!--            fontColor="var(&#45;&#45;basic-color)"-->
+            <!--          ></app-status>-->
+          </div>
+          <p-splitButton
+            *ngIf="survey.surveyType !== 'anonymous'"
+            (onClick)="downloadResultReport()"
+            [label]="'SURVEY_RESULTS' | translate"
+            [disabled]="isReportLoadingSignal()"
+            [model]="saveReportResultButtonItems"
+            [outlined]="true"
+          />
+        </div>
+
+        <div class="column grid-row mb-0">
+          <div
+            class="column"
+            [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+            <span class="header-title">{{ 'SURVEY_END_DATE' | translate }}</span>
+            <span class="header-row">{{survey.endDate | date: 'dd.MM.yyyy'}}</span>
+          </div>
+        </div>
+
+        <div class="column grid-row mb-0">
+          <div
+            class="column"
+            [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+            <span class="header-title">{{ 'SURVEY_TYPE' | translate }}</span>
+            <span class="header-row">{{survey.surveyType === 'anonymous' ? 'Анонимный' : 'Неанонимный'}}</span>
+          </div>
+        </div>
+
+        <div class="header-row block">
+          <div class="header-title">{{ 'EMPLOYEE_APPROVERS' | translate }}: </div>
+          <div *ngFor="let coordinator of survey.coordinators; let coordinatorIndex = index">
+            <div>
+              {{getOptionValue('coordinatorsList', coordinator)}}
+              <span *ngIf="coordinatorIndex !== survey.coordinators.length -1">{{','}}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="header-title">
+          <span>{{ 'RESPONDENTS' | translate }}</span>
+        </div>
+        <div class="header-row block" *ngIf="survey.respondents.organizations?.length">
+          <div>{{ 'ORGANIZATIONS' | translate }}: </div>
+          <div *ngFor="let organization of survey.respondents.organizations; let organizationIndex = index" class="ml-10">
+            {{getOptionValue('organizationsList', organization) + '; '}}
+            <span *ngIf="organizationIndex !== survey.respondents.organizations.length -1">{{';'}}</span>
+          </div>
+        </div>
+        <div class="header-row block" *ngIf="survey.respondents.divisions?.length">
+          <div>{{ 'DEPARTMENTS' | translate }}: </div>
+          <div *ngFor="let division of survey.respondents.divisions; let divisionIndex = index">
+            {{getOptionValue('divisionsList', division) + '; '}}
+            <span *ngIf="divisionIndex !== survey.respondents.divisions.length -1">{{';'}}</span>
+          </div>
+        </div>
+        <div class="header-row block" *ngIf="survey.respondents.individuals?.length">
+          <div>{{ 'BREADCRUMBS_EMPLOYEES' | translate }}: </div>
+          <div *ngFor="let individual of survey.respondents.individuals; let individualIndex = index">
+            {{getOptionValue('individualsList', individual) + '; '}}
+            <span *ngIf="individualIndex !== survey.respondents.individuals.length -1">{{';'}}</span>
+          </div>
+        </div>
+
+        <div class="column grid-row mb-0">
+          <div
+            class="column"
+            [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+            <span class="header-title">{{ 'REMINDERS' | translate }}: </span>
+            <span class="header-row">{{(survey.reminders.remindersFrequency ? 'ON' : 'OFF') | translate}}</span>
+          </div>
+        </div>
+        <div class="header-row block" *ngIf="survey.reminders.remindersFrequency">
+          <div class="header-title">{{ 'PERIODICITY' | translate }}: </div>
+          <div>{{getOptionValue('frequencyList', survey.reminders.remindersFrequency)}}</div>
+        </div>
+
+        <div class="column grid-row mb-0" *ngIf="survey.reminders.remindersFrequency">
+          <div
+            class="column"
+            [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV()
+          }">
+            <span class="header-title">{{ 'ENABLE_ADDITIONAL_REMINDERS' | translate }}: </span>
+            <span class="header-row">{{(survey.reminders.enableAdditionalReminders ? 'YES_BUTTON' : 'NO_BUTTON') | translate}}</span>
+          </div>
+        </div>
+        <div class="header-row block" *ngIf="survey.reminders.additionalRemindersStartPeriod">
+          <div class="header-title">{{ 'ADDITIONAL_REMINDERS_START_PERIOD' | translate }}: </div>
+          <div>{{getOptionValue('frequencyList', survey.reminders.additionalRemindersStartPeriod)}}</div>
+        </div>
+        <div class="header-row block" *ngIf="survey.reminders.additionalRemindersFrequency">
+          <div class="header-title">{{ 'ADDITIONAL_REMINDERS_FREQUENCY' | translate }}: </div>
+          <div>{{getOptionValue('frequencyList', survey.reminders.additionalRemindersFrequency)}}</div>
+        </div>
+
+      </div>
+
+      <div *ngIf="survey.approvalAvailable">
+        <!-- Поле ввода комментария (для отклонения заявки) -->
+        <div class="comment-container mt-25">
+          <label for="comment" class="grey">{{ 'COMMENT' | translate }}</label>
+          <input
+            pInputText
+            [(ngModel)]="cancelComment"
+            id="comment"
+            class="comment-input w-full mt-8"
+            placeholder="{{ 'ENTER_YOUR_COMMENT' | translate }}"
+            type="text"
+          />
+        </div>
+
+        <div class="flex gap-8">
+          <button
+            class="p-button-success w-full mt-25"
+            pButton
+            label="{{ 'BUTTON_APPROVE' | translate }}"
+            (click)="approveSurvey(true)"
+          ></button>
+          <button
+            class="p-button-outlined p-button-danger w-full mt-25"
+            pButton
+            label="{{ 'BUTTON_REJECT' | translate }}"
+            [disabled]="!cancelComment"
+            (click)="approveSurvey(false)"
+          ></button>
+        </div>
+      </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="{{ 'SURVEY_LAYOUT' | translate }}">
+      <app-surveys-management-preview
+        [hideButtons]="true"
+        [questions]="survey.questions"
+        [setting]="survey"
+      ></app-surveys-management-preview>
+    </p-tabPanel>
+
+    <!-- Вкладка "История изменений" -->
+    <p-tabPanel header="{{ 'ISSUE_CHANGES' | translate }}">
+      <ng-container>
+        <div class="header-content">
+          <div *ngFor="let history of historyList" class="column">
+            <div class="history-row">
+              <div
+                class="history-row__column"
+                [ngClass]="{
+                'jc-space-between w-full': isMobileV()
+              }"
+              >
+                <div class="history-row__date">
+                  {{history.date | date: 'dd.MM.yyyy'}}
+                </div>
+                <div
+                  class="history-row__status"
+                  [ngStyle]="{
+                  order: isMobileV() ? -1 : 0,
+                }"
+                >
+                  <div
+                    class="history-row__status_tag"
+                    [ngStyle]="{
+                    backgroundColor: getColor(history.color)
+                  }"
+                  >
+                    {{history.stateName}}
+                  </div>
+                </div>
+              </div>
+
+              <div class="history-row__name">
+                {{history.userName}}
+              </div>
+            </div>
+            <div class="history-comment" *ngIf="history.comment">
+              <span class="comment-title">
+                {{ 'ISSUE_COMMENT' | translate }}
+              </span>
+              <br />
+              {{history.comment}}
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </p-tabPanel>
+  </p-tabView>
+</p-card>
+

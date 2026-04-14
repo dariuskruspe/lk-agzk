@@ -1,0 +1,31 @@
+<p-card class="no-padding">
+  <div class="info-flex-container">
+    <div class="info-flex-container__column">
+      <app-avatar
+        [isEditable]="settings?.userProfile?.photoUpload?.enable"
+        [boxShadow]="'0 0 3px 2px #3880ff'"
+      ></app-avatar>
+    </div>
+
+    <div class="info-flex-container__column info-flex-container__column_full">
+      <div class="info-flex-container__name">
+        <h2>
+          {{ personalData?.fullName }}
+        </h2>
+        <h4>
+          {{ personalData?.position }}
+        </h4>
+      </div>
+
+      <div class="info-flex-container__list">
+        <app-item-list [items]="items"></app-item-list>
+        <a
+          *ngIf="personalData && personalData.applicantArchive"
+          (click)="downloadArch(personalData.applicantArchive)"
+          class="arch-link"
+          >{{ 'DOCUMENTS_EMPLOYMENT' | translate }}</a
+        >
+      </div>
+    </div>
+  </div>
+</p-card>

@@ -1,0 +1,419 @@
+body.app-theme-default_legacy {
+  --main-padding-y: 28px;
+  --main-padding-x: 28px;
+
+  --bg-primary: rgba(249, 250, 251, 1);
+  --foreground-color: rgba(51, 61, 74, 1);
+  --foreground-color-secondary: rgba(107, 114, 128, 1);
+  --foreground-color-inverse: rgba(255, 255, 255, 1);
+
+  --primary-foreground: rgba(255, 255, 255, 1);
+
+  --button-hover: rgba(243, 245, 248, 1);
+
+  --bg-element: rgba(255, 255, 255, 1);
+
+  --control-bg: rgba(255, 255, 255, 1);
+  --control-shadow:
+    0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --control-radius: 0.75rem;
+  --control-backdrop-filter: none;
+  --control-active-bg: rgba(243, 245, 248, 1);
+  --control-hover-bg: rgba(249, 250, 251, 1);
+
+  --timesheet-title-color: rgba(51, 61, 74, 1);
+  --timesheet-card-border: 1px solid rgba(226, 232, 240, 1);
+  --timesheet-card-bg: rgba(255, 255, 255, 1);
+  --timesheet-card-overlay: linear-gradient(
+    180deg,
+    rgba(243, 245, 248, 0.65) 0%,
+    rgba(243, 245, 248, 0) 100%
+  );
+  --timesheet-sticky-bg: var(--bg-primary);
+  --timesheet-header-text: rgba(152, 154, 162, 1);
+  --timesheet-weekend-header-text: rgba(180, 186, 197, 1);
+  --timesheet-total-header-text: rgba(178, 184, 193, 1);
+  --timesheet-name-text: rgba(68, 80, 100, 1);
+  --timesheet-summary-text: rgba(152, 154, 162, 1);
+  --timesheet-cell-border: rgba(226, 232, 240, 0.5);
+  --timesheet-cell-bg: rgba(255, 255, 255, 1);
+  --timesheet-cell-empty-bg: rgba(249, 250, 251, 0.42);
+  --timesheet-cell-empty-border: rgba(226, 232, 240, 0.35);
+  --timesheet-cell-empty-text: rgba(188, 194, 203, 0.8);
+  --timesheet-cell-value-text: rgba(152, 154, 162, 1);
+  --timesheet-note-text: rgba(242, 111, 97, 1);
+  --timesheet-health-icon: rgba(255, 114, 159, 1);
+  --timesheet-vacation-icon: rgba(56, 128, 255, 1);
+  --timesheet-business-trip-icon: rgba(70, 164, 255, 1);
+  --timesheet-remote-icon: rgba(70, 175, 123, 1);
+  --timesheet-warning-bg: rgba(255, 248, 221, 1);
+  --timesheet-warning-border: rgba(248, 221, 129, 0.8);
+  --timesheet-warning-icon: rgba(244, 180, 0, 1);
+  --timesheet-current-row-bg: rgba(56, 128, 255, 0.08);
+  --timesheet-current-row-border: rgba(56, 128, 255, 0.85);
+  --timesheet-divider: rgba(226, 232, 240, 0.9);
+  --timesheet-badge-bg: rgba(15, 23, 42, 0.06);
+  --timesheet-badge-text: #475467;
+
+  --docky-main-bg: rgba(255, 255, 255, 1);
+  --docky-main-text: rgba(51, 61, 74, 1);
+  --docky-main-icons-text: rgba(51, 61, 74, 1);
+  --docky-header-bg: rgba(79, 70, 229, 0.1);
+  --docky-suggestions-bg: rgba(243, 245, 248, 1);
+  --docky-suggestions-border: 1px solid rgba(229, 231, 235, 1);
+  --docky-msg-in-bg: rgba(243, 245, 248, 1);
+  --docky-msg-btn-bg: rgba(249, 250, 251, 1);
+  --docky-msg-btn-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --docky-primary-color: #405d78;
+  --docky-input-bg: rgba(255, 255, 255, 1);
+  --docky-input-border: 1px solid rgba(229, 231, 235, 1);
+  --docky-input-shadow: inset 0 1px 2px 0 rgb(0 0 0 / 0.05);
+
+  --docky-mini-main-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  --docky-mini-suggestions-border: 1px solid rgba(229, 231, 235, 1);
+  --docky-mini-suggestions-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+  --docky-mini-suggestions-bg: rgba(150, 193, 234, 1);
+  --docky-mini-suggestions-footer-bg: rgba(150, 193, 234, 1);
+  --docky-mini-input-border: 1px solid rgba(79, 70, 229, 0.3);
+  --docky-mini-msg-in-bg: rgba(243, 245, 248, 1);
+  --docky-mini-button-bg: rgba(249, 250, 251, 1);
+  --docky-mini-button-hover-bg: rgba(243, 245, 248, 1);
+  --docky-overlay-bg: rgba(0, 0, 0, 0.5);
+
+  --docky-widget-input-bg: white;
+  --docky-widget-input-border: none;
+  --docky-widget-input-shadow:
+    1px 1px 10px 0 rgba(187, 212, 253, 0.5),
+    4px 0 4px 0 rgba(200, 235, 247, 0.5),
+    -2px -4px 6px 0 rgba(197, 230, 248, 0.5),
+    -3px 4px 6px 0 rgba(236, 225, 250, 0.5);
+  --docky-widget-main-text: rgba(51, 61, 74, 1);
+  --docky-widget-secondary-text: rgba(107, 114, 128, 1);
+  --docky-widget-input-radius: 10px;
+
+  --sidebar-padding-y: 12px;
+  --sidebar-padding-x: 12px;
+  --sidebar-width: 280px;
+  --sidebar-width-collapsed: 70px;
+  --sidebar-header-height: 80px;
+  --sidebar-item-height: 48px;
+  --sidebar-submenu-item-height: 40px;
+
+  --sidebar-item-collapsed-shadow: none;
+  --sidebar-item-radius: 0.5rem;
+  --sidebar-item-gap: 8px;
+
+  --sidebar-font-size: 14px;
+  --sidebar-font-weight: 400;
+  --sidebar-radius: 10px;
+  --sidebar-foreground: var(--foreground-color);
+  --sidebar-popover-header-bg: var(--foreground-color);
+  --sidebar-popover-header-text: rgba(255, 255, 255, 1);
+
+  // &25B0
+  --sidebar-bg: #ffffff;
+  --sidebar-border: #e5e7eb;
+  --sidebar-shadow: none;
+
+  // >3>B8?
+  --sidebar-logo-blue: #3880ff;
+  --sidebar-logo-red: #dc2626;
+  --sidebar-brand-text: #1f2937;
+  --sidebar-brand-subtitle: #6b7280;
+
+  // 02830F8O
+  --sidebar-menu-text: var(--foreground-color);
+  --sidebar-menu-icon: var(--foreground-color);
+  --sidebar-menu-hover-bg: rgba(243, 245, 248, 1);
+  --sidebar-menu-hover-text: var(--foreground-color);
+  --sidebar-menu-active-bg: rgba(243, 245, 248, 1);
+  --sidebar-menu-active-text: var(--foreground-color);
+  --sidebar-menu-active-icon: var(--foreground-color);
+
+  // >4<5=N
+  --sidebar-submenu-bg: rgba(255, 255, 255, 1);
+  --sidebar-submenu-text: var(--foreground-color);
+  --sidebar-submenu-hover-bg: rgba(243, 245, 248, 1);
+  --sidebar-submenu-active-bg: rgba(243, 245, 248, 1);
+  --sidebar-submenu-active-text: var(--foreground-color);
+
+  // =>?:8
+  --sidebar-toggle-bg: #f3f4f6;
+  --sidebar-toggle-hover-bg: #e5e7eb;
+  --sidebar-toggle-text: #6b7280;
+
+  // =8<0F88
+  --sidebar-transition-duration: 0.3s;
+  --sidebar-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --sidebar-submenu-line-color: rgba(51, 61, 74, 0.5);
+  --sidebar-drawer-bg: rgba(255, 255, 255, 1);
+
+  /* Select Button */
+
+  --select-button-bg: hsl(220 13% 91%);
+  --select-button-text: hsl(220 9% 46%);
+  --select-button-border: transparent;
+  --select-button-shadow: none;
+  --select-button-inner-shadow: none;
+
+  --select-button-option-bg: transparent;
+  --select-button-option-bg-hover: hsl(220 14% 83%);
+  --select-button-option-bg-active: hsl(0 0% 100%);
+  --select-button-option-text: hsl(220 9% 46%);
+  --select-button-option-text-active: hsl(220 9% 15%);
+  --select-button-option-border-active: transparent;
+  --select-button-option-shadow-active: none;
+  --select-button-option-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Primary ?????? */
+  --button-primary-bg: #3880ff;
+  --button-primary-text: rgba(255, 255, 255, 1);
+  --button-primary-border: transparent;
+  --button-primary-shadow: 0 4px 16px rgba(79, 70, 229, 0.25);
+
+  --button-primary-hover-bg: #3880ff;
+  --button-primary-hover-text: rgba(255, 255, 255, 1);
+  --button-primary-hover-border: transparent;
+  --button-primary-hover-shadow: 0 6px 20px rgba(79, 70, 229, 0.35);
+
+  --button-primary-active-bg: #3880ff;
+  --button-primary-active-text: rgba(255, 255, 255, 1);
+  --button-primary-active-border: transparent;
+  --button-primary-active-shadow: 0 2px 8px rgba(79, 70, 229, 0.35);
+
+  --button-primary-disabled-bg: rgba(38, 122, 255, 0.4);
+  --button-primary-disabled-text: rgba(255, 255, 255, 0.7);
+  --button-primary-disabled-border: transparent;
+  --button-primary-disabled-shadow: none;
+
+  /* Secondary ?????? */
+  --button-secondary-bg: rgba(249, 250, 251, 1);
+  --button-secondary-text: rgba(51, 61, 74, 1);
+  --button-secondary-border: rgba(209, 213, 219, 1);
+  --button-secondary-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+
+  --button-secondary-hover-bg: rgba(243, 244, 246, 1);
+  --button-secondary-hover-text: rgba(31, 41, 55, 1);
+  --button-secondary-hover-border: rgba(156, 163, 175, 1);
+  --button-secondary-hover-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+
+  --button-secondary-active-bg: rgba(229, 231, 235, 1);
+  --button-secondary-active-text: rgba(31, 41, 55, 1);
+  --button-secondary-active-border: rgba(107, 114, 128, 1);
+  --button-secondary-active-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  --button-secondary-disabled-bg: rgba(249, 250, 251, 0.5);
+  --button-secondary-disabled-text: rgba(156, 163, 175, 1);
+  --button-secondary-disabled-border: rgba(229, 231, 235, 1);
+  --button-secondary-disabled-shadow: none;
+
+  /* Success ?????? */
+  --button-success-bg: #10b981;
+  --button-success-text: rgba(255, 255, 255, 1);
+  --button-success-border: transparent;
+  --button-success-shadow: 0 4px 16px rgba(16, 185, 129, 0.25);
+
+  --button-success-hover-bg: #059669;
+  --button-success-hover-text: rgba(255, 255, 255, 1);
+  --button-success-hover-border: transparent;
+  --button-success-hover-shadow: 0 6px 20px rgba(16, 185, 129, 0.35);
+
+  --button-success-active-bg: #047857;
+  --button-success-active-text: rgba(255, 255, 255, 1);
+  --button-success-active-border: transparent;
+  --button-success-active-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
+
+  --button-success-disabled-bg: rgba(16, 185, 129, 0.4);
+  --button-success-disabled-text: rgba(255, 255, 255, 0.7);
+  --button-success-disabled-border: transparent;
+  --button-success-disabled-shadow: none;
+
+  /* Danger ?????? */
+  --button-danger-bg: #ef4444;
+  --button-danger-text: rgba(255, 255, 255, 1);
+  --button-danger-border: transparent;
+  --button-danger-shadow: 0 4px 16px rgba(239, 68, 68, 0.25);
+
+  --button-danger-hover-bg: #dc2626;
+  --button-danger-hover-text: rgba(255, 255, 255, 1);
+  --button-danger-hover-border: transparent;
+  --button-danger-hover-shadow: 0 6px 20px rgba(239, 68, 68, 0.35);
+
+  --button-danger-active-bg: #b91c1c;
+  --button-danger-active-text: rgba(255, 255, 255, 1);
+  --button-danger-active-border: transparent;
+  --button-danger-active-shadow: 0 2px 8px rgba(239, 68, 68, 0.35);
+
+  --button-danger-disabled-bg: rgba(239, 68, 68, 0.4);
+  --button-danger-disabled-text: rgba(255, 255, 255, 0.7);
+  --button-danger-disabled-border: transparent;
+  --button-danger-disabled-shadow: none;
+
+  /* Warning ?????? */
+  --button-warning-bg: #f59e0b;
+  --button-warning-text: rgba(255, 255, 255, 1);
+  --button-warning-border: transparent;
+  --button-warning-shadow: 0 4px 16px rgba(245, 158, 11, 0.25);
+
+  --button-warning-hover-bg: #d97706;
+  --button-warning-hover-text: rgba(255, 255, 255, 1);
+  --button-warning-hover-border: transparent;
+  --button-warning-hover-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+
+  --button-warning-active-bg: #b45309;
+  --button-warning-active-text: rgba(255, 255, 255, 1);
+  --button-warning-active-border: transparent;
+  --button-warning-active-shadow: 0 2px 8px rgba(245, 158, 11, 0.35);
+
+  --button-warning-disabled-bg: rgba(245, 158, 11, 0.4);
+  --button-warning-disabled-text: rgba(255, 255, 255, 0.7);
+  --button-warning-disabled-border: transparent;
+  --button-warning-disabled-shadow: none;
+
+  /* Info ?????? */
+  --button-info-bg: #3b82f6;
+  --button-info-text: rgba(255, 255, 255, 1);
+  --button-info-border: transparent;
+  --button-info-shadow: 0 4px 16px rgba(59, 130, 246, 0.25);
+
+  --button-info-hover-bg: #2563eb;
+  --button-info-hover-text: rgba(255, 255, 255, 1);
+  --button-info-hover-border: transparent;
+  --button-info-hover-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+
+  --button-info-active-bg: #1d4ed8;
+  --button-info-active-text: rgba(255, 255, 255, 1);
+  --button-info-active-border: transparent;
+  --button-info-active-shadow: 0 2px 8px rgba(59, 130, 246, 0.35);
+
+  --button-info-disabled-bg: rgba(59, 130, 246, 0.4);
+  --button-info-disabled-text: rgba(255, 255, 255, 0.7);
+  --button-info-disabled-border: transparent;
+  --button-info-disabled-shadow: none;
+
+  /* Outlined ??????? ??? ???? ????? */
+  --button-primary-outlined-bg: transparent;
+  --button-primary-outlined-text: #4f46e5;
+  --button-primary-outlined-border: #4f46e5;
+  --button-primary-outlined-shadow: none;
+
+  --button-primary-outlined-hover-bg: rgba(79, 70, 229, 0.05);
+  --button-primary-outlined-hover-text: #4338ca;
+  --button-primary-outlined-hover-border: #4338ca;
+  --button-primary-outlined-hover-shadow: 0 4px 16px rgba(79, 70, 229, 0.15);
+
+  --button-secondary-outlined-bg: transparent;
+  --button-secondary-outlined-text: rgba(51, 61, 74, 1);
+  --button-secondary-outlined-border: rgba(209, 213, 219, 1);
+  --button-secondary-outlined-shadow: none;
+
+  --button-secondary-outlined-hover-bg: rgba(249, 250, 251, 1);
+  --button-secondary-outlined-hover-text: rgba(31, 41, 55, 1);
+  --button-secondary-outlined-hover-border: rgba(156, 163, 175, 1);
+  --button-secondary-outlined-hover-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+
+  --button-success-outlined-bg: transparent;
+  --button-success-outlined-text: #10b981;
+  --button-success-outlined-border: #10b981;
+  --button-success-outlined-shadow: none;
+
+  --button-success-outlined-hover-bg: rgba(16, 185, 129, 0.05);
+  --button-success-outlined-hover-text: #059669;
+  --button-success-outlined-hover-border: #059669;
+  --button-success-outlined-hover-shadow: 0 4px 16px rgba(16, 185, 129, 0.15);
+
+  --button-danger-outlined-bg: transparent;
+  --button-danger-outlined-text: #ef4444;
+  --button-danger-outlined-border: #ef4444;
+  --button-danger-outlined-shadow: none;
+
+  --button-danger-outlined-hover-bg: rgba(239, 68, 68, 0.05);
+  --button-danger-outlined-hover-text: #dc2626;
+  --button-danger-outlined-hover-border: #dc2626;
+  --button-danger-outlined-hover-shadow: 0 4px 16px rgba(239, 68, 68, 0.15);
+
+  --button-warning-outlined-bg: transparent;
+  --button-warning-outlined-text: #f59e0b;
+  --button-warning-outlined-border: #f59e0b;
+  --button-warning-outlined-shadow: none;
+
+  --button-warning-outlined-hover-bg: rgba(245, 158, 11, 0.05);
+  --button-warning-outlined-hover-text: #d97706;
+  --button-warning-outlined-hover-border: #d97706;
+  --button-warning-outlined-hover-shadow: 0 4px 16px rgba(245, 158, 11, 0.15);
+
+  --button-info-outlined-bg: transparent;
+  --button-info-outlined-text: #3b82f6;
+  --button-info-outlined-border: #3b82f6;
+  --button-info-outlined-shadow: none;
+
+  --button-info-outlined-hover-bg: rgba(59, 130, 246, 0.05);
+  --button-info-outlined-hover-text: #2563eb;
+  --button-info-outlined-hover-border: #2563eb;
+  --button-info-outlined-hover-shadow: 0 4px 16px rgba(59, 130, 246, 0.15);
+
+  /* Sidebar popover */
+  --sidebar-popover-bg: var(--bg-element);
+  --sidebar-popover-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --sidebar-popover-radius: 0.75rem;
+  --sidebar-popover-backdrop-filter: none;
+
+  /* Calendar Graph */
+  --calendar-graph-month-sticky-background: var(--background-color);
+  --calendar-graph-cell-bg: rgba(229, 231, 235, 1);
+  --calendar-graph-cell-border: 1px solid rgba(209, 213, 219, 1);
+  --calendar-graph-header-text: var(--foreground-color-secondary);
+
+  /* Calendar */
+  --calendar-selected-bg: #3880ff;
+  --calendar-selected-text: rgba(255, 255, 255, 1);
+  --calendar-range-bg: #bcd7fa;
+  --calendar-range-text: var(--foreground-color);
+  --calendar-outlined-border: 1px solid rgba(51, 61, 74, 0.2);
+  --calendar-outlined-border-hover: rgba(51, 61, 74, 0.3);
+  --calendar-offdays-color: #989aa2;
+  --calendar-holiday-color: #ed4346;
+  --calendar-dayoff-color: #989aa2;
+  --calendar-workday-color: var(--foreground-color);
+  --calendar-ring-color: var(--foreground-color);
+  --calendar-item-radius: 10px;
+
+  /* Prime ng variables */
+  --border-radius: 0.75rem;
+  --card-background: rgba(255, 255, 255, 1);
+  --card-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --text-color: var(--foreground-color);
+  --basic-color: var(--foreground-color);
+
+  --hover: rgba(243, 245, 248, 1);
+  --dialog-background: rgba(255, 255, 255, 1);
+
+  --liquid-shadow:
+    0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  /* Radius variables */
+  --radius: 0.5rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 0.75rem;
+  --button-md-radius: 6px;
+
+  /* Paginator */
+  .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    color: #3880ff;
+  }
+
+  app-calendar-graph-fullscreen-filters .chips .chip {
+    background: rgba(218, 235, 254, 1);
+    color: rgba(56, 128, 255, 1);
+  }
+
+  .time-line__layout_sticky .month-head {
+    background: none;
+  }
+
+  .time-line__layout_sticky {
+    background: none;
+  }
+}

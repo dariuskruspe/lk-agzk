@@ -1,0 +1,118 @@
+<app-main-agreements-dialog
+  [unsignedAgreements]="unsignedAgreementsFacade.getData$() | async"
+  (showAgreementDialog)="showAgreementDialog($event)"
+></app-main-agreements-dialog>
+
+<div class="main-layout">
+  <!-- <app-main-header
+    [isMobile]="isMobile()"
+    [currentUser]="currentUserFacade.getData$() | async"
+    [agreementDocumentState]="agreementDocumentStateFacade.getData$() | async"
+    [isOpened]="sidebarFacade.getData$() | async"
+    [employeeId]="localStorageService.getCurrentEmployeeId()"
+    [settings]="settingsFacade.getData()"
+    [notifications]="mainNotificationsFacade.getData$() | async"
+    (initApp)="initApp($event)"
+    (changeEmployee)="changeEmployeeID($event)"
+    [pushesAvailable]="isPushesAvailable"
+    [pushesEnabled]="(isPushesEnabled$ | async) === true"
+    [pushesLoading]="(isPushesLoading$ | async) === true"
+    (logout)="onLogout($event)"
+    (langChange)="changeLang($event)"
+    (themeChange)="themeChange($event)"
+    (deleteNotification)="onDeleteNotification($event)"
+    (pushesDisable)="onPushesDisable()"
+    (pushesEnable)="onPushesEnable()"
+  ></app-main-header> -->
+
+  <div class="main-layout__page">
+    @if (settings()) {
+      <app-main-sidebar (logout)="onLogout($event)" />
+    }
+
+    <div class="main-container" [style]="cssVars()">
+      <div scrollable="router" class="scroll-main-container">
+        <!-- <div class="main-content-header">
+          <button class="sidebar-toggle-button" (click)="sidebar.toggle()">
+            <lucide-icon [name]="PanelLeftIcon"></lucide-icon>
+          </button>
+
+          <app-main-breadcrumbs
+            [class.hidden]="isDashboardPage() || isFullContent()"
+          ></app-main-breadcrumbs>
+        </div> -->
+
+        <div class="main-header">
+          @if (isMobile()) {
+            <button
+              class="main-header__menu-button"
+              (click)="sidebar.toggleMobileMenu()"
+            >
+              <lucide-icon [name]="MenuIcon"></lucide-icon>
+            </button>
+          }
+          @if (showDocky()) {
+            <app-docky></app-docky>
+          }
+        </div>
+        <div
+          #mainContent
+          [attr.scrollable__ptr]="true"
+          class="main-content"
+          [class.dashboard-page]="isDashboardPage()"
+          [class.full-content]="isFullContent()"
+        >
+          <router-outlet *ngIf="showPage()"></router-outlet>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (isMobile() && showPage() && settings()) {
+  <app-main-bottom-nav (logout)="onLogout($event)" />
+}
+
+<div class="initial-loading" *ngIf="initialLoadingService.isLoading$() | async">
+  <div id="lottie" #lottie></div>
+</div>
+
+<p-toast class="cy-main-template-toast">
+  <ng-template pTemplate="message" let-message>
+    <span
+      class="p-toast-message-icon pi"
+      [ngClass]="{
+        'pi-check-circle': message.severity === 'success',
+        'pi-info-circle': message.severity === 'info',
+        'pi-exclamation-triangle': message.severity === 'warn',
+        'pi-times-circle': message.severity === 'error',
+      }"
+    ></span>
+    <div class="flex flex-column" style="flex: 1">
+      <div class="p-toast-message-text">
+        <div class="flex flex-column" style="flex: 1">
+          <div class="p-toast-summary">
+            {{ message.summary }}
+          </div>
+          <div class="p-toast-detail">
+            {{ message.detail }}
+          </div>
+        </div>
+      </div>
+      <div
+        *ngIf="message.data?.button as btn"
+        class="flex toast-error-copy-button"
+      >
+        <button
+          pButton
+          iconPos="left"
+          icon="{{ btn?.icon | iconPack }}"
+          [label]="btn?.title | translate"
+          (click)="btn?.callback()"
+        ></button>
+      </div>
+    </div>
+  </ng-template>
+</p-toast>
+
+<p-confirmPopup />

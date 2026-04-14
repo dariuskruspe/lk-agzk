@@ -1,0 +1,555 @@
+<!-- Тулбар с кнопкой -->
+<p-toolbar class="title" *ngIf="showEditButton">
+  <div></div>
+
+  <span class="spacer"></span>
+
+  <!-- Кнопка "Запланировать отпуск" -->
+  <button
+    pButton
+    class="button-full-xs mobile-button"
+    (click)="openEditPlanningClick()"
+    [disabled]="disablePlanningButton"
+    [label]="'BUTTON_SCHEDULE_VACATION' | translate"
+  ></button>
+</p-toolbar>
+
+<!-- Панель вкладок и элементов управления -->
+<div
+  class="tabs-controls-panel fd-row-tabs"
+  [class.no-gradient-before]="isFullscreen"
+>
+  <!-- <только для страницы "Отпуска сотрудников"> -->
+  @if (urlSegmentsSignal()?.[0]?.path === 'vacations-management') {
+    <!-- Вкладки -->
+    <div class="tabs">
+      <!-- Вкладка "Все отпуска" -->
+      <div
+        class="tab-item active"
+        (click)="changeTab('ALL_VACATIONS')"
+        [class.active]="vacationsManagementTabSignal() === 'ALL_VACATIONS'"
+      >
+        <span class="tab-title">{{ 'ALL_VACATIONS' | translate }}</span>
+      </div>
+
+      <!-- Вкладка "К согласованию" -->
+      <div
+        class="tab-item"
+        (click)="changeTab('VACATIONS_TO_BE_APPROVED')"
+        [class.active]="
+          vacationsManagementTabSignal() === 'VACATIONS_TO_BE_APPROVED'
+        "
+      >
+        <span class="tab-title">{{ 'TO_BE_APPROVED' | translate }}</span
+        ><span
+          class="counter ml-20"
+          [pTooltip]="'TO_BE_APPROVED_COUNT_HINT' | translate"
+          tooltipPosition="bottom"
+          >{{
+            vacationsManagementToBeApprovedCountSignal()?.toString() || '...'
+          }}</span
+        >
+      </div>
+    </div>
+  }
+
+  <!-- <только для страниц "График отпусков" и "Командировки"> -->
+  @if (
+    urlSegmentsSignal()?.[0]?.path === 'vacations' ||
+    urlSegmentsSignal()?.[0]?.path === 'business-trip' ||
+    urlSegmentsSignal()?.[0]?.path === 'employee-business-trip'
+  ) {
+    <!-- заполнитель пустого пространства (чтобы сдвинуть элементы управления в правую часть контейнера, пока слева нет вкладок) -->
+    <div class="spacer"></div>
+  }
+
+  <!-- Элементы управления (кнопка вызова фильтров, кнопка "На весь экран" и  т. д.) -->
+  <div class="controls">
+    <div class="filters flex-1">
+      <div class="toolbar">
+        <!-- <только для обычной (desktop'ной) версии приложения> -->
+        @if (!isMobileV()) {
+          <!-- Кнопка "Фильтр" -->
+          <div (click)="filtersOverlay.toggle($event)" class="btn-filter">
+            <div class="filter-text">
+              {{ 'FILTER' | translate }}
+            </div>
+            <i class="pi pi-sliders-h clickable font-size-26px"></i>
+          </div>
+        }
+
+        <!-- Кнопка "Справка" (скрывает/показывает легенду и подсказку) -->
+        <div
+          (click)="toggleLegend()"
+          class="btn-help"
+          [pTooltip]="(showLegend ? 'HIDE' : 'SHOW') + '_LEGEND' | translate"
+          tooltipPosition="bottom"
+        >
+          <!-- [ngClass]="{ 'pi-eye-slash': !showLegend, 'pi-eye': showLegend }" -->
+          <i class="pi pi-sun clickable font-size-26px"></i>
+        </div>
+
+        <!-- Кнопка "На весь экран" -->
+        <div
+          *ngIf="showFullscreenIcon"
+          (click)="showDialog()"
+          class="fullscreen"
+          [pTooltip]="'VACATION_GRAPH_FULLSCREEN' | translate"
+          tooltipPosition="bottom"
+        >
+          <svg
+            width="32"
+            height="32"
+            viewBox="0 0 32 32"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <mask
+              id="mask0_17373_33961"
+              style="mask-type: alpha"
+              maskUnits="userSpaceOnUse"
+              x="0"
+              y="0"
+              width="32"
+              height="32"
+            >
+              <rect width="32" height="32" fill="#D9D9D9" />
+            </mask>
+            <g mask="url(#mask0_17373_33961)">
+              <path
+                d="M6.66797 25.3337V18.667H9.33464V22.667H13.3346V25.3337H6.66797ZM6.66797 13.3337V6.66699H13.3346V9.33366H9.33464V13.3337H6.66797ZM18.668 25.3337V22.667H22.668V18.667H25.3346V25.3337H18.668ZM22.668 13.3337V9.33366H18.668V6.66699H25.3346V13.3337H22.668Z"
+                fill="#989AA2"
+              />
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Контейнеры, содержащие фильтры -->
+      <ng-container>
+        <!-- <только для мобильной версии приложения> -->
+        <!-- Нижняя выпадающая панель (sidebar) с фильтрами -->
+        @if (isMobileV()) {
+          <p-sidebar
+            #filterSidebar
+            [(visible)]="showFilters"
+            appendTo="body"
+            position="bottom"
+            [showCloseIcon]="false"
+            styleClass="filters-sidebar"
+          >
+            <!-- Тулбар с заголовком и кнопкой закрытия сайдбара в виде обычного "крестика" -->
+            <p-toolbar class="space-between">
+              <div class="sidebar-header font-size-26px">
+                {{ 'FILTER' | translate }}
+              </div>
+              <button
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-times"
+                class="p-button-rounded p-button-secondary p-button-text"
+                (click)="filterSidebar.close($event)"
+              ></button>
+            </p-toolbar>
+
+            <div class="sidebar-content">
+              <!-- Фильтры -->
+              <div class="sidebar-filters">
+                <ng-container *ngTemplateOutlet="filters"></ng-container>
+              </div>
+
+              <!-- Тулбар с кнопкой -->
+              <p-toolbar class="margin-top">
+                <!-- Кнопка "Применить" (ничего не делает по назначению, просто закрывает сайдбар) -->
+                <button
+                  pButton
+                  type="button"
+                  label="{{ 'APPLY' | translate }}"
+                  class="button-full-xs filter-button"
+                  (click)="filterSidebar.close($event)"
+                ></button>
+              </p-toolbar>
+            </div>
+          </p-sidebar>
+        }
+
+        <!-- <только для обычной (desktop'ной) версии приложения> -->
+        <!-- Диалоговое окно с фильтрами (OverlayPanel добавляется в body и не обрезается родительскими контейнерами) -->
+        <p-overlayPanel
+          #filtersOverlay
+          appendTo="body"
+          styleClass="filters-overlay-panel"
+        >
+          <div class="filters-dialog-content">
+            <ng-container *ngTemplateOutlet="filters"></ng-container>
+
+            <!-- Кнопка "Закрыть" (закрывает диалоговое окно с фильтрами) -->
+            <button
+              pButton
+              (click)="filtersOverlay.hide()"
+              class="p-button-outlined"
+              [label]="'BUTTON_CLOSE' | translate"
+            ></button>
+          </div>
+        </p-overlayPanel>
+
+        <!-- Фильтры -->
+        <ng-template #filters>
+          <!-- <только для страницы "График отпусков"> -->
+          <!-- Фильтр "Показать пересечения" -->
+          <div class="filter-item p-fluid" *ngIf="!trips">
+            <p-checkbox
+              [(ngModel)]="filterValues.hasIntersection"
+              [binary]="true"
+              id="ny"
+              class="checkbox-filter"
+              (ngModelChange)="onFilterSubmit(filterValues)"
+            ></p-checkbox>
+            <label for="ny">{{
+              'VACATIONS_GRAPH_SHOW_INTERSECTIONS' | translate
+            }}</label>
+          </div>
+
+          <!-- <только для страницы "Командировки"> -->
+          <!-- Фильтр "Авансовый отчёт" -->
+          <div class="filter-item p-fluid" *ngIf="trips">
+            <p-checkbox
+              id="report"
+              [(ngModel)]="filterValues.hasReport"
+              [binary]="true"
+              class="checkbox-filter"
+              (ngModelChange)="onFilterSubmit(filterValues)"
+            ></p-checkbox>
+            <label for="report">{{ 'EXPENSE_REPORT' | translate }}</label>
+          </div>
+
+          <!-- Фильтр "Сотрудник" -->
+          <div
+            class="filter-item column p-fluid"
+            *ngIf="trips === 'employeeBusinessTrips' || !trips"
+          >
+            <label for="employee-multiselect">{{
+              'VACATION_EMPLOYEE_TITLE' | translate
+            }}</label>
+            <p-multiSelect
+              [options]="employeeList"
+              [filter]="true"
+              optionGroupLabel="title"
+              optionGroupChildren="items"
+              maxSelectedLabels="1"
+              [group]="true"
+              [(ngModel)]="filterValues.employees"
+              emptyFilterMessage="Сотрудников не найдено"
+              optionLabel="title"
+              [optionValue]="getFullObject"
+              id="employee-multiselect"
+              resetFilterOnHide="true"
+              (ngModelChange)="onFilterEmployeeSubmit(filterValues)"
+            >
+              <ng-template let-selectedItems pTemplate="selectedItems">
+                <div class="selected-items-container">
+                  <span
+                    *ngIf="filterValues.employees.length === 1"
+                    class="single-selection"
+                  >
+                    {{ filterValues.employees[0].title }}
+                  </span>
+                  <span
+                    *ngIf="filterValues.employees.length > 1"
+                    class="multiple-selection"
+                  >
+                    {{ 'SELECTED_ITEMS_COUNT' | translate }}
+                    {{ filterValues.employees.length }}
+                  </span>
+                </div>
+              </ng-template>
+              <ng-template let-group pTemplate="group">
+                <div class="multi-select-group-head">
+                  <p-checkbox
+                    [binary]="true"
+                    [ngModelOptions]="{ standalone: true }"
+                    [(ngModel)]="group.checked"
+                    (onChange)="onGroupClick(group)"
+                    class="employees-group-checkbox"
+                  ></p-checkbox>
+                  <label [for]="group.value">
+                    {{ group.title }}
+                  </label>
+                </div>
+              </ng-template>
+              <!-- Отключил из-за бага (см. коммент Максима Никитина в PJLKS-1163) -->
+              <!--            <ng-template pTemplate="filter">-->
+              <!--              <span class="p-float-label p-fluid employee-filter-row">-->
+              <!--                <span class="p-input-icon-right">-->
+              <!--                  <i-->
+              <!--                    class="pi pi-times clear-filter-icon"-->
+              <!--                    (click)="clearEmployeeSearchFilter()"-->
+              <!--                  ></i>-->
+              <!--                  <input-->
+              <!--                    type="text"-->
+              <!--                    id="search-employee-box"-->
+              <!--                    pInputText-->
+              <!--                    (input)="onSearchInput($event)"-->
+              <!--                    class="multi-select-employees-filter"-->
+              <!--                  />-->
+              <!--                </span>-->
+              <!--              </span>-->
+              <!--            </ng-template>-->
+            </p-multiSelect>
+          </div>
+
+          <!-- Фильтр "Подразделение" -->
+          <div
+            class="filter-item column p-fluid"
+            *ngIf="
+              !trips &&
+              settings()?.vacationSchedule?.vacationDepartmentsFilterEnabled
+            "
+          >
+            <label for="department-select">{{
+              'DEPARTMENT' | translate
+            }}</label>
+            <p-multiSelect
+              [options]="departments || []"
+              optionLabel="name"
+              optionValue="id"
+              id="department-select"
+              [(ngModel)]="filterValues.departmentIds"
+              [placeholder]="'SELECT_DEPARTMENT' | translate"
+              [showClear]="true"
+              [filter]="true"
+              (ngModelChange)="onDepartmentChange()"
+            ></p-multiSelect>
+          </div>
+
+          <!-- Фильтр "Показать только мои командировки" -->
+          <div
+            class="filter-item p-fluid"
+            *ngIf="
+              trips === 'employeeBusinessTrips' &&
+              employeeList[0]?.items?.length + employeeList[1]?.items?.length > 1
+            "
+          >
+            <p-checkbox
+              [(ngModel)]="onlyMyTrips"
+              [binary]="true"
+              id="onlyMyTrips"
+              class="checkbox-filter"
+              (ngModelChange)="onlyMyTripsFilter.emit(onlyMyTrips)"
+            ></p-checkbox>
+            <label for="onlyMyTrips">{{
+              'BUSINESS_TRIP_SHOW_ONLY_MY' | translate
+            }}</label>
+          </div>
+
+          <!-- Фильтр "Вид" -->
+          <div class="filter-item column p-fluid">
+            <label for="ny3">{{ 'GRAPH_VIEW' | translate }}</label>
+            <p-dropdown
+              [options]="[
+                { title: 'YEAR' | translate, value: 'year' },
+                { title: 'MONTH' | translate, value: 'month' },
+              ]"
+              optionLabel="title"
+              optionValue="value"
+              id="ny3"
+              [(ngModel)]="filterValues.showType"
+              (ngModelChange)="onFilterSubmit(filterValues)"
+            ></p-dropdown>
+          </div>
+
+          <!-- <только для мобильной версии приложения (в desktop есть стрелочки для переключения года)> -->
+          <!-- Фильтр "Год" -->
+          <div *ngIf="isMobileV()" class="filter-item column p-fluid">
+            <label for="ny5">{{ 'YEAR' | translate }}</label>
+            <p-dropdown
+              [options]="years"
+              [(ngModel)]="filterValues.year"
+              (ngModelChange)="onYearChange($event)"
+            ></p-dropdown>
+          </div>
+
+          <!-- <только для вида "Месяц"> -->
+          <!-- Фильтр "Месяц" -->
+          @if (filterValues.showType === 'month') {
+            <div class="filter-item column p-fluid">
+              <label for="ny5">{{ 'MONTH' | translate }}</label>
+              <p-dropdown
+                [options]="months"
+                id="ny5"
+                [(ngModel)]="filterValues.month"
+                (ngModelChange)="onFilterMonthApply()"
+              ></p-dropdown>
+            </div>
+          }
+        </ng-template>
+      </ng-container>
+    </div>
+  </div>
+</div>
+
+<!-- <только для страницы "Отпуска сотрудников", и если активна вкладка "К согласованию"> -->
+@if (
+  urlSegmentsSignal()?.[0]?.path === 'vacations-management' &&
+  vacationsManagementTabSignal() === 'VACATIONS_TO_BE_APPROVED' &&
+  vacationsManagementToBeApprovedCountSignal()
+) {
+  <!-- Панель согласования/отклонения отпусков сотрудников (с чекбоксом выделения всех сотрудников и кнопками "Согласовать" и "Отклонить") -->
+  <div class="decision-panel flex flex-row jc-space-between">
+    <!-- Чекбокс для выбора всех сотрудников в списке (графике) отпусков -->
+    <p-checkbox
+      [(ngModel)]="employeeVacationsService.allEmployeeCheckboxSignal"
+      (onChange)="onAllEmployeeCheckboxChange($event)"
+      [binary]="true"
+      [label]="'SELECT_ALL' | translate"
+    >
+    </p-checkbox>
+
+    <!-- Кнопки принятия решений по согласованию/отклонению отпусков сотрудников -->
+    <div class="decision-buttons">
+      <!-- Кнопка "Отклонить" -->
+      <p-button
+        (onClick)="showConfirmDecisionDialog('decline')"
+        class="mr-10"
+        [disabled]="
+          !employeeVacationsService.selectedEmployeeIdsSignal()?.length
+        "
+        [label]="'BUTTON_REJECT' | translate"
+        [outlined]="true"
+        styleClass="btn-reject"
+      ></p-button>
+
+      <!-- Кнопка "Согласовать" -->
+      <p-button
+        (onClick)="showConfirmDecisionDialog('approve')"
+        [disabled]="
+          !employeeVacationsService.selectedEmployeeIdsSignal()?.length
+        "
+        [label]="'BUTTON_APPROVE' | translate"
+        styleClass="btn-approve"
+      ></p-button>
+    </div>
+  </div>
+}
+
+<!-- Метки (chips — "чипы") фильтров -->
+<div class="chips mb-20">
+  <div
+    class="chip"
+    *ngIf="filterValues.hasIntersection"
+    (click)="clearIntersectionFilter()"
+  >
+    {{ 'VACATIONS_GRAPH_INTERSECTIONS' | translate }}
+    <i class="pi pi-times remove-icon"></i>
+  </div>
+  <div
+    class="chip"
+    *ngIf="
+      !trips &&
+      settings()?.vacationSchedule?.vacationDepartmentsFilterEnabled &&
+      filterValues &&
+      filterValues?.departmentIds?.length
+    "
+    (click)="clearDepartmentFilter()"
+  >
+    {{ selectedDepartmentName }}
+    <i class="pi pi-times remove-icon"></i>
+  </div>
+  <ng-container *ngIf="filterValues.employees.length <= 2">
+    <div
+      class="chip"
+      *ngFor="let employee of filterValues.employees; let i = index"
+      (click)="clearEmployeeFilter(i)"
+    >
+      {{ employee.title }}
+      <i class="pi pi-times remove-icon"></i>
+    </div>
+  </ng-container>
+  <ng-container
+    *ngIf="
+      employeeList &&
+      filterValues.employees.length &&
+      filterValues.employees.length === employeesCount
+    "
+  >
+    <div class="chip" (click)="clearAllEmployeeFilter()">
+      {{ 'ALL_EMPLOYEES_FILTER' | translate }}
+      <i class="pi pi-times remove-icon"></i>
+    </div>
+  </ng-container>
+  <ng-container
+    *ngIf="
+      employeeList &&
+      filterValues.employees.length > 2 &&
+      filterValues.employees.length !== employeesCount
+    "
+  >
+    <div class="chip" (click)="clearAllEmployeeFilter()">
+      {{ 'BREADCRUMBS_EMPLOYEES' | translate }}
+      {{ filterValues.employees.length }}
+      <i class="pi pi-times remove-icon"></i>
+    </div>
+  </ng-container>
+</div>
+
+<!-- Легенда -->
+<div
+  *ngIf="showLegend"
+  class="legend"
+  [ngClass]="{ 'mobile-v': isMobileV() }"
+  [style.width]="hasChips || trips ? 'auto' : '100%'"
+>
+  <!-- Подсказка для пользователя -->
+  <div class="help-text">
+    {{ subtitleText | translate }}
+  </div>
+
+  <!-- Элементы легенды -->
+  <div class="legend-items flex" [ngClass]="{ 'mobile-v': isMobileV() }">
+    <div class="legend-item" *ngFor="let type of legendList">
+      <div
+        class="legend-icon"
+        [style.background-color]="type?.color"
+        [ngClass]="{
+          liner: type?.approving === true,
+          'linear-red': type?.approving === false,
+        }"
+      >
+        <i class="pi pi-sun sun-icon" *ngIf="!trips"></i>
+        <svg
+          *ngIf="trips"
+          class="sun-icon"
+          width="22"
+          height="18"
+          viewBox="0 0 22 18"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M18.1121 7.5C17.9528 7.5 17.4184 7.50469 17.2684 7.51406L14.2262 7.59375C14.1934 7.59375 14.1606 7.57969 14.1465 7.55156L9.58557 0.721875C9.44963 0.50625 9.20588 0.375 8.95276 0.375H7.84182C7.57932 0.375 7.49026 0.6375 7.58401 0.88125L9.93245 7.575C9.95588 7.63594 9.9137 7.70156 9.84807 7.70156L4.11057 7.78594C3.9887 7.79063 3.8762 7.73438 3.8012 7.64062L2.06682 5.53125C1.9262 5.34844 1.70589 5.24531 1.4762 5.24531H0.688699C0.557449 5.24531 0.468386 5.37187 0.510574 5.49375L1.44339 8.71406C1.5137 8.89219 1.5137 9.09375 1.44339 9.27188L0.510574 12.4922C0.468386 12.6141 0.557449 12.7406 0.688699 12.7406H1.47151C1.7012 12.7406 1.92151 12.6328 2.06214 12.4547L3.82932 10.3125C3.90432 10.2188 4.02151 10.1625 4.1387 10.1672L9.84338 10.2938C9.90901 10.2984 9.9512 10.3594 9.92776 10.4203L7.57932 17.1188C7.48557 17.3625 7.57464 17.625 7.83714 17.625H8.94807C9.20588 17.625 9.44495 17.4937 9.58088 17.2781L14.1465 10.4531C14.1653 10.425 14.1934 10.4109 14.2262 10.4109L17.2684 10.4906C17.4231 10.5 17.9528 10.5047 18.1121 10.5047C20.1887 10.5047 21.5012 9.83438 21.5012 9.00469C21.5012 8.175 20.1934 7.5 18.1121 7.5Z"
+            fill="#3880FF"
+          />
+        </svg>
+      </div>
+      <div class="title-legend">
+        <span>{{ type?.label }}</span>
+        <span *ngIf="type?.approving === true && !trips"
+          >({{ 'DOCUMENTS_AGREE' | translate }})</span
+        >
+        <span *ngIf="type?.approving === true && trips">на согласовании</span>
+        <span *ngIf="type?.approving === false && trips">отменена</span>
+        <span *ngIf="type?.approving === false && !trips"
+          >({{ 'VACATION_REJECTED' | translate }})</span
+        >
+        <span
+          *ngIf="
+            type?.availibleAndLinkedIssue &&
+            settings().businessTrips.expenseReportsEnable
+          "
+          >{{ 'EXPENSE_REPORT_SUCCESS' | translate }}</span
+        >
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+<p
+  class="company-name"
+  *ngIf="
+    currentUser?.employees?.length === 1 ||
+    !settings.header.organizationButton.enable
+  "
+>
+  {{ currentUser?.employees[0].organizationShortName }}
+</p>
+
+<div
+  class="select-box"
+  *ngIf="
+    currentUser?.employees?.length > 1 &&
+    settings.header.organizationButton.enable
+  "
+>
+  <div class="select-box__current" tabindex="1">
+    <div
+      class="select-box__value"
+      *ngFor="
+        let employee of currentUser.employees;
+        let index = index;
+        trackBy: trackBy
+      "
+    >
+      <input
+        class="select-box__input"
+        type="radio"
+        [id]="index+'employee'"
+        value="{{ employee.employeeID }}"
+        name="Ben"
+        checked="checked"
+        [ngModel]="selectedEmployeeId"
+        (ngModelChange)="onChangeSelectedEmployeeId($event)"
+      />
+      <div class="select-box__input-text">
+        <div class="select-box__title">
+          {{ employee.organizationShortName }}
+        </div>
+        <div class="select-box__subtitle small-text secondary-text">
+          {{ employee.typeOfEmployment }}
+        </div>
+      </div>
+    </div>
+
+    <i class="pi pi-angle-down select-box__icon"></i>
+  </div>
+
+  <ul class="select-box__list">
+    <li
+      *ngFor="
+        let employee of currentUser.employees;
+        let index = index;
+        trackBy: trackBy
+      "
+    >
+      <label class="select-box__option" [for]="index+'employee'" aria-hidden="aria-hidden">
+        <div class="select-box__title">
+          {{ employee.organizationShortName }}
+        </div>
+        <div class="select-box__subtitle small-text secondary-text">
+          <span>{{ employee.typeOfEmployment }}</span>
+          <span *ngIf="employee.position">, {{ employee.position }}</span>
+          <span *ngIf="employee.department">, {{ employee.department }}</span>
+        </div>
+      </label>
+    </li>
+  </ul>
+</div>
+
+<!--
+
+<p-dropdown
+  class="dropdown-employees"
+  [options]="currentUser?.employees"
+  [(ngModel)]="selectedEmployee"
+  optionLabel="typeOfEmployment"
+  *ngIf="
+    currentUser?.employees?.length > 1 &&
+    settings.header.organizationButton.enable
+  "
+  (ngModelChange)="onCheckedEmployee($event)"
+>
+  <ng-template pTemplate="selectedItem">
+    <div class="flex align-items-center gap-2" *ngIf="selectedEmployee">
+      <div>{{ selectedEmployee.organizationShortName }}</div>
+      <div class="small-text">{{ selectedEmployee.typeOfEmployment }}</div>
+    </div>
+  </ng-template>
+  <ng-template let-employee pTemplate="item">
+    <div class="flex align-items-center gap-2">
+      <div>{{ employee.organizationShortName }}</div>
+      <div>{{ employee.typeOfEmployment }}</div>
+      <div>{{ employee.position }}</div>
+      <div>{{ employee.department }}</div>
+    </div>
+  </ng-template>
+</p-dropdown>
+-->

@@ -1,0 +1,13 @@
+<app-grouped-list [source]="groupedSource">
+  <ng-template pTemplate="group" let-group *ngIf="groupTemplate">
+    <ng-container
+      *ngTemplateOutlet="groupTemplate; context: { $implicit: group }"
+    ></ng-container>
+  </ng-template>
+
+  <ng-template pTemplate="item" let-item *ngIf="itemTemplate">
+    <ng-container
+      *ngTemplateOutlet="itemTemplate; context: { $implicit: item }"
+    ></ng-container>
+  </ng-template>
+</app-grouped-list>

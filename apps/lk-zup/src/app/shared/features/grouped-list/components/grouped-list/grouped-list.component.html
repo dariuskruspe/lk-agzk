@@ -1,0 +1,25 @@
+<div class="app-grouped-list">
+  <div *ngFor="let item of source">
+    <ng-container *ngIf="item.items?.length">
+      <ng-container *ngIf="!groupTemplate">
+        <app-grouped-list-header>
+          {{ getGroupTitle(item.group) }}
+        </app-grouped-list-header>
+      </ng-container>
+      <ng-container
+        *ngTemplateOutlet="groupTemplate; context: { $implicit: item.group }"
+      ></ng-container>
+    </ng-container>
+
+    <div class="items">
+      <ng-container *ngFor="let one of item.items">
+        <ng-container *ngIf="!itemTemplate">
+          <div>{{ one | json }}</div>
+        </ng-container>
+        <ng-container
+          *ngTemplateOutlet="itemTemplate; context: { $implicit: one }"
+        ></ng-container>
+      </ng-container>
+    </div>
+  </div>
+</div>

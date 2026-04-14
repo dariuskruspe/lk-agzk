@@ -1,0 +1,259 @@
+@import '../../../../../../styles/variables.scss';
+
+:host {
+  ::ng-deep {
+    // Панель согласования/отклонения отпусков
+    .decision-panel {
+      // Кнопка "Согласовать"
+      .btn-approve {
+        padding: 12px 50px;
+      }
+
+      // Кнопка "Отклонить"
+      .btn-reject {
+        padding: 12px 50px;
+      }
+    }
+  }
+
+  .controls {
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+}
+
+.filters {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  color: rgb(152, 154, 162);
+  position: relative;
+  font-size: 17px;
+
+  .toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .btn-filter {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+    }
+
+    .fullscreen {
+      cursor: pointer;
+      @media (max-width: $s-max-width) {
+        display: none;
+      }
+    }
+  }
+
+  .filters-dialog {
+    position: absolute;
+    //top: 30px;
+    right: 0;
+    padding: 35px 25px 25px 25px;
+    background: var(--card-background);
+    box-shadow: -4px 6px 8px 0 rgba(69, 151, 255, 0.25);
+    z-index: 11;
+    width: 320px;
+    border-radius: 5px;
+
+    .column {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .filter-item {
+      margin-bottom: 20px;
+
+      .checkbox-filter {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.chips {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .chip {
+    height: 32px;
+    border-radius: 30px;
+    padding: 5px 20px;
+    display: flex;
+    cursor: pointer;
+
+    .remove-icon {
+      margin-left: 5px;
+      margin-top: 4px;
+      font-size: 13px;
+    }
+  }
+}
+
+.employee-filter-row {
+  width: 100%;
+  display: flex;
+}
+
+// Стили для темплейта выбранных элементов в p-multiSelect
+.selected-items-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 20px;
+
+  .placeholder {
+    color: var(--text-color-secondary);
+    font-style: italic;
+  }
+
+  .single-selection {
+    color: var(--text-color);
+  }
+
+  .multiple-selection {
+    color: var(--text-color);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+
+.legend {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 40px;
+
+  &.mobile-v {
+    margin-top: 5px;
+    margin-bottom: 0;
+  }
+
+  &-items {
+    display: flex;
+    //flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.75rem; // (root 16px) -> 12px
+
+    &.mobile-v {
+      // для сенсорных экранов добавляем возможность горизонтальной прокрутки элементов, но при этом саму полосу прокрутки визуально скрываем
+      @media (pointer: coarse) {
+        flex-wrap: nowrap;
+        overflow: auto;
+
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
+        /* Hide scrollbar for Chrome, Safari and Opera */
+        &::-webkit-scrollbar {
+          display: none;
+        }
+      }
+    }
+
+    .legend-item {
+      flex-shrink: 0;
+    }
+  }
+
+  @media (max-width: $s-max-width) {
+    flex-direction: column;
+  }
+
+  .fullscreen {
+    cursor: pointer;
+    margin: auto;
+    @media (max-width: $s-max-width) {
+      display: none;
+    }
+  }
+
+  &-item {
+    display: flex;
+    //width: 180px;
+    max-width: 210px;
+    height: 44px;
+    //background: var(--surface-card);
+    //border: 1px solid var(--border-color);
+    border-radius: 5px;
+
+    @media (max-width: $m-max-width) {
+      max-width: 120px;
+    }
+
+    .legend-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 1 0 32px;
+
+      border-right: 1px solid var(--border-color);
+      border-radius: 5px;
+
+      width: 32px;
+      max-width: 32px;
+      height: 100%;
+
+      .sun-icon {
+        color: white;
+      }
+    }
+
+    .title-legend {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5px;
+      width: auto;
+      color: var(--basic-color);
+    }
+  }
+}
+.liner {
+  background:
+    linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0) 49.9%,
+        rgba(204, 204, 204, 100) 49.9%,
+        rgba(204, 204, 204, 100) 60%,
+        rgba(0, 0, 0, 0) 60%
+      )
+      fixed,
+    linear-gradient(45deg, rgba(204, 204, 204, 100) 10%, rgba(0, 0, 0, 0) 10%)
+      fixed;
+  background-size: 0.5em 0.5em;
+}
+.linear-red {
+  background:
+    linear-gradient(
+        45deg,
+        rgba(0, 0, 0, 0) 49.9%,
+        red 49.9%,
+        red 60%,
+        rgba(0, 0, 0, 0) 60%
+      )
+      fixed,
+    linear-gradient(45deg, red 10%, rgba(0, 0, 0, 0) 10%) fixed;
+  background-size: 0.5em 0.5em;
+}
+.help-text {
+  font-size: 0.75rem; // (root 16px) -> 12px
+  color: var(--secondary-color);
+  max-width: 210px;
+}
+.fd-row-tabs {
+  flex-direction: row;
+  @media (max-width: 991px) {
+    position: absolute;
+    right: 10px;
+    top: 24px;
+  }
+}

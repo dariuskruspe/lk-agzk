@@ -1,0 +1,123 @@
+# линт запускаем на любой коммит
+app:lint:
+  extends:
+    - .app:lint
+
+# на все коммиты кроме релизов и RC
+app:build:
+  extends:
+    - .app:build
+  variables:
+    APP_ENV_NAME: cloud-prod
+
+# deploy cloud
+
+.app:deploy:
+  stage: deploy
+  needs:
+    - app:build
+  before_script:
+    - !reference [.init-ssh-script]
+    - APP_DIR=/var/www/lks-releases/$(node ci/scripts/tag.js version_tag)
+    - DEPLOY_SSH=$SSH_USER@$SSH_HOST
+  script:
+    - ssh $DEPLOY_SSH "rm -rf $APP_DIR && exit"
+    - scp -r ./dist/apps/lk-zup $DEPLOY_SSH:$APP_DIR
+
+app:cloud:deploy:test:
+  stage: deploy
+  extends: .app:deploy
+  variables:
+    SSH_HOST: 91.105.198.143
+    SSH_USER: root
+
+app:cloud:deploy:prod:
+  stage: deploy
+  extends: .app:deploy
+  allow_failure: true
+  variables:
+    SSH_HOST: 172.16.164.139
+    SSH_USER: root
+  tags:
+    - dc
+
+# publish NC
+app:publish_nc:
+  stage: deploy
+  needs:
+    - app:build
+  rules:
+    - if: $CI_COMMIT_TAG =~ /.*-(dev|rel|cur|lts|cin|city)$/
+  before_script:
+    - (cd ./dist/apps/lk-zup && zip -r ../../../app.zip .)
+    - DST=$(node ci/scripts/tag.js nc_dst)
+    - DST_LATEST=$(node ci/scripts/tag.js nc_dst_latest)
+  script:
+    - ./tools/upload-nc app.zip $DST
+    - ./tools/upload-nc app.zip $DST_LATEST
+
+# build astra deb package
+app:deb:
+  stage: dist
+  extends:
+    - .node
+  image: node:20
+  tags:
+    - docker
+  artifacts:
+    paths:
+      - dist-deb
+    expire_in: 1 day
+  before_script:
+    - DST_DEB=$(node ci/scripts/tag.js deb_dst)
+    - DST_DEB_SOURCE=$(node ci/scripts/tag.js deb_source_dst)
+    - VERSION=$(node ci/scripts/tag.js version)
+    - apt update
+    - apt install -y rsync zip
+  script:
+    - bun install --frozen-lockfile --no-progress
+    - ./tools/dist-deb-source
+    - ./package/deb/build
+    - node ci/scripts/tag gen_version_file # генерируем файл с версией из тега
+    - rm -rf dist-deb && mkdir dist-deb
+    - zip -r ./dist-deb/empldocs-astra-source-$VERSION.zip ./package/deb/source ./package/deb/src ./package/deb/build
+    - mv ./package/deb/empldocs.deb ./dist-deb/empldocs-astra-$VERSION.deb
+    - ./tools/upload-nc ./dist-deb/empldocs-astra-$VERSION.deb $DST_DEB
+    - ./tools/upload-nc ./dist-deb/empldocs-astra-source-$VERSION.zip $DST_DEB_SOURCE
+  when: manual
+  allow_failure: true
+  interruptible: true
+
+# сборка и публикация докер образа
+app:docker-image:
+  stage: dist
+  needs:
+    - app:build
+  before_script:
+    - docker login cr.selcloud.ru -u token -p $IMAGE_PUSHER_TOKEN
+    - DOCKER_TAG=$(node ci/scripts/tag.js docker-tag)
+    - DOCKER_TAG_LATEST=$(node ci/scripts/tag.js docker-tag-latest)
+  script:
+    - docker build -t $DOCKER_TAG --build-arg path=./dist/apps/lk-zup .
+    - docker push $DOCKER_TAG
+    - docker tag $DOCKER_TAG $DOCKER_TAG_LATEST
+    - docker push $DOCKER_TAG_LATEST
+  services:
+    - docker:dind
+
+# сборка и публикация докер образа
+app:docker-image-node:
+  stage: dist
+  needs:
+    - app:build
+  before_script:
+    - docker login cr.selcloud.ru -u token -p $IMAGE_PUSHER_TOKEN
+    - DOCKER_TAG=$(node ci/scripts/tag.js docker-tag-node)
+    - DOCKER_TAG_LATEST=$(node ci/scripts/tag.js docker-tag-latest-node)
+  script:
+    - docker build -f Dockerfile.node -t $DOCKER_TAG --build-arg path=./dist/apps/lk-zup .
+    - docker push $DOCKER_TAG
+    - docker tag $DOCKER_TAG $DOCKER_TAG_LATEST
+    - docker push $DOCKER_TAG_LATEST
+  services:
+    - docker:dind

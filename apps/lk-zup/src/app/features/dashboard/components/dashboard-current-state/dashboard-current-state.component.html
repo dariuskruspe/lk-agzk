@@ -1,0 +1,87 @@
+<div
+  class="current-state" *ngIf="isEnabled"
+>
+<p-toolbar>
+  <h2 class="current-state__header dashboard-title">
+    {{ 'TITLE_WORK_STATUS' | translate }}
+  </h2>
+</p-toolbar>  
+  <div class="current-state__content">
+    <p-card class="p-padding-0-24">
+      <div class="custom-item">
+        <div class="custom-item__container custom-item__container_status">
+          <div class="icon" *skeleton="hasContent; else skeletonIcon">
+            <i class="{{ state?.icon | iconPack }}"></i>
+          </div>
+          <div class="custom-item__title" *skeleton="hasContent; else skeletonName">
+            {{ state?.name }}
+          </div>
+          <div
+            *ngIf="state?.name !== 'Работа' && currentState?.dateEnd" class="custom-item__date"
+          >
+            {{ 'UNTIL' | translate }} {{currentState?.dateEnd
+              | date: 'dd.MM.yyyy'}}
+          </div>
+          <div
+            *ngIf="state?.name === 'Работа' && currentState?.dateBegin" class="custom-item__date"
+          >
+            {{ 'SINCE' | translate }} {{currentState?.dateBegin
+              | date: 'dd.MM.yyyy'}}
+          </div>
+          <div class="status-dashboard-button" *ngIf="hasContent">
+            <button
+              pButton
+              class="custom-item__button p-button-outlined"
+              label="{{ 'BUTTON_CLARIFY_STATUS' | translate }}"
+              [routerLink]="['', 'issues', 'types']"
+              [queryParams]="{ groupAlias: 'workStatus' }"
+            ></button>
+          </div>
+        </div>
+        <div
+          class="custom-item__container custom-item__container_image" *skeleton="hasContent; else skeletonHugeIcon"
+        >
+          <img
+            *ngIf="state?.image &&
+              (state.image === 'day-off' ||
+              state.image === 'office-work' ||
+              state.image === 'vacation');
+              else dayOffTemplate
+            "
+            src="assets/img/svg/{{ currentUser.gender !== 'female' ? state.image+'-male' : state.image}}{{theme === 'dark' || theme === 'liquid-dark' ? '-dark' : ''}}.svg"
+            alt="status"
+            class="male-img"
+          />
+<!--          если требуются новогодние варианты картинок-->
+<!--          src="assets/img/svg/{{ currentUser.gender !== 'female' ? state.image+'-male' : state.image}}{{theme === 'dark' ? '-dark' : ''}}{{'-newYear'}}.svg"-->
+          <ng-template #dayOffTemplate>
+            <img
+              src="assets/img/svg/{{ currentUser.gender !== 'female' ? 'day-off-male' : 'day-off' }}{{theme === 'dark' || theme === 'liquid-dark' ? '-dark' : ''}}.svg"
+              alt="status"
+              class="male-img"
+            />
+            <!--          если требуются новогодние варианты картинок-->
+<!--            src="assets/img/svg/{{ currentUser.gender !== 'female' ? 'day-off-male' : 'day-off' }}{{theme === 'dark' ? '-dark' : ''}}{{'-newYear'}}.svg"-->
+          </ng-template>
+
+        </div>
+      </div>
+    </p-card>
+  </div>
+</div>
+
+<ng-template #skeletonIcon>
+  <p-skeleton width="50px" height="50px" borderRadius="50%"></p-skeleton>
+</ng-template>
+<ng-template #skeletonHugeIcon>
+  <div
+    class="custom-item__container custom-item__container_image"
+  >
+    <p-skeleton width="150px" height="150px" borderRadius="50%"></p-skeleton>
+  </div>
+</ng-template>
+<ng-template #skeletonName>
+  <div class="custom-item__title">
+    <p-skeleton width="100px" height="20px"></p-skeleton>
+  </div>
+</ng-template>

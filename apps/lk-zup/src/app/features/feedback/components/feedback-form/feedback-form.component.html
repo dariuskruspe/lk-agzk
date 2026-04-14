@@ -1,0 +1,35 @@
+<div class="container-fluid">
+  <div class="row">
+    <form
+      [formGroup]="form"
+      class="col-md-12 p-0"
+    >
+      <div class="card mb">
+        <div class="mt-10">
+        </div>
+        <div class="custom-form-field">
+          <label class="custom-form-field__label">Имя</label>
+          <input
+            pInputText
+            type="text"
+            formControlName="name"
+          />
+        </div>
+        <p-toolbar class="buttons margin-top">
+          <button
+            pButton
+            label="{{ 'BUTTON_SEND' | translate }}"
+            type="submit"
+            class="col-12 col-md-auto"
+            (click)="onSubmit()"
+          ></button>
+          <p-button
+            label="{{ 'BUTTON_CANCEL' | translate }}"
+            class="col-12 col-md-auto p-button-outlined ml-8"
+            [link]="true"
+          ></p-button>
+        </p-toolbar>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,21 @@
+<div>
+  <p-toolbar class="subtitle">
+    <h1>{{ 'TITLE_INCOME_TAX' | translate }}</h1>
+  </p-toolbar>
+
+  <app-salaries-tax-list-item
+    [dataList]="taxList"
+    [otherData]="{
+      taxStateList: taxStateList
+    }"
+    [loading]="loading"
+    (clickItem)="onGoDetails($event)"
+  ></app-salaries-tax-list-item>
+
+  <button
+    pButton
+    label="{{ 'BUTTON_GO_TAX' | translate }}"
+    class="p-button-secondary p-button-outlined issues-link"
+    [routerLink]="['', 'salaries', 'tax']"
+  ></button>
+</div>

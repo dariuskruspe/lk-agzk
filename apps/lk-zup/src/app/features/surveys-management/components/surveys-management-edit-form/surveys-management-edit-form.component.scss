@@ -1,0 +1,35 @@
+.additional-info {
+  padding: 0 20px !important;
+
+  @media (max-width: 767px) {
+    padding: 0;
+  }
+}
+
+.row-form {
+  padding: 0 15px;
+}
+
+.additional-fields {
+  display: block;
+}
+
+.static-data__item {
+  font-size: 14px;
+}
+
+.m-t-15 {
+  margin-top: 15px;
+}
+.approver-title {
+  font-size: 13px;
+  color: var(--gray);
+  .value {
+    color: var(--basic-color);
+  }
+}
+.separator {
+  height: 1px;
+  background: #D3DBE3;
+  margin-bottom: 16px;
+}

@@ -1,0 +1,32 @@
+<p-toolbar class="title">
+  <h2>
+    {{ 'SUPPORT_CONTACTS' | translate }}
+  </h2>
+</p-toolbar>
+<div class="contacts">
+  <p-card *ngFor="let contact of contacts">
+    <div class="contacts__header">
+      <img
+        *ngIf="contact?.photo"
+        src="{{ contact?.photo }}"
+        alt=""
+        class=""
+        width="60"
+        height="60"
+      /> <img
+      *ngIf="contact?.photo === null"
+      src="assets/img/svg/null-photo.svg"
+      alt=""
+      class=""
+      width="60"
+      height="60"
+    />
+      <p class="contacts__header-title">{{ contact?.title }}</p>
+    </div>
+    <app-item-list
+      [items]="contact?.contactsList"
+      titleKey="contactType"
+      valueKey="contactValue"
+    ></app-item-list>
+  </p-card>
+</div>

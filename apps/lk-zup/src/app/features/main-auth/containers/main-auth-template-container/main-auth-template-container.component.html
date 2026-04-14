@@ -1,0 +1,50 @@
+@if (app.settingsSignal()) {
+  <app-main-header
+    (changeLang)="changeLang($event)"
+    (themeChange)="themeChange($event)"
+    (quit)="quit()"
+    [isQuitPossible]="!!params?.quit"
+    [settings]="settingsFacade.forcedData$ | async"
+  ></app-main-header>
+  <div class="main-container">
+    <p-toast>
+      <ng-template pTemplate="message" let-message>
+        <span
+          class="p-toast-message-icon pi"
+          [ngClass]="{
+            'pi-check-circle': message.severity === 'success',
+            'pi-info-circle': message.severity === 'info',
+            'pi-exclamation-triangle': message.severity === 'warn',
+            'pi-times-circle': message.severity === 'error',
+          }"
+        ></span>
+        <div class="flex flex-column" style="flex: 1">
+          <div class="p-toast-message-text">
+            <div class="flex flex-column" style="flex: 1">
+              <div class="p-toast-summary">
+                {{ message.summary }}
+              </div>
+              <div class="p-toast-detail">
+                {{ message.detail }}
+              </div>
+            </div>
+          </div>
+          <div
+            *ngIf="message.data?.button as btn"
+            class="flex toast-error-copy-button"
+          >
+            <button
+              pButton
+              iconPos="left"
+              icon="{{ btn?.icon | iconPack }}"
+              [label]="btn?.title | translate"
+              (click)="btn?.callback()"
+            ></button>
+          </div>
+        </div>
+      </ng-template>
+    </p-toast>
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer class="fixed w-full"></app-footer>
+}

@@ -1,0 +1,43 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./src/app",
+    "paths": {
+      "@root/libs/*": ["../../../../libs/*"],
+      "@app/*": ["./*"],
+      "@assets/*": ["../assets/*"],
+      "@env/*": ["../environments/*"],
+      "@features/*": ["features/*"],
+      "@shared/*": ["shared/*"],
+      "@version/*": ["../version/*"],
+      "@wafpc/*": ["../../../../libs/form-page-constructor/projects/*"],
+      "@shared-types/*": ["libs/shared-types/*"]
+    },
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "useDefineForClassFields": false,
+    "target": "es2022",
+    "module": "preserve",
+    "preserveSymlinks": true,
+    "skipLibCheck": true
+  },
+  "files": [],
+  "include": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
+    }
+  ]
+}

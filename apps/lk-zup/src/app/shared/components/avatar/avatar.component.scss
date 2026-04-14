@@ -1,0 +1,63 @@
+.avatar-container {
+  position: relative;
+  width: fit-content;
+}
+
+.image-container,
+.user-avatar {
+  height: 200px;
+  width: 200px;
+  z-index: 1;
+  border-radius: 50%;
+  background-color: #fff;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+
+  &.avatar-placeholder {
+    background-image: url('../../../../assets/img/user-circle.png');
+  }
+}
+
+.user-avatar {
+  // Для img (эмулируем поведение CSS-правила background-size: cover)
+  // Важно: при задании размера аватарки путём передачи входных свойств width и height в компонент avatar соотношение
+  // сторон изображения должно всегда оставаться прежним, иначе могут возникать искажения!
+  object-fit: cover;
+}
+
+.icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  position: absolute;
+  top: 75%;
+  right: 0;
+  border-radius: 50%;
+  padding: 10px;
+  height: 40px;
+  width: 40px;
+  background-color: #3880ff;
+  cursor: pointer;
+
+  &:hover {
+    transition: all .25s;
+    background-color: #0962ff;
+  }
+
+  .icon {
+    color: white;
+  }
+
+  label {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  input[type='file'] {
+    display: none;
+  }
+}

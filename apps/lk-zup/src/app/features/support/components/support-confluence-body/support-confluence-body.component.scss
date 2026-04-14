@@ -1,0 +1,235 @@
+mat-card.mat-card:not([class*='mat-elevation-z']).support {
+  padding: 0;
+  margin-bottom: 0;
+
+  @media (max-width: 767px) {
+    padding-top: 1px;
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+
+  & h2 {
+    margin: 0;
+    padding: 25px 30px 19px;
+    font-family: inherit;
+    font-weight: 400;
+    font-size: 30px;
+    line-height: 40px;
+    color: #222428;
+
+    @media (max-width: 767px) {
+      padding: 15px 15px 20px;
+      font-size: 28px;
+      line-height: 36px;
+    }
+  }
+
+  & p {
+    margin-bottom: 15px;
+    font-size: 16px;
+    line-height: 22px;
+    color: #222428;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  & h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    line-height: 28px;
+    color: #222428;
+    font-weight: 400;
+    text-transform: none;
+  }
+
+  & button {
+    margin-top: 30px;
+    padding: 13px 36.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    @media (max-width: 767px) {
+      margin-top: 20px;
+      width: 100%;
+    }
+  }
+
+  & button.support__video-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+    padding: 0;
+    width: 48px;
+    height: 33px;
+    background-color: transparent;
+    border: none;
+    background-image: url('/../assets/img/svg/button-play.svg');
+    background-size: 48px 33px;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  & li {
+    font-size: 16px;
+    line-height: 22px;
+    color: #222428;
+    display: flex;
+    margin-bottom: 10px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  & ul {
+    margin: 0;
+    padding: 0;
+
+    & li {
+      &::before {
+        content: '';
+        position: relative;
+        left: 6px;
+        top: 7px;
+        display: block;
+        margin-right: 20px;
+        width: 8px;
+        height: 8px;
+        background-color: var(--primary);
+        border-radius: 50%;
+      }
+    }
+  }
+
+  & ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: item;
+
+    & li {
+      padding-left: 5px;
+
+      &::before {
+        counter-increment: item;
+        content: counters(item, '.') '.';
+        display: block;
+        margin-right: 12px;
+        font-size: 16px;
+        line-height: 22px;
+        color: var(--primary);
+      }
+    }
+  }
+
+  & img {
+    width: 100%;
+    height: 362px;
+    object-fit: cover;
+  }
+}
+
+.support__desc-wrap {
+  padding: 30px;
+  border-top: 1px solid #e4e6e9;
+
+  @media (max-width: 767px) {
+    padding: 20px 15px;
+  }
+}
+
+.support__desc {
+  margin-bottom: 30px;
+
+  @media (max-width: 767px) {
+    margin-bottom: 20px;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+article.support__article {
+  margin: 30px 0;
+  padding: 20px;
+  background-color: #f3f5f8;
+  border-radius: 5px;
+
+  @media (max-width: 767px) {
+    margin: 20px 0;
+  }
+
+  & h3 {
+    margin-bottom: 10px;
+  }
+
+  & a {
+    display: block;
+    margin-top: 15px;
+    font-size: 16px;
+    line-height: 22px;
+    color: var(--primary);
+    text-decoration: none;
+
+    @media (max-width: 767px) {
+      margin-top: 10px;
+    }
+  }
+}
+
+.support__video {
+  position: relative;
+  margin-top: 30px;
+  margin-bottom: 30px;
+  width: 100%;
+  height: 362px;
+  border-radius: 5px;
+
+  @media (max-width: 767px) {
+    height: auto;
+  }
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.support__menu-open {
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+    align-items: center;
+    margin: 15px 15px 0 !important;
+    padding: 9px;
+    font-size: 16px;
+    line-height: 22px;
+    color: var(--basic-color);
+    background: #f3f5f8;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+
+    & .mat-icon {
+      margin-right: 10px;
+    }
+  }
+}

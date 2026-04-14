@@ -1,0 +1,22 @@
+.status {
+  padding: 4px 8px;
+  border-radius: var(--status-badge-radius, 5px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 22px;
+  line-height: 14px;
+  font-size: 11px;
+  position: relative;
+  text-transform: uppercase;
+  width: max-content;
+
+  &__background {
+    position: absolute;
+    border-radius: var(--status-badge-radius, 5px);
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}

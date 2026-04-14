@@ -1,0 +1,886 @@
+$liquid-shadow:
+  2px 8px 20px 0px rgba(22, 28, 35, 0.35),
+  -10px -19px 25px 0px rgba(21, 25, 31, 0.5) inset,
+  10px 10px 10px 0px rgba(38, 42, 48, 0.25) inset,
+  4px 4px 4px 0px rgba(255, 255, 255, 0.05) inset,
+  0.5px 0.5px 0.5px 0px rgba(255, 255, 255, 0.15) inset,
+  -0.5px -1px 0.5px 0px rgba(255, 255, 255, 0.25) inset,
+  0.2px 0.2px 0.5px 0px rgba(255, 255, 255, 1) inset;
+
+@mixin liquid-card {
+  box-shadow: $liquid-shadow !important;
+  background: var(--card-background);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+body.app-theme-liquid-dark {
+  --main-padding-y: 28px;
+  --main-padding-x: 28px;
+
+  --bg-primary: rgba(21, 25, 31, 1);
+  --foreground-color: rgba(255, 255, 255, 0.9);
+  --foreground-color-secondary: rgba(152, 154, 162, 1);
+
+  --foreground-color-inverse: rgba(21, 25, 31, 1);
+
+  --button-hover: rgba(60, 60, 60, 1);
+
+  --bg-element: rgba(255, 255, 255, 0.05);
+
+  --danger-color: #ef5658;
+
+  --primary-color: rgba(255, 255, 255, 0.9);
+  --primary-foreground: rgba(21, 25, 31, 1);
+
+  --link-color: #fff;
+  --control-bg: rgba(255, 255, 255, 0.05);
+  --border-color: rgba(255, 255, 255, 0.1);
+
+  --control-shadow:
+    2px 8px 20px 0px rgba(22, 28, 35, 0.35),
+    -10px -19px 25px 0px rgba(21, 25, 31, 0.5) inset,
+    10px 10px 10px 0px rgba(38, 42, 48, 0.25) inset,
+    4px 4px 4px 0px rgba(255, 255, 255, 0.05) inset,
+    0.5px 0.5px 0.5px 0px rgba(255, 255, 255, 0.15) inset,
+    -0.5px -1px 0.5px 0px rgba(255, 255, 255, 0.25) inset,
+    0.2px 0.2px 0.5px 0px rgba(255, 255, 255, 1) inset;
+  --control-radius: 10px;
+  --control-backdrop-filter: blur(10px);
+  --control-active-bg: rgba(255, 255, 255, 0.1);
+  --control-hover-bg: rgba(255, 255, 255, 0.07);
+
+  --timesheet-title-color: rgba(255, 255, 255, 0.9);
+  --timesheet-card-border: 1px solid rgba(255, 255, 255, 0.14);
+  --timesheet-card-bg: rgba(255, 255, 255, 0.05);
+  --timesheet-card-overlay: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  --timesheet-sticky-bg: rgba(28, 34, 42, 0.92);
+  --timesheet-header-text: rgba(152, 154, 162, 1);
+  --timesheet-weekend-header-text: rgba(152, 154, 162, 0.55);
+  --timesheet-total-header-text: rgba(255, 255, 255, 0.45);
+  --timesheet-name-text: rgba(255, 255, 255, 0.9);
+  --timesheet-summary-text: rgba(152, 154, 162, 1);
+  --timesheet-cell-border: rgba(255, 255, 255, 0.14);
+  --timesheet-cell-bg: rgba(255, 255, 255, 0.06);
+  --timesheet-cell-empty-bg: rgba(255, 255, 255, 0.03);
+  --timesheet-cell-empty-border: rgba(255, 255, 255, 0.08);
+  --timesheet-cell-empty-text: rgba(255, 255, 255, 0.25);
+  --timesheet-cell-value-text: rgba(255, 255, 255, 0.72);
+  --timesheet-note-text: rgba(255, 166, 134, 1);
+  --timesheet-health-icon: rgba(255, 145, 184, 1);
+  --timesheet-vacation-icon: rgba(130, 184, 255, 1);
+  --timesheet-business-trip-icon: rgba(116, 198, 255, 1);
+  --timesheet-remote-icon: rgba(114, 223, 169, 1);
+  --timesheet-warning-bg: rgba(255, 212, 82, 0.14);
+  --timesheet-warning-border: rgba(255, 212, 82, 0.28);
+  --timesheet-warning-icon: rgba(255, 212, 82, 1);
+  --timesheet-current-row-bg: rgba(155, 191, 255, 0.12);
+  --timesheet-current-row-border: rgba(155, 191, 255, 0.82);
+  --timesheet-divider: rgba(255, 255, 255, 0.12);
+  --timesheet-badge-bg: rgba(255, 255, 255, 0.08);
+  --timesheet-badge-text: rgba(255, 255, 255, 0.72);
+
+  --docky-main-bg: transparent;
+  --docky-main-text: #fff;
+  --docky-main-icons-text: #fff;
+  --docky-header-bg: rgba(155, 191, 255, 0.5);
+  --docky-suggestions-bg: rgba(77, 91, 108, 1);
+  --docky-suggestions-border: none;
+  --docky-msg-in-bg: rgba(90, 109, 139, 1);
+  --docky-msg-out-bg: rgba(56, 128, 255, 1);
+  --docky-msg-btn-bg: rgba(61, 73, 91, 1);
+  --docky-msg-btn-shadow: 2px 3px 6px 0px rgba(0, 0, 0, 0.25);
+  --docky-input-bg: transparent;
+  --docky-input-border: 1px solid none;
+  --docky-input-shadow: var(--control-shadow);
+  --docky-examples-color: var(--primary);
+
+  --docky-mini-main-shadow: none;
+  --docky-mini-suggestions-border: none;
+  --docky-mini-suggestions-shadow: none;
+  --docky-mini-suggestions-bg: rgba(77, 91, 108, 1);
+  --docky-mini-input-border: 1px solid rgba(56, 128, 255, 0.2);
+  --docky-mini-msg-in-bg: rgba(90, 109, 139, 1);
+  --docky-mini-button-bg: rgba(77, 91, 108, 1);
+  --docky-mini-button-hover-bg: rgba(77, 91, 108, 0.8);
+  --docky-overlay-bg: rgba(34, 39, 45, 0.7);
+
+  --docky-widget-input-bg: transparent;
+  --docky-widget-input-border: none;
+  --docky-widget-input-shadow: none;
+  --docky-widget-main-text: rgba(37, 47, 63, 1);
+  --docky-widget-secondary-text: rgba(146, 151, 159, 1);
+  --docky-widget-input-radius: 10px;
+
+  /*
+  Sidebar
+  */
+  --sidebar-padding-y: 16px;
+  --sidebar-padding-x: 16px;
+  --sidebar-width: 280px;
+  --sidebar-width-collapsed: 70px;
+  --sidebar-header-height: 80px;
+  --sidebar-item-height: 48px;
+  --sidebar-submenu-item-height: 44px;
+
+  --sidebar-item-collapsed-shadow:
+    2px 8px 20px 0px rgba(22, 28, 35, 0.35),
+    4px 4px 4px 0px rgba(255, 255, 255, 0.05) inset,
+    0.5px 0.5px 0.5px 0px rgba(255, 255, 255, 0.15) inset,
+    -0.5px -1px 0.5px 0px rgba(255, 255, 255, 0.25) inset,
+    0.2px 0.2px 0.5px 0px rgba(255, 255, 255, 1) inset;
+  --sidebar-item-radius: var(--radius-md);
+  --sidebar-collapsed-item-radius: 50%;
+  --sidebar-item-gap: 12px;
+
+  --sidebar-radius: var(--radius-lg);
+  --sidebar-font-size: 14px;
+  --sidebar-font-weight: 500;
+  --sidebar-foreground: var(--foreground-color);
+  --sidebar-popover-header-bg: rgba(255, 255, 255, 0.9);
+  --sidebar-popover-header-text: rgba(21, 25, 31, 1);
+  // Фон
+  --sidebar-bg: none;
+  --sidebar-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+
+  --sidebar-mobile-bg: rgba(21, 25, 31, 1);
+
+  // Логотип
+  --sidebar-logo-blue: #007aff;
+  --sidebar-logo-red: #ff3b30;
+  --sidebar-brand-text: rgba(255, 255, 255, 0.9);
+  --sidebar-brand-subtitle: rgba(255, 255, 255, 0.6);
+
+  // Меню
+  --sidebar-menu-text: var(--foreground-color);
+  --sidebar-menu-icon: var(--forground-color);
+  --sidebar-menu-hover-bg: var(--foreground-color);
+  --sidebar-menu-hover-text: var(--foreground-color-inverse);
+  --sidebar-menu-active-bg: var(--foreground-color);
+  --sidebar-menu-active-text: var(--foreground-color-inverse);
+  --sidebar-menu-active-icon: var(--foreground-color-inverse);
+
+  // Подменю
+  --sidebar-submenu-bg: rgba(20, 20, 22, 0.9);
+  --sidebar-submenu-text: rgba(255, 255, 255, 0.7);
+  --sidebar-submenu-hover-bg: rgba(255, 255, 255, 0.08);
+  --sidebar-submenu-active-bg: rgba(69, 82, 99, 0.5);
+  --sidebar-submenu-active-text: rgba(255, 255, 255, 0.9);
+
+  // Кнопки
+  --sidebar-toggle-bg: #2a3036;
+  --sidebar-toggle-hover-bg: rgba(60, 60, 67, 1);
+  --sidebar-toggle-text: rgba(255, 255, 255, 0.6);
+
+  // Попапы
+  --sidebar-popover-bg: var(--bg-element);
+  //--sidebar-popover-border: 1px solid var(--bg-primary);
+  --sidebar-popover-shadow: var(--control-shadow);
+  --sidebar-popover-radius: var(--radius-lg);
+  --sidebar-popover-backdrop-filter: blur(10px);
+
+  --bottom-nav-bg: var(--bg-element);
+  --bottom-nav-filter: blur(10px);
+  --bottom-nav-shadow: var(--control-shadow);
+  --bottom-nav-margin: 13px;
+
+  // Анимации
+  --sidebar-transition-duration: 0.4s;
+  --sidebar-transition-easing: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --sidebar-submenu-line-color: rgba(255, 255, 255, 0.2);
+
+  --sidebar-badge-bg: var(--foreground-color);
+  --sidebar-badge-text: var(--foreground-color-inverse);
+  --sidebar-badge-active-bg: var(--bg-primary);
+  --sidebar-badge-active-text: var(--foreground-color);
+  --sidebar-drawer-bg: rgba(21, 25, 31, 0.7);
+
+  --menu-button-bg: rgba(21, 25, 31, 1);
+  --menu-button-radius: 10px;
+  --menu-button-shadow:
+    0.2px 0.2px 0.5px 0 #fff inset,
+    -0.5px -1px 0.5px 0 rgba(255, 255, 255, 0.25) inset,
+    0.5px 0.5px 0.5px 0 rgba(255, 255, 255, 0.15) inset,
+    4px 4px 4px 0 rgba(255, 255, 255, 0.05) inset,
+    10px 10px 10px 0 rgba(38, 42, 48, 0.25) inset,
+    -10px -19px 25px 0 rgba(21, 25, 31, 0.5) inset,
+    2px 8px 20px 0 rgba(22, 28, 35, 0.35);
+  --sidebar-menu-color: rgba(255, 255, 255, 0.9);
+
+  --app-logo-title-color: #fff;
+  --app-logo-subtitle-color: #afb9c7;
+
+  /*
+  Calendar Graph
+  */
+
+  --calendar-graph-cell-bg: rgba(255, 255, 255, 0.1);
+  --calendar-graph-cell-border: 1px solid rgba(37, 47, 63, 0);
+  --calendar-graph-header-text: var(--foreground-color-secondary);
+  --calendar-graph-month-sticky-background: transparent;
+
+  /* Calendar */
+  --calendar-selected-bg: rgba(255, 255, 255, 1);
+  --calendar-selected-text: var(--foreground-color-inverse);
+  --calendar-range-bg: #bcd7fa;
+  --calendar-range-text: var(--foreground-color);
+  --calendar-outlined-border: 1px solid rgba(255, 255, 255, 0.2);
+  --calendar-outlined-border-hover: rgba(255, 255, 255, 0.3);
+  --calendar-offdays-color: #989aa2;
+  --calendar-holiday-color: #ed4346;
+  --calendar-dayoff-color: #989aa2;
+  --calendar-workday-color: #fff;
+  --calendar-ring-color: #fff;
+  --calendar-item-radius: 10px;
+
+  /*
+  Select Button
+  */
+
+  /* Select Button */
+
+  --select-button-bg: rgba(255, 255, 255, 0.1);
+  --select-button-text: rgba(255, 255, 255, 0.9);
+  --select-button-border: transparent;
+  --select-button-shadow: 2px 8px 20px 0px rgba(22, 28, 35, 0.35);
+  --select-button-inner-shadow:
+    0.2px 0.2px 0.5px 0px inset rgba(255, 255, 255, 1),
+    -0.5px -1px 0.5px 0px inset rgba(255, 255, 255, 0.25),
+    0.5px 0.5px 0.5px 0px inset rgba(255, 255, 255, 0.15),
+    4px 4px 4px 0px inset rgba(255, 255, 255, 0.05),
+    10px 10px 10px 0px inset rgba(38, 42, 48, 0.25),
+    -10px -19px 25px 0px inset rgba(21, 25, 31, 0.5);
+  --select-button-padding: 0px;
+
+  --select-button-option-bg: transparent;
+  --select-button-option-bg-hover: rgba(255, 255, 255, 0.06);
+  --select-button-option-bg-active: rgba(255, 255, 255, 0.15);
+  --select-button-option-text: rgba(255, 255, 255, 0.7);
+  --select-button-option-text-active: rgba(255, 255, 255, 1);
+  --select-button-option-border-active: transparent;
+  --select-button-option-shadow-active: none;
+  --select-button-option-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Button */
+
+  /* Primary кнопки */
+  --button-primary-bg: rgba(255, 255, 255, 1);
+  --button-primary-text: rgba(26, 46, 53, 1);
+  --button-primary-border: transparent;
+  --button-primary-shadow: 2px 8px 4px 0px rgba(22, 28, 35, 0.35);
+
+  --button-primary-hover-bg: rgba(255, 255, 255, 0.9);
+  --button-primary-hover-text: var(--button-primary-text);
+  --button-primary-hover-border: transparent;
+  --button-primary-hover-shadow: var(--button-primary-shadow);
+
+  --button-primary-active-bg: var(--button-primary-hover-bg);
+  --button-primary-active-text: var(--button-primary-text);
+
+  /* Secondary кнопки */
+  --button-secondary-bg: var(--bg-element);
+  --button-secondary-text: rgba(255, 255, 255, 0.9);
+  --button-secondary-border: rgba(255, 255, 255, 0.12);
+  --button-secondary-shadow: var(--control-shadow);
+
+  --button-secondary-hover-bg: rgba(255, 255, 255, 0.12);
+  --button-secondary-hover-text: rgba(255, 255, 255, 1);
+  --button-secondary-hover-border: rgba(255, 255, 255, 0.2);
+  --button-secondary-hover-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+
+  --button-secondary-active-bg: rgba(255, 255, 255, 0.16);
+  --button-secondary-active-text: rgba(255, 255, 255, 1);
+  --button-secondary-active-border: rgba(255, 255, 255, 0.24);
+  --button-secondary-active-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+
+  --button-secondary-disabled-bg: rgba(255, 255, 255, 0.04);
+  --button-secondary-disabled-text: rgba(255, 255, 255, 0.4);
+  --button-secondary-disabled-border: rgba(255, 255, 255, 0.06);
+  --button-secondary-disabled-shadow: none;
+
+  /* Success кнопки */
+  --button-success-bg: #34c759;
+  --button-success-text: rgba(255, 255, 255, 1);
+  --button-success-border: transparent;
+  --button-success-shadow: 0 4px 16px rgba(52, 199, 89, 0.3);
+
+  --button-success-hover-bg: #28a745;
+  --button-success-hover-text: rgba(255, 255, 255, 1);
+  --button-success-hover-border: transparent;
+  --button-success-hover-shadow: 0 6px 20px rgba(52, 199, 89, 0.4);
+
+  --button-success-active-bg: #1e7e34;
+  --button-success-active-text: rgba(255, 255, 255, 1);
+  --button-success-active-border: transparent;
+  --button-success-active-shadow: 0 2px 8px rgba(52, 199, 89, 0.4);
+
+  --button-success-disabled-bg: rgba(52, 199, 89, 0.3);
+  --button-success-disabled-text: rgba(255, 255, 255, 0.6);
+  --button-success-disabled-border: transparent;
+  --button-success-disabled-shadow: none;
+
+  /* Danger кнопки */
+  --button-danger-bg: #ff3b30;
+  --button-danger-text: rgba(255, 255, 255, 1);
+  --button-danger-border: transparent;
+  --button-danger-shadow: 0 4px 16px rgba(255, 59, 48, 0.3);
+
+  --button-danger-hover-bg: #dc3545;
+  --button-danger-hover-text: rgba(255, 255, 255, 1);
+  --button-danger-hover-border: transparent;
+  --button-danger-hover-shadow: 0 6px 20px rgba(255, 59, 48, 0.4);
+
+  --button-danger-active-bg: #bd2130;
+  --button-danger-active-text: rgba(255, 255, 255, 1);
+  --button-danger-active-border: transparent;
+  --button-danger-active-shadow: 0 2px 8px rgba(255, 59, 48, 0.4);
+
+  --button-danger-disabled-bg: rgba(255, 59, 48, 0.3);
+  --button-danger-disabled-text: rgba(255, 255, 255, 0.6);
+  --button-danger-disabled-border: transparent;
+  --button-danger-disabled-shadow: none;
+
+  /* Warning кнопки */
+  --button-warning-bg: #ff9500;
+  --button-warning-text: rgba(255, 255, 255, 1);
+  --button-warning-border: transparent;
+  --button-warning-shadow: 0 4px 16px rgba(255, 149, 0, 0.3);
+
+  --button-warning-hover-bg: #e68900;
+  --button-warning-hover-text: rgba(255, 255, 255, 1);
+  --button-warning-hover-border: transparent;
+  --button-warning-hover-shadow: 0 6px 20px rgba(255, 149, 0, 0.4);
+
+  --button-warning-active-bg: #cc7700;
+  --button-warning-active-text: rgba(255, 255, 255, 1);
+  --button-warning-active-border: transparent;
+  --button-warning-active-shadow: 0 2px 8px rgba(255, 149, 0, 0.4);
+
+  --button-warning-disabled-bg: rgba(255, 149, 0, 0.3);
+  --button-warning-disabled-text: rgba(255, 255, 255, 0.6);
+  --button-warning-disabled-border: transparent;
+  --button-warning-disabled-shadow: none;
+
+  /* Info кнопки */
+  --button-info-bg: #5ac8fa;
+  --button-info-text: rgba(255, 255, 255, 1);
+  --button-info-border: transparent;
+  --button-info-shadow: 0 4px 16px rgba(90, 200, 250, 0.3);
+
+  --button-info-hover-bg: #17a2b8;
+  --button-info-hover-text: rgba(255, 255, 255, 1);
+  --button-info-hover-border: transparent;
+  --button-info-hover-shadow: 0 6px 20px rgba(90, 200, 250, 0.4);
+
+  --button-info-active-bg: #138496;
+  --button-info-active-text: rgba(255, 255, 255, 1);
+  --button-info-active-border: transparent;
+  --button-info-active-shadow: 0 2px 8px rgba(90, 200, 250, 0.4);
+
+  --button-info-disabled-bg: rgba(90, 200, 250, 0.3);
+  --button-info-disabled-text: rgba(255, 255, 255, 0.6);
+  --button-info-disabled-border: transparent;
+  --button-info-disabled-shadow: none;
+
+  /* Outlined вариант для всех типов */
+  --button-primary-outlined-bg: transparent;
+  --button-primary-outlined-text: #007aff;
+  --button-primary-outlined-border: #007aff;
+  --button-primary-outlined-shadow: none;
+
+  --button-primary-outlined-hover-bg: rgba(0, 122, 255, 0.1);
+  --button-primary-outlined-hover-text: #0056b3;
+  --button-primary-outlined-hover-border: #0056b3;
+  --button-primary-outlined-hover-shadow: 0 4px 16px rgba(0, 122, 255, 0.2);
+
+  --button-secondary-outlined-bg: transparent;
+  --button-secondary-outlined-text: rgba(255, 255, 255, 0.9);
+  --button-secondary-outlined-border: rgba(255, 255, 255, 0.3);
+  --button-secondary-outlined-shadow: none;
+
+  --button-secondary-outlined-hover-bg: rgba(255, 255, 255, 0.08);
+  --button-secondary-outlined-hover-text: rgba(255, 255, 255, 1);
+  --button-secondary-outlined-hover-border: rgba(255, 255, 255, 0.4);
+  --button-secondary-outlined-hover-shadow: 0 4px 16px rgba(255, 255, 255, 0.1);
+
+  --button-success-outlined-bg: transparent;
+  --button-success-outlined-text: #34c759;
+  --button-success-outlined-border: #34c759;
+  --button-success-outlined-shadow: none;
+
+  --button-success-outlined-hover-bg: rgba(52, 199, 89, 0.1);
+  --button-success-outlined-hover-text: #28a745;
+  --button-success-outlined-hover-border: #28a745;
+  --button-success-outlined-hover-shadow: 0 4px 16px rgba(52, 199, 89, 0.2);
+
+  --button-danger-outlined-bg: transparent;
+  --button-danger-outlined-text: #ff3b30;
+  --button-danger-outlined-border: #ff3b30;
+  --button-danger-outlined-shadow: none;
+
+  --button-danger-outlined-hover-bg: rgba(255, 59, 48, 0.1);
+  --button-danger-outlined-hover-text: #dc3545;
+  --button-danger-outlined-hover-border: #dc3545;
+  --button-danger-outlined-hover-shadow: 0 4px 16px rgba(255, 59, 48, 0.2);
+
+  --button-warning-outlined-bg: transparent;
+  --button-warning-outlined-text: #ff9500;
+  --button-warning-outlined-border: #ff9500;
+  --button-warning-outlined-shadow: none;
+
+  --button-warning-outlined-hover-bg: rgba(255, 149, 0, 0.1);
+  --button-warning-outlined-hover-text: #e68900;
+  --button-warning-outlined-hover-border: #e68900;
+  --button-warning-outlined-hover-shadow: 0 4px 16px rgba(255, 149, 0, 0.2);
+
+  --button-info-outlined-bg: transparent;
+  --button-info-outlined-text: #5ac8fa;
+  --button-info-outlined-border: #5ac8fa;
+  --button-info-outlined-shadow: none;
+
+  --button-info-outlined-hover-bg: rgba(90, 200, 250, 0.1);
+  --button-info-outlined-hover-text: #17a2b8;
+  --button-info-outlined-hover-border: #17a2b8;
+  --button-info-outlined-hover-shadow: 0 4px 16px rgba(90, 200, 250, 0.2);
+
+  --toast-icon-background-info: rgba(255, 255, 255, 0.9);
+
+  /* Prime ng variables */
+  --border-radius: 10px;
+  --card-background: rgba(255, 255, 255, 0.02);
+  --card-shadow: none;
+  --text-color: var(--foreground-color);
+  --basic-color: var(--foreground-color);
+
+  --hover: rgba(255, 255, 255, 0.07);
+  --dialog-background: rgba(255, 255, 255, 0.1);
+
+  --liquid-shadow:
+    2px 8px 20px 0px rgba(22, 28, 35, 0.35),
+    -10px -19px 25px 0px rgba(21, 25, 31, 0.5) inset,
+    10px 10px 10px 0px rgba(38, 42, 48, 0.25) inset,
+    4px 4px 4px 0px rgba(255, 255, 255, 0.05) inset,
+    0.5px 0.5px 0.5px 0px rgba(255, 255, 255, 0.15) inset,
+    -0.5px -1px 0.5px 0px rgba(255, 255, 255, 0.25) inset,
+    0.2px 0.2px 0.5px 0px rgba(255, 255, 255, 1) inset;
+
+  --onapproval: rgba(103, 79, 43, 0.5);
+
+  --status-badge-radius: 10px;
+
+  @media (max-width: 767px) {
+    --docky-widget-input-radius: 10px;
+  }
+
+  & {
+    color: var(--foreground-color);
+  }
+
+  .main-layout {
+    background: none;
+    background-image: url('../../assets/img/liquid/bg.svg');
+    background-size: cover;
+    background-color: var(--bg-primary);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: var(--foreground-color);
+  }
+
+  .sidebar.sidebar--expanded {
+    box-shadow: $liquid-shadow;
+    border-radius: var(--radius-lg);
+  }
+
+  .app-page-container {
+    padding-top: 20px;
+  }
+
+  .app-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+  }
+
+  lucide-icon {
+    display: inline-flex;
+  }
+
+  label.p-checkbox-label {
+    user-select: none;
+  }
+
+  .secondary {
+    color: var(--foreground-color-secondary);
+  }
+
+  .docky-chat-panel {
+    backdrop-filter: blur(32px);
+    box-shadow: $liquid-shadow;
+  }
+
+  .main-notifications-overlay {
+    backdrop-filter: blur(20px);
+  }
+
+  .dashboard-btn-action {
+    &--primary {
+      background-color: rgba(243, 245, 248, 0.1);
+      color: var(--button-primary-bg);
+      border-color: transparent;
+
+      &:hover:not(:disabled) {
+        background-color: rgba(243, 245, 248, 0.2);
+      }
+    }
+
+    &--secondary {
+      background-color: transparent;
+      color: var(--button-primary-bg);
+      border-color: transparent;
+    }
+  }
+
+  .dashboard-container .p-toolbar .p-element.p-button.title-button {
+    background: rgba(243, 245, 248, 0.1);
+    color: var(--foreground-color);
+  }
+
+  @media (max-width: 768px) {
+    .main-notifications-overlay {
+      width: 100vw;
+      left: 0 !important;
+      border-radius: 0;
+      box-shadow: none;
+      overflow: hidden;
+      padding-bottom: 80px;
+    }
+  }
+
+  // .p-card {
+  //   border: 1.06px solid rgba(37, 47, 63, 1);
+  // }
+
+  // background-image: url('../../assets/img/liquid/bg.svg');
+  // background-size: cover;
+
+  // .p-card {
+  //   border: none;
+  //   position: relative;
+  //   overflow: hidden;
+
+  //   border-radius: var(--radius-lg);
+  //   box-shadow:
+  //     0 4px 30px rgba(0, 0, 0, 0.1),
+  //     0 4px 30px rgba(0, 0, 0, 0.1);
+  //   border: 1px solid rgba(255, 255, 255, 0.27);
+  // }
+
+  .card-nglike {
+    @include liquid-card;
+    color: var(--foreground-color);
+  }
+  .p-card {
+    @include liquid-card;
+    color: var(--foreground-color);
+  }
+
+  .p-button {
+    border: none;
+    box-shadow: none;
+    border-radius: var(--control-radius);
+  }
+
+  .p-splitbutton.p-component.p-button-outlined {
+    .p-splitbutton-defaultbutton {
+      border: 1px solid var(--foreground-color);
+      border-radius: var(--control-radius) 0 0 var(--control-radius);
+      color: var(--foreground-color);
+    }
+
+    .p-splitbutton-menubutton {
+      border: 1px solid var(--foreground-color);
+      border-radius: 0 var(--control-radius) var(--control-radius) 0;
+      color: var(--foreground-color);
+    }
+  }
+
+  .p-tooltip.p-component {
+    box-shadow: none;
+    border: none;
+
+    .p-tooltip-text {
+      padding: 8px 12px;
+      background: var(--foreground-color);
+      border-radius: var(--control-radius);
+      color: var(--bg-primary);
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+
+  .p-tooltip.p-tooltip-right .p-tooltip-arrow {
+    border-right-color: var(--foreground-color);
+  }
+
+  .p-tooltip.p-tooltip-left .p-tooltip-arrow {
+    border-left-color: var(--foreground-color);
+  }
+
+  .p-tooltip.p-tooltip-top .p-tooltip-arrow {
+    border-top-color: var(--foreground-color);
+  }
+
+  .p-tooltip.p-tooltip-bottom .p-tooltip-arrow {
+    border-bottom-color: var(--foreground-color);
+  }
+
+  .p-component-overlay.p-component-overlay-enter.p-dialog-mask-scrollblocker {
+    background: rgba(21, 25, 31, 0.8);
+    backdrop-filter: blur(25px);
+  }
+
+  .p-dialog {
+    box-shadow: $liquid-shadow;
+
+    backdrop-filter: blur(20px);
+    border-radius: var(--control-radius);
+    background: rgba(255, 255, 255, 0.1);
+
+    .p-dialog-content {
+      background: none;
+      color: var(--foreground-color);
+      padding: 0px;
+    }
+
+    .p-dialog-header .p-dialog-title {
+      color: var(--foreground-color);
+      font-weight: 400;
+    }
+    .p-dialog-header .p-dialog-header-icon {
+      color: var(--foreground-color);
+    }
+    .p-dialog-header .p-dialog-header-icon {
+      color: var(--foreground-color);
+      background: rgba(243, 245, 248, 0.05);
+      border-radius: var(--control-radius);
+      width: 40px;
+      height: 40px;
+    }
+  }
+
+  .p-overlaypanel {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: $liquid-shadow;
+    backdrop-filter: blur(20px);
+    color: var(--foreground-color);
+    border-radius: var(--control-radius);
+
+    &:after,
+    &:before {
+      display: none;
+    }
+  }
+  .p-checkbox .p-checkbox-box {
+    background: transparent;
+  }
+
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 1px var(--foreground-color);
+    border-color: var(--foreground-color);
+  }
+  .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: var(--foreground-color);
+    background: var(--foreground-color);
+  }
+  .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
+    border-color: var(--foreground-color);
+    background: var(--foreground-color);
+    color: var(--bg-primary);
+    .p-checkbox-icon {
+      color: var(--bg-primary);
+    }
+  }
+  .p-checkbox .p-checkbox-box .p-checkbox-icon {
+    color: var(--bg-primary);
+  }
+  .p-multiselect,
+  .p-inputwrapper,
+  .p-inputtext {
+    background: transparent;
+    color: var(--foreground-color);
+    border-radius: var(--control-radius);
+  }
+
+  .p-multiselect {
+    .p-multiselect-label {
+      color: var(--foreground-color);
+    }
+    .p-multiselect-trigger {
+      color: var(--foreground-color);
+    }
+  }
+
+  .p-multiselect-panel
+    .p-multiselect-items
+    .p-multiselect-item:not(.p-highlight):not(.p-disabled):hover {
+    color: var(--foreground-color);
+    background: var(--bg-element);
+  }
+
+  .p-inputtext:enabled:focus {
+    box-shadow: none;
+    border-color: var(--foreground-color);
+  }
+
+  .p-tabview .p-tabview-nav {
+    background: none;
+
+    li {
+      .p-tabview-nav-link {
+        color: var(--foreground-color-secondary);
+      }
+
+      &.p-highlight .p-tabview-nav-link {
+        color: var(--foreground-color);
+      }
+
+      &:not(.p-highlight):not(.p-disabled):hover .p-tabview-nav-link {
+        color: var(--foreground-color);
+      }
+    }
+  }
+
+  .tabs {
+    display: flex;
+    flex-direction: row;
+
+    .tab,
+    .tab-item {
+      cursor: pointer;
+      padding: 15px 20px;
+      color: var(--foreground-color-secondary);
+      border-style: solid;
+      border-color: var(--bg-element);
+      border-width: 0 0 2px 0;
+      text-decoration: none;
+      @media (max-width: $m-max-width) {
+        padding: 20px 35px;
+      }
+      @media (max-width: $s-max-width) {
+        padding: 20px 8px;
+        font-size: 15px;
+      }
+
+      .counter {
+        padding: 2px 8px;
+        font-size: 12px;
+        border-radius: 20px;
+        background-color: var(--foreground-color);
+        color: var(--foreground-color-inverse);
+      }
+    }
+
+    .active {
+      color: var(--foreground-color);
+      border-color: var(--foreground-color);
+    }
+  }
+  ::-webkit-input-placeholder {
+    color: var(--foreground-color-secondary);
+  }
+  :-moz-placeholder {
+    color: var(--foreground-color-secondary);
+  }
+  ::-moz-placeholder {
+    color: var(--foreground-color-secondary);
+  }
+  :-ms-input-placeholder {
+    color: var(--foreground-color-secondary);
+  }
+
+  .p-input-icon-left > i:first-of-type {
+    left: 0.75rem;
+    color: var(--foreground-color-secondary);
+  }
+
+  .p-input-icon-right > i:last-of-type {
+    right: 0.75rem;
+    color: var(--foreground-color-secondary);
+  }
+
+  .p-input-icon-right > .p-inputtext {
+    padding-right: 2.5rem;
+  }
+
+  .tabs-controls-panel .filters .filters-dialog {
+    box-shadow: $liquid-shadow;
+
+    backdrop-filter: blur(20px);
+    border-radius: var(--control-radius);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .p-button.p-button-outlined {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 1px solid;
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      border-color 0.2s ease;
+
+    &:enabled {
+      &:active {
+        background: var(--primary-color);
+        color: var(--foreground-color-inverse);
+        border-color: var(--primary-color);
+      }
+      &:hover {
+        background: var(--primary-color);
+        color: var(--foreground-color-inverse);
+        border-color: var(--primary-color);
+      }
+    }
+    &:focus {
+      box-shadow: 0 0 0 1px var(--primary-color);
+    }
+  }
+
+  .p-calendar.p-calendar-w-btn {
+    .p-datepicker-trigger.p-button {
+      position: absolute;
+      right: 0px;
+      background: transparent !important;
+      color: var(--foreground-color) !important;
+      border: none !important;
+    }
+  }
+
+  .p-datepicker {
+    border: none;
+    box-shadow: $liquid-shadow;
+    background: var(--control-bg) !important;
+    backdrop-filter: blur(20px);
+    .p-datepicker-header {
+      background: transparent !important;
+    }
+  }
+}

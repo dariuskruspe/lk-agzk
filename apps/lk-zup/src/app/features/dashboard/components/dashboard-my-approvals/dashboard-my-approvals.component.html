@@ -1,0 +1,95 @@
+<!-- Виджет "Мои согласования" (или что мы там напишем...) -->
+<!-- (перенесено из dashboard-files.component.html в отдельный виджет) -->
+@if (isEnabledIssues) {
+  <div class="work-issues-container">
+    <div *ngIf="!issueDataList?.count; else issuesTable">
+      <p-toolbar>
+        <h2>
+          {{ 'DOCUMENTS_AGREE' | translate }}
+        </h2>
+      </p-toolbar>
+
+      <p-card *skeleton="issueDataList; else skeleton; repeat: 3">
+        <div class="empty-files">
+          <div class="left-side">
+            <div class="empty-text">
+              {{ 'ALL_DOCUMENTS_AGREED' | translate }}
+            </div>
+            <div class="all-issues-btn">
+              <button
+                pButton
+                label="{{ 'BUTTON_OPEN_ALL' | translate }}"
+                class="p-button-outlined s"
+                [routerLink]="['', 'issues-management']"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: false }"
+              ></button>
+            </div>
+          </div>
+          <div class="right-side">
+            <img
+              [src]="
+                isDarkTheme()
+                  ? 'assets/img/svg/all-docs-signed-dark.svg'
+                  : 'assets/img/svg/all-docs-signed.svg'
+              "
+              alt="empty-issues"
+              [class]="
+                documentDataList?.documents.length === 3
+                  ? 'third'
+                  : documentDataList?.documents.length === 2
+                    ? 'second'
+                    : 'first'
+              "
+            />
+          </div>
+        </div>
+      </p-card>
+    </div>
+    <ng-template #issuesTable>
+      <div>
+        <!-- <div class="counter-container"> -->
+        <p-toolbar>
+          <h2 class="mr-10">
+            {{ 'DOCUMENTS_AGREE' | translate }}
+          </h2>
+          <p-badge
+            [value]="issueDataList.count.toString()"
+            styleClass="mr-2"
+            severity="danger"
+            class="small"
+          ></p-badge>
+        </p-toolbar>
+        <!-- </div> -->
+
+        <loadable-list-container
+          [template]="issueLayout"
+          [dataConfig]="issuesConfig"
+          [dataList]="issueDataList"
+          [otherData]="{
+            states: issueStateList,
+          }"
+          [pagination]="false"
+          (clickItem)="clickIssue($event)"
+        ></loadable-list-container>
+        <div class="button-card">
+          <button
+            pButton
+            class="issues-link p-button-outlined s"
+            label="{{ 'BUTTON_OPEN_ALL' | translate }}"
+            [routerLink]="['', 'issues-management']"
+          ></button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+}
+
+<ng-template #skeleton>
+  <div class="skeleton-list-item">
+    <div class="skeleton-list-item__el">
+      <p-skeleton height="36px" width="36px" borderRadius="50%"></p-skeleton>
+    </div>
+    <p-skeleton height="25px" width="250px"></p-skeleton>
+  </div>
+</ng-template>

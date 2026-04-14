@@ -1,0 +1,16 @@
+<div class="container-fluid">
+  <div class="row">
+    <app-support-confluence-body
+      class="p-0"
+      (menuEvent)="openMenu()"
+      [menu]="menu"
+      [ngClass]="menu ? 'col-md-8' : 'col-12'"
+    ></app-support-confluence-body>
+
+    <app-support-confluence-menu
+      class="col-md-4 p-0"
+      (menuEvent)="closeMenu()"
+      [menuOpened]="menuOpened"
+    ></app-support-confluence-menu>
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<p
+  *ngFor="let version of Object.keys(changeLogFile)"
+  (click)="getVersion(version)"
+>
+  {{ version }}
+</p>

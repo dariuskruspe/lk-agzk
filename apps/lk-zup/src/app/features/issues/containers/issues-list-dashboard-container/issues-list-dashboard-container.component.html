@@ -1,0 +1,22 @@
+<app-issues-list-dashboard
+  [issuesList]="
+    myIssuesListFacade.getData() || (myIssuesListFacade.getData$() | async)
+  "
+  [issueTypesList]="
+    issuesTypeListFacade.getData() || (issuesTypeListFacade.getData$() | async)
+  "
+  [issuesOtherEmployeeList]="
+    issuesOtherEmployeeListFacade.getData() ||
+    (issuesOtherEmployeeListFacade.getData$() | async)
+  "
+  [issuesStatusList]="issuesStatusListFacade.forcedData$ | async"
+  [loading]="myIssuesListFacade.loading$() | async"
+  [loadingOtherEmployeeIssues]="
+    issuesOtherEmployeeListFacade.loading$() | async
+  "
+  [scrollPosition]="scrollPositionFacade.getData()?.position"
+  (loadList)="getList($event)"
+  (loadOtherEmployeeList)="getOtherEmployeeList($event)"
+  (goDetails)="onIssueDetails($event)"
+  (saveScrollPosition)="saveScrollPosition($event)"
+></app-issues-list-dashboard>

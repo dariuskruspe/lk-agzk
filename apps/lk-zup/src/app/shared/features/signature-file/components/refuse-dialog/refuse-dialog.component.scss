@@ -1,0 +1,14 @@
+.validation-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__description {
+    margin-bottom: 10px;
+
+    &_comment {
+      width: 100%;
+      max-height: 200px;
+    }
+  }
+}

@@ -1,0 +1,142 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+.docky-chat-input {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  background: var(--docky-input-bg, #f5f7fa);
+  border: var(--docky-input-border, 1px solid transparent);
+  box-shadow: var(--docky-input-shadow, none);
+  border-radius: 16px;
+  padding: 4px 4px 4px 16px;
+  min-height: 48px;
+
+  &:focus-within {
+    box-shadow: var(--docky-input-shadow-focus, none);
+    border: 1px solid var(--primary);
+  }
+
+  textarea {
+    flex: 1;
+    border: none;
+    background: transparent;
+    outline: none;
+    font-size: 14px;
+    line-height: 20px;
+    color: var(--docky-main-text, #252f3f);
+    min-height: 20px;
+    max-height: 120px;
+    padding: 10px 0;
+    resize: none;
+    overflow-y: auto;
+    -webkit-appearance: none;
+
+    &::placeholder {
+      color: var(--foreground-color-secondary, #92979f);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    cursor: text;
+  }
+
+  &__send {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    border: none;
+    border-radius: 50%;
+    background: var(--docky-send-button-bg, #3b82f6);
+    color: var(--docky-send-button-text, #fff);
+    cursor: pointer;
+    transition: background 150ms ease;
+    align-self: center;
+    touch-action: manipulation;
+
+    &:hover {
+      background: var(--button-info-hover-bg, #2563eb);
+    }
+
+    &--stop {
+      background: var(--button-danger-bg, #ef4444);
+
+      &:hover {
+        background: var(--button-danger-hover-bg, #dc2626);
+      }
+    }
+
+    lucide-icon {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &--multiline {
+    flex-wrap: wrap;
+    align-items: stretch;
+
+    textarea {
+      flex-basis: 100%;
+    }
+
+    .docky-chat-input__submit {
+      margin-left: auto;
+    }
+  }
+}
+
+.docky-chat-input-hint {
+  margin-top: 4px;
+  padding-left: 6px;
+  font-size: 11px;
+  line-height: 14px;
+  color: var(--foreground-color-secondary, #92979f);
+  text-align: left;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .docky-chat-input {
+    padding: 6px 6px 6px 14px;
+
+    textarea {
+      font-size: 16px;
+      line-height: 22px;
+      max-height: 140px;
+      padding: 9px 0;
+    }
+
+    &__submit {
+      width: 44px;
+      height: 44px;
+      min-width: 44px;
+    }
+
+    &__send {
+      width: 40px;
+      height: 40px;
+      min-width: 40px;
+    }
+  }
+
+  .docky-chat-input-hint {
+    font-size: 12px;
+  }
+}

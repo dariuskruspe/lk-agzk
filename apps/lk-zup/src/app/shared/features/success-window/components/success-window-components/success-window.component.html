@@ -1,0 +1,16 @@
+<div>
+  <h2>
+    {{ 'TITLE_SUCCESS_ISSUE' | translate }}
+  </h2>
+  <p>
+    {{ 'SUCCESS_ISSUE' | translate }}
+
+    {{ 'NUMBER' | translate }}{{ responseData?.number }} ({{
+      responseData?.header
+    }})
+
+    {{ 'SUCCESS_FORMED' | translate }}.
+    <br />
+    {{ 'SUCCESS_ISSUE_STATUS' | translate }}.
+  </p>
+</div>

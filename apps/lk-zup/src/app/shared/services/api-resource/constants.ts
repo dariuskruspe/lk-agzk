@@ -1,0 +1,9 @@
+export const TTL_1_MINUTE = 60 * 1000;
+export const TTL_10_MINUTES = 10 * 60 * 1000;
+export const TTL_20_MINUTES = 2 * 60 * 1000;
+export const TTL_30_MINUTES = 30 * 60 * 1000;
+export const TTL_1_HOUR = 60 * 60 * 1000;
+export const TTL_1_DAY = 24 * 60 * 60 * 1000;
+export const TTL_1_WEEK = 7 * 24 * 60 * 60 * 1000;
+export const TTL_1_MONTH = 30 * 24 * 60 * 60 * 1000;
+export const TTL_1_YEAR = 365 * 24 * 60 * 60 * 1000;

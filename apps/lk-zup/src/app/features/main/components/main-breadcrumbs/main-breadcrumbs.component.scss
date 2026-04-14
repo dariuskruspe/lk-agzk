@@ -1,0 +1,120 @@
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  color: var(--foreground-color, #1f2937);
+  font-size: 0.875rem;
+  line-height: 1.4;
+
+  &__list {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 0;
+  }
+
+  &__item {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+
+    &:not(:last-child) {
+      margin-right: 0.75rem;
+
+      &::after {
+        content: '/';
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        margin-left: 0.75rem;
+        color: rgba(107, 114, 128, 1);
+        font-size: 0.75rem;
+        line-height: 1;
+      }
+    }
+  }
+
+  &__link {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0.25rem 0.5rem;
+    border-radius: calc(var(--radius, 10px) / 1.5);
+    font: inherit;
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    cursor: pointer;
+    max-width: 16rem;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    transition: background-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: var(--button-hover, rgba(243, 245, 248, 1));
+      color: var(--foreground-color, #1f2937);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.35);
+      background-color: var(--button-hover, rgba(243, 245, 248, 1));
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: rgba(107, 114, 128, 1);
+      background: transparent;
+      box-shadow: none;
+    }
+  }
+
+  &__link--current {
+    font-weight: 600;
+    color: var(--foreground-color, #1f2937);
+    background-color: var(--button-hover, rgba(243, 245, 248, 1));
+  }
+
+  &__skeleton {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.5rem;
+    min-width: 6rem;
+    height: 1.75rem;
+    border-radius: calc(var(--radius, 10px) / 1.5);
+    background: linear-gradient(
+      90deg,
+      rgba(243, 245, 248, 1) 0%,
+      rgba(229, 231, 235, 1) 50%,
+      rgba(243, 245, 248, 1) 100%
+    );
+    background-size: 200% 100%;
+    animation: breadcrumbs-skeleton 1.2s ease-in-out infinite;
+    color: transparent;
+  }
+
+  &__skeleton::after {
+    content: attr(data-label);
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes breadcrumbs-skeleton {
+  0% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0 50%;
+  }
+}

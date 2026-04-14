@@ -1,0 +1,8 @@
+<div>
+  <app-agreements-success-component
+    *ngIf="data?.useComponent === 'agreement'; else defaultSuccessTemplate"
+  ></app-agreements-success-component>
+  <ng-template #defaultSuccessTemplate>
+    <app-success-window [responseData]="data"></app-success-window>
+  </ng-template>
+</div>

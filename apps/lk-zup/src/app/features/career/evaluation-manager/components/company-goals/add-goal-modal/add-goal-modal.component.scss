@@ -1,0 +1,48 @@
+.add-goal-form {
+  padding: 8px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+label {
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.actions-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.delete-button-container {
+  margin-left: auto;
+}
+
+.delete-button {
+  color: var(--primary-color, #007bff) !important;
+  padding: 0 !important;
+  
+  ::ng-deep .p-button-label {
+    color: var(--primary-color, #007bff);
+    font-weight: 400;
+  }
+  
+  ::ng-deep .p-button-icon {
+    color: var(--primary-color, #007bff);
+    margin-right: 8px;
+  }
+}
+

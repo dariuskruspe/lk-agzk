@@ -1,0 +1,131 @@
+@if (trips()) {
+  <div class="app-page-container">
+    <div class="business-trip-header">
+      <div class="business-trip-header-top">
+        <h1>{{ 'TITLE_BUSINESS_TRIPS' | translate }}</h1>
+        <div>
+          @if (viewType() === 'year') {
+            <app-year-select [(value)]="year"></app-year-select>
+          } @else {
+            <app-month-select
+              [value]="fullMonth()"
+              (valueChange)="businessTripService.setFullMonth($event)"
+            ></app-month-select>
+          }
+        </div>
+        <div class="business-trip-header-top-buttons">
+          <app-select-button [(value)]="viewType">
+            <app-select-button-option value="year">{{
+              'YEAR' | translate
+            }}</app-select-button-option>
+            <app-select-button-option value="month">{{
+              'MONTH' | translate
+            }}</app-select-button-option>
+          </app-select-button>
+
+          <!-- Кнопка "Скачать отчёт" -->
+
+          <p-splitButton
+            (onClick)="downloadReport()"
+            [label]="'DOWNLOAD_REPORT' | translate"
+            [disabled]="isReportLoading()"
+            [model]="saveReportButtonItems"
+            [outlined]="true"
+            styleClass="download-report-btn"
+          ></p-splitButton>
+
+          <app-button
+            [label]="'BUTTON_ISSUE_CREATE' | translate"
+            [icon]="PlusIcon"
+            severity="primary"
+            (click)="goToCreateIssue()"
+          ></app-button>
+        </div>
+      </div>
+      <div class="business-trip-header-bottom">
+        <div>
+          @if (filters().hasIntersection) {
+            <app-app-filter-chip
+              (remove)="patchFilters({ hasIntersection: false })"
+            >
+              {{ 'VACATIONS_GRAPH_SHOW_INTERSECTIONS' | translate }}
+            </app-app-filter-chip>
+          }
+        </div>
+        <app-button-filter>
+          <app-button
+            #trigger
+            [label]="'FILTER' | translate"
+            [icon]="SlidersHorizontalIcon"
+          ></app-button>
+
+          <ng-template #filter>
+            <div>
+              <div class="app-filter-field app-filter-field--checkbox">
+                <p-checkbox
+                  [ngModel]="filters().hasIntersection"
+                  (ngModelChange)="
+                    patchFilters({ hasIntersection: $any($event) })
+                  "
+                  [binary]="true"
+                  id="ny"
+                  [label]="'VACATIONS_GRAPH_SHOW_INTERSECTIONS' | translate"
+                ></p-checkbox>
+              </div>
+
+              <div class="app-filter-field">
+                <label for="employee-multiselect">{{
+                  'VACATION_EMPLOYEE_TITLE' | translate
+                }}</label>
+                <p-multiSelect
+                  [options]="employeeFilterOptions()"
+                  [filter]="true"
+                  optionGroupLabel="title"
+                  optionGroupChildren="items"
+                  [maxSelectedLabels]="1"
+                  [group]="true"
+                  [ngModel]="filters().employees"
+                  (ngModelChange)="onChangeEmployeesFilter($event)"
+                  emptyFilterMessage="Сотрудников не найдено"
+                  optionLabel="title"
+                  optionValue="value"
+                  appendTo="body"
+                  id="employee-multiselect"
+                  resetFilterOnHide="true"
+                >
+                  <ng-template let-selectedItems pTemplate="selectedItems">
+                    <div class="selected-items-container">
+                      <span class="multiple-selection">
+                        {{ 'SELECTED_ITEMS_COUNT' | translate }}
+                        {{ filters().employees.length }}
+                      </span>
+                    </div>
+                  </ng-template>
+                  <ng-template let-group pTemplate="group">
+                    <div class="multi-select-group-head">
+                      <p-checkbox
+                        [binary]="true"
+                        [ngModel]="group.checked"
+                        (ngModelChange)="
+                          onChangeEmployeesFilterGroup(group, $event)
+                        "
+                        class="employees-group-checkbox"
+                        [label]="group.title | translate"
+                      ></p-checkbox>
+                    </div>
+                  </ng-template>
+                </p-multiSelect>
+              </div>
+            </div>
+          </ng-template>
+        </app-button-filter>
+      </div>
+    </div>
+
+    @if (viewType() === 'month') {
+      <app-business-trip-month-viewer></app-business-trip-month-viewer>
+    } @else {
+      <app-business-trip-year-viewer></app-business-trip-year-viewer>
+    }
+  </div>
+}

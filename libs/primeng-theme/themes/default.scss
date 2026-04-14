@@ -1,0 +1,18 @@
+$primaryColor: #3880FF !default;
+$primaryLightColor: scale-color($primaryColor, $lightness: 60%) !default;
+$primaryDarkColor: scale-color($primaryColor, $lightness: -10%) !default;
+$primaryDarkerColor: scale-color($primaryColor, $lightness: -20%) !default;
+$primaryTextColor: #ffffff !default;
+
+$textColor: #252F3F !default;
+$textSecondaryColor: #989AA2 !default;
+
+$highlightBg: #E3F2FD !default;
+$highlightTextColor: #495057 !default;
+
+$inputBorder: 1px solid #DEE0E2;
+
+$panelContentBg: #fff !default;
+
+
+@import '../sass/themes/saga/saga-blue/theme';

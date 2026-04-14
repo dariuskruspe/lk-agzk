@@ -1,0 +1,42 @@
+<div class="result-container">
+  <div class="result-list" *ngIf="!success">
+    <div class="result-item" *ngFor="let item of items">
+      <div class="error" *ngIf="!!item.errorMsg">
+        <img src='assets/icons/error-icon.svg' alt='error'>
+        <div class="error-text">{{item.errorMsg}}</div>
+      </div>
+      <div class="issue">
+        <div class="issue-body">
+          <div class="icon">
+            <span
+              class="icon center"
+            >
+              <i class="{{(getTaskById(item.fileID).iconName || 'icon-doc') | iconPack}}"></i>
+            </span>
+
+          </div>
+          <div class="info">
+            <div class="name">{{getTaskById(item.fileID).employeeName}}</div>
+            <div class="title">{{getTaskById(item.fileID).name}}</div>
+            <div class="footer-info">
+              <div class="date">
+                {{getTaskById(item.fileID).stateDate | date: 'dd.MM.yyyy'}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="success" class="success">
+    {{ 'AGREEMENTS_EMPLOYEE_SIGNING_SUCCESS_TEXT' | translate }}
+  </div>
+  <div>
+    <button
+    pButton
+    label="{{ 'BUTTON_CLOSE' | translate }}"
+    class="p-button-outlined"
+    (click)="close()"
+    ></button>
+  </div>
+</div>

@@ -1,0 +1,160 @@
+.calendar {
+  width: 100%;
+  font-size: 14px;
+  font-weight: 400;
+  user-select: none;
+  position: relative;
+}
+// Дни недели
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+
+  .weekday {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--foreground-color-secondary);
+    padding: 8px;
+  }
+}
+
+// Сетка дней
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+// Ячейка дня
+.calendar-day {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.2s ease;
+  border-radius: var(--calendar-item-radius, 10px);
+  color: var(--text-color);
+
+  .day-number {
+    position: relative;
+    z-index: 2;
+  }
+
+  &.none {
+    color: #989aa2;
+    opacity: 0.2;
+  }
+
+  &.text {
+  }
+
+  &.filled {
+    background-color: var(--fill-color);
+  }
+
+  &.outlined {
+    color: var(--text-color);
+    border: 1px solid var(--border-color);
+  }
+
+  &.hovered {
+    transform: scale(1.2);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 3px solid var(--border-color, var(--calendar-ring-color));
+  }
+
+  &:not(.none) {
+    cursor: pointer;
+  }
+}
+
+// Wrapper для дня с padding
+.calendar-day-wrapper {
+  padding: 0px 10px;
+  margin-bottom: 10px;
+}
+
+// Тултип
+.calendar-tooltip {
+  background: var(--tooltip-bg, #fff);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--tooltip-text, #000);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+  margin-bottom: 8px;
+  max-width: 300px;
+  word-wrap: break-word;
+
+  .tooltip-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .tooltip-row {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+
+    .tooltip-label {
+      font-weight: 600;
+      color: var(--tooltip-label-color, var(--foreground-color-secondary));
+      min-width: 60px;
+    }
+  }
+}
+
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+
+  .month-name {
+    margin-bottom: 0;
+    font-size: 18px;
+    font-weight: 400;
+  }
+
+  .calendar-header-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    height: 32px;
+
+    .calendar-loading {
+      .pi-spinner {
+        font-size: 10px;
+      }
+    }
+    .nav-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: var(--calendar-item-radius, 10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      color: var(--foreground-color);
+      transition: all 0.2s ease;
+      background: var(--control-bg);
+
+      &:hover {
+        background: var(--control-hover-bg);
+      }
+    }
+  }
+}

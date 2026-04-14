@@ -1,0 +1,48 @@
+.title-button {
+  display: flex !important;
+  align-items: center;
+  width: auto;
+  height: 50px;
+  padding: 14px 20px;
+  font-size: 16px;
+  line-height: 22px;
+
+  & mat-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+  }
+}
+//:host ::ng-deep {
+//  .p-tabview .p-tabview-panels {
+//    padding: 1.25rem 0 0 0;
+//  }
+//  .p-tabview .p-tabview-nav {
+//    background: none;
+//    border: none;
+//  }
+//  .p-tabview .p-tabview-nav li {
+//    border-style: solid;
+//    border-width: 0 0 2px 0;
+//  }
+//}
+.my-issues-title {
+  @media (max-width: 991px) {
+    padding-bottom: 15px;
+    padding-left: 5px;
+  }
+}
+.filter-icon-button {
+  @media (max-width: 991px) {
+    background: var(--card-background);
+    border: 1px solid #252F3F1A;
+    border-radius: 10px;
+    padding: 7px 10px 3px 10px;
+    margin-left: 10px;
+  }
+}
+.mobile-search-input {
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}

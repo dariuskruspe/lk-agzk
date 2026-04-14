@@ -1,0 +1,179 @@
+<div
+  *ngIf="template"
+  class="custom-list-item"
+  [ngClass]="{ highlighted: highlighted }"
+  [ngStyle]="{ 'grid-template': template[widthType || 'm'] }"
+>
+  <ng-container *ngFor="let item of dataConfig">
+    <div
+      *ngIf="item.type === 'checkbox'"
+      [ngClass]="item.class"
+      [ngStyle]="{
+        'grid-area': item.area || item.name,
+        'margin-right': '5px',
+      }"
+    >
+      <p-checkbox
+        class="desktop"
+        [binary]="true"
+        inputId="binary"
+        (click)="$event.stopPropagation()"
+        [(ngModel)]="dataList.selected"
+        [disabled]="!state || state.approve === false || state.sign === true"
+      ></p-checkbox>
+      <span
+        class="mobile"
+        [class.disabled]="state.approve === false || state.sign === true"
+        (click)="
+          state.approve === false || state.sign === true
+            ? $event.stopPropagation()
+            : (dataList.selected = !dataList.selected);
+          $event.stopPropagation()
+        "
+      >
+        <span *ngIf="dataList.selected" class="custom-checkbox-filled center">
+          <i class="pi pi-check white"></i>
+        </span>
+        <span
+          *ngIf="!dataList.selected"
+          class="custom-checkbox-empty center"
+        ></span>
+      </span>
+    </div>
+    <div
+      *ngIf="item.type === 'avatar'"
+      [ngClass]="item.class"
+      [ngStyle]="{ 'grid-area': item.area || item.name }"
+    >
+      <div
+        class="avatar"
+        [ngStyle]="{
+          'background-image':
+            'url(' +
+            (!dataList[item.name]
+              ? 'assets/img/svg/user-circle.svg'
+              : isBase64Image(dataList[item.name])
+                ? encodeURI(dataList[item.name])
+                : avatarSrc) +
+            ')',
+        }"
+      ></div>
+    </div>
+    <div
+      *ngIf="item.type === 'icon'"
+      [ngClass]="item.class"
+      [ngStyle]="{
+        'grid-area': item.area || item.name,
+        'margin-right': '5px',
+      }"
+    >
+      <span
+        *ngIf="!item.showParamName || !!dataList[item.showParamName]"
+        class="icon center {{ item.icon ? 'attached' : '' }}"
+      >
+        <i
+          class="{{
+            item.icon || dataList[item.name] || 'icon-doc' | iconPack
+          }}"
+        ></i>
+      </span>
+    </div>
+    <div
+      *ngIf="item.type === 'heading'"
+      [ngClass]="item.class"
+      [ngStyle]="{ 'grid-area': item.area || item.name }"
+    >
+      <p
+        class="header-text break"
+        pTooltip="{{ item.tooltip ? dataList[item.name] || item.name : '' }}"
+      >
+        {{ dataList[item.name] || item.name }}
+      </p>
+    </div>
+    <div
+      *ngIf="item.type === 'text'"
+      [ngClass]="item.class"
+      [ngStyle]="{
+        color: item?.color || 'var(--secondary-text)',
+        'grid-area': item.area || item.name,
+      }"
+    >
+      <span *ngIf="item.prefix" [innerHTML]="item.prefix | trustedHtml"></span>
+      <span
+        *ngIf="!item.pipe && item.name"
+        [innerText]="dataList[item.name]"
+        pTooltip="{{ item.tooltip ? item.prefix + dataList[item.name] : '' }}"
+      ></span>
+      <span
+        *ngIf="item.pipe === 'date'"
+        [innerText]="dataList[item.name] | date: ('DATE_TIME_PIPE' | translate)"
+        pTooltip="{{
+          item.tooltip
+            ? (dataList[item.name] | date: ('DATE_TIME_PIPE' | translate))
+            : ''
+        }}"
+      ></span>
+    </div>
+    <div
+      *ngIf="item.type === 'status'"
+      [ngClass]="item.class"
+      [ngStyle]="{ 'grid-area': item.area || item.name }"
+      class="tooltip_button__vacation"
+    >
+      <span
+        class="status"
+        [pTooltip]="item.tooltip && state ? state[item.name] : ''"
+        [ngStyle]="{
+          backgroundColor: state?.bgColor
+            ? 'var(--' + state.bgColor + ')'
+            : state?.color
+              ? getColor(state.color)
+              : 'inherit',
+          color: item?.color || 'inherit',
+        }"
+      >
+        {{ state ? state[item.name] : ''
+        }}<span *ngIf="dataList.stateEnds">
+          до
+          {{
+            dataList.stateEnds
+              | date: langUtils.convert(langFacade.getLang(), 'DATE_PIPE')
+          }}
+        </span>
+      </span>
+    </div>
+    <div
+      *ngIf="item.type === 'link'"
+      [ngClass]="item.class"
+      [ngStyle]="{
+        color: item?.color || 'var(--secondary-text)',
+      }"
+    >
+      <i
+        *ngIf="item.name"
+        class="pi pi-paperclip"
+        [pTooltip]="'EXPENSE_REPORT_TITLE' | translate"
+        [routerLink]="
+          dataList[item.name] && dataList[item.name][0]?.issueId
+            ? '/issues/' + dataList[item.name][0].issueId
+            : ''
+        "
+      ></i>
+    </div>
+    <div
+      *ngIf="item.type === 'button'"
+      [ngClass]="item.class"
+      [ngStyle]="{
+        'grid-area': item.area || item.name,
+        'margin-right': '5px',
+      }"
+    >
+      <button
+        pButton
+        (click)="emitEvent(); $event.stopPropagation()"
+        [label]="dataList[item.name]"
+        class="p-button-outlined p-button-sm"
+      ></button>
+    </div>
+  </ng-container>
+</div>

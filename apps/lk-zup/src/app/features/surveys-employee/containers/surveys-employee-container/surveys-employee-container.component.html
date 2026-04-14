@@ -1,0 +1,75 @@
+<!-- Страница "Опросы" -->
+<div class="employee-vacations-body">
+  <p-toolbar class="title">
+    <h1>{{ 'TITLE_SURVEYS' | translate }}</h1>
+    <span class="spacer"></span>
+  </p-toolbar>
+
+  <div class="tabs-controls-panel">
+    <div class="tabs">
+      <div
+        class="tab-item"
+        (click)="changeTab('SURVEYS')"
+        [class.active]="activeTab === 'SURVEYS'"
+      >
+        <span class="tab-title">{{ 'TITLE_SURVEYS' | translate }}</span>
+      </div>
+      <div
+        class="tab-item"
+        (click)="changeTab('ARCHIVE')"
+        [class.active]="activeTab === 'ARCHIVE'"
+      >
+        <span class="tab-title">{{ 'BUTTON_ARCHIVE' | translate }}</span>
+      </div>
+    </div>
+    <div class="filters">
+      <!-- Поиск -->
+      <div class="p-input-icon-left mobile-search-input">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          [(ngModel)]="filterValue.search"
+          (ngModelChange)="applySearchFilter()"
+          class="search-input"
+          [placeholder]="'ISSUE_SEARCH_FIELD' | translate"
+          type="text"
+        />
+      </div>
+    </div>
+  </div>
+
+  <!-- Содержимое -->
+  <div class="content">
+    <!-- Метки (chips — "чипы") фильтров -->
+    <div class="filter-chips">
+      <!-- Метки (chips — "чипы") поиска -->
+      <div class="filter-chip" *ngIf="filterValue.search">
+        {{ filterValue.search }}
+        <i
+          class="pi pi-times times-icon"
+          (click)="clearFilterByChips('search')"
+        ></i>
+      </div>
+    </div>
+
+
+    <div>
+      <loadable-list-container
+        [template]="dataLayout"
+        [dataList]="agreementsEmployeeList"
+        [dataConfig]="dataConfig"
+        [otherData]="stateList"
+        [filter]="null"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [loading]="this.loading$ | async"
+        [select]="false"
+        [selectButtonTitle]="''"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="handleOpenDocument($event)"
+        (clickSelectedList)="handleOpenDocument($event)"
+      ></loadable-list-container>
+    </div>
+
+  </div>
+</div>

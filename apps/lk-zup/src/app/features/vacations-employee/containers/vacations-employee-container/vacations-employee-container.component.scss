@@ -1,0 +1,36 @@
+:host {
+  //::ng-deep {
+  //  .p-overlay {
+  //    top: 0 !important;
+  //    right: 0 !important;
+  //    left: 0 !important;
+  //  }
+  //}
+}
+
+.employee-vacations-body {
+  max-width: 1360px;
+}
+.filter-icon-button {
+  @media (max-width: 991px) {
+    background: var(--card-background);
+    border: 1px solid #252F3F1A;
+    border-radius: 10px;
+    padding: 7px 10px 3px 10px;
+    margin-left: 10px;
+  }
+}
+.mobile-search-input {
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}
+.mobile-download-button {
+  @media (max-width: 991px) {
+    margin-top: 15px;
+  }
+}
+
+::ng-deep .sort-button {
+  margin-right: 10px;
+}

@@ -1,0 +1,212 @@
+.salary__wrap {
+  margin-bottom: 20px;
+}
+
+.salary__periodWrap {
+  display: flex;
+  align-items: center;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+
+  & span {
+    text-align: left;
+  }
+}
+
+.salary {
+  display: flex;
+  gap: 15px;
+  flex: 0 0 100%;
+  flex-wrap: wrap;
+  @media (max-width: 1200px) {
+    flex-direction: column;
+  }
+
+  .main_item {
+    flex: 1;
+    min-width: 40%;
+    padding-top: 0 !important;
+    @media (max-width: 1200px) {
+      width: 100%;
+      margin-bottom: 19px;
+    }
+  }
+
+  & dt {
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    color: #989aa2;
+    text-align: left;
+  }
+
+  & dd {
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 36px;
+
+    & .salary__period {
+      font-weight: 400;
+      font-size: 25px;
+      line-height: 36px;
+      color: #3880ff;
+
+      @media (max-width: 767px) {
+        width: 90%;
+        font-size: 14px;
+        line-height: 26px;
+      }
+    }
+  }
+
+  & .hide {
+    position: relative;
+    bottom: 2px;
+    font-size: 25px;
+    color: var(--basic-color);
+  }
+}
+
+.salary__item {
+  width: 28%;
+  margin-bottom: 0;
+  margin-right: 0;
+
+  @media (max-width: 1200px) {
+    width: 100%;
+    margin-bottom: 19px;
+  }
+}
+.last_item {
+  order: 2;
+  margin-left: auto;
+  @media (max-width: 1200px) {
+    order: 0;
+    margin-left: 0;
+  }
+}
+.salary_divider {
+  display: flex;
+  flex-direction: column;
+}
+.text-view {
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #989aa2;
+}
+.image-card {
+  height: 35px;
+  display: flex;
+  flex-direction: row;
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 35px;
+    height: 35px;
+    background: var(--issue-icon-background);
+    border-radius: 50%;
+    cursor: pointer;
+    margin-left: 0;
+    margin-right: 20px;
+    font-weight: 400;
+    color: var(--primary-color);
+    cursor: pointer;
+  }
+}
+
+.salary__show {
+  margin-left: 0;
+  margin-right: 20px;
+  font-weight: 400;
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+mat-card.mat-card:not([class*='mat-elevation-z']) {
+  margin-bottom: 0;
+  border-radius: 3px;
+  box-sizing: border-box;
+
+  @media (max-width: 767px) {
+    padding: 25px 15px;
+  }
+}
+
+.calendar-container {
+  position: relative;
+}
+
+.period-text {
+  margin-right: 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.form__salary {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+  color: #989aa2;
+  text-align: left;
+
+  & mat-form-field {
+    color: #3880ff !important;
+    margin: 0 0 0 5px;
+    width: 85px !important;
+    @media (max-width: 767px) {
+      font-size: 20px;
+    }
+    & * {
+      margin: 0;
+    }
+    & mat-datepicker-toggle {
+      margin-top: -4px;
+    }
+  }
+
+  & input.mat-input-element {
+    text-transform: capitalize;
+  }
+
+  & ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+    display: none !important;
+  }
+
+  & .mat-icon {
+    font-size: 25px !important;
+    color: #3880ff;
+    margin-top: -5px !important;
+    @media (max-width: 767px) {
+      font-size: 20px;
+    }
+  }
+}
+
+.mat-form-field-infix {
+  background-color: #000;
+}
+.title.leave {
+  @media (max-width: 767px) {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+.mobile-title {
+  @media (max-width: 767px) {
+    margin-bottom: 10px;
+  }
+}

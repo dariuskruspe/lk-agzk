@@ -1,0 +1,62 @@
+@import './default.scss';
+@import './liquid_dark.scss';
+@import './light.scss';
+@import './millennium.scss';
+
+:root {
+  --docky-widget-input-bg: transparent;
+  --docky-widget-input-border: 1px solid rgba(218, 235, 254, 1);
+  --docky-widget-input-shadow: 1px 1px 10px 0px rgba(187, 212, 253, 0.5);
+  --docky-widget-main-text: rgba(37, 47, 63, 1);
+  --docky-widget-secondary-text: rgba(146, 151, 159, 1);
+
+  /* Базовые переменные радиусов */
+  --radius: 5px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-xl: 24px;
+
+  /* Кнопки - Базовые переменные */
+  --button-font-weight: 500;
+  --button-font-size: 14px;
+  --button-line-height: 1.2;
+  --button-transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --button-border-width: 1px;
+  --button-border-style: solid;
+
+  /* Размеры кнопок */
+  --button-xs-height: 24px;
+  --button-xs-padding-x: 8px;
+  --button-xs-font-size: 11px;
+  --button-xs-radius: var(--radius-lg);
+
+  --button-sm-height: 32px;
+  --button-sm-padding-x: 12px;
+  --button-sm-font-size: 12px;
+  --button-sm-radius: var(--radius-lg);
+
+  --button-md-height: 40px;
+  --button-md-padding-x: 16px;
+  --button-md-font-size: 14px;
+  --button-md-radius: var(--radius-lg);
+
+  --button-lg-height: 48px;
+  --button-lg-padding-x: 20px;
+  --button-lg-font-size: 16px;
+  --button-lg-radius: var(--radius-lg);
+
+  --button-xl-height: 56px;
+  --button-xl-padding-x: 24px;
+  --button-xl-font-size: 18px;
+  --button-xl-radius: var(--radius-lg);
+
+  /* Loader */
+  --button-loader-color: currentColor;
+  --button-loader-size: 16px;
+
+  --liquid-container-radius: var(--radius-lg);
+}
+
+lucide-icon {
+  display: inline-flex;
+}

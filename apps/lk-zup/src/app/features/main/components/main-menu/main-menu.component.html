@@ -1,0 +1,19 @@
+@if (settingsSignal() && userSettingsSignal()) {
+  <div
+    class="panel"
+    [ngClass]="{ isMobile: isMobile }"
+    [@panelMobile]="isMobile ? state : ''"
+  >
+    <div class="menu-container" [scrollable]="null">
+      <app-aside-menu
+        [items]="items"
+        [signLater]="signLater"
+        [currentUser]="currentUser"
+        (itemClick)="togglePanel()"
+      ></app-aside-menu>
+    </div>
+    <div class="version">
+      v.{{ ver?.version }} | {{ settingsSignal().general.version }}
+    </div>
+  </div>
+}

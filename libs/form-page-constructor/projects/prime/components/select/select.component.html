@@ -1,0 +1,26 @@
+<div [formGroup]="form">
+  <label for="{{ item.formControlName }}" class="custom-form-field__label"
+    >{{ item.label }}{{ isRequired() ? ' *' : '' }}</label
+  >
+  <p-dropdown
+    #dd
+    id="{{ item.formControlName }}"
+    [options]="hideOptions ? filteredOptions : options"
+    [formControlName]="item.formControlName"
+    [placeholder]="
+      item.placeholder && item.placeholder !== 'undefined'
+        ? item.placeholder
+        : ''
+    "
+    [showClear]="!!dd.value"
+    [filter]="hasFilter"
+    [filterBy]="optionLabel"
+    [optionLabel]="optionLabel"
+    appendTo="body"
+    optionValue="value"
+    [attr.aria-describedby]="item.formControlName + '-hint'"
+    (onFilter)="onFilter($event)"
+    (onShow)="onDropdownShow()"
+    (onHide)="onDropdownHide()"
+  ></p-dropdown>
+</div>

@@ -1,0 +1,26 @@
+.app-button-filter-overlay {
+  .p-overlaypanel-content {
+    min-width: 300px;
+  }
+
+  .app-filter-field {
+    margin-bottom: 12px;
+
+    & > label {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--text-color);
+      font-weight: 400;
+    }
+
+    .p-component {
+      width: 100%;
+      font-size: 14px;
+    }
+
+    &--checkbox .p-component {
+      width: auto;
+      cursor: pointer;
+    }
+  }
+}

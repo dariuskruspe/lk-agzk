@@ -1,0 +1,108 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12 p-0">
+      <div class="card mb custom-form-field" *ngFor="let survey of surveys(); let i = index">
+        <div class="custom-form-field">
+          <label class="custom-form-field__label flex space-between">
+            {{getTypeLabel(survey.type)}}
+            <div (click)="removeQuestion(i)" class="custom-link" *ngIf="!surveysManagementCreateService.disableEditForm()">
+              <i
+                class="pi pi-times"
+              ></i>
+              {{ 'DELETE' | translate }}
+            </div>
+          </label>
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="survey.formulation"
+            [placeholder]="getPlaceholderByType(survey.type)"
+            [disabled]="surveysManagementCreateService.disableEditForm()"
+            [class.ng-invalid]="survey.type === 'divider' && showDividerError && !survey.formulation"
+            [class.ng-dirty]="survey.type === 'divider' && showDividerError && !survey.formulation"
+          />
+        </div>
+        <div *ngIf="survey.type === 'select' || survey.type === 'checkbox'" class="custom-form-field">
+          <div class="flex align-items-end custom-form-field" *ngFor="let option of survey.options; let optionIndex = index">
+            <div class="custom-form-field survey-option">
+              <label class="custom-form-field__label">Вариант {{optionIndex + 1}}</label>
+              <input
+                pInputText
+                type="text"
+                [(ngModel)]="option.formulation"
+                placeholder="Введите вариант"
+                [disabled]="surveysManagementCreateService.disableEditForm()"
+              />
+            </div>
+            <i class="pi pi-times remove-icon" (click)="removeOption(i, optionIndex)" *ngIf="survey.options.length > 1"></i>
+          </div>
+          <div class="custom-form-field remove-icon">
+            <p-button
+              icon="pi pi-plus"
+              iconPos="left"
+              label="Добавить вариант"
+              [link]="true"
+              (click)="addOption(i)"
+              [disabled]="surveysManagementCreateService.disableEditForm()"
+            >
+            </p-button>
+          </div>
+        </div>
+        <div class="custom-form-field" *ngIf="survey.type === 'select' || survey.type === 'checkbox' || survey.type === 'text'">
+          <p-checkbox
+            [(ngModel)]="survey.required"
+            [binary]="true"
+            [disabled]="surveysManagementCreateService.disableEditForm()"
+          />
+          <label>Поле является обязательным</label>
+        </div>
+        <div class="custom-form-field" *ngIf="survey.type === 'file'">
+          <div class="fpc-upload-files-header custom-form-field__upload-header">
+
+            <input
+              #uploader
+              id="file-uploader"
+              type="file"
+              style="display: none;"
+              accept=".pdf, .doc, .docx, .rtf, .odt, .xls, .xlsx, .ods, .pptx, .jpg, .jpeg"
+              (change)="onFilesAdd($event, i)"
+            >
+
+            <div class="fpc-upload-buttons-container custom-form-field__upload-button-container">
+              <button
+                *ngIf="!survey.fileData"
+                pButton
+                type="button"
+                iconPos="left"
+                class="custom-form-field__upload-button"
+                [icon]="'pi pi-plus-circle'"
+                [label]="'UPLOAD_TITLE' | translate"
+                (click)="select()"
+              ></button>
+              <button
+                *ngIf="survey.fileData"
+                pButton
+                type="button"
+                iconPos="left"
+                icon="pi pi-trash"
+                class="p-button-outlined custom-form-field__upload-button custom-form-field__upload-button_remove"
+                [label]="'REMOVE_UPLOADED_TITLE_ONE' | translate"
+                (click)="removeFiles(i)"
+              ></button>
+            </div>
+          </div>
+
+          <ul class="custom-form-field__selected-files" *ngIf="survey.fileData">
+            <li
+              class="custom-form-field__selected-file"
+            >
+              <i class="pi pi-file"></i>
+              {{ survey.fileData.fileName }}
+            </li>
+          </ul>
+        </div>
+        <div class="separator"></div>
+      </div>
+    </div>
+  </div>
+</div>

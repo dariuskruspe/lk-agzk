@@ -1,0 +1,115 @@
+<ng-container *ngIf="isMobile; else desktop">
+  <div class="filter-row" [ngClass]="{ 'mobile-v': isMobileV() }" *ngIf="showFilerIcon">
+    <div class="toolbar flex ai-center jc-flex-end w-full ml-15">
+      <!-- Кнопка "Фильтр" -->
+      <div
+        (click)="toggleFilterVisibility()"
+        class="btn-filter grey"
+        [ngClass]="{ 'p-disabled': loading }"
+      >
+        <i class="pi pi-sliders-h clickable font-size-26px"></i>
+      </div>
+
+      <!-- Кнопка "Показать/скрыть легенду" -->
+      <div
+        *ngIf="showLegendButton"
+        (click)="toggleLegend()"
+        class="btn-help grey ml-10"
+        [ngClass]="{ 'p-disabled': loading }"
+        [pTooltip]="(showLegend ? 'HIDE' : 'SHOW') + '_LEGEND' | translate"
+        tooltipPosition="bottom"
+      >
+        <i class="pi pi-question-circle clickable font-size-26px"></i>
+      </div>
+    </div>
+  </div>
+
+  <p-sidebar
+    #sidebar
+    [(visible)]="isSecondaryFilter"
+    position="bottom"
+    [baseZIndex]="1102"
+    appendTo="body"
+    styleClass="filters-dialog"
+    [showCloseIcon]="false"
+  >
+    <p-toolbar class="space-between">
+      <div class="sidebar-header">{{ 'FILTER' | translate }}</div>
+      <button
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-times"
+        class="p-button-rounded p-button-secondary p-button-text"
+        (click)="sidebar.close($event)"
+      ></button>
+    </p-toolbar>
+    <div class="sidebar-content">
+      <fpc
+        *ngIf="filterConfig"
+        [formData]="filterConfig.main"
+        [loading]="loading"
+        [clear$]="clearFilter$"
+        (formSubmit)="submit($event)"
+        (formBuilt)="onFormBuilt($event)"
+        class="mb-16"
+      ></fpc>
+
+      <fpc
+        *ngIf="filterConfig"
+        [formData]="filterConfig.secondary"
+        [loading]="loading"
+        [clear$]="clearFilter$"
+        (formSubmit)="submit($event)"
+        (formBuilt)="onFormBuilt($event)"
+      ></fpc>
+      <ng-content></ng-content>
+
+      <p-toolbar class="margin-top">
+        <button
+          pButton
+          type="button"
+          label="{{ 'APPLY' | translate }}"
+          class="button-full-xs filter-button"
+          (click)="sidebar.close($event)"
+        ></button>
+      </p-toolbar>
+    </div>
+  </p-sidebar>
+</ng-container>
+<ng-template #desktop>
+  <fpc
+    [formData]="filterConfig.united"
+    [loading]="loading"
+    [clear$]="clearFilter$"
+    (formSubmit)="submit($event)"
+    (formBuilt)="onFormBuilt($event)"
+  ></fpc>
+</ng-template>
+
+<ng-container *ngIf="!loading && filterSize">
+  <div
+    *pluralize="
+      listSize;
+      forms: [
+        ['ONE_FOUND', 'ONE_OBJECT'],
+        ['PLURAL_FOUND', 'TWO_OBJECTS'],
+        ['PLURAL_FOUND', 'PLURAL_OBJECTS']
+      ];
+      let lang = lang;
+      let value
+    "
+    class="loadable-list-result"
+  >
+    <span *ngIf="!hideResultCount">
+      {{ lang === 'ru' ? (value[0] | translate) + ' ' : '' }}
+      {{ listSize }}
+      {{ value[1] | translate }}.
+    </span>
+
+    <!-- Кнопка "Сбросить фильтры" -->
+    <span (click)="clearFilter$.next()" class="link inline-block mb-10">{{
+      'CLEAR_FILTER' | translate
+    }}</span>
+  </div>
+</ng-container>

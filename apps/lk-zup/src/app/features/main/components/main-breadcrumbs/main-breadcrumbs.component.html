@@ -1,0 +1,28 @@
+<nav class="breadcrumbs" aria-label="breadcrumb">
+  <ol class="breadcrumbs__list">
+    <li class="breadcrumbs__item" *ngFor="let breadcrumb of breadcrumbs$ | async; let isLast = last">
+      <ng-container *ngIf="breadcrumb?.label | async as label; else skeleton">
+        <button
+          type="button"
+          class="breadcrumbs__link"
+          (click)="open(breadcrumb.url)"
+          [class.breadcrumbs__link--current]="isLast"
+          [disabled]="breadcrumb.bcLinkDisable"
+          [attr.aria-current]="isLast ? 'page' : null"
+        >
+          {{ label | translate }}
+        </button>
+      </ng-container>
+    </li>
+  </ol>
+</nav>
+
+<ng-template #skeleton>
+  <span
+    class="breadcrumbs__skeleton"
+    role="status"
+    aria-live="polite"
+    [attr.aria-label]="'BREADCRUMB_LOADING' | translate | uppercase"
+    [attr.data-label]="'BREADCRUMB_LOADING' | translate | uppercase"
+  ></span>
+</ng-template>

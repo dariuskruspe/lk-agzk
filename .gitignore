@@ -1,0 +1,66 @@
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# compiled output
+dist
+package/deb/source
+package/deb/src/
+!package/deb/src/DEBIAN
+tmp
+/out-tsc
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+.angular
+angular.json
+
+.nx/
+
+.cursor
+.claude
+.codex
+CLAUDE.md
+
+
+# START Ruler Generated Files
+/../../../../../Users/ruslanboliev/.config/.codex/config.toml
+/../../../../../Users/ruslanboliev/.config/.codex/config.toml.bak
+/../../../../../Users/ruslanboliev/.config/AGENTS.md
+/../../../../../Users/ruslanboliev/.config/AGENTS.md.bak
+/.codex/config.toml
+/.codex/config.toml.bak
+/.cursor/mcp.json
+/.cursor/mcp.json.bak
+/AGENTS.md
+/AGENTS.md.bak
+# END Ruler Generated Files

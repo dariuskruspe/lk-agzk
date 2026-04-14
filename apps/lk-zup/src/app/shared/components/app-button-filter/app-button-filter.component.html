@@ -1,0 +1,7 @@
+<div (click)="op.toggle($event)" #trigger>
+  <ng-content select="app-button"></ng-content>
+</div>
+
+<p-overlayPanel #op styleClass="app-button-filter-overlay">
+  <ng-container *ngTemplateOutlet="filterTemplateRef()"></ng-container>
+</p-overlayPanel>

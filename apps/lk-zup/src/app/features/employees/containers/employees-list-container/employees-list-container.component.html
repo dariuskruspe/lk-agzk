@@ -1,0 +1,20 @@
+<app-employees-list
+  [employeeList]="
+    employeesCompanyEmployeeListFacade.getData() ||
+    (employeesCompanyEmployeeListFacade.getData$() | async)
+  "
+  [employeesCompanyDepartments]="
+    (employeesCompanyDepartmentsFacade.getData$() | async)
+      | filter:'organizationID':chosenCompany:departmentsFilterService.isShowOrganizationFilter
+  "
+  [employeesCompanies]="departmentsFilterService.organizationList$ | async"
+  [employeeStateList]="employeeStateListFacade.forcedData$ | async"
+  [employeeStateFilterList]="employeeStateFilterListFacade.forcedData$ | async"
+  [loading]="
+    (employeesCompanyEmployeeListFacade.loading$() | async) ||
+    (employeesCompanyDepartmentsFacade.loading$() | async) ||
+    (employeeStateListFacade.forcedLoading$ | async)
+  "
+  (loadList)="getEmployeeList($event)"
+  (goDetails)="onEmployeeDetails($event)"
+></app-employees-list>

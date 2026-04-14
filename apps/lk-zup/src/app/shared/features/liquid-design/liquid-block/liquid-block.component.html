@@ -1,0 +1,79 @@
+<ng-content></ng-content>
+
+<svg
+  width="0"
+  height="0"
+  style="position: fixed; top: 0; left: 0; z-index: 999"
+>
+  <defs>
+    <filter
+      [id]="filterId()"
+      filterUnits="userSpaceOnUse"
+      colorInterpolationFilters="sRGB"
+      x="-5%"
+      y="-5%"
+      width="110%"
+      height="110%"
+    >
+      <feImage #feImage [attr.id]="uid() + '_map'" />
+      <feDisplacementMap
+        #feDisplacementMap
+        in="SourceGraphic"
+        [attr.in2]="uid() + '_map'"
+        xChannelSelector="R"
+        yChannelSelector="G"
+        result="displaced"
+      />
+
+      @if (dispersion() && dispersion() !== false) {
+        <!-- Хроматическая аберрация -->
+        <feOffset
+          [attr.dx]="dispersion()"
+          [attr.dy]="dispersion()"
+          in="displaced"
+          result="redShift"
+        />
+        <feOffset dx="0" dy="0" in="displaced" result="greenCenter" />
+        <feOffset
+          [attr.dx]="
+            dispersion() && typeof dispersion() === 'number' ? -dispersion() : 0
+          "
+          [attr.dy]="
+            dispersion() && typeof dispersion() === 'number' ? -dispersion() : 0
+          "
+          in="displaced"
+          result="blueShift"
+        />
+        <feColorMatrix
+          in="redShift"
+          type="matrix"
+          values="1 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 1 0"
+          result="redOnly"
+        />
+        <feColorMatrix
+          in="greenCenter"
+          type="matrix"
+          values="0 0 0 0 0  0 1 0 0 0  0 0 0 0 0  0 0 0 1 0"
+          result="greenOnly"
+        />
+        <feColorMatrix
+          in="blueShift"
+          type="matrix"
+          values="0 0 0 0 0  0 0 0 0 0  0 0 1 0 0  0 0 0 1 0"
+          result="blueOnly"
+        />
+
+        <!-- Объединяем каналы -->
+        <feComposite
+          in="redOnly"
+          in2="greenOnly"
+          operator="lighter"
+          result="redGreen"
+        />
+        <feComposite in="redGreen" in2="blueOnly" operator="lighter" />
+      }
+    </filter>
+  </defs>
+</svg>
+
+<canvas #canvas style="display: none"></canvas>

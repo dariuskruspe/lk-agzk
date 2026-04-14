@@ -1,0 +1,110 @@
+$mainTextColor: #252F3F;
+$blue: #D9E7FF;
+$blueLight: #E0F1FF;
+$blue-100: #F1F8FE;
+
+$red: #AA3349;
+
+/* PRIMENG VARS */
+
+$borderRadius: 5px !default;
+
+$tableHeaderCellBg: $blueLight !default;
+
+$tableHeaderCellFontWeight: normal !default;
+$tableHeaderBorder: 1px solid $blueLight !default;
+$tableHeaderCellBorder: none !default;
+$tableBodyCellBorder: 1px solid $blueLight !default;
+
+
+$tabviewHeaderActiveBorderColor: $red !default;
+$tabviewHeaderTextActiveColor: $red !default;
+
+$primaryColor: #3880FF !default;
+$primaryLightColor: scale-color($primaryColor, $lightness: 60%) !default;
+$primaryDarkColor: scale-color($primaryColor, $lightness: -10%) !default;
+$primaryDarkerColor: scale-color($primaryColor, $lightness: -20%) !default;
+$primaryTextColor: #ffffff !default;
+
+$secondaryButtonBg: $red !default;
+
+$textColor: #252F3F !default;
+$textSecondaryColor: #989AA2 !default;
+
+$highlightBg: #E3F2FD !default;
+$highlightTextColor: #495057 !default;
+
+$inputBorder: 1px solid #DEE0E2;
+
+$panelContentBg: #fff !default;
+
+
+:root {
+  --border-radius: $borderRadius;
+}
+
+
+@import '../sass/themes/saga/saga-blue/theme';
+
+/* END PRIME */
+
+body.theme-neo {
+  background: $blue-100;
+  color: $mainTextColor;
+
+
+  h1, h2, h3, h4, h5, h6 {
+    color: $mainTextColor;
+  }
+
+  b {
+    font-weight: 500;
+  }
+
+  .ui-section {
+    box-shadow: 0px 10px 20px rgba(0, 112, 253, 0.16);
+    border: none;
+  }
+
+  .grouped-list-header, .ui-table_item--header {
+    background: $blue;
+    border-bottom-color: $blueLight;
+    border-radius: 5px;
+  }
+
+  .transaction-item {
+    border-bottom-color: $blueLight;
+  }
+
+  web-billing-services-item .services-item {
+    border-bottom-color: $blueLight;
+  }
+
+  /* Таблицы */
+  .p-datatable-thead {
+    th:first-child {
+      border-radius: 5px 0 0 5px;
+    }
+    th:last-child {
+      border-radius: 0 5px 5px 0;
+    }
+  }
+
+  .p-tabview-nav-link:focus {
+    box-shadow:none !important;
+    -webkit-box-shadow:none !important;
+    -moz-box-shadow:none !important;
+  }
+
+  .p-tabview-nav-link > span {
+    font-weight: 400;
+  }
+
+  .p-button.p-button-lg {
+    padding: 18px 28px;
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+
+}

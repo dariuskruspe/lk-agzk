@@ -1,0 +1,39 @@
+<div class="confirmation-code">
+  <div *ngIf="data.text" class="confirmation-code__row confirmation-code__row_text">
+    {{ data.text | translate }}
+  </div>
+
+  <div class="confirmation-code__row">
+    <div class="confirmation-code__input custom-form-field p-fluid">
+      <p-inputMask [(ngModel)]="code" (ngModelChange)="onModelChanged()"
+                   [autoClear]="false"
+                   autoFocus="true"
+                   [ngClass]="{'ng-invalid': hasError, 'ng-dirty': hasError}"
+                   [mask]="'******'"
+                   [placeholder]="'SMS_CODE' | translate"
+                   required
+                   showClear="true"
+                   styleClass="flex flex-1"
+                   unmask="true"
+      ></p-inputMask>
+    </div>
+
+    <p-toolbar class="margin-top center">
+      <button
+          type="button"
+          pButton
+          icon="pi pi-check"
+          class="confirmation-code__buttons_button"
+          (click)="confirm()"
+          [label]="'BUTTON_CONFIRM' | translate"
+      ></button>
+      <button
+          type="button"
+          pButton
+          class="p-button-outlined confirmation-code__buttons_button"
+          (click)="cancelAction()"
+          [label]="'BUTTON_CANCEL_CONFIRM' | translate"
+      ></button>
+    </p-toolbar>
+  </div>
+</div>

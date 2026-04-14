@@ -1,0 +1,277 @@
+<div *ngIf="isMobileV()" class="flex flex-column bg-color p-15">
+  <div class="flex flex-row jc-space-between">
+    <div class="flex-column mr-5">
+      <div>{{ issueState?.name }}</div>
+      <div class="gray font-size-0-875rem mt-5">
+        {{ issueState?.description }}
+      </div>
+    </div>
+
+    <!-- Кружочек прогресса шагов -->
+    <app-steps
+      [steps]="issueSteps"
+      [options]="{ currentTemplate: 'circle' }"
+      (progressCircleClicked)="showSteps()"
+    ></app-steps>
+  </div>
+</div>
+
+<p-tabView (onChange)="changedTab($event)" [class.mobile-v]="isMobileV()" [(activeIndex)]="activeTabIndex">
+  <!-- Вкладка "Заявка" -->
+  <p-tabPanel header="{{ 'ISSUE' | translate }}">
+    <div class="column">
+      <!-- Название заявки -->
+      <div
+        *ngIf="issueJoinData?.issueType?.FullName"
+        class="header-row issue-title"
+      >
+        {{ issueJoinData.issueType.FullName }}
+      </div>
+
+      <div class="column grid-row">
+        <div
+          class="column"
+          [ngClass]="{
+            column: !isMobileV(),
+            'flex flex-row flex-1 jc-space-between': isMobileV(),
+          }"
+        >
+          <!-- Дата -->
+          <span class="header-title"
+            >{{
+              issueJoinData?.issue?.changeStatusDate
+                | date: langUtils.convert(langFacade.getLang(), 'DATE_PIPE')
+            }}
+          </span>
+
+          <!-- Статус заявки -->
+          <app-issue-status
+            *ngIf="issuesStatusList?.states && issueState?.color"
+            [color]="issueState?.color"
+            [label]="issueState?.name"
+            [ngStyle]="{ order: isMobileV() ? -1 : 0 }"
+            [pTooltip]="issueState.description"
+            fontColor="var(--basic-color)"
+          ></app-issue-status>
+        </div>
+
+        <!-- Кнопка "Отменить" (отменяет заявку) -->
+        <button
+          *ngIf="
+            !isMobileV() &&
+            issuesCancelAccess &&
+            issueState?.cancelAccess &&
+            !isManagerIssue() &&
+            !isRequiringApproval &&
+            !cancelDisabledForThisIssueType
+          "
+          class="p-button-outlined p-button-danger"
+          pButton
+          label="{{ 'ISSUES_CANCEL_BUTTON' | translate }}"
+          (click)="onIssueCancel()"
+        ></button>
+
+        <!-- Связанные заявки -->
+        <div *ngFor="let linkedIssues of issueJoinData?.issue?.linkedIssues">
+          <!-- Кнопка "Создать <название связанной заявки>" -->
+          <button
+            *ngIf="!linkedIssues.issueId && linkedIssues.issueTypeId"
+            class="p-button-outlined"
+            pButton
+            [label]="linkedIssues.issueCreateButtonName || ('Создать ' + linkedIssues.issueName)"
+            (click)="
+              createReportIssue(
+                linkedIssues.issueTypeId,
+                linkedIssues.documentId
+              )
+            "
+          ></button>
+
+          <!-- Кнопка "Авансовый отчет" -->
+          <button
+            *ngIf="linkedIssues.issueId"
+            class="p-button-link"
+            pButton
+            [label]="linkedIssues.issueOpenButtonName || linkedIssues.issueName || ('EXPENSE_REPORT_TITLE' | translate )"
+            (click)="toReportIssue(linkedIssues.issueId)"
+          ></button>
+        </div>
+      </div>
+
+      <div *ngIf="issueJoinData?.issue?.employeeName" class="header-row">
+        <span>{{ 'FROM' | translate }}:&nbsp; </span>
+        {{ issueJoinData?.issue?.employeeName }}
+      </div>
+
+      <fpc
+        [class.dashboard]="dashboard"
+        [employeeId]="issueJoinData?.issue?.formData?.employeeID"
+        [formData$]="moddedData$"
+        [dateLocale]="currentUserFacade.getLang()"
+        [fileBase64]="fileBase64"
+        (getFileEvent)="getFileOut($event)"
+      ></fpc>
+
+      <app-item-list
+        *ngIf="staticData.length"
+        [items]="staticData"
+      ></app-item-list>
+    </div>
+
+    <div
+      *ngIf="
+        isMobileV() &&
+        issuesCancelAccess &&
+        issueState?.cancelAccess &&
+        !isManagerIssue() &&
+        !isRequiringApproval &&
+        !cancelDisabledForThisIssueType
+      "
+    >
+      <!-- Поле ввода комментария (для отклонения заявки) -->
+      <div class="comment-container mt-25">
+        <label for="comment" class="grey">{{ 'COMMENT' | translate }}</label
+        ><span class="red">*</span>
+        <input
+          pInputText
+          [(ngModel)]="cancelComment"
+          id="comment"
+          class="comment-input w-full mt-8"
+          [class.border-red]="!cancelComment"
+          placeholder="{{ 'ENTER_YOUR_COMMENT' | translate }}"
+          type="text"
+        />
+        <div class="validation">
+          <span *ngIf="!cancelComment" class="red font-size-14px">{{
+            'VALIDATOR_REQUIRED' | translate
+          }}</span>
+        </div>
+      </div>
+
+      <!-- Кнопка "Отменить" (отменяет заявку) -->
+      <button
+        class="p-button-outlined p-button-danger w-full mt-25"
+        pButton
+        label="{{ 'ISSUES_CANCEL_BUTTON' | translate }}"
+        (click)="onIssueCancelMobile()"
+      ></button>
+    </div>
+    <div
+      *ngIf="issueJoinData?.issueType?.used && issueJoinData?.issue?.actions?.copyingAllowed"
+      class="copy-button-bar"
+    >
+      <button
+        class="p-button-outlined"
+        pButton
+        label="{{ 'COPY_ISSUE_BUTTON' | translate }}"
+        icon="pi pi-copy"
+        iconPos="left"
+        (click)="openAttachmentDialog()"
+      ></button>
+      <div class="info-icon">
+        <i
+          class="pi pi-question-circle info-icon-tooltip"
+          [pTooltip]="'COPY_ISSUE_BUTTON_TOOLTIP' | translate"
+        ></i>
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <!-- Вкладка "Документы" -->
+  <p-tabPanel header="{{ 'DOCUMENTS_FOR_SIGNATURE' | translate }}">
+    <!-- <ng-template pTemplate="header">
+      <span>{{ 'DOCUMENTS_FOR_SIGNATURE' | translate }}</span>
+      <span *ngIf="docSignList?.length" class="docs-count">{{ docSignList.length }}</span>
+    </ng-template> -->
+    <div class="documents-tab">
+      <div
+        *ngIf="docSignList?.length && !docSignLoading"
+        class="documents-list"
+      >
+        <div class="documents-list__header">
+          <h3>{{ 'DOCUMENTS_FOR_SIGNATURE' | translate }}</h3>
+          <p-button
+            class="button-full-xs"
+            label="{{ 'BUTTON_DOWNLOAD_ARCHIVE' | translate }}"
+            icon="pi pi-download"
+            iconPos="left"
+            [disabled]="docSignDownloading"
+            [loading]="docSignDownloading"
+            (click)="onDownloadArch()"
+          ></p-button>
+        </div>
+        <loadable-list-container
+          [pagination]="false"
+          [dataList]="{
+            documents: docSignList,
+            count: 0
+          }"
+          [dataConfig]="documentsDataConfig"
+          [template]="documentsDataLayout"
+          [otherData]="{
+            'states': docSignStateList
+          }"
+          (clickItem)="openSignature($event)"
+        ></loadable-list-container>
+      </div>
+      <div *ngIf="!docSignList?.length && !docSignLoading" class="no-documents">
+        {{ 'NO_DOCUMENTS' | translate }}
+      </div>
+    </div>
+  </p-tabPanel>
+
+  <!-- Вкладка "История изменений" -->
+  <p-tabPanel header="{{ 'ISSUE_CHANGES' | translate }}">
+    <ng-container *ngIf="issuesHistory">
+      <div class="header-content">
+        <div *ngFor="let history of issuesHistory.states" class="column">
+          <div class="history-row">
+            <div
+              class="history-row__column"
+              [ngClass]="{
+                'jc-space-between w-full': isMobileV(),
+              }"
+            >
+              <div class="history-row__date">
+                {{
+                  history.date
+                    | date
+                      : langUtils.convert(
+                          langFacade.getLang(),
+                          'DATE_TIME_PIPE'
+                        )
+                }}
+              </div>
+              <div
+                class="history-row__status"
+                [ngStyle]="{
+                  order: isMobileV() ? -1 : 0,
+                }"
+              >
+                <div
+                  class="history-row__status_tag"
+                  [ngStyle]="{
+                    backgroundColor: history?.color,
+                  }"
+                >
+                  {{ history.stateName }}
+                </div>
+              </div>
+            </div>
+
+            <div class="history-row__name">
+              {{ history.userName }}
+            </div>
+          </div>
+          <div class="history-comment" *ngIf="history.comment">
+            <span class="comment-title">
+              {{ 'ISSUE_COMMENT' | translate }}
+            </span>
+            <br />
+            {{ history.comment }}
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </p-tabPanel>
+</p-tabView>

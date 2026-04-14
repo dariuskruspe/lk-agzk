@@ -1,0 +1,68 @@
+<section>
+  <!--  <h1 class="h0">{{ 'TITLE_PHONE_NUMBER' | translate }}</h1>-->
+  <form [formGroup]="phoneForm" class="display-flex-column">
+    <div class="auth__form mb-20">
+      @if (!codeSentSignal()) {
+      <!-- Поле ввода номера мобильного телефона -->
+      <div class="custom-form-field mb-20">
+        <label class="custom-form-field__label font-weight-300">{{
+          'PHONE_NUMBER' | translate
+        }}</label>
+        <input
+          [formField]="phoneForm"
+          pInputText
+          mask="9 (999) 999-99-99"
+          placeholder="8 (___) ___-__-__"
+          formControlName="phoneNumber"
+        />
+      </div>
+
+      <!-- Кнопка "Отправить код" -->
+      <p-button
+        (onClick)="getSms()"
+        [disabled]="phoneNumber.invalid"
+        label="{{ 'SEND_SMS_CODE' | translate }}"
+        styleClass="w-full"
+      ></p-button>
+      } @else {
+      <!-- Поле ввода SMS-кода -->
+      <div class="custom-form-field mb-5">
+        <app-info class="mb-20"
+          ><small
+            >{{ 'AUTH_SMS_CODE_SENT' | translate }}:
+            <span class="link-color">{{
+              phoneForm.controls.phoneNumber.value
+            }}</span></small
+          ></app-info
+        >
+        <label class="custom-form-field__label font-weight-300">{{
+          'AUTH_CODE' | translate
+        }}</label>
+        <input pInputText mask="999 999" formControlName="code" />
+      </div>
+
+      <div class="flex flex-row jc-space-between mb-20">
+        <!-- кнопка "Другой номер" (переход к вводу номера телефона) -->
+        <span
+          (click)="getCodeResponseSignal.set(null)"
+          class="grey font-size-14px clickable"
+          >{{ 'CHANGE_PHONE_NUMBER' | translate }}</span
+        >
+
+        <!-- кнопка "Отправить SMS-код повторно" -->
+        <span (click)="getSms()" class="grey font-size-14px clickable">{{
+          'RESEND_SMS_CODE' | translate
+        }}</span>
+      </div>
+
+      <!-- Кнопка "Войти" -->
+      <p-button
+        (onClick)="onSubmit()"
+        [disabled]="phoneForm.invalid"
+        label="{{ 'BUTTON_LOGIN' | translate }}"
+        styleClass="w-full"
+      ></p-button>
+      }
+    </div>
+  </form>
+</section>

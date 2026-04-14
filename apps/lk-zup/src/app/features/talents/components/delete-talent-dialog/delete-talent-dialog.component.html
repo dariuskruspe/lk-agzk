@@ -1,0 +1,31 @@
+<div class="modal-info">
+  <div>
+    <div class="info-title">
+      {{ 'TALENT_DELETE_TEXT' | translate }}
+    </div>
+    <textarea
+      pInputTextarea
+      [(ngModel)]="comment"
+      class="w-full"
+      [autoResize]="true"
+      rows="4"
+      placeholder="{{ 'TALENT_DELETE_TOOLTIP' | translate }}"
+    ></textarea>
+
+    <div class="vacation-buttons">
+      <button
+        label="{{ 'BUTTON_SAVE' | translate }}"
+        pButton
+        (click)="sendIssue()"
+        [loading]="isLoadingSignal()"
+      ></button>
+      <button
+        label="{{ 'BUTTON_CANCEL' | translate }}"
+        pButton
+        class="p-button-outlined"
+        [disabled]="isLoadingSignal()"
+        (click)="cancelIssue()"
+      ></button>
+    </div>
+  </div>
+</div>

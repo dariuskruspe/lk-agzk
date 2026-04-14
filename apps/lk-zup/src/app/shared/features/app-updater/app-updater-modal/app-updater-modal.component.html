@@ -1,0 +1,14 @@
+<div>
+  <h2>{{ 'NEW_VERSION_AVAILABLE' | translate }}</h2>
+  <p class="mt-6 update-subtitle">
+    {{ 'NEW_VERSION_DESCRIPTION' | translate }}
+  </p>
+</div>
+
+<div class="submit-block">
+  <p-button
+    [label]="'NEW_VERSION_APPLY' | translate"
+    styleClass="p-button-lg"
+    (click)="apply()"
+  ></p-button>
+</div>

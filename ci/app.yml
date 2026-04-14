@@ -1,0 +1,30 @@
+include:
+  - 'ci/app/mr.yml'
+  - local: ci/app/on-tag.yml
+    rules:
+      - if: $CI_COMMIT_TAG
+
+.app:build:
+  extends:
+    - .node
+  stage: build
+  artifacts:
+    paths:
+      - dist
+    expire_in: 1 day
+  script:
+    - node ci/scripts/tag gen_version_file
+    - bun nx build lk-zup -c $APP_ENV_NAME
+
+# линт запускаем на любой коммит
+.app:lint:
+  extends:
+    - .node
+  stage: build
+  allow_failure: true
+  artifacts:
+    when: always
+    reports:
+      codequality: gl-codequality.json
+  script:
+    - ESLINT_CODE_QUALITY_REPORT=gl-codequality.json bun lint lk-zup --format gitlab

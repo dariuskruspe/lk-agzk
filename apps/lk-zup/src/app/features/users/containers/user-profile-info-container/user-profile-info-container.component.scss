@@ -1,0 +1,36 @@
+.profile-info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  &__row {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+  }
+
+  &__contacts {
+    width: 320px;
+  }
+
+  &__personal {
+    flex: 1;
+  }
+
+  @media (max-width: 1200px) {
+    flex-direction: column;
+
+    &__personal {
+      flex: 0;
+    }
+
+    &__contacts {
+      width: 100%;
+    }
+
+    &__row {
+      flex-direction: column;
+    }
+  }
+}

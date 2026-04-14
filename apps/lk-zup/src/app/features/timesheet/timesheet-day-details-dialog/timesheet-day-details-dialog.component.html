@@ -1,0 +1,188 @@
+<div class="timesheet-day-details">
+  <section class="timesheet-day-details__headline">
+    <div class="timesheet-day-details__headline-main">
+      <p class="timesheet-day-details__eyebrow">
+        {{ data()?.date | date: 'EEEE' }}
+      </p>
+      <div class="timesheet-day-details__date">
+        {{ data()?.date | date: 'dd.MM.yyyy' }}
+      </div>
+      <div class="timesheet-day-details__employee">
+        <span class="timesheet-day-details__employee-label">
+          {{ 'EMPLOYEE' | translate }}
+        </span>
+        <span class="timesheet-day-details__employee-name">
+          {{ data()?.employeeName }}
+        </span>
+      </div>
+    </div>
+  </section>
+
+  <section class="timesheet-day-details__summary">
+    <div class="timesheet-day-details__summary-item">
+      <span class="timesheet-day-details__summary-label">
+        {{ 'TIMESHEET_DAY_DETAILS_PLAN' | translate }}
+      </span>
+      <strong class="timesheet-day-details__summary-value">
+        {{ formatNumber(data()?.hoursPlan) }}
+      </strong>
+    </div>
+    <div class="timesheet-day-details__summary-item">
+      <span class="timesheet-day-details__summary-label">
+        {{ 'STATUS_FACT' | translate }}
+      </span>
+      <strong class="timesheet-day-details__summary-value">
+        {{ formatNumber(data()?.hoursFact) }}
+      </strong>
+    </div>
+    <div class="timesheet-day-details__summary-item">
+      <span class="timesheet-day-details__summary-label">
+        {{ 'TIMESHEET_DAY_DETAILS_DIFFERENCE' | translate }}
+      </span>
+      <strong
+        class="timesheet-day-details__summary-value"
+        [class.timesheet-day-details__summary-value--positive]="
+          getDifferenceState(hoursDifference()) === 'positive'
+        "
+        [class.timesheet-day-details__summary-value--negative]="
+          getDifferenceState(hoursDifference()) === 'negative'
+        "
+        [class.timesheet-day-details__summary-value--neutral]="
+          getDifferenceState(hoursDifference()) === 'neutral'
+        "
+      >
+        {{ formatDifference(hoursDifference()) }}
+      </strong>
+    </div>
+  </section>
+
+  <section class="timesheet-day-details__content">
+    <div class="timesheet-day-details__section-head">
+      <h3 class="timesheet-day-details__section-title">
+        {{ 'TIMESHEET_DAY_DETAILS_DAY_TYPES' | translate }}
+      </h3>
+    </div>
+
+    @if (dayTypeItems().length) {
+      <div class="timesheet-day-details__list">
+        @for (item of dayTypeItems(); track $index) {
+          <article class="timesheet-day-details__item">
+            <div class="timesheet-day-details__item-header">
+              <div
+                class="timesheet-day-details__marker"
+                [style.--marker-color]="
+                  item.style.color ?? 'var(--timesheet-summary-text, #989aa2)'
+                "
+                [style.--marker-bg]="
+                  item.style.bgColor ?? 'rgba(152, 154, 162, 0.12)'
+                "
+              >
+                @if (item.style.icon) {
+                  <app-icon
+                    [kind]="item.style.iconKind"
+                    [icon]="item.style.icon"
+                  ></app-icon>
+                } @else {
+                  <span class="timesheet-day-details__marker-dot"></span>
+                }
+              </div>
+
+              <div class="timesheet-day-details__item-meta">
+                <div class="timesheet-day-details__item-title">
+                  {{ item.title }}
+                </div>
+                @if (item.subtitle) {
+                  <div class="timesheet-day-details__item-subtitle">
+                    {{ item.subtitle }}
+                  </div>
+                }
+                <div class="timesheet-day-details__item-badges">
+                  @if (item.resolvedState; as state) {
+                    <span
+                      class="timesheet-day-details__badge timesheet-day-details__badge--status"
+                      [style.background]="state.color"
+                    >
+                      {{ state.name }}
+                    </span>
+                  }
+
+                  @if (item.showCalendarTypeBadge) {
+                    <span class="timesheet-day-details__badge">
+                      {{ item.calendarTypeLabelKey | translate }}
+                    </span>
+                  }
+
+                  @if (item.dayType.onApproval) {
+                    <span
+                      class="timesheet-day-details__badge timesheet-day-details__badge--warning"
+                    >
+                      {{ 'REQUIRING_APPROVAL' | translate }}
+                    </span>
+                  }
+                </div>
+              </div>
+            </div>
+
+            @if (item.showStats) {
+              <dl class="timesheet-day-details__stats">
+                @if (item.showPlanAndDifference) {
+                  <div class="timesheet-day-details__stat">
+                    <dt>{{ 'TIMESHEET_DAY_DETAILS_PLAN' | translate }}</dt>
+                    <dd>{{ formatNumber(item.dayType.hoursCountPlan) }}</dd>
+                  </div>
+                }
+                <div class="timesheet-day-details__stat">
+                  <dt>{{ 'STATUS_FACT' | translate }}</dt>
+                  <dd>{{ formatNumber(item.dayType.hoursCountActual) }}</dd>
+                </div>
+                @if (item.showPlanAndDifference) {
+                  <div class="timesheet-day-details__stat">
+                    <dt>
+                      {{ 'TIMESHEET_DAY_DETAILS_DIFFERENCE' | translate }}
+                    </dt>
+                    <dd
+                      [class.timesheet-day-details__stat-value--positive]="
+                        getDifferenceState(
+                          item.dayType.hoursCountDifference
+                        ) === 'positive'
+                      "
+                      [class.timesheet-day-details__stat-value--negative]="
+                        getDifferenceState(
+                          item.dayType.hoursCountDifference
+                        ) === 'negative'
+                      "
+                      [class.timesheet-day-details__stat-value--neutral]="
+                        getDifferenceState(
+                          item.dayType.hoursCountDifference
+                        ) === 'neutral'
+                      "
+                    >
+                      {{ formatDifference(item.dayType.hoursCountDifference) }}
+                    </dd>
+                  </div>
+                }
+              </dl>
+            }
+
+            @if (item.canOpenIssue) {
+              <div class="timesheet-day-details__actions">
+                <button
+                  type="button"
+                  class="timesheet-day-details__issue-link"
+                  (click)="openIssue(item.issueId)"
+                >
+                  {{ 'BUTTON_ISSUE_OPEN' | translate }}
+                </button>
+              </div>
+            }
+          </article>
+        }
+      </div>
+    } @else {
+      <div class="timesheet-day-details__empty">
+        <span class="timesheet-day-details__empty-icon">•</span>
+        <span>{{ 'TIMESHEET_DAY_DETAILS_EMPTY' | translate }}</span>
+      </div>
+    }
+  </section>
+</div>

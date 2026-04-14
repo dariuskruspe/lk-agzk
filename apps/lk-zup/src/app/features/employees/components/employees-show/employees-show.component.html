@@ -1,0 +1,70 @@
+<p-toolbar class="title nowrap">
+  <button
+    pButton
+    *ngIf="!dialogMode"
+    class="p-button-outlined p-button-rounded"
+    icon="pi pi-arrow-left"
+    (click)="onBackPage()"
+  ></button>
+  <h1>
+    {{ employeePersonalData?.fullName }}
+  </h1>
+</p-toolbar>
+<div class="profile-info">
+  <div
+    class="photo"
+    [ngStyle]="{
+      backgroundImage: employeePersonalData?.photo
+        ? 'url(' + apiUrl + '/' + employeePersonalData?.photo + ')'
+        : 'url(assets/img/svg/user-circle.svg)'
+    }"
+  ></div>
+  <div class="info">
+    <!-- Должность -->
+    <div *ngIf="employeePersonalData?.position">
+      <b>{{ employeePersonalData?.position }}</b>
+    </div>
+
+    <!-- Подразделение -->
+    <div *ngIf="employeePersonalData?.division">
+      {{ employeePersonalData?.division }}
+    </div>
+
+    <!-- Руководитель -->
+    <div *ngIf="employeePersonalData?.manager">
+      {{ 'EMPLOYEE_MANAGER' | translate }}
+      <a (click)="onGoRouteManager(employeePersonalData?.managerEmployeeID)">{{employeePersonalData?.manager}}</a>
+    </div>
+
+    <!-- Согласующий -->
+    <div *ngIf="employeePersonalData?.approver">
+      <span *ngIf="!synonym">{{ 'EMPLOYEE_APPROVER' | translate }}</span>
+      <span *ngIf="synonym">{{ synonym }} </span>
+      <a (click)="onGoRouteManager(employeePersonalData?.approverEmployeeID)">{{employeePersonalData?.approver}}</a>
+    </div>
+
+    <!-- Рабочий статус (например, "отсутствие до") -->
+    @if (employeePersonalData?.state || employeePersonalData?.state === 0) {
+      <div>
+        <span class="employee-status">{{ findWorkStatus(employeePersonalData?.state)?.name }}&nbsp;</span>
+        @if (employeePersonalData?.stateEnds) {
+          <span class="until">{{ 'UNTIL' | translate }}&nbsp;</span>
+          <span>{{ employeePersonalData?.stateEnds | date: ('DATE_PIPE' | translate) }}</span>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<div class="profile-info_card">
+  <p-card
+    *ngIf="employeePersonalData?.contactInfo?.length"
+    [ngClass]="{ 'no-border': dialogMode }"
+  >
+    <app-item-list
+      [items]="employeePersonalData?.contactInfo"
+      titleKey="infoType"
+      valueKey="infoValue"
+    ></app-item-list>
+  </p-card>
+</div>

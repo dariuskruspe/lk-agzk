@@ -1,0 +1,15 @@
+<div class="issue-template-builder-preview">
+  <fpc [formData]="config()" *appRecreateViewKey="uniqConfigKey()"></fpc>
+</div>
+
+@if (currentFocusedField().length) {
+  @for (item of currentFocusedField(); track item.target) {
+    <app-issue-template-builder-field-overlay [config]="item" />
+  }
+} @else if (currentOverlay()) {
+  <app-issue-template-builder-field-overlay
+    [config]="currentOverlay()"
+    (edit)="onEditField($event)"
+    (delete)="onDeleteField($event)"
+  />
+}

@@ -1,0 +1,19 @@
+@if (!messages().length) {
+  <app-docky-chat-intro (clickExample)="clickExample.emit($event)" />
+} @else {
+  <div class="docky-chat-list">
+    @for (message of messages(); track message.id) {
+      <app-docky-message [message]="message" (retry)="retry.emit()" />
+    }
+    @if (isThinking()) {
+      <div class="docky-chat-thinking">
+        <div class="docky-chat-thinking__text">Доки думает...</div>
+        <div class="docky-chat-thinking__dots">
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    }
+    <app-docky-writing-animation [show]="isStreaming()" />
+  </div>
+}

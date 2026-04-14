@@ -1,0 +1,139 @@
+<div *ngIf="!isBusinessTrips" class="sticky-top bg-color py-10">
+  <div class="filters pb-0">
+    <fpc-filter
+      [loading]="loading"
+      [hideResultCount]="true"
+      [filter]="newFilter"
+      (filterSubmitted)="onFilterSubmit($event)"
+      [filterSize]="filterSize"
+      [listSize]="vacations?.length || 0"
+      [showLegendButton]="true"
+      (legendButtonClicked)="toggleLegend()"
+    ></fpc-filter>
+  </div>
+
+  <!-- Легенда -->
+  <div
+    *ngIf="showLegend && !loading"
+    class="legend"
+    [ngClass]="{ 'mobile-v': isMobileV() }"
+  >
+    <!-- Элементы легенды -->
+    <div class="legend-items flex" [ngClass]="{ 'mobile-v': isMobileV() }">
+      <div class="legend-item" *ngFor="let type of legendList">
+        <div
+          class="legend-icon"
+          [style.background-color]="type?.color"
+          [ngClass]="{
+            liner: type?.approving === true,
+            'linear-red': type?.approving === false
+          }"
+        >
+          <i class="pi pi-sun sun-icon"></i>
+        </div>
+        <div class="title-legend">
+          <span>{{ type?.label }}</span>
+          <span *ngIf="type?.approving === true" class="vacation-status"
+            >({{ 'DOCUMENTS_AGREE' | translate }})</span
+          >
+          <span *ngIf="type?.approving === false" class="vacation-status"
+            >({{ 'VACATION_REJECTED' | translate }})</span
+          >
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Список отпусков (командировок) по месяцам -->
+<ng-container *ngIf="!loading">
+  <ng-container *ngFor="let month of vacationsFullData; let i = index">
+    <ng-container *ngIf="view === 'month' ? monthIndex === i : true">
+      <div class="month-block" [ngClass]="{ 'mobile-v': isMobileV() }">
+        <div class="month-block__title" id="{{ i }}mobile">
+          {{ month.monthName }} {{ year }}
+        </div>
+        <div class="month-block__body">
+          <div
+            class="vacation-list-item"
+            *ngFor="let vacation of month.vacationsList"
+            [ngStyle]="{ 'background-color': vacation?.color }"
+            [ngClass]="{
+              liner: !vacation.approved,
+              'linear-red': vacation.approved !== null && !vacation.approved
+            }"
+            (click)="
+              showInfo({
+                vacation: vacation.fullVacation,
+                period: vacation.period
+              })
+            "
+          >
+            <div class="info">
+              <div class="name">{{ vacation.employeeName }}</div>
+              <div class="vacation">
+                {{ vacation.type }}:
+                {{ vacation.startDate | date : 'dd.MM.yyyy' }} -
+                {{ vacation.endDate | date : 'dd.MM.yyyy' }} ({{
+                  vacation.daysLength
+                }}д)
+              </div>
+            </div>
+            <div class="icon" *ngIf="vacation.hasIntersection">
+              <img src="assets/icons/intersection.svg" alt="intersection" />
+            </div>
+          </div>
+          <div
+            class="vacation-list-item empty-list-item"
+            *ngIf="!month.vacationsList.length"
+          >
+            {{ 'VACATIONS_GRAPH_EMPTY' | translate }}
+          </div>
+          <div
+            class="intersection"
+            *ngIf="hasIntersections(month.vacationsList)"
+            (click)="openIntersections(month.vacationsList, i)"
+          >
+            {{ 'VACATIONS_GRAPH_SHOW_INTERSECTIONS' | translate }}
+            <img
+              src="assets/icons/intersection-blue.svg"
+              class="icon"
+              alt="intersection"
+            />
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </ng-container>
+</ng-container>
+
+<p-sidebar
+  #sidebar
+  [(visible)]="showIntersections"
+  position="bottom"
+  [baseZIndex]="1102"
+  appendTo="body"
+  [showCloseIcon]="false"
+>
+  <p-toolbar class="space-between">
+    <div class="sidebar-header">
+      {{ 'VACATIONS_GRAPH_INTERSECTIONS' | translate }}
+    </div>
+    <button
+      pButton
+      pRipple
+      type="button"
+      icon="pi pi-times"
+      class="p-button-rounded p-button-secondary p-button-text"
+      (click)="sidebar.close($event)"
+    ></button>
+  </p-toolbar>
+  <div class="sidebar-content">
+    <calendar-graph-mobile-intersection
+      *ngIf="showIntersections"
+      [periods]="intersectionPeriods"
+      [monthNumber]="intersectionMonth"
+      [dateLocale]="langFacade.getLang()"
+    ></calendar-graph-mobile-intersection>
+  </div>
+</p-sidebar>

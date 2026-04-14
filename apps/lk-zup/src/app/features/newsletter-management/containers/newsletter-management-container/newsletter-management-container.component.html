@@ -1,0 +1,169 @@
+<!-- Страница "Таланты" -->
+<div class="employee-vacations-body">
+  <p-toolbar class="title">
+    <h1>{{ 'TITLE_NEWSLETTER_MANAGEMENT' | translate }}</h1>
+    <span class="spacer"></span>
+
+    <button
+      pButton
+      icon="pi pi-plus-circle"
+      iconPos="left"
+      [label]="'NEWSLETTER_CREATE' | translate"
+      icon="pi pi-plus"
+      (click)="onCreate()"
+    ></button>
+  </p-toolbar>
+
+  <!-- Панель вкладок, поиска и фильтрации -->
+  <div class="tabs-controls-panel">
+    <!-- Вкладки -->
+    <div class="tabs">
+      <!-- Вкладка "Таланты" -->
+      <div
+        class="tab-item"
+        (click)="changeTab('newsletters')"
+        [class.active]="activeTab === 'newsletters'"
+      >
+        <span class="tab-title">{{
+          'NEWSLETTER_ALL_NEWSLETTERS' | translate
+        }}</span>
+      </div>
+
+      <!-- Вкладка "9-grid" -->
+      <div
+        class="tab-item active"
+        (click)="changeTab('templates')"
+        [class.active]="activeTab === 'templates'"
+      >
+        <span class="tab-title">{{
+          'NEWSLETTER_MESSAGE_TEMPLATES' | translate
+        }}</span>
+      </div>
+    </div>
+
+    <div class="tabs"></div>
+
+    <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+    <div class="filters">
+      <!-- Поиск -->
+      <!-- <div class="p-input-icon-left mobile-search-input">
+        <i class="pi pi-search"></i>
+        <input
+          pInputText
+          [(ngModel)]="filterValue.serach"
+          (ngModelChange)="applySearchFilter()"
+          class="search-input"
+          [placeholder]="'ISSUE_SEARCH_FIELD' | translate"
+          type="text"
+        />
+      </div> -->
+
+      <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+      <!-- <div class="filter-icon-button">
+        <i
+          class="pi pi-sliders-h filter-icon"
+          (click)="toggleFilters($event)"
+        ></i>
+      </div> -->
+
+      <!-- @if (isMobileV()) {
+        <app-filters-sidebar [visible]="showFilters">
+          <ng-container *ngTemplateOutlet="filters"></ng-container>
+        </app-filters-sidebar>
+      } @else {
+        @if (showFilters) {
+          <app-filters-dialog (closeButtonClicked)="showFilters = false">
+            <ng-container *ngTemplateOutlet="filters"></ng-container>
+          </app-filters-dialog>
+        }
+      } -->
+
+      <!-- <ng-template #filters> </ng-template> -->
+    </div>
+  </div>
+
+  <div class="content">
+    <div *ngIf="activeTab === 'templates'">
+      <router-outlet></router-outlet>
+    </div>
+    <div *ngIf="activeTab === 'newsletters'">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+
+<!-- <div class="newsletter-management-container">
+  <div class="newsletter-management-header">
+    <div class="breadcrumb-section">
+      <span class="breadcrumb">УПРАВЛЕНИЕ РАССЫЛКАМИ</span>
+    </div>
+    <h1 class="page-title">Управление рассылками</h1>
+  </div>
+
+  <p-tabView
+    [activeIndex]="activeTab === 'newsletters' ? 0 : 1"
+    class="newsletter-tabs"
+  >
+    <p-tabPanel header="Все рассылки">
+      <div class="tab-content">
+        <div class="tab-header">
+          <div class="search-section">
+            <input
+              type="text"
+              pInputText
+              placeholder="Поиск по наименованию"
+              class="search-input"
+            />
+            <button
+              pButton
+              type="button"
+              icon="pi pi-filter"
+              class="p-button-outlined filter-button"
+            ></button>
+          </div>
+          <button
+            pButton
+            type="button"
+            label="+ Создать"
+            icon="pi pi-plus"
+            class="p-button-primary create-button"
+            (click)="onCreateNewsletter()"
+          ></button>
+        </div>
+
+        <router-outlet></router-outlet>
+      </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Шаблоны сообщений">
+      <div class="tab-content">
+        <div class="tab-header">
+          <div class="search-section">
+            <input
+              type="text"
+              pInputText
+              placeholder="Поиск по наименованию"
+              class="search-input"
+            />
+            <button
+              pButton
+              type="button"
+              icon="pi pi-filter"
+              class="p-button-outlined filter-button"
+            ></button>
+          </div>
+          <button
+            pButton
+            type="button"
+            label="Создать"
+            icon="pi pi-plus"
+            class="p-button-primary create-button"
+            (click)="onCreateTemplate()"
+          ></button>
+        </div>
+
+        <router-outlet></router-outlet>
+      </div>
+    </p-tabPanel>
+  </p-tabView>
+</div> -->

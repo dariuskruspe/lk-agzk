@@ -1,0 +1,8 @@
+<div class="container">
+  <div>
+    <app-signature-file-container
+      [hasAgreement]="!data?.isShowMode && data.document.mandatory"
+      (onclose)="closeFile($event)"
+    ></app-signature-file-container>
+  </div>
+</div>

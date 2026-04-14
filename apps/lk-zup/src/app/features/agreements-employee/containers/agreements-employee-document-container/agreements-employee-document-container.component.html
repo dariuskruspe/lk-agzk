@@ -1,0 +1,6 @@
+<app-agreements-employee-document-page
+  *ngIf="agreementsEmployeeDocumentPageFacade.getData$() | async as doc"
+  [document]="doc"
+  (backPage)="backPage()"
+  (oncloseFile)="closeFile($event)"
+></app-agreements-employee-document-page>

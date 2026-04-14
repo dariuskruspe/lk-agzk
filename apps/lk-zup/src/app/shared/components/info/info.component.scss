@@ -1,0 +1,25 @@
+:host {
+  display: block;
+}
+
+.info-container {
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--card-background);
+  color: var(--text-color);
+
+  .content {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .severity-icon {
+    i {
+      font-size: 32px;
+    }
+  }
+
+  .error { color: var(--error); }
+  .info { color: var(--toast-icon-background-info); }
+  .success { color: var(--success); }
+  .warning { color: var(--warning); }
+}

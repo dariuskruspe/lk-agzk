@@ -1,0 +1,73 @@
+.notification-item {
+  display: flex;
+  align-items: flex-start;
+
+  font-size: 14px;
+  font-weight: 400;
+  padding: 18px 16px;
+
+  cursor: pointer;
+
+  &__icon {
+    flex: 0 0 auto;
+    align-self: start;
+    font-size: 20px;
+    background-color: var(--issue-icon-background);
+    color: var(--issue-icon-color);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    margin-left: 10px;
+  }
+
+  &__title {
+    display: flex;
+    align-items: center;
+    font-size: 11px;
+
+    &_text {
+      font-size: 11px;
+
+      a {
+        text-align: left;
+        color: var(--text-color);
+      }
+    }
+
+    &_point {
+      display: inline-flex;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: #45464f;
+      margin: 0 5px;
+    }
+
+    &_date {
+      color: var(--gray);
+      font-weight: 300;
+      flex-shrink: 0;
+      margin-left: 5px;
+    }
+  }
+
+  &__message {
+    margin-top: 5px;
+    color: var(--basic-color);
+    font-size: 14px;
+    font-weight: 400;
+  }
+
+  &:hover {
+    background-color: var(--hover);
+  }
+}

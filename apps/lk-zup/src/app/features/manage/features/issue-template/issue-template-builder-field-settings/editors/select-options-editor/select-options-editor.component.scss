@@ -1,0 +1,696 @@
+.select-options-editor {
+  .data-source-selector {
+    margin-bottom: 24px;
+
+    h4 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--foreground-color);
+    }
+
+    .source-options {
+      display: flex;
+      gap: 12px;
+    }
+
+    .source-option {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      border: 2px solid var(--sidebar-border);
+      border-radius: var(--radius-md);
+      background: var(--bg-element);
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: var(--foreground-color-secondary);
+        background: var(--bg-primary);
+      }
+
+      &.active {
+        border-color: var(--button-primary-bg);
+        background: rgba(56, 128, 255, 0.1);
+
+        .source-icon {
+          color: var(--button-primary-bg);
+        }
+      }
+
+      .source-icon {
+        font-size: 20px;
+        color: var(--foreground-color-secondary);
+        transition: color 0.2s ease;
+      }
+
+      .source-info {
+        flex: 1;
+
+        .source-label {
+          display: block;
+          font-size: 14px;
+          font-weight: 500;
+          color: var(--foreground-color);
+        }
+
+        .source-description {
+          display: block;
+          font-size: 12px;
+          color: var(--foreground-color-secondary);
+          margin-top: 2px;
+        }
+      }
+    }
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+
+    h4 {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--foreground-color);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      .changes-badge {
+        padding: 4px 8px;
+        background: var(--button-warning-bg);
+        color: var(--foreground-color);
+        font-size: 11px;
+        font-weight: 500;
+        border-radius: 12px;
+      }
+
+      .options-count {
+        padding: 4px 8px;
+        background: var(--control-hover-bg);
+        color: var(--foreground-color);
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 12px;
+      }
+
+      .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 4px;
+        padding: 4px 8px;
+        font-size: 12px;
+        font-weight: 500;
+        border-radius: 12px;
+
+        &.status-active {
+          background: rgba(16, 185, 129, 0.1);
+          color: var(--button-success-bg);
+        }
+
+        &.status-inactive {
+          background: rgba(239, 68, 68, 0.1);
+          color: var(--button-danger-bg);
+        }
+      }
+    }
+  }
+
+  // Ручной ввод опций
+  .manual-options {
+    .add-option-card {
+      margin-bottom: 20px;
+      background: var(--bg-element);
+      border: 1px solid var(--sidebar-border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+
+      .card-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 16px;
+        background: var(--bg-primary);
+        border-bottom: 1px solid var(--sidebar-border);
+        font-size: 14px;
+        font-weight: 500;
+        color: var(--foreground-color);
+
+        i {
+          color: var(--button-success-bg);
+        }
+      }
+
+      .add-option-form {
+        padding: 16px;
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 16px;
+          margin-bottom: 16px;
+
+          @media (max-width: 768px) {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .form-field {
+          display: flex;
+          flex-direction: column;
+
+          label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--foreground-color);
+
+            .error-text {
+              color: var(--button-danger-bg);
+              font-size: 11px;
+              font-weight: 400;
+            }
+          }
+
+          input {
+            padding: 10px 12px;
+            border: 1px solid var(--sidebar-border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: all 0.2s ease;
+
+            &:focus {
+              outline: none;
+              border-color: var(--button-primary-bg);
+              box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.25);
+            }
+
+            &.error {
+              border-color: var(--button-danger-bg);
+              box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+            }
+
+            &::placeholder {
+              color: var(--foreground-color-secondary);
+            }
+          }
+
+          .field-hint {
+            margin-top: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+
+            &.success-text {
+              color: var(--button-success-bg);
+            }
+
+            &.error-text {
+              color: var(--button-danger-bg);
+            }
+
+            .text-green {
+              color: var(--button-success-bg);
+            }
+
+            .text-red {
+              color: var(--button-danger-bg);
+            }
+          }
+        }
+
+        .form-actions {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+        }
+      }
+    }
+
+    .options-list {
+        .list-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 12px;
+        padding: 8px 12px;
+        background: var(--bg-primary);
+        border-radius: var(--radius);
+
+        .drag-hint {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          color: var(--foreground-color-secondary);
+
+          i {
+            color: var(--foreground-color-secondary);
+          }
+        }
+
+        .btn {
+          &.btn-link {
+            color: var(--button-primary-bg);
+            text-decoration: none;
+            font-size: 12px;
+            border: none;
+            background: none;
+            padding: 4px 8px;
+            cursor: pointer;
+
+            &:hover {
+              text-decoration: underline;
+            }
+          }
+        }
+      }
+
+      .option-item {
+        display: flex;
+        align-items: stretch;
+        margin-bottom: 12px;
+        background: var(--bg-element);
+        border: 1px solid var(--sidebar-border);
+        border-radius: var(--radius-md);
+        overflow: hidden;
+        transition: all 0.2s ease;
+
+        &:hover {
+          box-shadow: var(--control-shadow);
+        }
+
+        &.dragging {
+          opacity: 0.6;
+          transform: rotate(1deg);
+          box-shadow: var(--liquid-shadow);
+        }
+
+        &.drag-over {
+          border-color: var(--button-primary-bg);
+          background: var(--control-hover-bg);
+        }
+
+        .option-drag-handle {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 40px;
+          background: var(--bg-primary);
+          border-right: 1px solid var(--sidebar-border);
+          cursor: grab;
+          color: var(--foreground-color-secondary);
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: var(--control-hover-bg);
+            color: var(--foreground-color);
+          }
+
+          &:active {
+            cursor: grabbing;
+          }
+
+          i {
+            font-size: 16px;
+          }
+        }
+
+        .option-content {
+          flex: 1;
+          display: flex;
+          align-items: center;
+          padding: 16px;
+          gap: 16px;
+
+          .option-index {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: var(--control-hover-bg);
+            color: var(--foreground-color);
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 50%;
+            min-width: 28px;
+          }
+
+          .option-fields {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+
+            @media (max-width: 768px) {
+              grid-template-columns: 1fr;
+            }
+
+            .field-group {
+              display: flex;
+              flex-direction: column;
+
+              label {
+                margin-bottom: 4px;
+                font-size: 12px;
+                font-weight: 500;
+                color: var(--foreground-color-secondary);
+              }
+
+              input {
+                padding: 8px 10px;
+                border: 1px solid var(--sidebar-border);
+                border-radius: var(--radius);
+                font-size: 14px;
+                transition: all 0.2s ease;
+
+                &:focus {
+                  outline: none;
+                  border-color: var(--button-primary-bg);
+                  box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.25);
+                }
+
+                &.error {
+                  border-color: var(--button-danger-bg);
+                }
+              }
+
+              .error-text {
+                margin-top: 2px;
+                font-size: 11px;
+                color: var(--button-danger-bg);
+              }
+            }
+          }
+
+          .option-controls {
+            .control-group {
+                .checkbox-label {
+                  display: flex;
+                  align-items: center;
+                  gap: 8px;
+                  font-size: 13px;
+                  color: var(--foreground-color);
+                  cursor: pointer;
+                  user-select: none;
+
+                  input[type='checkbox'] {
+                    display: none;
+                  }
+
+                  .checkmark {
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid var(--sidebar-border);
+                    border-radius: var(--radius);
+                    position: relative;
+                    transition: all 0.2s ease;
+
+                    &::after {
+                      content: '';
+                      position: absolute;
+                      left: 3px;
+                      top: 0px;
+                      width: 6px;
+                      height: 9px;
+                      border: solid var(--foreground-color-inverse);
+                      border-width: 0 2px 2px 0;
+                      transform: rotate(45deg);
+                      opacity: 0;
+                      transition: opacity 0.2s ease;
+                    }
+                  }
+
+                  input[type='checkbox']:checked + .checkmark {
+                    background: var(--button-primary-bg);
+                    border-color: var(--button-primary-bg);
+
+                    &::after {
+                      opacity: 1;
+                    }
+                  }
+                }
+            }
+          }
+        }
+
+        .option-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+          padding: 8px;
+          background: var(--bg-primary);
+          border-left: 1px solid var(--sidebar-border);
+
+          .btn {
+            &.btn-icon {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 32px;
+              height: 32px;
+              border: none;
+              border-radius: var(--radius);
+              background: transparent;
+              color: var(--foreground-color-secondary);
+              cursor: pointer;
+              transition: all 0.2s ease;
+              font-size: 12px;
+
+              &:hover:not(:disabled) {
+                background: var(--control-hover-bg);
+              }
+
+              &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+              }
+
+              &.btn-move-up:hover:not(:disabled) {
+                color: var(--button-primary-bg);
+              }
+
+              &.btn-move-down:hover:not(:disabled) {
+                color: var(--button-primary-bg);
+              }
+
+              &.btn-duplicate:hover {
+                color: var(--button-success-bg);
+              }
+
+              &.btn-remove:hover {
+                color: var(--button-danger-bg);
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .empty-options {
+      text-align: center;
+      padding: 40px 20px;
+
+      .empty-content {
+        .empty-icon {
+          font-size: 48px;
+          color: var(--foreground-color-secondary);
+          margin-bottom: 16px;
+        }
+
+        h5 {
+          margin: 0 0 8px 0;
+          font-size: 18px;
+          font-weight: 500;
+          color: var(--foreground-color);
+        }
+
+        p {
+          margin: 0 0 20px 0;
+          color: var(--foreground-color-secondary);
+          font-size: 14px;
+        }
+      }
+    }
+  }
+
+  // API настройки
+  .api-options {
+    .api-form {
+      .form-field {
+        margin-bottom: 20px;
+
+          label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--foreground-color);
+
+            .error-text {
+              color: var(--button-danger-bg);
+              font-size: 11px;
+              font-weight: 400;
+            }
+          }
+
+          input,
+          textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--sidebar-border);
+            border-radius: var(--radius);
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+
+            &:focus {
+              outline: none;
+              border-color: var(--button-primary-bg);
+              box-shadow: 0 0 0 2px rgba(56, 128, 255, 0.25);
+            }
+
+            &.error {
+              border-color: var(--button-danger-bg);
+              box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.25);
+            }
+
+            &::placeholder {
+              color: var(--foreground-color-secondary);
+            }
+          }
+
+        textarea {
+          resize: vertical;
+          min-height: 80px;
+          font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+        }
+
+        .field-hint {
+          margin-top: 6px;
+          font-size: 12px;
+          color: var(--foreground-color-secondary);
+          display: flex;
+          align-items: center;
+          gap: 4px;
+
+          i {
+            color: var(--foreground-color-secondary);
+          }
+        }
+
+        .success-text {
+          margin-top: 6px;
+          font-size: 12px;
+          color: var(--button-success-bg);
+          display: flex;
+          align-items: center;
+          gap: 4px;
+        }
+      }
+    }
+  }
+
+  // Общие стили для кнопок
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid transparent;
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-weight: 500;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    user-select: none;
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.btn-primary {
+      background: var(--button-primary-bg);
+      border-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+
+      &:hover:not(:disabled) {
+        background: var(--button-primary-hover-bg);
+        border-color: var(--button-primary-hover-bg);
+      }
+    }
+
+    &.btn-secondary {
+      background: var(--button-secondary-bg);
+      border-color: var(--button-secondary-bg);
+      color: var(--button-secondary-text);
+
+      &:hover:not(:disabled) {
+        background: var(--button-secondary-hover-bg);
+        border-color: var(--button-secondary-hover-bg);
+      }
+    }
+
+    &.btn-sm {
+      padding: 4px 8px;
+      font-size: 12px;
+    }
+
+    i {
+      font-size: 14px;
+    }
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .select-options-editor {
+    .data-source-selector {
+      .source-options {
+        flex-direction: column;
+      }
+    }
+
+    .manual-options {
+      .add-option-form {
+        .form-row {
+          flex-direction: column;
+        }
+      }
+
+      .options-list {
+        .option-item {
+          .option-content {
+            .option-fields {
+              flex-direction: column;
+            }
+          }
+        }
+      }
+    }
+
+    .preset-options {
+      .preset-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  }
+}

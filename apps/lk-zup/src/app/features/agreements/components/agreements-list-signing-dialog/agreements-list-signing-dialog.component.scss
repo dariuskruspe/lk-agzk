@@ -1,0 +1,43 @@
+.dialog-content {
+  box-sizing: border-box;
+
+  .error-text {
+    color: red;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+    .docs-list {
+      display: flex;
+      flex-direction: column;
+      .file {
+        padding: 8px 3px;
+        cursor: pointer;
+        border-radius: 5%;
+        &:hover {
+          background-color: #f1eded57;
+        }
+        .file-icon {
+          margin-right: 5px;
+        }
+        .file-name {
+          text-align: center;
+          overflow-wrap: break-word;
+        }
+      }
+    }
+    .pdf-viewer {
+      width: 500px;
+    }
+  }
+
+  .sign-button {
+    margin-top: 20px;
+  }
+}
+.cert-item {
+  max-width: 400px;
+  white-space: pre-wrap;
+}

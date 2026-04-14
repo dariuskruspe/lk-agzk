@@ -1,0 +1,39 @@
+.dashboard-v2 {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 26px;
+  max-width: 100%;
+  overflow: hidden;
+
+  &__right {
+    &-widgets {
+      display: flex;
+      flex-direction: column;
+      gap: 26px;
+    }
+  }
+
+  // Мобильная адаптация
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    padding: 0;
+    width: 100%;
+    min-width: 0;
+
+    .left-side {
+      min-width: 0;
+      max-width: 100%;
+    }
+
+    &__right {
+      gap: 16px;
+      min-width: 0;
+      max-width: 100%;
+
+      &-widgets {
+        min-width: 0;
+      }
+    }
+  }
+}

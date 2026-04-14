@@ -1,0 +1,48 @@
+.docs-to-sign {
+  background-color: var(--card-background);
+  border-radius: 8px;
+  padding: 16px 24px;
+  margin-bottom: 16px;
+
+  &__header {
+    font-weight: 500;
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 12px;
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background-color: var(--surface-card);
+    border-radius: 8px;
+    padding: 12px 16px;
+  }
+
+  &__item-icon {
+    color: var(--text-color-secondary);
+
+    i {
+      font-size: 1.25rem;
+    }
+  }
+
+  &__item-name {
+    flex: 1;
+    font-size: 14px;
+    color: var(--text-color);
+  }
+
+  &__item-action {
+    ::ng-deep .p-button {
+      font-size: 14px;
+    }
+  }
+}

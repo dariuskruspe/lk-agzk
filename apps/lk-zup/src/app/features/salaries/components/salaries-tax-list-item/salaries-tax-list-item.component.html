@@ -1,0 +1,12 @@
+<loadable-list-container
+  *ngIf="dataList"
+  [pagination]="false"
+  [takeCount]="5"
+  [template]="dataLayout"
+  [loading]="loading"
+  [dataConfig]="dataConfig"
+  [dataList]="dataList"
+  [otherData]="otherData"
+  [appendFilterToQuery]="true"
+  (clickItem)="logIssueDetails($event)"
+></loadable-list-container>

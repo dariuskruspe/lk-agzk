@@ -1,0 +1,98 @@
+<div class="dependent-container">
+  @for (dep of dependent; track $index; let i = $index) {
+    <div class="dependence-item">
+      <div class="dependence-item__header">
+        <span class="dependence-item__title">Зависимость #{{ i + 1 }}</span>
+        <p-button
+          type="button"
+          icon="pi pi-trash"
+          styleClass="p-button-outlined p-button-danger p-button-sm"
+          (click)="removeDependent(i)"
+        ></p-button>
+      </div>
+
+      <div class="dependence-item__field">
+        <label class="dependence-item__field-label">Зависимое поле</label>
+        <div class="p-inputgroup">
+          <span class="p-inputgroup-addon">
+            <i class="pi pi-hashtag"></i>
+          </span>
+          <input
+            pInputText
+            placeholder="Введите formControlName зависимого поля"
+            [(ngModel)]="dep.control"
+          />
+        </div>
+      </div>
+
+      <div class="dependence-item__radio-group">
+        <span class="dependence-item__radio-group-label">Тип:</span>
+        <div class="dependence-item__radio-group-options">
+          <div class="field-radiobutton">
+            <p-radioButton
+              [value]="false"
+              [(ngModel)]="dep.clone"
+              [inputId]="'condition-type-' + i"
+            ></p-radioButton>
+            <label [for]="'condition-type-' + i">Условие отображения</label>
+          </div>
+          <div class="field-radiobutton">
+            <p-radioButton
+              [value]="true"
+              [(ngModel)]="dep.clone"
+              [inputId]="'copy-type-' + i"
+            ></p-radioButton>
+            <label [for]="'copy-type-' + i">Копировать значение</label>
+          </div>
+        </div>
+      </div>
+
+      @if (!dep.clone) {
+        <div class="dependence-item__field">
+          <div class="p-inputgroup">
+            <span class="p-inputgroup-addon">
+              <i class="pi pi-code"></i>
+            </span>
+            <input
+              pInputText
+              placeholder="Напр.: field1 === 'значение'"
+              [(ngModel)]="dep.condition"
+            />
+          </div>
+        </div>
+      } @else {
+        <div class="dependence-item__copy-message">
+          <i class="pi pi-copy"></i>
+          <span>Значение будет скопировано из текущего поля</span>
+        </div>
+      }
+    </div>
+  } @empty {
+    <div class="empty-list">
+      <i class="pi pi-sitemap empty-list__icon"></i>
+      <div class="empty-list__text">Нет созависимых полей</div>
+    </div>
+  }
+
+  <div class="add-button">
+    <p-button
+      label="Добавить зависимость"
+      icon="pi pi-plus"
+      size="small"
+      (click)="addDependent()"
+    ></p-button>
+  </div>
+</div>
+
+<style>
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

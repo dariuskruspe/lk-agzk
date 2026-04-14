@@ -1,0 +1,11 @@
+<small
+  *ngIf="hint && !error"
+  id="{{ controlName }}-hint"
+  class="block custom-form-field__hint"
+>
+  {{ hint | translate }}
+</small>
+<small class="p-error block custom-form-field__error">
+  {{ error | translate }}
+  <span *ngFor="let value of values">{{ value | translate }} </span>
+</small>

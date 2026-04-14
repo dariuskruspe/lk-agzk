@@ -1,0 +1,18 @@
+<section>
+  <h1 class="h0">{{ 'TITLE_AUTH' | translate }}</h1>
+
+  <button
+    *ngIf="!isLoading"
+    pButton
+    label="{{ 'BUTTON_LOGIN' | translate }}"
+    type="button"
+    class="full"
+    (click)="onAuthSooRequest()"
+  ></button>
+
+  <div class="loading" *ngIf="isLoading">
+    <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+  </div>
+
+
+</section>

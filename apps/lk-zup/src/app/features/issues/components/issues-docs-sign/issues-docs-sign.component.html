@@ -1,0 +1,25 @@
+<div
+  *ngIf="docSignList?.length && !loading" class="pf-to-sign"
+>
+  <p-toolbar class="margin-top-bottom p-toolbar-single-row">
+    <h3>{{ 'DOCUMENTS_FOR_SIGNATURE' | translate }}</h3>
+    <span class="spacer"></span>
+    <p-button
+      class="button-full-xs"
+      label="{{ 'BUTTON_DOWNLOAD_ARCHIVE' | translate }}"
+      icon="pi pi-download"
+      iconPos="left"
+      [disabled]="downloading"
+      [loading]="downloading"
+      (click)="onDownloadArch()"
+    ></p-button>
+  </p-toolbar>
+  <loadable-list-container
+    [pagination]="false" [dataList]="{
+      documents: docSignList,
+      count: 0
+    }" [dataConfig]="dataConfig" [template]="dataLayout" [otherData]="{
+      'states': stateList
+    }" (clickItem)="openSignature($event)"
+  ></loadable-list-container>
+</div>

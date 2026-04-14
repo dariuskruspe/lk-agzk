@@ -1,0 +1,22 @@
+<div class="field-overlay" [style]="styles()">
+  <div class="field-overlay__content" [@overlayAnimation]>
+    <div class="field-overlay__actions">
+      <button
+        pButton
+        icon="pi pi-pencil"
+        class="p-button-rounded p-button-text p-button-sm p-button-info"
+        pTooltip="Редактировать"
+        tooltipPosition="top"
+        (click)="edit.emit()"
+      ></button>
+      <button
+        pButton
+        icon="pi pi-trash"
+        class="p-button-rounded p-button-text p-button-sm p-button-danger"
+        pTooltip="Удалить"
+        tooltipPosition="top"
+        (click)="delete.emit()"
+      ></button>
+    </div>
+  </div>
+</div>

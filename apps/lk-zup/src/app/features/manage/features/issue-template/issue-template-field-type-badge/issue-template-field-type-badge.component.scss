@@ -1,0 +1,14 @@
+.field-type-badge {
+  font-size: 12px;
+  padding: 2px 6px;
+  border-radius: var(--radius);
+  background-color: var(--control-hover-bg);
+  color: var(--foreground-color-secondary);
+  width: fit-content;
+
+  // Упрощенная цветовая схема для типов полей
+  &[data-type='arr-smart'] {
+    background-color: var(--control-hover-bg);
+    color: var(--button-primary-bg);
+  }
+}

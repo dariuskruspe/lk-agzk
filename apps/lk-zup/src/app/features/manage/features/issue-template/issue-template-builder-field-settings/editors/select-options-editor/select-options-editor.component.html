@@ -1,0 +1,381 @@
+<div class="select-options-editor">
+  <!-- Выбор источника данных -->
+  <div class="data-source-selector">
+    <h4>Источник данных</h4>
+    <div class="source-options">
+      @for (source of optionSources; track source.type) {
+        <div
+          class="source-option"
+          [class.active]="currentSource() === source.type"
+          (click)="setOptionSource(source.type)"
+        >
+          <i class="source-icon {{ source.icon }}"></i>
+          <div class="source-info">
+            <span class="source-label">{{ source.label }}</span>
+            <span class="source-description">{{ source.description }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
+  <!-- Ручной ввод опций -->
+  @if (currentSource() === 'manual') {
+    <div class="manual-options">
+      <div class="section-header">
+        <h4>Список опций</h4>
+        <div class="header-actions">
+          @if (hasUnsavedChanges()) {
+            <span class="changes-badge">Есть изменения</span>
+          }
+          <span class="options-count"
+            >{{ options().length }}
+            {{
+              options().length === 1
+                ? 'опция'
+                : options().length < 5
+                  ? 'опции'
+                  : 'опций'
+            }}</span
+          >
+        </div>
+      </div>
+
+      <!-- Добавление новой опции -->
+      <div class="add-option-card">
+        <div class="card-header">
+          <i class="pi pi-plus-circle"></i>
+          <span>Добавить новую опцию</span>
+        </div>
+        <div class="add-option-form">
+          <div class="form-grid">
+            <div class="form-field">
+              <label for="new-option-label">
+                Название опции *
+                @if (newOptionLabel() && !isValidLabel(newOptionLabel())) {
+                  <span class="error-text">Название не может быть пустым</span>
+                }
+              </label>
+              <input
+                id="new-option-label"
+                type="text"
+                [value]="newOptionLabel()"
+                (input)="onNewLabelChange($any($event.target).value)"
+                (keydown.enter)="addNewOption()"
+                placeholder="Введите название опции"
+                [class.error]="
+                  newOptionLabel() && !isValidLabel(newOptionLabel())
+                "
+                autocomplete="off"
+              />
+            </div>
+            <div class="form-field">
+              <label for="new-option-value">
+                Значение *
+                @if (newOptionValue() && !isValidValue(newOptionValue())) {
+                  <span class="error-text">Значение уже используется</span>
+                }
+              </label>
+              <input
+                id="new-option-value"
+                type="text"
+                [value]="newOptionValue()"
+                (input)="newOptionValue.set($any($event.target).value)"
+                (keydown.enter)="addNewOption()"
+                placeholder="Значение будет сгенерировано автоматически"
+                [class.error]="
+                  newOptionValue() && !isValidValue(newOptionValue())
+                "
+                autocomplete="off"
+              />
+              @if (newOptionValue() && newOptionLabel()) {
+                <small class="field-hint">
+                  @if (isValidValue(newOptionValue())) {
+                    <i class="pi pi-check text-green"></i> Значение корректно
+                  } @else {
+                    <i class="pi pi-times text-red"></i> Значение уже
+                    используется
+                  }
+                </small>
+              }
+            </div>
+          </div>
+          <div class="form-actions">
+            <button
+              type="button"
+              class="btn btn-primary"
+              [disabled]="!canAddOption()"
+              (click)="addNewOption()"
+            >
+              <i class="pi pi-plus"></i>
+              Добавить опцию
+            </button>
+            @if (newOptionLabel() || newOptionValue()) {
+              <button
+                type="button"
+                class="btn btn-secondary"
+                (click)="clearNewOption()"
+              >
+                <i class="pi pi-times"></i>
+                Очистить
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+
+      <!-- Список опций -->
+      @if (options().length > 0) {
+        <div class="options-list">
+          <div class="list-header">
+            <span class="drag-hint">
+              <i class="pi pi-arrows-v"></i>
+              Перетащите для изменения порядка
+            </span>
+            @if (options().length > 1) {
+              <button
+                type="button"
+                class="btn btn-link btn-sm"
+                (click)="sortOptionsAlphabetically()"
+                title="Сортировать по алфавиту"
+              >
+                <i class="pi pi-sort-alpha-down"></i>
+                Сортировать А-Я
+              </button>
+            }
+          </div>
+
+          @for (option of options(); track option.id; let i = $index) {
+            <div
+              class="option-item"
+              [class.dragging]="draggedItem()?.id === option.id"
+              [class.drag-over]="isDragOver(option.id)"
+              draggable="true"
+              (dragstart)="onDragStart($event, option)"
+              (dragover)="onDragOver($event, option)"
+              (dragleave)="onDragLeave($event)"
+              (drop)="onDrop($event, option)"
+              (dragend)="onDragEnd()"
+            >
+              <div
+                class="option-drag-handle"
+                title="Перетащите для изменения порядка"
+              >
+                <i class="pi pi-grip-vertical"></i>
+              </div>
+
+              <div class="option-content">
+                <div class="option-index">{{ i + 1 }}</div>
+
+                <div class="option-fields">
+                  <div class="field-group">
+                    <label>Название</label>
+                    <input
+                      type="text"
+                      [value]="option.label"
+                      (input)="
+                        onLabelChange(option.id, $any($event.target).value)
+                      "
+                      (blur)="validateOptionLabel(option.id)"
+                      placeholder="Название опции"
+                      [class.error]="!option.label.trim()"
+                    />
+                    @if (!option.label.trim()) {
+                      <small class="error-text">Название обязательно</small>
+                    }
+                  </div>
+
+                  <div class="field-group">
+                    <label>Значение</label>
+                    <input
+                      type="text"
+                      [value]="option.value"
+                      (input)="
+                        updateOption(
+                          option.id,
+                          'value',
+                          $any($event.target).value
+                        )
+                      "
+                      (blur)="validateOptionValue(option.id)"
+                      placeholder="Значение"
+                      [class.error]="
+                        !option.value.trim() ||
+                        isDuplicateValue(option.value, option.id)
+                      "
+                    />
+                    @if (!option.value.trim()) {
+                      <small class="error-text">Значение обязательно</small>
+                    } @else if (isDuplicateValue(option.value, option.id)) {
+                      <small class="error-text"
+                        >Значение уже используется</small
+                      >
+                    }
+                  </div>
+                </div>
+
+                <div class="option-controls">
+                  <div class="control-group">
+                    <label class="checkbox-label">
+                      <input
+                        type="checkbox"
+                        [checked]="!!option.disabled"
+                        (change)="
+                          updateOption(
+                            option.id,
+                            'disabled',
+                            $any($event.target).checked
+                          )
+                        "
+                      />
+                      <span class="checkmark"></span>
+                      Заблокировано
+                    </label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="option-actions">
+                <button
+                  type="button"
+                  class="btn btn-icon btn-move-up"
+                  [disabled]="i === 0"
+                  (click)="moveOptionUp(i)"
+                  title="Переместить вверх"
+                >
+                  <i class="pi pi-chevron-up"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-icon btn-move-down"
+                  [disabled]="i === options().length - 1"
+                  (click)="moveOptionDown(i)"
+                  title="Переместить вниз"
+                >
+                  <i class="pi pi-chevron-down"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-icon btn-duplicate"
+                  (click)="duplicateOption(option)"
+                  title="Дублировать опцию"
+                >
+                  <i class="pi pi-copy"></i>
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-icon btn-remove"
+                  (click)="removeOption(option.id)"
+                  title="Удалить опцию"
+                >
+                  <i class="pi pi-trash"></i>
+                </button>
+              </div>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="empty-options">
+          <div class="empty-content">
+            <i class="pi pi-list empty-icon"></i>
+            <h5>Нет добавленных опций</h5>
+            <p>Добавьте первую опцию используя форму выше</p>
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="focusNewOptionInput()"
+            >
+              <i class="pi pi-plus"></i>
+              Добавить первую опцию
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- API настройки -->
+  @if (currentSource() === 'api') {
+    <div class="api-options">
+      <div class="section-header">
+        <h4>Настройки API запроса</h4>
+        <div class="header-actions">
+          @if (
+            value().optionListRequestAlias &&
+            value().optionListRequestAlias.trim()
+          ) {
+            <span class="status-badge status-active">
+              <i class="pi pi-check-circle"></i>
+              Настроено
+            </span>
+          } @else {
+            <span class="status-badge status-inactive">
+              <i class="pi pi-info-circle"></i>
+              Требуется настройка
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="api-form">
+        <div class="form-field">
+          <label for="api-alias">
+            Алиас запроса *
+            @if (!isValidApiAlias()) {
+              <span class="error-text">Алиас обязателен</span>
+            }
+          </label>
+          <input
+            id="api-alias"
+            type="text"
+            [value]="value().optionListRequestAlias || ''"
+            (input)="onApiUrlChange($any($event.target).value)"
+            placeholder="employees, departments, payTypes"
+            [class.error]="!isValidApiAlias()"
+            autocomplete="off"
+          />
+          <small class="field-hint">
+            <i class="pi pi-info-circle"></i>
+            Идентификатор API endpoint для загрузки опций
+          </small>
+        </div>
+
+        <div class="form-field">
+          <label for="api-params">
+            Параметры запроса
+            @if (
+              value().optionListRequestParams &&
+              !isValidJson(value().optionListRequestParams || '')
+            ) {
+              <span class="error-text">Неверный формат JSON</span>
+            }
+          </label>
+          <textarea
+            id="api-params"
+            [value]="value().optionListRequestParams || ''"
+            (input)="onApiParamsChange($any($event.target).value)"
+            placeholder='{"department": "IT", "active": true}'
+            rows="4"
+            [class.error]="
+              value().optionListRequestParams &&
+              !isValidJson(value().optionListRequestParams || '')
+            "
+          ></textarea>
+          <small class="field-hint">
+            <i class="pi pi-info-circle"></i>
+            JSON объект с параметрами для фильтрации (необязательно)
+          </small>
+          @if (
+            value().optionListRequestParams &&
+            isValidJson(value().optionListRequestParams || '')
+          ) {
+            <small class="success-text">
+              <i class="pi pi-check"></i>
+              JSON корректен
+            </small>
+          }
+        </div>
+      </div>
+    </div>
+  }
+</div>

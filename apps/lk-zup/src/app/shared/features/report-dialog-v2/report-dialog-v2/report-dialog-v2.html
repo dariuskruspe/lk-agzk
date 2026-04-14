@@ -1,0 +1,32 @@
+@if(isLoading()) {
+<div class="loading-wrapper">
+  <p-progressSpinner
+    class="d-flex justify-content-center"
+    styleClass="custom-spinner"
+  >
+  </p-progressSpinner>
+</div>
+} @if(pdfFile()) {
+<app-pdf-viewer [value]="pdfFile().file64"></app-pdf-viewer>
+}
+
+<p-toolbar class="margin-top">
+  @if (formats.length === 1) {
+  <p-button
+    label="{{ 'BUTTON_DOWNLOAD' | translate }}"
+    [disabled]="isLoading()"
+    [loading]="isDownloading()"
+    class="button-full-xs"
+    (click)="downloadFile()"
+  ></p-button>
+  } @else if (formats.length > 1) {
+  <p-splitButton
+    (onClick)="downloadFile()"
+    label="{{ 'BUTTON_DOWNLOAD' | translate }}"
+    [disabled]="isLoading() || isDownloading()"
+    appendTo="body"
+    [outlined]="true"
+    [model]="saveReportButtonItems()"
+  />
+  }
+</p-toolbar>

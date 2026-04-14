@@ -1,0 +1,10 @@
+.card-nglike {
+  background-color: var(--card-background);
+  box-shadow: var(--card-shadow);
+  border-radius: 5px;
+  overflow: visible;
+
+  &_paddings {
+    padding: 24px;
+  }
+}

@@ -1,0 +1,27 @@
+<div class="issue-container">
+  <div class="issues-title">{{ 'INSURANCE_ISSUES' | translate }}</div>
+  <ng-container *ngIf="!insuranceIssues?.issues.length; else issues">
+    <p-toolbar class="custom-item custom-item--empty">
+      {{ 'ISSUE_NO_ACTIVE' | translate }}
+    </p-toolbar>
+  </ng-container>
+  <div>
+    <ng-template #issues>
+      <loadable-list-container
+        [template]="dataLayout" [dataList]="insuranceIssues" [dataConfig]="dataConfig" [otherData]="{
+           issuesStatusList: issuesStatusList
+        }" [appendFilterToQuery]="true" [pagination]="false" [loading]="loading" (clickItem)="onGoDetails($event)"
+      ></loadable-list-container>
+    </ng-template>
+  </div>
+</div>
+<p-toolbar
+  class="center margin-top" *ngIf="!isIssueContainer"
+>
+  <button
+    pButton
+    class="p-button-outlined s"
+    label="{{ 'BUTTON_ISSUE_INSURANCE' | translate }}"
+    [routerLink]="['insurance-issues']"
+  ></button>
+</p-toolbar>

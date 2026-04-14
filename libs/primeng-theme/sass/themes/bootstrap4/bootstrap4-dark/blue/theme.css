@@ -1,0 +1,18 @@
+/* Error: Expected '.
+ *    ,
+ * 10 | @import '../_variables_dark
+ *    |                            ^
+ *    '
+ *   ../../Development/projects/designer/designer-ng/designer-ui/src/sass/themes/bootstrap4/bootstrap4-dark/blue/_variables.scss 10:28  @import
+ *   ../../Development/projects/designer/designer-ng/designer-ui/src/sass/themes/bootstrap4/bootstrap4-dark/blue/theme.scss 1:9         root stylesheet */
+
+body::before {
+  font-family: "Source Code Pro", "SF Mono", Monaco, Inconsolata, "Fira Mono",
+      "Droid Sans Mono", monospace, monospace;
+  white-space: pre;
+  display: block;
+  padding: 1em;
+  margin-bottom: 1em;
+  border-bottom: 2px solid black;
+  content: "Error: Expected '.\a    \2577 \a 10 \2502  @import '../_variables_dark\a    \2502                             ^\a    \2575 \a   ../../Development/projects/designer/designer-ng/designer-ui/src/sass/themes/bootstrap4/bootstrap4-dark/blue/_variables.scss 10:28  @import\a   ../../Development/projects/designer/designer-ng/designer-ui/src/sass/themes/bootstrap4/bootstrap4-dark/blue/theme.scss 1:9         root stylesheet";
+}

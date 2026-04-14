@@ -1,0 +1,48 @@
+:host {
+  display: block;
+  position: relative;
+}
+
+.editor-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 400px;
+  border: 1px solid #d1d5db;
+  border-radius: 4px;
+  background-color: #f9fafb;
+  color: #6b7280;
+  font-size: 14px;
+}
+
+.hugerte-container {
+  width: 100%;
+}
+
+:host ::ng-deep {
+  .tox-tinymce {
+    border-radius: 4px;
+    border: 1px solid #d1d5db;
+  }
+
+  .tox-edit-area iframe {
+    min-height: 400px !important;
+  }
+
+  .tox-toolbar-overlord {
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .tox-editor-header {
+    background: #f9fafb;
+  }
+
+  .tox-statusbar {
+    border-top: 1px solid #e5e7eb;
+  }
+
+  // Настройка для светло-голубого фона
+  .tox-edit-area iframe {
+    background-color: #ffffff;
+  }
+}

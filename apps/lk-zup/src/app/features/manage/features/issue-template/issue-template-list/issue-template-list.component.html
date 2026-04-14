@@ -1,0 +1,112 @@
+@if (issueTemplatesResource.loading()) {
+  <div class="loading-container">
+    <div class="spinner"></div>
+    <p>Загрузка типов заявок...</p>
+  </div>
+} @else if (issueTemplatesResource.error()) {
+  <div class="error-container">
+    <p>Ошибка при загрузке данных: {{ issueTemplatesResource.error() }}</p>
+  </div>
+} @else {
+  <div class="template-list-container">
+    <div class="template-list-header">
+      <h1>Типы заявок</h1>
+      <div class="header-actions">
+        <div class="stat-item">
+          <span class="stat-label">Всего типов заявок: </span>
+          <span class="stat-value">{{ getTotalTemplates() }}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <span class="search-icon"><i class="pi pi-search"></i></span>
+        <input
+          type="text"
+          class="search-input"
+          placeholder="Поиск по названию, коду или алиасу..."
+          [ngModel]="searchQuery()"
+          (ngModelChange)="updateSearch($event)"
+        />
+        @if (searchQuery().length > 0) {
+          <button class="clear-search-btn" (click)="updateSearch('')">✕</button>
+        }
+      </div>
+      @if (searchQuery().length > 0) {
+        <div class="search-results">
+          Найдено: {{ getFilteredTemplatesCount() }} типов заявок
+        </div>
+      }
+    </div>
+
+    @for (group of filteredGroups(); track group) {
+      <div class="template-group">
+        <div class="template-group-header">
+          <h2>{{ group.groupName }}</h2>
+          @if (group.groupAlias) {
+            <span class="group-alias">Алиас: {{ group.groupAlias }}</span>
+          }
+        </div>
+
+        @if (group.issueTypes.length) {
+          <div class="template-items">
+            @for (type of group.issueTypes; track type.issueTypeID) {
+              <div class="template-item">
+                <div class="template-item-header">
+                  <h3 title="{{ type.issueTypeFullName }}">
+                    {{ truncateText(type.issueTypeFullName, 60) }}
+                  </h3>
+                  <p class="template-item-shortname">
+                    {{ type.issueTypeShortName }}
+                  </p>
+                </div>
+                <div class="template-item-details">
+                  @if (type.issueTypeAlias) {
+                    <div class="detail-item">
+                      <span class="detail-label">Алиас:</span>
+                      <span
+                        class="detail-value"
+                        title="{{ type.issueTypeAlias }}"
+                        >{{ truncateText(type.issueTypeAlias, 30) }}</span
+                      >
+                    </div>
+                  }
+                  <div class="detail-item visible-flag">
+                    <span class="detail-label">Отображать:</span>
+                    <span
+                      class="visible-badge"
+                      [class.is-visible]="type.issueTypeIsInList"
+                    >
+                      {{ type.issueTypeIsInList ? 'Да' : 'Нет' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="template-item-actions">
+                  <a [routerLink]="[type.issueTypeID]" class="edit-button"
+                    >Редактировать</a
+                  >
+                </div>
+              </div>
+            }
+          </div>
+        } @else {
+          <p class="no-items">В данной группе нет типов заявок</p>
+        }
+      </div>
+    }
+
+    @if (!filteredGroups().length) {
+      <div class="no-templates">
+        @if (searchQuery().length > 0) {
+          <p>По запросу "{{ searchQuery() }}" ничего не найдено</p>
+          <button class="clear-search" (click)="updateSearch('')">
+            Сбросить поиск
+          </button>
+        } @else {
+          <p>Типы заявок не найдены</p>
+        }
+      </div>
+    }
+  </div>
+}

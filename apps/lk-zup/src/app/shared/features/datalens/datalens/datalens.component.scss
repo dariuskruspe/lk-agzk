@@ -1,0 +1,37 @@
+::ng-deep {
+  ul.p-tabview-nav {
+    margin-bottom: 2px;
+    border: 0 !important;
+  }
+
+  .p-tabview-panels {
+    padding: 1.25rem 0!important;
+  }
+
+  .p-tabview-title {
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .p-tabview-nav-link {
+    padding: 15px 0 !important;
+  }
+
+  .p-tabview .p-tabview-nav {
+    background: transparent!important;
+  }
+
+  .p-tabview .p-tabview-nav li {
+    flex-basis: 0;
+    padding-right: 20px;
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    .p-tabview-nav-link {
+      border-color: transparent;
+      padding: 12px 22px!important;
+    }
+  }
+}

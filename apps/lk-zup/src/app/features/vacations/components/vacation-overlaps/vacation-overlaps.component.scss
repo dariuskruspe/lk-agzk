@@ -1,0 +1,206 @@
+// [Цвета дней в календаре пересечений согласно дизайн-макету]
+// ┌─────────┬─────────────┬─────────────────────────┬─────────────────────────┐
+// │         │ Нет отпуска │ Отпуск по графику       │ Отпуск (вне графика)    │
+// │         ├─────────────┼─────────┬───────────────┼─────────┬───────────────┤
+// │         │     ───     │ Обычный │ Пересечение   │ Обычный │ Пересечение   │
+// ├─────────┼─────────────┼─────────┼───────────────┼─────────┼───────────────┤
+// │ Заливка │ нет         │ #DFF2D5 │ #DFF2D5       │ #D4EAFF │ #D4EAFF       │
+// ├─────────┼─────────────┼─────────┼───────────────┼─────────┼───────────────┤
+// │ Обводка │ #D3DBE3     │ #D3DBE3 │ #ED4346 (50%) │ #D8E0E7 │ #ED4346 (50%) │
+// ├─────────┼─────────────┼─────────┼───────────────┼─────────┼───────────────┤
+// │ Оверлей │ нет         │ нет     │ #FF3226 (10%) │ нет     │ #FF3226 (10%) │
+// └─────────┴─────────────┴─────────┴───────────────┴─────────┴───────────────┘
+
+:host ::ng-deep {
+  .p-dropdown {
+    border: none;
+    box-shadow: none;
+    width: 290px;
+
+    .p-dropdown-label {
+      padding: 0;
+
+      &:focus-visible {
+        outline: none;
+      }
+    }
+  }
+}
+
+:host {
+  /* Цвета обводки (stroke colors) */
+  --day-stroke-color: #D3DBE3; // нет отпуска
+  --vacation-stroke-color: #D3DBE3; // отпуск по графику (обычный)
+  --overlap-stroke-color: #ED434680; // отпуск по графику (пересечение)
+  --custom-vacation-stroke-color: #D8E0E7; // отпуск (обычный)
+  --custom-overlap-stroke-color: #ED434680; // отпуск (пересечение)
+
+  /* Цвета заливки (fill colors) */
+  --day-fill-color: var(--surface-card); // нет отпуска
+  --vacation-fill-color: #DFF2D5; // отпуск по графику (обычный)
+  --overlap-fill-color: #DFF2D5; // отпуск по графику (пересечение)
+  --custom-vacation-fill-color: #D4EAFF; // отпуск (обычный)
+  --custom-overlap-fill-color: #D4EAFF; // отпуск (пересечение)
+
+  /* Цвета оверлея (overlay colors) */
+  --day-overlay-color: transparent; // нет отпуска
+  --vacation-overlay-color: transparent; // отпуск по графику (обычный)
+  --overlap-overlay-color: #FF32261A; // отпуск по графику (пересечение)
+  --custom-vacation-overlay-color: transparent; // отпуск (обычный)
+  --custom-overlap-overlay-color: #FF32261A; // отпуск (пересечение)
+
+  /* Отступы */
+  --day-gap: 2px; // отступ между днями в календаре пересечений отпусков сотрудников
+
+  /* Границы */
+  --day-border-width: 1px;
+  --day-border-style: solid;
+  --day-border-color: var(--day-stroke-color);
+  --day-border-radius: 5px;
+  --overlap-border-style: dashed; // пересечение -> стиль границы
+
+  .vacation-info {
+    .info-row {
+      margin-bottom: 10px;
+
+      .info-label {
+        font-weight: 300; // Light
+        width: 100px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .vacation-overlaps-container {
+    height: 100%;
+  }
+
+  .vacation-overlaps {
+    overflow: auto;
+
+    // номера дней в месяце
+    .month-day-numbers {
+      gap: var(--day-gap);
+
+      // номер дня в месяце
+      .day-number {
+        flex-shrink: 0;
+        font-weight: 700;
+
+        // выходной день
+        &.weekend {
+          color: var(--grey);
+        }
+
+        // нерабочий праздничный день (праздник)
+        &.holiday {
+          color: red;
+        }
+      }
+    }
+
+    // короткие названия дней недели (пн, вт, ср, чт, пт, сб, вс)
+    .weekdays {
+      gap: var(--day-gap);
+
+      .weekday {
+        flex-shrink: 0;
+        color: var(--grey);
+
+        // выходной день
+        &.weekend {
+          color: var(--grey);
+        }
+
+        // нерабочий праздничный день (праздник)
+        &.holiday {
+          color: red;
+        }
+      }
+    }
+
+    .employee-full-name {
+      position: sticky;
+      left: 0;
+    }
+
+    .overlap-text {
+      position: sticky;
+      left: 0;
+    }
+
+    .overlap-calendar {
+      gap: var(--day-gap);
+
+      .day {
+        position: relative;
+        flex-shrink: 0;
+        border: var(--day-border-width) var(--day-border-style) var(--day-stroke-color);
+        border-radius: var(--day-border-radius);
+        width: 34px;
+        height: 56px;
+        background: var(--day-fill-color);
+
+        &:hover {
+          opacity: 0.5;
+        }
+
+        // выходной день
+        &.weekend {
+        }
+
+        // отпуск по графику
+        &.vacation {
+          border: var(--day-border-width) var(--day-border-style) var(--vacation-stroke-color);
+          background: var(--vacation-fill-color);
+        }
+
+        // отпуск (вне графика)
+        &.custom-vacation {
+          border: var(--day-border-width) var(--day-border-style) var(--custom-vacation-stroke-color);
+          background: var(--custom-vacation-fill-color);
+        }
+
+        // пересечение
+        &.overlap {
+          border: var(--day-border-width) var(--overlap-border-style) var(--overlap-stroke-color);
+          background: var(--overlap-fill-color);
+
+          // пересечение -> отпуск по графику -> overlay
+          &::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: var(--overlap-overlay-color);
+          }
+
+          // пересечение -> отпуск (вне графика)
+          &.custom-vacation {
+            border: var(--day-border-width) var(--overlap-border-style) var(--custom-overlap-stroke-color);
+            background: var(--custom-overlap-fill-color);
+
+            // пересечение -> отпуск (вне графика) -> overlay
+            &::before {
+              content: '';
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              background: var(--custom-overlap-overlay-color);
+            }
+          }
+        }
+      }
+    }
+  }
+}

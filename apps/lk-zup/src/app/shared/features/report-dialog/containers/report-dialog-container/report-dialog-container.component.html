@@ -1,0 +1,34 @@
+<div
+  [ngClass]="{ 'align-center': (facade.forcedLoading$ | async) }" class="pdf-view-block"
+>
+  <p-progressSpinner
+    class="d-flex justify-content-center" styleClass="custom-spinner" *ngIf="facade.forcedLoading$ | async"
+  >
+  </p-progressSpinner>
+  <app-report-dialog
+    *ngIf="facade.getData$() | async" [data]="facade.getData()" [download]="eventDownload | async"
+  ></app-report-dialog>
+</div>
+<p-toolbar class="margin-top">
+  <p-button
+    *ngIf="!formats || !formats.length || formats.length === 1"
+    label="{{ 'BUTTON_DOWNLOAD' | translate }}"
+    [disabled]="facade.forcedLoading$ | async"
+    [loading]="facade.forcedLoading$ | async"
+    class="button-full-xs"
+    (click)="downloadImg()"
+  ></p-button>
+  <p-splitButton
+    *ngIf="(formats && formats.length && formats.length > 1) && !isReportLoadingSignal()"
+    (onClick)="downloadImg()"
+    label="{{ 'BUTTON_DOWNLOAD' | translate }}"
+    [disabled]="facade.forcedLoading$ | async"
+    [model]="saveReportButtonItems"
+    [outlined]="true"
+    appendTo="body"
+  />
+  <p-progressSpinner
+    [style]="{ width: '20px', height: '20px' }"
+    *ngIf="isReportLoadingSignal()"
+  ></p-progressSpinner>
+</p-toolbar>

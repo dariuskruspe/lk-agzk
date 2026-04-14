@@ -1,0 +1,33 @@
+.custom-item-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__item {
+    width: 100%;
+    min-height: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    padding: 5px 0;
+    overflow-wrap: anywhere;
+  }
+}
+
+.custom-item {
+  position: relative;
+
+  &__title {
+    flex: 0 0 100%;
+    color: var(--gray);
+    overflow-wrap: anywhere;
+    min-width: 200px;
+  }
+
+  &__value {
+    flex: 1;
+    min-width: 200px;
+    color: var(--basic-color);
+    overflow-wrap: break-word;
+  }
+}

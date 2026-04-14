@@ -1,0 +1,47 @@
+<!-- Страница Создание новой заявки -->
+<p-toolbar class="nowrap">
+  <button
+    pButton class="p-button-outlined p-button-rounded" icon="pi pi-arrow-left" (click)="onBackPage()"
+  ></button>
+  <h1>
+    {{ 'TITLE_ISSUE_CREATE' | translate }}
+  </h1>
+</p-toolbar>
+<p-card>
+  <form class="form-field-wrapper" [formGroup]="filterForm">
+    <span class="p-input-icon-right form-field-wrapper__input">
+      <i class="pi pi-search"></i>
+      <input
+        type="text" pInputText formControlName="name" placeholder="{{ 'ISSUE_SEARCH_FIELD' | translate }}"
+      />
+    </span>
+  </form>
+  <h3>
+    {{ 'TITLE_ISSUES_SELECT_TYPE' | translate }}
+  </h3>
+
+  <app-grouped-list [source]="listSource">
+    <ng-template pTemplate="group" let-group>
+      <div class="issue-group">
+        {{ group.groupName }}
+      </div>
+    </ng-template>
+    <ng-template pTemplate="item" let-item>
+      <div
+        *ngIf="asItem(item) as item"
+        class="list-item"
+        pRipple
+        data-fullName="{{ item?.issueTypeFullName }}"
+        [ngClass]="[item?.onboardingCssClass || '']"
+        (mousedown)="issueShowRouting(item)"
+      >
+        {{ item?.issueTypeShortName }}
+        <span class="spacer"></span>
+        <span *ngIf="currentUser.getData().isManager" class="icon-container">
+          <i *ngIf="item.onOtherEmployees" class="pi pi-users icons"></i>
+          <i *ngIf="item.onApplicant" class="pi pi-user icons"></i>
+        </span>
+      </div>
+    </ng-template>
+  </app-grouped-list>
+</p-card>

@@ -1,0 +1,44 @@
+.steps-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 30px;
+  .step-item {
+    padding: 0 0 0 26px;
+    text-align: left;
+    max-width: 70px;
+    &:last-child {
+      padding-right: 0;
+      max-width: 110px;
+    }
+    &:first-child {
+      padding-left: 0;
+    }
+    .step-text {
+      color: rgba(152, 154, 162, 1);
+      padding: 5px 0 5px 0;
+    }
+    .status-title {
+      overflow: visible;
+      white-space: nowrap;
+    }
+  }
+  .step-divider {
+    width: 100%;
+    color: #3880ff
+  }
+}
+:host ::ng-deep {
+  .p-divider-solid.p-divider-horizontal:before {
+    border-color: #CADDFD;
+    border-width: 1px;
+    border-style: dashed;
+  }
+  .active {
+    .p-divider-solid.p-divider-horizontal:before {
+      border-color: #3880ff;
+      border-width: 1px;
+      border-style: solid;
+    }
+  }
+}

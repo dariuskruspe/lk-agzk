@@ -1,0 +1,30 @@
+<mat-toolbar
+  *ngFor="let issue of dataList?.issues"
+  (click)="logIssueDetails(issue.IssueID)"
+  class="custom-item"
+>
+  <span [ngStyle]="{ backgroundColor: issueState(issue.state)?.color }">
+    <mat-icon svgIcon="{{ issue?.iconName }}"></mat-icon>
+  </span>
+  <h4>{{ issue?.typeShortName }}</h4>
+  <div class="custom-item__wrap">
+    <p>
+      {{ issue?.date | date : ('DATE_TIME_PIPE' | translate) }}
+      #{{ issue?.number }}
+    </p>
+
+    <div class="custom-item__crunch">
+      <mat-icon *ngIf="issue.attachedFiles" svgIcon="pi-paperclip"></mat-icon>
+    </div>
+
+    <div class="custom-item__status">
+      <p
+        [ngStyle]="{
+          backgroundColor: issueState(issue?.state)?.color + '20'
+        }"
+      >
+        {{ issueState(issue.state)?.name }}
+      </p>
+    </div>
+  </div>
+</mat-toolbar>

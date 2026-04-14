@@ -1,0 +1,12 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: 522px;
+  margin: 0 auto;
+  min-height: calc(100% - 62px);
+
+  @media (max-width: 375px) {
+    min-height: calc(100% - 87px);
+  }
+}

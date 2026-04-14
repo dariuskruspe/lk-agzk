@@ -1,0 +1,7 @@
+<app-dashboard-custom-page
+  *ngIf="content"
+  [blocks]="content"
+></app-dashboard-custom-page>
+<div *ngIf="template">
+  <div [innerHTML]="template"></div>
+</div>

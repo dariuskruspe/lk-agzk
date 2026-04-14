@@ -1,0 +1,40 @@
+h3 {
+  color: var(--title-color);
+}
+
+.text-small {
+  font-size: .9rem;
+  color: var(--text-color-secondary);
+}
+
+.category-header {
+  display: flex;
+  //justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+}
+
+.category-title {
+  font-weight: 500;
+  margin: 0;
+  padding: 0;
+}
+
+.goal-add-button {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 8px 16px 8px 0px;
+  color: var(--primary-color);
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: 300;
+
+  &[disabled]{
+    opacity: .8;
+    cursor: default;
+  }
+}

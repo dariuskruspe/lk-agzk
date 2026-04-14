@@ -1,0 +1,85 @@
+@let currentUser = user();
+
+@if (currentUser) {
+  <nav
+    class="bottom-nav"
+    [class.overlay-open]="sidebarService.showNotificationsOverlay() || sidebarService.showUserMenuOverlay()"
+  >
+    <div class="bottom-nav__list">
+      <!-- Home -->
+      <a
+        routerLink="/"
+        routerLinkActive="bottom-nav__item--active"
+        [routerLinkActiveOptions]="{ exact: true }"
+        class="bottom-nav__item"
+      >
+        <lucide-icon [img]="HouseIcon" class="bottom-nav__icon"></lucide-icon>
+      </a>
+
+      <!-- Issues List -->
+      <a
+        routerLink="/issues/list"
+        routerLinkActive="bottom-nav__item--active"
+        class="bottom-nav__item"
+      >
+        <lucide-icon
+          [img]="CalendarIcon"
+          class="bottom-nav__icon"
+        ></lucide-icon>
+      </a>
+
+      <!-- New Issue -->
+      <a
+        routerLink="/issues/types"
+        routerLinkActive="bottom-nav__item--active"
+        class="bottom-nav__item bottom-nav__item--center"
+      >
+        <lucide-icon
+          [img]="CirclePlusIcon"
+          class="bottom-nav__icon"
+        ></lucide-icon>
+      </a>
+
+      <!-- Notifications -->
+      <button
+        type="button"
+        class="bottom-nav__item"
+        [class.bottom-nav__item--active-overlay]="
+          sidebarService.showNotificationsOverlay()
+        "
+        [disabled]="sidebarService.showUserMenuOverlay()"
+        (click)="showNotifications()"
+      >
+        <lucide-icon [img]="BellIcon" class="bottom-nav__icon"></lucide-icon>
+        @if (unreadCount() > 0) {
+          <span class="bottom-nav__badge">{{ unreadCount() }}</span>
+        }
+      </button>
+
+      <!-- User Profile -->
+      <button
+        type="button"
+        class="bottom-nav__item bottom-nav__item--profile"
+        [class.bottom-nav__item--active-overlay]="
+          sidebarService.showUserMenuOverlay()
+        "
+        [disabled]="sidebarService.showNotificationsOverlay() || sidebarService.showUserMenuOverlay()"
+        (click)="showUserMenu()"
+      >
+        @if (currentUser.avatar) {
+          <img
+            [src]="currentUser.avatar"
+            alt="avatar"
+            class="bottom-nav__avatar"
+          />
+        } @else {
+          <lucide-icon
+            [img]="CircleUserIcon"
+            class="bottom-nav__icon"
+          ></lucide-icon>
+        }
+      </button>
+    </div>
+  </nav>
+}
+

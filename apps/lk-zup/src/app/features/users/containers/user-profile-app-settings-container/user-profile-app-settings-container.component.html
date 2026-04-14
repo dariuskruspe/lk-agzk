@@ -1,0 +1,7 @@
+@if (userSettingsSignal()) {
+<app-users-profile-app-settings
+  [currentUser]="currentUser.forcedData$ | async"
+  (updateUserSettings)="updateUserSettings()"
+>
+</app-users-profile-app-settings>
+}

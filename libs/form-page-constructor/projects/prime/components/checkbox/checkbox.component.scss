@@ -1,0 +1,10 @@
+.checkbox-block {
+  display: flex;
+  flex-direction: row;
+  .custom-form-field__checkbox-label {
+    margin-left: 10px;
+  }
+  .checkbox-item {
+    height: 20px;
+  }
+}

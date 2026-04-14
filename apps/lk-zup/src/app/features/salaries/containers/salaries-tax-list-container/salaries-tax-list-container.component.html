@@ -1,0 +1,22 @@
+<mat-progress-bar
+  class="absolute-top"
+  mode="indeterminate"
+  *ngIf="
+    (salariesDashboardTaxFacade.loading$() | async) ||
+    (salariesDashboardTaxFacade.loading$() | async)
+  "
+></mat-progress-bar>
+
+<app-salaries-tax-list
+  [taxList]="salariesDashboardTaxFacade.getData$() | async"
+  [taxStateList]="issuesStatusListFacade.forcedData$ | async"
+  [loading]="
+    salariesDashboardTaxFacade.loading$() | async
+  "
+  [scrollPosition]="scrollPositionFacade.getData()?.position"
+  (loadList)="getIncomeTax($event)"
+  (goDetails)="onIssueDetails($event)"
+  (saveScrollPosition)="saveScrollPosition($event)"
+  (backPage)="onBackPage()"
+>
+</app-salaries-tax-list>

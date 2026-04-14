@@ -1,0 +1,13 @@
+@if (actionNotificationsSignal()?.length) {
+<div class="unfinished-actions-container">
+  @for (actionNotification of actionNotificationsSignal(); track
+  actionNotification.id) {
+  <div class="unfinished-actions-container__item">
+    <app-notification-item
+      [item]="actionNotification"
+      (clicked)="employeeAlertsService.showActionDialog($event.payload)"
+    ></app-notification-item>
+  </div>
+  }
+</div>
+}

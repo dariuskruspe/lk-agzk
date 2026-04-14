@@ -1,0 +1,45 @@
+<div class="popular-issues" *ngIf="isEnabled">
+  <p-toolbar>
+    <h2 class="popular-issues__title">
+      {{ 'TITLE_POPULAR_ISSUE' | translate }}
+    </h2>
+  </p-toolbar>
+
+  <div class="popular-requests popular-issues__content">
+    <ng-container *skeleton="popularRequests; else loading; repeat 4">
+      <ng-container
+        *ngFor="let issueType of popularRequests?.issueTypes; let i = index"
+      >
+        <p-card
+          class="popular-requests__card p-padding-0-24 hoverable" *ngIf="i < 4" (click)="issueShowRouting(issueType)"
+        >
+          <div class="popular-requests__card-wrapper">
+            <div class="popular-requests__card description-container">
+              <div class="popular-requests__short-name">
+                {{ issueType?.issueTypeShortName.length > 50 ? issueType?.issueTypeShortName.substring(0, 50) + '...' :  issueType?.issueTypeShortName}}
+              </div>
+            </div>
+            <span class="icon">
+              <i class="{{ issueType?.issueTypeIconName | iconPack}}"></i>
+            </span>
+          </div>
+        </p-card>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>
+
+<ng-template #loading>
+  <p-card
+    class="popular-requests__card p-padding-0-24"
+  >
+    <div class="popular-requests__card-wrapper">
+      <div class="popular-requests__card description-container">
+        <div class="popular-requests__short-name">
+          <p-skeleton width="100px"></p-skeleton>
+        </div>
+      </div>
+      <p-skeleton width="50px" height="50px" borderRadius="50%"></p-skeleton>
+    </div>
+  </p-card>
+</ng-template>

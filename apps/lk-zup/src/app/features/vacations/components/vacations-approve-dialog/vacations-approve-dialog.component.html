@@ -1,0 +1,121 @@
+<div class="vacation-dialog">
+  <!-- Здесь будут вкладки -->
+  <!--  <h3 class="vacation-dialog__title">-->
+  <!--    {{ 'VACATION_DIALOG_TITLE_' + data.type | translate }}-->
+  <!--  </h3>-->
+
+  <!-- <только если имеется комментарий> -->
+  @if (commonPeriod?.lastComment) {
+    <!-- Дата последнего комментария при согласовании/отклонении -->
+    <div class="last-comment-date mb-20">
+      {{
+        commonPeriod?.lastComment?.date | date: ('DATE_TIME_PIPE' | translate)
+      }}
+    </div>
+  }
+
+  <!-- Статус согласования отпуска (например: "включён в график" или "отклонён") -->
+  <div class="vacation-dialog__row status" *ngIf="state">
+    <div class="status__title">{{ 'VACATION_STATUS_TITLE' | translate }}:</div>
+    <div class="status__badge">
+      <app-issue-status
+        [label]="state.name | translate"
+        [isApproved]="commonPeriod?.approved"
+      ></app-issue-status>
+    </div>
+  </div>
+
+  <!-- Сотрудник -->
+  <div class="vacation-dialog__row employee">
+    <div>{{ 'VACATION_EMPLOYEE_TITLE' | translate }}:</div>
+
+    <!-- ФИО сотрудника -->
+    <div>{{ data.vacation.name }}</div>
+  </div>
+
+  <!-- <только если имеется комментарий> -->
+  @if (commonPeriod?.lastComment) {
+    <!-- Согласующий -->
+    <div class="vacation-dialog__row approver">
+      <div class="approver-text">{{ 'EMPLOYEE_APPROVER' | translate }}:</div>
+
+      <!-- ФИО согласующего сотрудника -->
+      <div class="approver-full-name">{{ commonPeriod.lastComment.name }}</div>
+    </div>
+
+    <!-- Последний комментарий за весь период -->
+    <div class="comment">
+      <div class="comment-text">{{ 'COMMENT' | translate }}:</div>
+      <div class="comment__text">
+        {{ commonPeriod.lastComment.text }}
+      </div>
+    </div>
+  }
+
+  <!-- Отпуска по типу (например "Основной", "Северный" или "За интенсивный труд и ответственность") -->
+  <ng-container *ngFor="let type of types">
+    <div *ngIf="forms[type?.vacationTypeId]" class="vacation-dialog__type type">
+      <div class="type__title">{{ 'VACATION_TYPE_TITLE' | translate }}:</div>
+      <div class="type__title type__title_primary">
+        {{ type?.representation }}
+      </div>
+    </div>
+    <div class="vacation-dialog__form vacation-dialog__form_nm">
+      <fpc
+        [formData$]="forms[type?.vacationTypeId].asObservable()"
+        [dateLocale]="lang"
+      ></fpc>
+    </div>
+  </ng-container>
+
+  <!-- <только если отпуск на согласовании> -->
+  <!-- Поле ввода комментария -->
+  <div
+    *ngIf="
+      commonPeriod &&
+      !commonPeriod?.approved &&
+      commonPeriod?.activeApprovement &&
+      isSubordinated &&
+      isApprovingAllowed
+    "
+    class="vacation-dialog__leave-comment leave-comment"
+  >
+    <div class="leave-comment__title">
+      {{ 'VACATION_LEAVE_COMMENT' | translate }}
+    </div>
+    <textarea
+      pInputTextarea
+      cdkTextareaAutosize
+      class="leave-comment__input"
+      placeholder="{{ 'VACATION_COMMENT_TITLE' | translate }}"
+      [(ngModel)]="comment"
+    ></textarea>
+  </div>
+
+  <!-- Панель согласования/отклонения отпусков сотрудника -->
+  <div class="vacation-dialog__buttons buttons">
+    <ng-container *ngIf="commonPeriod">
+      <ng-container
+        *ngIf="
+          !commonPeriod?.approved &&
+          commonPeriod?.activeApprovement &&
+          isSubordinated &&
+          isApprovingAllowed
+        "
+      >
+        <button
+          pButton
+          class="p-button-success buttons__one"
+          label="{{ 'BUTTON_APPROVE' | translate }}"
+          (click)="close(vacationActionEnum.approve)"
+        ></button>
+        <button
+          pButton
+          class="p-button-danger buttons__one"
+          label="{{ 'BUTTON_REJECT' | translate }}"
+          (click)="close(vacationActionEnum.discard)"
+        ></button>
+      </ng-container>
+    </ng-container>
+  </div>
+</div>

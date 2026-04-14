@@ -1,0 +1,14 @@
+<app-agreements-employee-list
+  (loadList)="onGetAgreementsEmployeeList($event)"
+  (openAgreementEmployeeDocumentDialog)="openDocument($event)"
+  [agreementsEmployeeList]="
+    agreementsEmployeeListFacade.forcedData$ | async
+  "
+  [documentTypesList]="
+    agreementEmployeeTypesListFacade.forcedData$ | async
+  "
+  [loading]="agreementsEmployeeListFacade.loading$() | async"
+  [stateList]="agreementDocumentStateFacade.forcedData$ | async"
+  [title]="title"
+  [providers]="providersFacade.forcedData$ | async"
+></app-agreements-employee-list>

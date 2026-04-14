@@ -1,0 +1,28 @@
+.employee-vacations-body {
+  //max-width: 1360px;
+}
+.filter-icon-button {
+  @media (max-width: 991px) {
+    background: var(--card-background);
+    border: 1px solid #252F3F1A;
+    border-radius: 10px;
+    padding: 7px 10px 3px 10px;
+    margin-left: 10px;
+  }
+}
+.mobile-search-input {
+  @media (max-width: 991px) {
+    width: 100%;
+  }
+}
+.tabs-controls-panel {
+  align-items: end;
+  .filters {
+    align-items: center;
+  }
+}
+:host ::ng-deep {
+  .p-dropdown .p-dropdown-label {
+    width: 275px;
+  }
+}

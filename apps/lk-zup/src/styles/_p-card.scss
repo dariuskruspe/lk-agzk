@@ -1,0 +1,59 @@
+.p-card {
+  margin: 0;
+  padding: 24px;
+  box-shadow: var(--card-shadow) !important;
+  border-radius: var(--border-radius) !important;
+  background: var(--card-background) !important;
+  max-width: 100%;
+  overflow: hidden;
+
+  .p-card-body {
+    padding: 0 !important;
+
+    .p-card-content {
+      padding: 0 !important;
+    }
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+}
+
+.hoverable {
+  .p-card:hover {
+    cursor: pointer;
+    background-color: var(--hover) !important;
+  }
+}
+
+.p-padding-0-24 {
+  .p-card {
+    padding: 0 24px;
+  }
+}
+
+.p-dialog-content {
+  .p-card {
+    box-shadow: none;
+    padding: 0;
+  }
+}
+.mb {
+  .p-card {
+    margin-bottom: 20px;
+  }
+}
+
+.no-padding {
+  .p-card {
+    padding: 0;
+  }
+}
+
+.p-dialog {
+  .p-card {
+    box-shadow: none !important;
+    background: transparent !important;
+  }
+}

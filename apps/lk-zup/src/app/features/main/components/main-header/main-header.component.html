@@ -1,0 +1,143 @@
+<header class="header" id="main-header">
+  <div class="header__wrapper">
+    <div
+      *ngIf="!isMobile; else mobileHeader"
+      class="logo-company cy-main-header"
+    >
+      <ng-container
+        *skeleton="currentUser && employeeId && settings; else skeletonLogo"
+      >
+        <a routerLink="" class="logo__wrap" [class.disable]="hasUnsignedDocs()">
+          <img
+            *ngIf="employeeActiveLogoSrc"
+            [src]="employeeActiveLogoSrc"
+            class="logo"
+            alt=""
+            id="image-with-jwt"
+          />
+          <script>
+
+          </script>
+          <mat-icon
+            *ngIf="!employeeActiveLogoSrc && employeeActiveLogoSrc !== undefined"
+            svgIcon="icon-logo-wa-left"
+            class="logo"
+          ></mat-icon>
+        </a>
+        <app-main-company
+          *ngIf="!isMobile && currentUser"
+          [settings]="settings"
+          [employeeActiveName]="employeeActiveName"
+          [currentUser]="currentUser"
+          [employeeId]="employeeId"
+          (changeEmployee)="changeEmployee.emit($event)"
+        ></app-main-company>
+      </ng-container>
+    </div>
+
+    <ng-template #mobileHeader>
+      <div class="mobile-header-menu cy-main-header">
+        <div class="mobile-header-menu__item" (click)="onToggleSidebar()">
+          <i class="header-icon pi pi-th-large"></i>
+        </div>
+        <div class="mobile-header-menu__item" (click)="redirectTo(['/'])">
+          <i class="header-icon hrm-icons icon-home"></i>
+        </div>
+        <div class="mobile-header-menu__item" (click)="openDocky($event)">
+          <button class="docky-btn"></button>
+        </div>
+        <div
+          *attention="
+            !!alertsSignal()?.actions?.length;
+            style: 'bottom: 20px; right: 50px;'
+          "
+          class="mobile-header-menu__item"
+          (click)="toggle('openNotifications')"
+        >
+          <i
+            *ngIf="!notifications?.length; else badge"
+            class="header-icon pi pi-bell"
+          ></i>
+          <ng-template #badge>
+            <i
+              class="header-icon pi pi-bell"
+              pBadge
+              value="{{
+                notifications?.length > 99 ? '99+' : notifications?.length
+              }}"
+              severity="success"
+            ></i>
+          </ng-template>
+        </div>
+        <div class="mobile-header-menu__item" (click)="toggle('menu')">
+          <i class="header-icon hrm-icons icon-contacts"></i>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="header__wrap" [@openedMenu]="state">
+      <ng-container
+        *skeleton="
+          currentUser && employeeId && employeeActiveName && settings;
+          else skeletonUser
+        "
+      >
+        <app-main-header-user-menu
+          [notifications]="notifications"
+          [pushesAvailable]="pushesAvailable"
+          [pushesEnabled]="pushesEnabled"
+          [pushesLoading]="pushesLoading"
+          [currentUser]="currentUser"
+          [isMobile]="isMobile"
+          [settings]="settings"
+          [employeeId]="employeeId"
+          [toggleMenu$]="toggleMenu$.asObservable()"
+          (logout)="onLogout($event)"
+          (langChange)="langChange.emit($event)"
+          (themeChange)="themeChange.emit($event)"
+          (deleteNotification)="deleteNotification.emit($event)"
+          (pushesDisable)="pushesDisable.emit()"
+          (pushesEnable)="pushesEnable.emit()"
+          (changeEmployee)="changeEmployee.emit($event)"
+        ></app-main-header-user-menu>
+      </ng-container>
+    </div>
+  </div>
+</header>
+
+<ng-template #skeletonLogo>
+  <div *ngIf="!isMobile" style="margin-left: 20px">
+    <p-skeleton width="250px" height="50px" borderRadius="10px"></p-skeleton>
+  </div>
+</ng-template>
+
+<ng-template #skeletonUser>
+  <ng-container *ngIf="!isMobile">
+    <div
+      style="
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <div style="margin-right: 10px">
+        <p-skeleton width="40px" height="40px" borderRadius="50%"></p-skeleton>
+      </div>
+
+      <p-skeleton width="150px" height="20px"></p-skeleton>
+    </div>
+    <div
+      *ngFor="let _ of [0, 0, 0, 0, 0]"
+      style="
+        width: 60px;
+        height: 60px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <p-skeleton width="35px" height="35px" borderRadius="10px"></p-skeleton>
+    </div>
+  </ng-container>
+</ng-template>

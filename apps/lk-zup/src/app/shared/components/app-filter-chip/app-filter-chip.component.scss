@@ -1,0 +1,23 @@
+.app-filter-chip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--button-md-height);
+  padding: 0 var(--button-md-padding-x, var(--button-padding-x));
+  font-size: var(--button-md-font-size, var(--button-font-size));
+  border-radius: var(--button-md-radius, var(--button-radius));
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-text);
+  border-color: var(--button-secondary-border);
+  box-shadow: var(--button-secondary-shadow);
+  user-select: none;
+  gap: 12px;
+}
+
+.app-filter-chip-remove {
+  // reset button styles
+  all: unset;
+  background: none;
+  cursor: pointer;
+  display: inline-flex;
+}

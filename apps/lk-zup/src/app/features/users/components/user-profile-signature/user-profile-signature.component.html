@@ -1,0 +1,184 @@
+<p-card class="margin-bottom">
+  <div class="top-divider">
+    <!-- Название провайдера (поставщика) ЭЦП -->
+    <div class="header-text">
+      {{ provider.ui.name }}
+    </div>
+
+    <!-- Логотип провайдера (поставщика) ЭЦП -->
+    <img
+      *ngIf="provider.ui.logo"
+      class="logo-image"
+      src="{{ apiUrl + provider.ui.logo }}"
+      alt=""
+    />
+  </div>
+
+  <!-- Описание провайдера (поставщика) ЭЦП -->
+  <div
+    class="content-description"
+    [innerHTML]="provider.ui.description | trustedHtml : true"
+  ></div>
+
+  <div class="cert-container">
+    <!-- Сертификаты -->
+    <div class="mb-10">{{ 'EXISTING_CERTIFICATES' | translate }}</div>
+    @if (provider.ui.certs?.length) {
+    <p-accordion [activeIndex]="null">
+      <ng-container *ngFor="let cert of provider.ui.certs">
+        <p-accordionTab
+          [header]="
+            (cert.assignment || cert.requestStatus) +
+            (cert.serialNumber ? ' - ' + cert.serialNumber : '')
+          "
+        >
+          <div class="cert-info flex flex-column">
+            <div
+              *ngIf="cert.assignment"
+              class="cert-info-row flex flex-column mt-5"
+            >
+              <div class="cert-item-title grey">
+                {{ 'PROFILE_ASSIGNMENT' | translate }}:&nbsp;
+              </div>
+              <div>{{ cert.assignment }}</div>
+            </div>
+
+            <div
+              *ngIf="cert.serialNumber"
+              class="cert-info-row flex flex-column"
+            >
+              <div class="cert-item-title grey">
+                {{ 'PROFILE_SERIAL_NUMBER' | translate }}:&nbsp;
+              </div>
+              <div>{{ cert.serialNumber }}</div>
+            </div>
+
+            <div *ngIf="cert.dateBegin" class="cert-info-row flex flex-column">
+              <div class="cert-item-title grey">
+                {{ 'PROFILE_DATE_CREATION' | translate }}:&nbsp;
+              </div>
+              <div>
+                {{ cert.dateBegin | date : ('DATE_PIPE' | translate) }}
+              </div>
+            </div>
+
+            <div *ngIf="cert.dateEnd" class="cert-info-row flex flex-column">
+              <div class="cert-item-title grey">
+                {{ 'PROFILE_DATE_END' | translate }}:&nbsp;
+              </div>
+              <div>{{ cert.dateEnd | date : ('DATE_PIPE' | translate) }}</div>
+            </div>
+
+            <div *ngIf="cert.commonName" class="cert-info-row flex flex-column">
+              <div class="cert-item-title grey">
+                {{ 'PROFILE_OWNER_ATTRIBUTES' | translate }}:&nbsp;
+              </div>
+              <div>{{ cert.commonName }}</div>
+
+              <div
+                *ngIf="cert.revocationTime"
+                class="cert-info-row flex flex-column"
+              >
+                <div class="cert-item-title grey">
+                  {{ 'PROFILE_DATE_REVOCATION' | translate }}:&nbsp;
+                </div>
+                <div>
+                  {{ cert.revocationTime | date : ('DATE_PIPE' | translate) }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Шаги выпуска ЭЦП -->
+          <app-steps
+            *ngIf="provider.metadata.confirmMethod === 'sms'"
+            [steps]="cert.steps"
+            [options]="{
+              currentTemplate: 'timeline',
+              template: {
+                timeline: { layout: isMobileV() ? 'vertical' : 'horizontal' }
+              }
+            }"
+            class="block mt-16"
+          ></app-steps>
+
+          <!-- Статус выпуска ЭЦП -->
+          <div
+            *ngIf="cert.requestStatus"
+            class="cert-status flex flex-column mt-16"
+          >
+            <!-- Заголовок "Статус" -->
+            <div class="cert-status-title grey">
+              {{ 'SIGNATURE_REQUEST_STATUS' | translate }}:&nbsp;
+            </div>
+
+            <!-- Название статуса -->
+            <div>{{ cert.requestStatus }}</div>
+
+            <!-- Заголовок "Описание статуса" -->
+            <div
+              *ngIf="cert.requestStatusDescription"
+              class="cert-status-description grey mt-16"
+            >
+              {{ 'SIGNATURE_REQUEST_STATUS_DESCRIPTION' | translate }}:&nbsp;
+            </div>
+
+            <!-- Описание статуса -->
+            <ng-container *ngIf="cert.requestStatusDescription">
+              <!-- Если статус "ошибка", то выводим эту ошибку, добавляя скроллы при необходимости (overflow: auto) на случай, если она большая -->
+              <div
+                *ngIf="
+                  [
+                    ProviderErrorsEnum.editing,
+                    ProviderErrorsEnum.unhandled
+                  ].includes($any(cert.requestStatus));
+                  else statusDescription
+                "
+              >
+                <div class="request-status-error w-full">
+                  {{ cert.requestStatusDescription | json }}
+                </div>
+
+                <!-- Надпись "Обратитесь к сотруднику, предоставившему доступ в ЛК" -->
+                <div class="mt-5">
+                  {{ 'CONTACT_ADMINISTRATOR' | translate }}
+                </div>
+              </div>
+
+              <!-- Если статус не "ошибка", то отображаем описание статуса как обычно -->
+              <ng-template #statusDescription>
+                <div>{{ cert.requestStatusDescription }}</div>
+              </ng-template>
+            </ng-container>
+          </div>
+        </p-accordionTab>
+      </ng-container>
+    </p-accordion>
+    } @else {
+    <app-info>{{ 'LIST_EMPTY' | translate }}</app-info>
+    }
+
+    <p-toolbar class="margin-top col-12">
+      @if (provider.ui.buttonCaption) {
+      <!-- Кнопка "Выпустить подпись" (или "Перевыпустить подпись") -->
+      <button
+        pButton
+        (click)="openCreationForm()"
+        class="button-full-xs"
+        [disabled]="
+          provider.ui.hasCertInProgress || !provider.ui.buttonAvailable
+        "
+        label="{{ provider.ui.buttonCaption | translate }}"
+      ></button>
+      }
+
+      <!-- Подсказка для отключённой [disabled] кнопки (например, "Кнопка будет активна по инициативе кадровика") -->
+      <div
+        *ngIf="!provider.ui.buttonAvailable && provider.ui.buttonCaption"
+        class="button_tooltip"
+      >
+        * {{ provider.ui.tooltipText ?? '' }}
+      </div>
+    </p-toolbar>
+  </div>
+</p-card>

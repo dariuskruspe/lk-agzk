@@ -1,0 +1,43 @@
+<!-- Страница "Обратная связь" в разделе Менеджер -->
+<div class="employee-vacations-body">
+  <p-toolbar class="title">
+    <h1>{{ 'FEEDBACK' | translate }}</h1>
+    <span class="spacer"></span>
+
+    <p-splitButton
+      (onClick)="downloadResultReport()"
+      [label]="'DOWNLOAD_REPORT' | translate"
+      [disabled]="isReportLoadingSignal()"
+      [model]="saveReportResultButtonItems"
+      [outlined]="true"
+      class="mr-10"
+    />
+    <button
+      pButton
+      icon="pi pi-plus-circle"
+      iconPos="left"
+      label="{{ 'CREATE' | translate }}"
+      [routerLink]="['', 'issues', 'types']"
+      [queryParams]="{ groupAlias: 'feedback' }"
+    ></button>
+  </p-toolbar>
+
+  <div class="tabs-controls-panel">
+  </div>
+
+  <div class="content">
+    <div>
+      <loadable-list-container
+        [template]="dataTemplate"
+        [dataConfig]="dataConfig"
+        [dataList]="agreementsEmployeeList"
+        [scrollContainerClassCss]="'.scroll-main-container'"
+        [otherData]="stateList"
+        [loading]="this.loading$ | async"
+        [appendFilterToQuery]="true"
+        (loadList)="onLoadList($event)"
+        (clickItem)="onFeedbackItem($event)"
+      ></loadable-list-container>
+    </div>
+  </div>
+</div>

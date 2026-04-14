@@ -1,0 +1,55 @@
+.calculator-card-body {
+  font-weight: 100;
+  .options-form {
+    .calc-field {
+      padding-bottom: 20px;
+    }
+    .mini-loader {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      padding-bottom: 18px;
+    }
+    .program-body {
+      padding: 10px 20px;
+      color: var(--gray);
+      font-weight: 100;
+      .description {
+
+      }
+      .program-item {
+        margin-top: 22px;
+        display: flex;
+        .name {
+          width: 250px;
+          margin-right: 20px;
+        }
+        .value {
+          color: var(--basic-color);
+        }
+      }
+    }
+    .result {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      background: var(--card-second-background);
+      border-right: 6px;
+      padding: 5px 10px;
+      line-height: 30px;
+      border-radius: 6px;
+      .title {
+        color: var(--gray);
+        font-weight: 100;
+        width: 260px;
+        margin-right: 20px;
+      }
+      .value {
+        color: var(--primary-color);
+      }
+    }
+    .text {
+      padding: 20px;
+    }
+  }
+}

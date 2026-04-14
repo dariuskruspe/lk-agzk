@@ -1,0 +1,30 @@
+<div class="validation-container">
+  <h3 *ngIf="response.message?.header" class="validation-container__header">
+    {{ response.message?.header }}
+  </h3>
+  <div
+    *ngIf="response.message?.text; else link"
+    class="validation-container__description"
+  >
+    {{ response.message.text }}
+  </div>
+  <ng-template #link>
+    <div class="validation-container__description">
+      {{ 'SIGNATURE_THROUGH_LINK_BEGIN' | translate }}
+      <button
+        pButton
+        label="{{ 'SIGNATURE_THROUGH_LINK' | translate }}"
+        (click)="goLink()"
+        class="p-button-link"
+      ></button>
+      {{ 'SIGNATURE_THROUGH_LINK_END' | translate }}
+    </div>
+  </ng-template>
+  <p-toolbar *ngIf="closable" class="margin-top">
+    <p-button
+      *ngIf="response.link"
+      label="{{ 'SIGNATURE_SIDE_LINK' | translate }}"
+      (onClick)="close(); goLink()"
+    ></p-button>
+  </p-toolbar>
+</div>

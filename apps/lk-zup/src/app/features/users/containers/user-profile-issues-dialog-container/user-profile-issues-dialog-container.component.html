@@ -1,0 +1,22 @@
+<div>
+  <app-user-profile-dialog
+    [employeeData]="usersProfilePersonalDataFacade.getData()"
+    [userData]="currentUserFacade.getData()"
+    [issueType]="userProfileIssuesFacade.getData$() | async"
+    [loading]="userProfileIssuesFacade.loading$() | async"
+    [loading$]="userProfileIssuesFacade.loading$()"
+    [submit$]="submit$"
+    [alias]="alias"
+    [relativeIndex]="relativeIndex"
+    (formSubmitOut)="addIssue($event)"
+  ></app-user-profile-dialog>
+</div>
+<p-toolbar class="margin-top">
+  <button
+    pButton
+    label="{{ 'BUTTON_SEND' | translate }}"
+    class="button-full-xs"
+    (click)="onSubmitDialog()"
+    [disabled]="userProfileIssuesFacade.loading$() | async"
+  ></button>
+</p-toolbar>

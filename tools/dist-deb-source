@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+const {execSync} = require('node:child_process');
+const {existsSync} = require("node:fs");
+const {join} = require("node:path");
+
+const root = getParentRoot(process.cwd());
+
+const source = `${root}/package/deb/source`;
+
+console.log('Копирование исходников...')
+exec(`rm -rf ${source}`);
+exec(`mkdir -p ${source}`);
+exec(`rsync -ar --files-from=.sourcelist.txt . ${source}`);
+
+function exec(cmd, description) {
+  console.log(description ? description : `Command: ${cmd}`)
+  return execSync(cmd, {stdio: 'inherit', cwd: root});
+}
+
+function getParentRoot(root) {
+  if (existsSync(join(root, 'package.json'))) {
+    return root;
+  } else {
+    return getParentRoot(join(root, '..'))
+  }
+}
+

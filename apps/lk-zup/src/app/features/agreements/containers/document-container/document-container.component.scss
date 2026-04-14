@@ -1,0 +1,42 @@
+.checkbox {
+  display: inline-block;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+:host::ng-deep.mat-checkbox-layout {
+  white-space: normal !important;
+}
+
+:host::ng-deep.mat-checkbox-inner-container {
+  margin-top: 4px;
+}
+
+div.mat-dialog-content {
+  padding-bottom: 24px;
+}
+
+div.mat-dialog-actions {
+  margin-bottom: -20px;
+}
+
+.warning {
+  border: 1px solid #ffd7d7;
+  background-color: #fff8f8;
+  padding: 16px;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 22px;
+}
+
+.warning__header {
+  color: rgba(237, 67, 70, 1);
+}
+
+.document {
+  margin-bottom: 20px;
+  display: block;
+}

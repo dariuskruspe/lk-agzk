@@ -1,0 +1,16 @@
+<fpc
+  [formData]="formData"
+  [dateLocale]="currentUserFacade.getLang()"
+  (formSubmit)="handleSubmit($event)"
+  [submit$]="submit$"
+></fpc>
+
+<p-toolbar class="buttons margin-top">
+  <button
+    pButton
+    label="{{ 'BUTTON_SEND' | translate }}"
+    type="submit"
+    class="col-12 col-md-auto"
+    (click)="submit$.next()"
+  ></button>
+</p-toolbar>

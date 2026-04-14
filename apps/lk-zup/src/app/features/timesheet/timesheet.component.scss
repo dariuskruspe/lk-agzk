@@ -1,0 +1,145 @@
+.timesheet-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.timesheet-header__top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 16px;
+
+  h1 {
+    margin: 0;
+    color: var(--timesheet-title-color, var(--foreground-color));
+    font-size: 28px;
+    font-weight: 400;
+    line-height: 40px;
+    letter-spacing: -0.02em;
+  }
+}
+
+.timesheet-header__month-nav {
+  display: flex;
+  justify-content: center;
+}
+
+.timesheet-header__month-select .app-month-select {
+  width: 211px;
+}
+
+.timesheet-header__actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.timesheet-header__bottom {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.timesheet-content__spinner {
+  width: 32px;
+  height: 32px;
+  border: 2px solid
+    color-mix(in srgb, var(--timesheet-cell-border) 72%, transparent);
+  border-top-color: var(
+    --primary-color,
+    var(--button-primary-bg, var(--foreground-color))
+  );
+  border-radius: 50%;
+  animation: timesheet-spin 0.8s linear infinite;
+}
+
+.timesheet-grid {
+  --timesheet-cell-height: 30px;
+  --app-grid-sticky-background: var(--timesheet-sticky-bg);
+
+  .app-grid-header {
+    margin-bottom: 10px;
+    align-items: center;
+  }
+  .app-grid-row {
+    gap: 2px;
+    margin-bottom: 10px;
+  }
+
+  .timesheet-grid-header__day {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--timesheet-header-text);
+    font-size: 12px;
+
+    &--weekend {
+      color: var(--timesheet-weekend-header-text);
+    }
+  }
+}
+
+.timesheet-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--timesheet-summary-text, #989aa2);
+
+  &__hours {
+    font-size: 14px;
+    color: var(--timesheet-summary-text);
+  }
+
+  &__hours-fact {
+    font-size: 12px;
+    color: var(--timesheet-note-text);
+  }
+}
+
+@keyframes timesheet-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.app-timesheet {
+  app-grid-body .app-grid-row {
+    gap: 2px;
+    margin-bottom: 10px;
+  }
+  app-grid-header .timesheet-summary-cell {
+    color: var(--timesheet-total-header-text);
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.timesheet-legend-container {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: var(--calendar-graph-month-sticky-background);
+  border-color: var(--timesheet-divider);
+  backdrop-filter: var(--control-backdrop-filter, none);
+
+  &.is-stuck {
+    border-top: 1px solid
+      var(--calendar-graph-header-border, var(--timesheet-divider, #eee));
+  }
+}
+
+@media (max-width: 768px) {
+  .timesheet-content,
+  .timesheet-legend-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}

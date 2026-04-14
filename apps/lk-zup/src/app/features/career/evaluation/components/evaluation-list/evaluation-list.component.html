@@ -1,0 +1,14 @@
+<div class="assessment-list">
+  <div class="assessment-item cursor-pointer" *ngFor="let listItem of items" (click)="toEvaluationClick(listItem.evaluationID)">
+    <div class="icon">
+      <i class="pi pi-chart-line"></i>
+    </div>
+    <div class="info">
+      <div class="title">{{ listItem.stageName }}</div>
+      <div class="description">{{ listItem.representation }}</div>
+    </div>
+    <div class="status" [ngClass]="isStateDone(listItem.stateName)">
+      {{ listItem.stateName | uppercase }}
+    </div>
+  </div>
+</div>

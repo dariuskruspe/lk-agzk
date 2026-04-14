@@ -1,0 +1,40 @@
+<div class="list-item">
+  <div class="user list-item__col">
+    <div class="avatar">
+      <img
+        [src]="
+          item.photo ? apiUrl + item.photo : './assets/img/svg/user-circle.svg'
+        "
+        alt="user"
+      />
+    </div>
+    <div class="user__name">
+      {{ item?.fullName || 'EMPLOYEE_VACATIONS_UNKNOWN' | translate }}
+    </div>
+  </div>
+  <div class="days list-item__col" [pTooltip]="tooltipText">
+    {{ 'STATIC_DATA_VACATION_BALANCE' | translate }}:
+    <span class="count">
+      {{ item?.vacationsTotal || '0' }}
+    </span>
+  </div>
+  <div class="vacation list-item__col">
+    {{ 'EMPLOYEE_VACATIONS_PLAN' | translate }}:
+    <span class="vacation__dates">
+      {{ item?.vacation ? vacationString + ('D' | translate) + ')' : '...' }}
+    </span>
+  </div>
+  <div class="download list-item__col">
+    <i
+      class="pi pi-download download-icon"
+      (click)="download()"
+      *ngIf="!isDownloadEmployeeReportInProgress; else spinner"
+    ></i>
+    <ng-template #spinner>
+      <i
+        class="pi pi-spin pi-spinner download-icon"
+        *ngIf="isDownloadEmployeeReportInProgress"
+      ></i>
+    </ng-template>
+  </div>
+</div>

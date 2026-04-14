@@ -1,0 +1,29 @@
+.vacation {
+  &__block {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    .description {
+      align-self: center;
+      margin-right: 15px;
+    }
+  }
+}
+.custom-dates {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  gap: 20px;
+  @media (max-width: 900px) {
+    flex-direction: column;
+  }
+}
+.mobile-title {
+  @media (max-width: 767px) {
+    margin-bottom: 10px;
+  }
+}
+
+.custom-widget-item {
+  margin-bottom: 20px;
+}

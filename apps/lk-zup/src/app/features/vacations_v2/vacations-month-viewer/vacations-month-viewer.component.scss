@@ -1,0 +1,53 @@
+.app-vacations-month {
+  --calendar-graph-col-gap: 2px;
+  --calendar-graph-row-gap: 10px;
+}
+
+.vacations-month-viewer__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 48px 24px;
+  color: var(--foreground-color-secondary);
+  text-align: center;
+}
+
+.vacations-month-viewer__empty-icon {
+  color: var(--foreground-color-secondary);
+  opacity: 0.4;
+  margin-bottom: 4px;
+}
+
+.vacations-month-viewer__empty-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--foreground-color);
+}
+
+.vacations-month-viewer__empty-text {
+  font-size: 14px;
+  color: var(--foreground-color-secondary);
+}
+
+.vacations-month-legend-container {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 16px 20px;
+  background: var(
+    --calendar-graph-month-sticky-background,
+    var(--surface-ground, #fff)
+  );
+  backdrop-filter: var(--control-backdrop-filter, none);
+
+  &.is-stuck {
+    border-top: 1px solid
+      var(--calendar-graph-header-border, var(--surface-border, #eee));
+  }
+}

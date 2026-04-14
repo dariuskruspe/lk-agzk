@@ -1,0 +1,59 @@
+<p-card class="income">
+  <p-toolbar class="title">
+    <h3 class="title-text">{{ 'SALARY_AVERAGE' | translate }}</h3>
+    <i class="pi pi-info-circle tooltip-icon" [pTooltip]="'SALARY_TOOLTIP' | translate"></i>
+    <div class="hidden-block"></div>
+  </p-toolbar>
+
+  <ng-container *ngIf="!loading; else spinner">
+    <div class="salary-total">
+      <p class="salary-total__sum">
+        <span *ngIf="textShow" class="salary-total__sum-num"
+          >{{ averageIncome?.averageIncomeLog[0]?.sum || 0 }}&nbsp;{{
+            'SALARY_CURRENCY' | translate
+          }}
+          <span class="salary-total__sum-tooltip">{{
+            'SALARY_AVERAGE_LAST_THREE_MONTHS' | translate
+          }}</span>
+        </span>
+        <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+      </p>
+    </div>
+
+    <div>
+      <div
+        class="salary-item"
+        *ngFor="let item of averageIncome?.averageIncomeLog"
+      >
+        <span class="salary-item__period_whole">
+          {{ 'SALARY_MID' | translate }}
+          <span class="salary-item__period">{{ item?.periodName }}</span>
+        </span>
+        <span class="spacer"></span>
+        <span class="salary-item__sum">
+          <span *ngIf="textShow"
+            >{{ item?.sum || 0 }}&nbsp;{{ 'SALARY_CURRENCY' | translate }}</span
+          >
+          <span *ngIf="!textShow" [ngClass]="{ hide: !textShow }">•••</span>
+        </span>
+      </div>
+    </div>
+
+    <p-toolbar class="buttons-wrapper">
+      <button
+        pButton
+        label="{{ 'BUTTON_VIEW_DETAILS' | translate }}"
+        [routerLink]="['', 'salaries', 'income']"
+        class="button-full-xs p-button-outlined p-button-secondary salary-button"
+      ></button>
+    </p-toolbar>
+  </ng-container>
+
+  <ng-template #spinner>
+    <div class="spinner-container">
+      <p-progressSpinner
+        [style]="{ width: '40px', height: '40px' }"
+      ></p-progressSpinner>
+    </div>
+  </ng-template>
+</p-card>

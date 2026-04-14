@@ -1,0 +1,106 @@
+<div *ngIf="widgets?.length">
+  <div *ngFor="let widget of widgets; let i = index" class="custom-widget-item">
+    <p-toolbar class="title">
+      <h2 class="dashboard-title mobile-title">{{ widget.title }}</h2>
+      <span class="spacer"></span>
+      <button
+        pButton
+        type="button"
+        class="button-full-xs title-button"
+        label="{{ 'BUTTON_OPEN' | translate }}"
+        [loading]="loading && selectedId() === widget.id"
+        (click)="createReport(i)"
+      ></button>
+    </p-toolbar>
+    <div
+      class="row vacations-block"
+      *ngIf="!widget.hidePeriodSelection && widget.periodType"
+    >
+      <div class="main-leave col-md-12 mb-20">
+        <app-card [withPaddings]="false">
+          <div class="vacation__block">
+            @if (widget.description) {
+              <div class="description">
+                {{ widget.description }}
+              </div>
+            }
+
+            @if (!widget.hidePeriodSelection) {
+              <p-calendar
+                *ngIf="widget.periodType === 'month'"
+                [showIcon]="true"
+                [(ngModel)]="selectedDate[i]"
+                [readonlyInput]="true"
+                view="month"
+                dateFormat="mm.yy"
+                [minDate]="getDate(widget.dateBegin)"
+                [maxDate]="getDate(widget.dateEnd)"
+                appendTo="body"
+              ></p-calendar>
+              <p-calendar
+                *ngIf="widget.periodType === 'day'"
+                [showIcon]="true"
+                [readonlyInput]="true"
+                [(ngModel)]="selectedDate[i]"
+                [minDate]="getDate(widget.dateBegin)"
+                [maxDate]="getDate(widget.dateEnd)"
+                appendTo="body"
+              >
+                <ng-template pTemplate="date" let-date>
+                  <span [ngClass]="{ weekend: isWeekend(date) }">
+                    {{ date.day }}
+                  </span>
+                </ng-template>
+              </p-calendar>
+              <p-calendar
+                *ngIf="widget.periodType === 'year'"
+                [showIcon]="true"
+                [readonlyInput]="true"
+                view="year"
+                dateFormat="yy"
+                [(ngModel)]="years[i]"
+                [minDate]="getDate(widget.dateBegin)"
+                [maxDate]="getDate(widget.dateEnd)"
+                appendTo="body"
+              ></p-calendar>
+              <div *ngIf="widget.periodType === 'custom'" class="custom-dates">
+                <div class="start-date">
+                  <p-calendar
+                    [showIcon]="true"
+                    [readonlyInput]="true"
+                    [(ngModel)]="selectedDate[i].dateBegin"
+                    [minDate]="getDate(widget.dateBegin)"
+                    [maxDate]="getDate(widget.dateEnd)"
+                    appendTo="body"
+                  >
+                    <ng-template pTemplate="date" let-date>
+                      <span [ngClass]="{ weekend: isWeekend(date) }">
+                        {{ date.day }}
+                      </span>
+                    </ng-template>
+                  </p-calendar>
+                </div>
+                <div class="end-date">
+                  <p-calendar
+                    [showIcon]="true"
+                    [readonlyInput]="true"
+                    [(ngModel)]="selectedDate[i].dateEnd"
+                    [minDate]="getDate(widget.dateBegin)"
+                    [maxDate]="getDate(widget.dateEnd)"
+                    appendTo="body"
+                  >
+                    <ng-template pTemplate="date" let-date>
+                      <span [ngClass]="{ weekend: isWeekend(date) }">
+                        {{ date.day }}
+                      </span>
+                    </ng-template>
+                  </p-calendar>
+                </div>
+              </div>
+            }
+          </div>
+        </app-card>
+      </div>
+    </div>
+  </div>
+</div>

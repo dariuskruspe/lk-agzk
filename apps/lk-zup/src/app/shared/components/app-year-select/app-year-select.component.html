@@ -1,0 +1,47 @@
+<div class="app-year-select">
+  <button
+    class="app-year-select__button"
+    (click)="onDecreaseYear()"
+    aria-label="Предыдущий год"
+  >
+    <lucide-icon [name]="ChevronLeftIcon"></lucide-icon>
+  </button>
+  <div
+    class="app-year-select__value"
+    [class.app-year-select__value--open]="isOpen()"
+    [class.app-year-select__value--position-top]="dropdownPosition() === 'top'"
+    [class.app-year-select__value--position-bottom]="dropdownPosition() === 'bottom'"
+    [class.app-year-select__value--position-center]="dropdownPosition() === 'center'"
+    [style.--active-year-index]="3"
+    (click)="toggleDropdown()"
+    role="combobox"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="listbox"
+    [attr.aria-label]="'Выбор года'"
+    tabindex="0"
+  >
+    <div class="app-year-select__value-container">
+      <div class="app-year-select__value-list" role="listbox">
+        @for (year of years(); track year) {
+          <div
+            class="app-year-select__value-item"
+            [class.app-year-select__value-item--active]="value() === year"
+            (click)="isOpen() && selectYear(year, $event)"
+            role="option"
+            [attr.aria-selected]="value() === year"
+            tabindex="0"
+          >
+            {{ year }}
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+  <button
+    class="app-year-select__button"
+    (click)="onIncreaseYear()"
+    aria-label="Следующий год"
+  >
+    <lucide-icon [name]="ChevronRightIcon"></lucide-icon>
+  </button>
+</div>

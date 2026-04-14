@@ -1,0 +1,205 @@
+<p-card class="no-padding">
+  <div class="personal-data-wrapper">
+    <h3>
+      {{ 'PROFILE_PERSONAL_DATA' | translate | uppercase }}
+    </h3>
+
+    <div class="personal-data-list">
+      <div class="personal-data-list__header">
+        <p-toolbar class="space-between no-margin">
+          <h4 class="personal-data-list__header_title">
+            {{ 'USER_FULL_NAME' | translate }}
+          </h4>
+          <button
+            *ngIf="settings.userProfile.changeSurnameButton?.enable"
+            pButton
+            iconPos="left"
+            [label]="isMobileV() ? '' : 'BUTTON_EDIT' | translate"
+            icon="pi pi-pencil"
+            class="p-button-text"
+            (click)="onPersonalDataEdit('surname')"
+          ></button>
+        </p-toolbar>
+      </div>
+
+      <div class="personal-data-list__values">
+        <app-item-list
+          [items]="[
+            { title: 'USER_LAST_NAME', value: personalData?.surname || 'NOT_FILLED' },
+            { title: 'USER_NAME', value: personalData?.forename || 'NOT_FILLED' },
+            { title: 'USER_MID_NAME', value: personalData?.midname || 'NOT_FILLED' },
+          ]"
+        ></app-item-list>
+      </div>
+    </div>
+
+    <div class="personal-data-list">
+      <div class="personal-data-list__header">
+        <p-toolbar class="space-between no-margin">
+          <h4 class="personal-data-list__header_title">
+            {{ 'USER_CITIZENSHIP' | translate }}
+          </h4>
+          <button
+            *ngIf="settings.userProfile.changeCitizenshipButton?.enable"
+            pButton
+            iconPos="left"
+            [label]="isMobileV() ? '' : 'BUTTON_EDIT' | translate"
+            icon="pi pi-pencil"
+            class="p-button-text "
+            (click)="onPersonalDataEdit('citizenship')"
+          ></button>
+        </p-toolbar>
+      </div>
+
+      <div class="personal-data-list__values">
+        <app-item-list
+          [items]="[
+            { title: 'USER_CITIZENSHIP', value: personalData?.citizenship || 'NOT_FILLED' },
+          ]"
+        ></app-item-list>
+      </div>
+    </div>
+
+    <div class="personal-data-list">
+      <div class="personal-data-list__header">
+        <p-toolbar class="space-between no-margin">
+          <h4 class="personal-data-list__header_title">
+            {{ 'PASS' | translate }}
+          </h4>
+          <button
+            *ngIf="settings.userProfile.changePassportButton?.enable"
+            pButton
+            iconPos="left"
+            [label]="isMobileV() ? '' : 'BUTTON_EDIT' | translate"
+            icon="pi pi-pencil"
+            class="p-button-text "
+            (click)="onPersonalDataEdit('passport')"
+          ></button>
+        </p-toolbar>
+      </div>
+
+      <div class="personal-data-list__values">
+        <app-item-list
+          [items]="[
+            { title: 'PASS_SERIES', value: personalData?.passSeries || 'NOT_FILLED' },
+            { title: 'PASS_NUMBER', value: personalData?.passNumber || 'NOT_FILLED' },
+            { title: 'PASS_ISSUED_BY', value: personalData?.passIssued || 'NOT_FILLED' },
+            { title: 'PASS_ISSUE_DATE', value: personalData?.passIssueDate
+              | date: langUtils.convert(langFacade.getLang(), 'DATE_PIPE') || 'NOT_FILLED' },
+            { title: 'PASS_DEPT_ID', value: personalData?.passUnitCode || 'NOT_FILLED' },
+          ]"
+        ></app-item-list>
+      </div>
+    </div>
+
+    <div class="personal-data-list">
+      <div class="personal-data-list__header">
+        <p-toolbar class="space-between no-margin">
+          <h4 class="personal-data-list__header_title">
+            {{ 'ADDRESS_REGISTRATION' | translate }}
+          </h4>
+          <button
+            *ngIf="settings.userProfile.changeRegistrationAddressButton?.enable"
+            pButton
+            iconPos="left"
+            [label]="isMobileV() ? '' : 'BUTTON_EDIT' | translate"
+            icon="pi pi-pencil"
+            class="p-button-text "
+            (click)="onPersonalDataEdit('registrationAddress')"
+          ></button>
+        </p-toolbar>
+      </div>
+
+      <div class="personal-data-list__values">
+        <app-item-list
+          [items]="[
+            { title: 'ADDRESS_REGISTRATION', value: personalData?.registrationAddress || 'NOT_FILLED' },
+          ]"
+        ></app-item-list>
+      </div>
+    </div>
+
+    <div class="personal-data-list">
+      <div class="personal-data-list__header">
+        <p-toolbar class="space-between no-margin">
+          <h4 class="personal-data-list__header_title">
+            {{ 'ADDRESS_ACTUAL' | translate }}
+          </h4>
+          <button
+            *ngIf="settings.userProfile.changeActualAddressButton?.enable"
+            pButton
+            iconPos="left"
+            [label]="isMobileV() ? '' : 'BUTTON_EDIT' | translate"
+            icon="pi pi-pencil"
+            class="p-button-text "
+            (click)="onPersonalDataEdit('actualAddress')"
+          ></button>
+        </p-toolbar>
+      </div>
+
+      <div class="personal-data-list__values">
+        <app-item-list
+          [items]="[
+            { title: 'ADDRESS_ACTUAL', value: personalData?.actualAddress || 'NOT_FILLED' },
+          ]"
+        ></app-item-list>
+      </div>
+    </div>
+
+    <div class="personal-data-list">
+      <div class="personal-data-list__header">
+        <p-toolbar class="space-between no-margin">
+          <h4 class="personal-data-list__header_title">
+            {{ 'USER_OTHER_INFORMATION' | translate }}
+          </h4>
+          <button
+            *ngIf="settings.userProfile.changeOtherInfoButton?.enable"
+            pButton
+            iconPos="left"
+            [label]="isMobileV() ? '' : 'BUTTON_EDIT' | translate"
+            icon="pi pi-pencil"
+            class="p-button-text "
+            (click)="onPersonalDataEdit('other')"
+          ></button>
+        </p-toolbar>
+      </div>
+
+      <div class="personal-data-list__values">
+        <app-item-list
+          [items]="[
+            { title: 'USER_TIN', value: personalData?.inn || 'NOT_FILLED' },
+            { title: 'USER_NATIONAL_INSURANCE_NUMBER', value: personalData?.snils || 'NOT_FILLED' },
+            { title: 'USER_MARITAL_STATUS', value: personalData?.familyStatus || 'NOT_FILLED' },
+          ]"
+        ></app-item-list>
+      </div>
+    </div>
+
+    <div class="personal-data-list" *ngIf="sectionSettings()?.relatives?.enable">
+      <div class="personal-data-list__header">
+        <p-toolbar class="space-between no-margin">
+          <h4 class="personal-data-list__header_title">
+            {{ 'USER_RELATIVES' | translate }}
+          </h4>
+          <button
+            *ngIf="settings.userProfile.changeRelativesButton?.enable"
+            pButton
+            iconPos="left"
+            [label]="isMobileV() ? '' : 'BUTTON_ADD' | translate"
+            icon="pi pi-plus"
+            class="p-button-text "
+            (click)="onPersonalDataEdit('relatives')"
+          ></button>
+        </p-toolbar>
+      </div>
+
+      <div class="personal-data-list__values">
+        <app-item-list
+          [items]="relatives"
+          [editOneByOne]="settings.userProfile.changeRelativesButton?.enable"
+          (changeOne)="editOne($event)"
+        ></app-item-list>
+      </div>
+    </div>
+  </div>
+</p-card>

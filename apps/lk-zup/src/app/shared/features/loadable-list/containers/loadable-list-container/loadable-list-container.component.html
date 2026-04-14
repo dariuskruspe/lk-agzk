@@ -1,0 +1,75 @@
+<div class="filter" *ngIf="newFilter">
+  <fpc-filter
+    [loading]="loading"
+    [filter]="newFilter"
+    (filterSubmitted)="onFilterSubmit($event)"
+    [filterSize]="filterSize"
+    [listSize]="listSize"
+  ></fpc-filter>
+</div>
+<ng-container *ngIf="select">
+  <div class="select-buttons">
+    <div class="all-checkbox" [class.disabled]="!hasUnsigned()">
+      <p-checkbox
+        class="desktop mr-6"
+        [binary]="true"
+        inputId="binary"
+        (onChange)="selectAll($event)"
+        [(ngModel)]="isAllSelected"
+        [disabled]="!hasUnsigned()"
+      ></p-checkbox>
+      <span
+        class="mobile"
+        [class.disabled]="!hasUnsigned()"
+        (click)="!hasUnsigned() ? $event.stopPropagation() : isAllSelected = !isAllSelected; selectAll({checked: isAllSelected}); $event.stopPropagation()"
+      >
+        <span
+          *ngIf="isAllSelected"
+          class="custom-checkbox-filled center"
+        >
+        <i
+          class="pi pi-check white"
+        ></i>
+      </span>
+        <span
+          *ngIf="!isAllSelected"
+          class="custom-checkbox-empty center"
+        ></span>
+      </span>
+      {{'SELECT_ALL' | translate}}
+    </div>
+    <div *ngIf="hasSelectedItems" [class.p-fluid]="isMobileV()" class="buttons-container">
+      <button *ngIf="rejectButtonTitle"
+        pButton
+        label="{{rejectButtonTitle | translate}}"
+        class="p-button-outlined reject-button"
+        (click)="signList(true)"
+      ></button>
+      <button
+        pButton
+        label="{{selectButtonTitle | translate}}"
+        (click)="signList(false)"
+      ></button>
+    </div>
+  </div>
+</ng-container>
+
+<loadable-list
+  [template]="fullTemplate"
+  [widthType]="windowWidthService.size$ | async"
+  [takeCount]="takeCount"
+  [dataConfig]="dataConfig"
+  [dataList]="dataList"
+  [otherData]="otherData"
+  [highlight]="highlight"
+  [scrollContainerClassCss]="scrollContainerClassCss"
+  [scrollPosition]="loadableListScrollPositionFacade.getData()?.position"
+  [backPage]="backPage"
+  [loading]="loading"
+  [pagination]="pagination"
+  (clickItem)="onClickItem($event)"
+  (clickButton)="onClickButton($event)"
+  (saveScrollPosition)="saveScrollPosition($event)"
+  (listLoadable)="onListLoadable()"
+  (listPagination)="onListPagination($event)"
+></loadable-list>

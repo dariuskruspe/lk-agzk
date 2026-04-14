@@ -1,0 +1,21 @@
+<p-card>
+  <h3 class="magic-title">{{ 'PROFILE_MAGIC_LINK_HEADING' | translate }}</h3>
+  <div class="description">
+    {{ 'PROFILE_MAGIC_LINK_DESCRIPTION' | translate }}
+  </div>
+  <qr-code
+    [value]="magicLink"
+    size="200"
+    errorCorrectionLevel="M"
+    [centerImageSrc]="icon"
+    centerImageSize="48"
+  ></qr-code>
+  <div (click)="copyLink(link)" class="rec-link">
+    <span
+      #link
+      [innerText]="magicLink"
+    >
+    </span>
+    <i class="pi pi-copy"></i>
+  </div>
+</p-card>

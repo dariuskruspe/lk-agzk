@@ -1,0 +1,9 @@
+<div>
+  <app-employees-show
+    [employeePersonalData]="
+      employeesCompanyProfileDialogFacade.getData$() | async
+    "
+    [employeeStateList]="employeeStateListFacade.getData()"
+    [dialogMode]="true"
+  ></app-employees-show>
+</div>

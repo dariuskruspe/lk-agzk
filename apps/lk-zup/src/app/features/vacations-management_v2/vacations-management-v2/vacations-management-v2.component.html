@@ -1,0 +1,187 @@
+@if (vacations()) {
+  <div class="app-page-container">
+    <div class="vacations-management-header">
+      <!-- Заголовок с иконкой-подсказкой -->
+      <div class="vacations-management-header-top">
+        <div class="vacations-management-title">
+          <h1>{{ 'TITLE_VACATIONS_EMPLOYEE' | translate }}</h1>
+          <i
+            class="pi pi-question-circle title-hint-icon"
+            [pTooltip]="'EMPLOYEE_VACATIONS_APPROVAL_TOOLTIP' | translate"
+            tooltipPosition="right"
+          ></i>
+        </div>
+        <div>
+          @if (viewType() === 'year') {
+            <app-year-select [(value)]="year"></app-year-select>
+          } @else {
+            <app-month-select
+              [value]="fullMonth()"
+              (valueChange)="vacationsService.setFullMonth($event)"
+            ></app-month-select>
+          }
+        </div>
+        <div class="vacations-management-header-top-buttons">
+          <app-select-button [(value)]="viewType">
+            <app-select-button-option value="year">{{
+              'YEAR' | translate
+            }}</app-select-button-option>
+            <app-select-button-option value="month">{{
+              'MONTH' | translate
+            }}</app-select-button-option>
+          </app-select-button>
+        </div>
+      </div>
+
+      <!-- Табы и фильтры -->
+      <div class="vacations-management-header-bottom">
+        <!-- Табы: "Все отпуска" / "К согласованию" -->
+        <div class="vacations-management-tabs">
+          <div
+            class="vacations-management-tab"
+            [class.active]="activeTab() === 'ALL_VACATIONS'"
+            (click)="changeTab('ALL_VACATIONS')"
+          >
+            <span>{{ 'ALL_VACATIONS' | translate }}</span>
+          </div>
+          <div
+            class="vacations-management-tab"
+            [class.active]="activeTab() === 'VACATIONS_TO_BE_APPROVED'"
+            (click)="changeTab('VACATIONS_TO_BE_APPROVED')"
+          >
+            <span>{{ 'TO_BE_APPROVED' | translate }}</span>
+            <span
+              class="vacations-management-tab-counter"
+              [pTooltip]="'TO_BE_APPROVED_COUNT_HINT' | translate"
+              tooltipPosition="bottom"
+            >
+              {{ toBeApprovedCount()?.toString() || '...' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="vacations-management-header-bottom-right">
+          <!-- Чипы фильтров -->
+          <div>
+            @if (filters().hasIntersection) {
+              <app-app-filter-chip
+                (remove)="patchFilters({ hasIntersection: false })"
+              >
+                {{ 'VACATIONS_GRAPH_SHOW_INTERSECTIONS' | translate }}
+              </app-app-filter-chip>
+            }
+          </div>
+
+          <!-- Кнопка фильтра -->
+          <app-button-filter>
+            <app-button
+              #trigger
+              [label]="'FILTER' | translate"
+              [icon]="SlidersHorizontalIcon"
+            ></app-button>
+
+            <ng-template #filter>
+              <div>
+                <div class="app-filter-field app-filter-field--checkbox">
+                  <p-checkbox
+                    [ngModel]="filters().hasIntersection"
+                    (ngModelChange)="
+                      patchFilters({ hasIntersection: $any($event) })
+                    "
+                    [binary]="true"
+                    id="ny"
+                    [label]="
+                      'VACATIONS_GRAPH_SHOW_INTERSECTIONS' | translate
+                    "
+                  ></p-checkbox>
+                </div>
+
+                <div class="app-filter-field">
+                  <label for="employee-multiselect">{{
+                    'VACATION_EMPLOYEE_TITLE' | translate
+                  }}</label>
+                  <p-multiSelect
+                    [options]="employeeFilterOptions()"
+                    [filter]="true"
+                    optionGroupLabel="title"
+                    optionGroupChildren="items"
+                    [maxSelectedLabels]="1"
+                    [group]="true"
+                    [ngModel]="filters().employees"
+                    (ngModelChange)="onChangeEmployeesFilter($event)"
+                    emptyFilterMessage="Сотрудников не найдено"
+                    optionLabel="title"
+                    optionValue="value"
+                    appendTo="body"
+                    id="employee-multiselect"
+                    resetFilterOnHide="true"
+                  >
+                    <ng-template let-selectedItems pTemplate="selectedItems">
+                      <div class="selected-items-container">
+                        <span class="multiple-selection">
+                          {{ 'SELECTED_ITEMS_COUNT' | translate }}
+                          {{ filters().employees.length }}
+                        </span>
+                      </div>
+                    </ng-template>
+                    <ng-template let-group pTemplate="group">
+                      <div class="multi-select-group-head">
+                        <p-checkbox
+                          [binary]="true"
+                          [ngModel]="group.checked"
+                          (ngModelChange)="
+                            onChangeEmployeesFilterGroup(group, $event)
+                          "
+                          class="employees-group-checkbox"
+                          [label]="group.title | translate"
+                        ></p-checkbox>
+                      </div>
+                    </ng-template>
+                  </p-multiSelect>
+                </div>
+              </div>
+            </ng-template>
+          </app-button-filter>
+        </div>
+      </div>
+    </div>
+
+    <!-- Панель согласования (только для вкладки "К согласованию") -->
+    @if (
+      activeTab() === 'VACATIONS_TO_BE_APPROVED' && toBeApprovedCount()
+    ) {
+      <div class="vacations-management-decision-panel">
+        <p-checkbox
+          [(ngModel)]="allEmployeeCheckbox"
+          (onChange)="onAllEmployeeCheckboxChange($event)"
+          [binary]="true"
+          [label]="'SELECT_ALL' | translate"
+        ></p-checkbox>
+
+        <div class="vacations-management-decision-buttons">
+          <p-button
+            class="mr-10"
+            [disabled]="!selectedEmployeeIds()?.length"
+            [label]="'BUTTON_REJECT' | translate"
+            [outlined]="true"
+            styleClass="btn-reject"
+            (onClick)="showConfirmDecisionDialog('decline')"
+          ></p-button>
+          <p-button
+            [disabled]="!selectedEmployeeIds()?.length"
+            [label]="'BUTTON_APPROVE' | translate"
+            styleClass="btn-approve"
+            (onClick)="showConfirmDecisionDialog('approve')"
+          ></p-button>
+        </div>
+      </div>
+    }
+
+    <!-- График отпусков (v2 дизайн) -->
+    @if (viewType() === 'month') {
+      <app-vacations-month-viewer></app-vacations-month-viewer>
+    } @else {
+      <app-vacations-year-viewer></app-vacations-year-viewer>
+    }
+  </div>
+}

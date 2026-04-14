@@ -1,0 +1,162 @@
+<div class="container-fluid">
+  <p-toolbar>
+    <button
+      pButton class="p-button-outlined p-button-rounded" icon="pi pi-arrow-left" [routerLink]="['', 'salaries']"
+    ></button>
+    <h1>
+      {{ 'BREADCRUMBS_PAYROLL' | translate }}
+    </h1>
+    <span class="spacer"></span>
+    <form
+      [formGroup]="salaryDateForm" class="form-salary"
+    >
+      <ng-container
+        *map="
+          [
+            workPeriods?.reports[0]?.dateBegin,
+            workPeriods?.reports[0]?.dateEnd,
+          ];
+          handler: toDate;
+          let values
+        "
+      >
+        <p-calendar
+          *ngIf="workPeriodActiveValue"
+          class="without-borders"
+          formControlName="date"
+          view="month"
+          appendTo="body"
+          dateFormat="MM yy"
+          [readonlyInput]="true"
+          [locale]="locale[dateLocale]"
+          [minDate]="values[0]"
+          [maxDate]="values[1]"
+          icon="pi pi-chevron-down"
+          [showIcon]="true"
+          (ngModelChange)="onChangeForm()"
+        ></p-calendar>
+      </ng-container>
+    </form>
+  </p-toolbar>
+  <div class="salaries-wrap p-0">
+    <p-card>
+      <span class="secondary">{{ 'SALARY_TOTAL_PAYABLE' | translate }}</span>
+      <div class="salary-total">
+        <p class="salary-total__sum">
+          <span
+            *ngIf="textShow"
+          >{{toNumberFormat(
+            payslip?.earnings?.total + payslip?.deductions?.total
+          ) || 0}}&nbsp;{{ 'SALARY_CURRENCY' | translate }}</span> <span
+            *ngIf="!textShow" [ngClass]="{ hide: !textShow }"
+          >•••</span>
+        </p>
+        <button
+          (click)="onTextDisplayChange()" class="salary-total__btn"
+        >
+          <mat-icon
+            svgIcon="icon-eye-hide" *ngIf="!textShow"
+          ></mat-icon>
+          <mat-icon
+            svgIcon="icon-eye-show" *ngIf="textShow"
+          ></mat-icon>
+        </button>
+      </div>
+    </p-card>
+    <p-card>
+      <span class="secondary">{{ 'SALARY_TOTAL_PAID' | translate }}</span>
+      <p class="salary-total__sum">
+        <span
+          *ngIf="textShow"
+        >{{ toNumberFormat(payslip?.payments?.total) || 0 }}&nbsp;{{'SALARY_CURRENCY' | translate}}</span> <span
+          *ngIf="!textShow" [ngClass]="{ hide: !textShow }"
+        >•••</span>
+      </p>
+      <span class="secondary">{{ payslip?.payMethod }}</span>
+    </p-card>
+    <p-card>
+      <span class="secondary">{{'SALARY_REMAINING_PAYABLE' | translate}}</span>
+      <p class="salary-total__sum">
+        <span *ngIf="textShow && payslip?.netPaySum">
+          {{ toNumberFormat(payslip?.netPaySum) }}&nbsp;{{'SALARY_CURRENCY' | translate}}</span> <span
+          *ngIf="textShow && !payslip?.netPaySum"
+        >0 {{ 'SALARY_CURRENCY' | translate }}</span> <span
+          *ngIf="!textShow" [ngClass]="{ hide: !textShow }"
+        >•••</span>
+      </p>
+      <span
+        class="secondary" *ngIf="payslip?.netPaySum"
+      >{{ 'SALARY_PLANNED_DATE' | translate }}&nbsp;{{payslip?.netPayDate | date: 'dd.MM.yyyy'}}</span>
+    </p-card>
+  </div>
+  <p-toolbar class="subtitle">
+    <!-- Заголовок "Детализация зарплаты" -->
+    <h1>{{ 'SALARY_DETAIL' | translate }}</h1>
+  </p-toolbar>
+  <div>
+    <div
+      class="salary-item" *ngFor="let item of payslip?.earnings?.items"
+    >
+      <p-toolbar class="no-margin space-between align-center">
+        <span>{{ item?.name }} {{ item?.date | date: 'dd.MM.yyyy' }}</span>
+        <span
+          *coloredNumber="item?.sum; suffix (' ' + ('SALARY_CURRENCY' | translate)); let value"
+        >
+          <span *ngIf="textShow">
+            {{ value }}
+          </span>
+          <span
+            *ngIf="!textShow" [ngClass]="{ hide: !textShow }"
+          >•••</span>
+        </span>
+      </p-toolbar>
+    </div>
+    <div
+      class="salary-item" *ngFor="let item of payslip?.deductions?.items"
+    >
+      <p-toolbar class="no-margin space-between align-center">
+        <span>{{ item?.name }} {{ item?.date | date: 'dd.MM.yyyy' }}</span>
+        <span
+          *coloredNumber="item?.sum; suffix (' ' + ('SALARY_CURRENCY' | translate)); let value"
+        >
+          <span *ngIf="textShow">
+            {{ value }}
+          </span>
+          <span
+            *ngIf="!textShow" [ngClass]="{ hide: !textShow }"
+          >•••</span>
+        </span>
+      </p-toolbar>
+    </div>
+    <div
+      class="salary-item" *ngFor="let item of payslip?.payments?.items"
+    >
+      <p-toolbar class="no-margin space-between align-center">
+        <span>{{ item?.name }} {{ item?.date | date: 'dd.MM.yyyy' }}</span>
+        <span class="grey">
+          <span *ngIf="textShow">
+            {{ toNumberFormat(item?.sum) || 0 }}&nbsp;{{'SALARY_CURRENCY' | translate}}
+          </span>
+          <span
+            *ngIf="!textShow" [ngClass]="{ hide: !textShow }"
+          >•••</span>
+        </span>
+      </p-toolbar>
+    </div>
+    <div
+      class="salary-item" *ngIf="payslip?.balanceText"
+    >
+      <p-toolbar class="no-margin space-between align-center">
+        <span class="black salary-item__period">{{payslip?.balanceText}}</span>
+        <span class="black">
+          <span *ngIf="textShow">
+            {{ toNumberFormat(payslip?.balanceSum) }}&nbsp;{{'SALARY_CURRENCY' | translate}}
+          </span>
+          <span
+            *ngIf="!textShow" [ngClass]="{ hide: !textShow }"
+          >•••</span>
+        </span>
+      </p-toolbar>
+    </div>
+  </div>
+</div>

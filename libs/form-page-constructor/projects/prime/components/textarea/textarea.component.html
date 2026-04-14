@@ -1,0 +1,23 @@
+<div [formGroup]="form">
+  <label class="custom-form-field__label"> {{ item.label }}{{ isRequired() ? ' *' : '' }}</label>
+  <textarea
+    #textarea
+    rows="5"
+    pInputTextarea
+    [mask]="item.mask"
+    [placeholder]="item.placeholder ?? ''"
+    [formControlName]="item.formControlName"
+    (change)="valueBinding(item.formControlName, $event)"
+    [autoResize]="true"
+    [attr.aria-describedby]="item.formControlName + '-error'"
+  ></textarea>
+  <button
+    *ngIf="item.icon && item.icon.clearMode && textarea.value"
+    pButton
+    icon="pi pi-times"
+    class="p-button-rounded p-button-text p-button-plain custom-form-field__clearance"
+    aria-label="Clear"
+    (click)="form.get(item.formControlName).patchValue('')"
+    type="button"
+  ></button>
+</div>

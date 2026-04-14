@@ -1,0 +1,174 @@
+<!-- Пересечения отпусков выбранного сотрудника с отпусками других сотрудников в графике отпусков -->
+
+@if (selectedEmployeeVacationsData && allEmployeesVacationsData) {
+<div
+  [formGroup]="vacationOverlapsFG"
+  class="vacation-overlaps-container flex flex-col"
+>
+  <!-- Информация о выбранном сотруднике и конкретном периоде его отпуска -->
+  <div class="vacation-info flex flex-col mb-24">
+    <!-- Строка вида "Сотрудник: <ФИО сотрудника>" -->
+    <div class="info-row employee-full-name-row flex flex-row">
+      <!-- Метка "Сотрудник" -->
+      <div class="info-label employee mr-4">{{ 'EMPLOYEE' | translate }}:</div>
+
+      <!-- ФИО сотрудника -->
+      <div class="info-value employee-full-name">
+        {{ selectedEmployeeVacationsData?.name }}
+      </div>
+    </div>
+
+    <!-- Строка вида "Отпуск: <выбранный период отпуска сотрудника>" -->
+    <div class="info-row vacation-row flex flex-row">
+      <!-- Метка "Отпуск" -->
+      <div class="info-label vacation mr-4">{{ 'VACATION' | translate }}:</div>
+
+      <!-- Выпадающий список выбора периода отпуска сотрудника -->
+      <div class="info-value vacation-period">
+        <p-dropdown
+          (onChange)="onFormControlChange('period', $event)"
+          formControlName="period"
+          [options]="selectedEmployeeOverlapPeriods"
+          styleClass="vacation-period-dropdown"
+        ></p-dropdown>
+      </div>
+    </div>
+  </div>
+
+  <!-- Информация о пересечениях с конкретным периодом отпуска выбранного сотрудника -->
+  <div class="vacation-overlaps flex flex-col">
+    @for (employeeCalendar of overlapCalendar; track
+    employeeCalendar.employeeId; let first=$first) {
+    <!-- <только для выбранного сотрудника (первого элемента массива)> -->
+    @if (first) {
+    <div class="flex flex-row gap-2px">
+      <!-- Проходим по всем подходящим периодам отпусков указанного сотрудника (в данном случае — это массив из -->
+      <!-- одного элемента — выбранного периода) -->
+      @for (matchedPeriod of employeeCalendar.matchedPeriods; track
+      matchedPeriod.label) {
+      <!-- Проходим по всем месяцам выбранного периода -->
+      @for (matchedMonth of matchedPeriod.matchedMonths; let index=$index; track
+      index) {
+      <div class="flex flex-col">
+        <!-- Строка вида "<Название месяца> <год>" -->
+        <div class="month-year-row font-size-14px mb-20">
+          <span class="month-name mr-5">{{ matchedMonth?.name }}</span>
+          <span class="year">{{ matchedMonth?.year }}</span>
+        </div>
+
+        <!-- Строка с номерами дней месяца -->
+        <div class="month-day-numbers flex flex-row mb-5">
+          @for (day of matchedMonth?.days; track day.number) {
+          <div
+            class="day-number"
+            [ngClass]="{ weekend: day.isWeekend, holiday: day.isHolidayRU }"
+            [ngStyle]="{ width: overlapCalendarConfig.dayWidthPx + 'px' }"
+            [title]="
+              (day.date | date : 'fullDate') +
+              (day.isHolidayRU ? ' — ' + day.holidayRUName : '')
+            "
+          >
+            {{ day.number }}
+          </div>
+          }
+        </div>
+
+        <!-- Строка с названиями дней недели -->
+        <div class="weekdays flex flex-row mb-15">
+          @for (day of matchedMonth?.days; track day.number) {
+          <div
+            class="weekday"
+            [ngClass]="{ weekend: day.isWeekend, holiday: day.isHolidayRU }"
+            [ngStyle]="{ width: overlapCalendarConfig.dayWidthPx + 'px' }"
+            [title]="
+              (day.date | date : 'fullDate') +
+              (day.isHolidayRU ? ' — ' + day.holidayRUName : '')
+            "
+          >
+            {{ day.shortName }}
+          </div>
+          }
+        </div>
+
+        <!-- Строка с календарём дней месяца, соответствующего дате начала выбранного периода отпуска указанного сотрудника -->
+        <div class="overlap-calendar flex flex-row mb-25">
+          @for (day of matchedMonth?.days; track day.number) {
+          <div
+            class="day"
+            [ngClass]="{
+              vacation: day.isVacation,
+              'custom-vacation': day.isCustomVacation,
+               weekend: day.isWeekend,
+            }"
+            [ngStyle]="{
+              width: overlapCalendarConfig.dayWidthPx + 'px',
+              height: overlapCalendarConfig.dayHeightPx + 'px',
+              '--vacation-fill-color': day.workStatus?.color || '#DFF2D5',
+              '--overlap-fill-color': day.workStatus?.color || '#DFF2D5',
+              '--custom-vacation-fill-color': day.workStatus?.color || '#D4EAFF',
+              '--custom-overlap-fill-color': day.workStatus?.color || '#D4EAFF',
+            }"
+            [title]="
+              (day.date | date : 'fullDate') +
+              (day.isHolidayRU ? ' — ' + day.holidayRUName : '')
+            "
+          ></div>
+          }
+        </div>
+      </div>
+      } }
+    </div>
+    }
+
+    <!-- <только не для выбранного сотрудника (для всех элементов массива кроме первого)> -->
+    @if (!first) {
+    <!-- <только если имеются пересекающиеся периоды отпусков> -->
+    @if (employeeCalendar.matchedPeriods?.length) {
+    <!-- Строка с ФИО сотрудника -->
+    <div class="employee-full-name flex flex-row mb-10">
+      <span>{{ employeeCalendar.employeeFullName }}</span>
+    </div>
+
+    <!-- Проходим по всем пересекающимся периодам отпусков сотрудника -->
+    @for (matchedPeriod of employeeCalendar.matchedPeriods; track
+    matchedPeriod.label) {
+    <!-- Строка вида "Пересечение 01.06 - 05.06 (отпуск по графику с 01.06 по 12.06)" -->
+    <div class="overlap-text flex flex-row gap-5px mb-15">
+      <span>{{ 'OVERLAP' | translate }}</span>
+      <span class="grey">({{ matchedPeriod.label }})</span>
+    </div>
+
+    <!-- Строка с календарём дней месяца, соответствующего дате начала выбранного периода отпуска указанного сотрудника -->
+    <div class="overlap-calendar flex flex-row mb-25">
+      <!-- Проходим по всем месяцам пересекающегося периода -->
+      @for (matchedMonth of matchedPeriod.matchedMonths; let index=$index; track
+      index) {
+      <!-- Отображаем каждый день месяца -->
+      @for (day of matchedMonth.days; track day.number) {
+      <div
+        class="day"
+        [ngClass]="{
+          vacation: day.isVacation,
+          'custom-vacation': day.isCustomVacation,
+          overlap: day.isVacationOverlap,
+          weekend: day.isWeekend,
+        }"
+        [ngStyle]="{
+          width: overlapCalendarConfig.dayWidthPx + 'px',
+          height: overlapCalendarConfig.dayHeightPx + 'px',
+          '--vacation-fill-color': day.workStatus?.color || '#DFF2D5',
+          '--overlap-fill-color': day.workStatus?.color || '#DFF2D5',
+          '--custom-vacation-fill-color': day.workStatus?.color || '#D4EAFF',
+          '--custom-overlap-fill-color': day.workStatus?.color || '#D4EAFF',
+        }"
+        [title]="
+          (day.date | date : 'fullDate') +
+          (day.isHolidayRU ? ' — ' + day.holidayRUName : '')
+        "
+      ></div>
+      } }
+    </div>
+    } } } }
+  </div>
+</div>
+}

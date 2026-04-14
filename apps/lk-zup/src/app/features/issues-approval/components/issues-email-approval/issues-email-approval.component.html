@@ -1,0 +1,73 @@
+<div
+  class="approval__spinner"
+  *ngIf="loading() || !settings; else isTaskProcessed ? result : form"
+>
+  <p-progressSpinner></p-progressSpinner>
+</div>
+
+<!-- Форма согласования заявки (с полем для ввода комментария и кнопками "Согласовать"/"Отклонить") -->
+<ng-template #form>
+  <div class="flex flex-column">
+    <!-- Поле ввода комментария -->
+    <textarea *ngIf="settings?.issues?.enableApproveComment || settings?.issues?.enableCancelComment"
+              pInputTextarea [(ngModel)]="comment"
+              [autoResize]="true"
+              class="w-full"
+              cols="30"
+              [placeholder]="'ISSUE_COMMENT' | translate"
+              rows="5">
+    </textarea>
+
+    <!-- Тулбар с кнопками -->
+    <p-toolbar class="flex w-full mt-10" styleClass="flex w-full">
+      <div class="toolbar-group-left"
+           *ngIf="isApprove"
+           [pTooltip]="(settings?.issues?.enableApproveComment && settings?.issues?.requiredApproveComment) && !comment ? ('ERROR_VACATION_EMPTY_COMMENT' | translate) : ''">
+        <!-- Кнопка "Согласовать" -->
+        <p-button
+          (onClick)="onApprove()"
+          [disabled]="(settings?.issues?.enableApproveComment && settings?.issues?.requiredApproveComment) && !comment"
+          [label]="'BUTTON_APPROVE' | translate"
+          styleClass="p-button-success m-0 mr-10"
+        ></p-button>
+      </div>
+
+      <div class="toolbar-group-right"
+           *ngIf="!isApprove"
+           [pTooltip]="(settings?.issues?.enableCancelComment && settings?.issues?.requiredCancelComment) && !comment ? ('ERROR_VACATION_EMPTY_COMMENT' | translate) : ''">
+        <!-- Кнопка "Отклонить" -->
+        <p-button
+          (onClick)="onReject()"
+          [disabled]="(settings?.issues?.enableCancelComment && settings?.issues?.requiredCancelComment) && !comment"
+          [label]="'BUTTON_REJECT' | translate"
+          styleClass="p-button-danger m-0"
+        ></p-button>
+      </div>
+    </p-toolbar>
+  </div>
+</ng-template>
+
+<!-- Результат согласования заявки (например, "Заявка согласована") -->
+<ng-template #result>
+  <div
+    class="approval__logo"
+    [ngClass]="{
+      'approval__success': approveData?.state === 1 || (!approveData?.state && checkState(approveData) === 1),
+      'approval__error': approveData?.state === 2 || (!approveData?.state && checkState(approveData) === 2),
+      'approval__warn': approveData?.state === 3
+    }"
+  >
+    <i
+      *ngIf="approveData?.state === 1 || (!approveData?.state && checkState(approveData) === 1)"
+      class="pi pi-check-circle"
+    ></i> <i
+    *ngIf="approveData?.state === 2 || (!approveData?.state && checkState(approveData) === 2)"
+    class="pi pi-times-circle"
+  ></i> <i
+    *ngIf="approveData?.state === 3"
+    class="pi pi-info-circle"
+  ></i>
+  </div>
+  <h3 *ngIf="approveData?.message?.header">{{ approveData?.message?.header }}</h3>
+  <p>{{ approveData?.message?.text }}</p>
+</ng-template>

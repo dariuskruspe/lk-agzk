@@ -1,0 +1,20 @@
+<app-steps
+  *ngIf="evaluationItem()"
+  [steps]="steps"
+  [options]="stepsOptions"
+></app-steps>
+
+<p-card class="no-padding" *ngIf="evaluationItem()">
+  <p-tabView>
+    <p-tabPanel header="{{ 'ISSUE' | translate }}">
+      <app-evaluation-form
+        [evaluation]="evaluationItem()"
+        [ratingList]="ratingList()"
+        [isManager]="isManager()"
+        (submitForm)="submitForm($event)"
+        (approve)="approve($event)"
+        (nextStage)="nextStage()"
+      ></app-evaluation-form>
+    </p-tabPanel>
+  </p-tabView>
+</p-card>

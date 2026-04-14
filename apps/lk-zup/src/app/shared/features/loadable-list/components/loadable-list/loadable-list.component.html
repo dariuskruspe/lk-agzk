@@ -1,0 +1,40 @@
+<div *ngIf="data?.length; else noData">
+  <ng-container *ngFor="let item of (data | take:takeCount); let i = index">
+    <app-item-list-builder
+      class="col-12 p-0"
+      [template]="template"
+      [widthType]="widthType"
+      [highlighted]="highlight(item)"
+      [stateId]="item.stateID || item.state"
+      [stateList]="stateList"
+      [dataList]="item"
+      [dataConfig]="displayedConfig"
+      (click)="onClick(item, i)"
+      (buttonClick)="onButtonClick(item)"
+    ></app-item-list-builder>
+  </ng-container>
+</div>
+
+<!-- Сообщение об отсутствии данных (когда список пуст) -->
+<ng-template #noData>
+  <app-info *ngIf="!loading">{{ noDataText || ('LIST_EMPTY' | translate) }}</app-info>
+</ng-template>
+
+<p-paginator
+  #paginator
+  *ngIf="pagination && data?.length"
+  [pageLinkSize]="pageLinkSize"
+  [rows]="activatedRoute?.snapshot?.queryParams?.count || 15"
+  [totalRecords]="dataList?.count"
+  [alwaysShow]="true"
+  (click)="onPaginate($event)"
+  (onPageChange)="onSetPaginate($event)"
+></p-paginator>
+
+<div *ngIf="!pagination" #listLoadableSeparator></div>
+<div class="spinner-container" *ngIf="loading && !pagination">
+  <p-progressSpinner
+    [style]="{ width: '40px', height: '40px' }"
+  ></p-progressSpinner>
+</div>
+

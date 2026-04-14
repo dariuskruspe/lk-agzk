@@ -1,0 +1,175 @@
+.custom-list {
+  //gap: 20px;
+  display: flex;
+  flex-direction: column;
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    margin: 10px 0;
+  }
+
+  &__line.label {
+    width: 100%;
+
+    @media (max-width: 769px) {
+      width: 100%;
+      max-width: 100%;
+    }
+  }
+
+  &__line {
+    flex: 1;
+  }
+  .custom-text-block {
+    padding: 13px;
+    border-radius: 5px;
+    border: 1px solid var(--toast-border);
+    background: var(--info-comment-background);
+  }
+
+  &__separator {
+    border-bottom: 1px solid var(--border-color);
+  }
+}
+
+.custom-form-field {
+  margin-bottom: 23px;
+  position: relative;
+
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  &__radio {
+    margin-bottom: 10px;
+
+    :last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  &__error {
+    display: block;
+  }
+
+  &__hint {
+
+  }
+
+  &__invalid {
+
+  }
+
+  &__clearance {
+    position: absolute;
+    right: 13px;
+    height: auto !important;
+  }
+
+  &__with-clearance {
+    padding-right: 50px;
+  }
+
+  &__upload-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__upload-header {
+
+  }
+
+  &__selected-files {
+    height: 100%;
+    align-self: center;
+    margin: 20px 0;
+    padding: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  &__selected-file {
+    list-style: none;
+    display: flex;
+    gap: 10px;
+    overflow-wrap: anywhere;
+  }
+
+  &__static-files {
+
+  }
+
+  .p-multiselect,
+  .p-dropdown,
+  .p-calendar,
+  .p-fileupload,
+  .p-inputnumber,
+  .p-password,
+  .p-inputtext {
+    width: 100%;
+  }
+
+  .p-fileupload {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    .p-fileupload-choose-selected {
+      max-width: 100%;
+    }
+  }
+}
+
+.custom-form-array {
+  &__title {
+    margin-bottom: 10px;
+  }
+
+  &__row {
+    position: relative;
+    padding: 15px 0 10px;
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 15px;
+      width: 95.5%;
+      height: 1px;
+      background-color: rgba(0,0,0,.12);
+
+      @media (max-width: 767px) {
+        content: none;
+      }
+    }
+  }
+
+  &__row-tools {
+    width: auto;
+    display: flex;
+    align-items: center;
+  }
+
+  &__add-row {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  &__row-inputs {
+    width: 85%;
+    flex: 1;
+  }
+}
+
+.custom-array-view {
+  margin-top: 10px;
+}

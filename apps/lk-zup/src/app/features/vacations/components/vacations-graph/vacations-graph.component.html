@@ -1,0 +1,103 @@
+<!-- Страница "График отпусков" -->
+<!-- Страница "Отпуска сотрудников" -->
+
+<!-- Тулбар с заголовком и кнопками -->
+<p-toolbar class="page-header-toolbar" [ngClass]="{ 'mobile-v': isMobileV() }">
+  <div>
+    <!-- <только для страницы "График отпусков"> -->
+    @if (urlSegmentsSignal()?.[0]?.path === 'vacations') {
+      <!-- Заголовок "График отпусков" -->
+      <h1>{{ 'TITLE_VACATIONS' | translate }}</h1>
+    }
+
+    <!-- <только для страницы "Отпуска сотрудников"> -->
+    @if (urlSegmentsSignal()?.[0]?.path === 'vacations-management') {
+      <div class="flex flex-row ai-baseline">
+        <!-- Заголовок "Отпуска сотрудников" -->
+        <h1>{{ 'TITLE_VACATIONS_EMPLOYEE' | translate }}&nbsp;</h1>
+        <!-- Подсказка пользователю по согласованию отпусков -->
+        <i
+          class="pi pi-question-circle font-size-18px"
+          [pTooltip]="'EMPLOYEE_VACATIONS_APPROVAL_TOOLTIP' | translate"
+          tooltipPosition="right"
+        ></i>
+      </div>
+    }
+  </div>
+
+  <span class="spacer"></span>
+
+  <!-- <только для страницы "График отпусков"> -->
+  @if (urlSegmentsSignal()?.[0]?.path === 'vacations') {
+    <!-- Кнопка "Скачать отчёт" -->
+    <p-splitButton
+      #splitButton
+      [label]="'DOWNLOAD_REPORT' | translate"
+      [icon]="isReportLoadingSignal() ? 'pi pi-spin pi-spinner' : ''"
+      [disabled]="isReportLoadingSignal()"
+      [model]="saveReportButtonItems"
+      [outlined]="true"
+      (onClick)="toggleMenu($event)"
+      appendTo="body"
+    />
+
+    <!-- Кнопка "Запланировать отпуск" -->
+    <button
+      pButton
+      class="btn-schedule-vacation ml-10"
+      [ngClass]="{ 'mobile-v': isMobileV() }"
+      (click)="onEdit()"
+      [disabled]="
+        loading ||
+        (loading$ | async) ||
+        !availableDays?.planEnable ||
+        !(availableDays?.vacationTypes && availableDays?.vacationTypes.length)
+      "
+      label="{{ 'BUTTON_SCHEDULE_VACATION' | translate }}"
+    ></button>
+  }
+</p-toolbar>
+
+<!-- <только для обычной (desktop'ной) версии приложения> -->
+@if (!isMobileV()) {
+  <!-- Фильтры с легендой и график отпусков -->
+  <calendar-graph
+    [vacations]="vacations"
+    [types]="types"
+    [initYear]="initYear"
+    [loading]="loading$ | async"
+    [states]="states"
+    [calendarConfig]="calendarConfig$ | async"
+    [dayOffList]="dayOffList"
+    [filterConfig]="filterConfig"
+    [filterConfigFullscreen]="filterConfigFullscreen"
+    [daysOfWeek]="daysOfWeek | translateObj"
+    [months]="months | translateObj"
+    [disablePlanningButton]="
+      loading ||
+      !availableDays?.planEnable ||
+      !(availableDays?.vacationTypes && availableDays?.vacationTypes.length)
+    "
+    (filterSubmit)="onFilterSubmit($event)"
+    (openApproval)="onOpenApproval($event)"
+    (openEdit)="onOpenEdit($event)"
+    (openEditPlanning)="onEdit()"
+    [dialogComponent]="infoDialogComponent"
+  ></calendar-graph>
+} @else {
+  <!-- <только для мобильной версии приложения> -->
+
+  <!-- Фильтры с легендой и график отпусков -->
+  <app-calendar-graph-mobile
+    [months]="months | translateObj"
+    [loading]="loading$ | async"
+    [vacations]="vacations"
+    [types]="types"
+    [employees]="employeesOptionList"
+    [filter]="filterConfig"
+    [states]="states"
+    (filterSubmit)="onFilterSubmit($event)"
+    (openEdit)="onOpenEdit($event)"
+    [dialogComponent]="infoDialogComponent"
+  ></app-calendar-graph-mobile>
+}

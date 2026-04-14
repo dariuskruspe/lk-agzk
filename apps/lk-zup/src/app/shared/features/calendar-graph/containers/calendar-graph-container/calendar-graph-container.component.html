@@ -1,0 +1,215 @@
+<app-calendar-graph-fullscreen-filters
+  (tabChanged)="onTabChange($event)"
+  [isFullscreen]="false"
+  [filterValues]="filterValues"
+  [employeeList]="employeeList"
+  [months]="months"
+  [showFullscreenIcon]="true"
+  [types]="types"
+  [showEditButton]="false"
+  [subtitleText]="''"
+  (clearIntersection)="clearIntersectionFilter()"
+  (clearEmployee)="clearEmployeeFilter($event)"
+  (clearAllEmployee)="clearAllEmployeeFilter()"
+  (clearApproval)="clearApprovalFilter()"
+  (clearDepartment)="clearDepartmentFilter()"
+  (monthApply)="onFilterMonthApply()"
+  (filterSubmit)="onFilterSubmit($event)"
+  (showDialogFullscreen)="showDialog()"
+></app-calendar-graph-fullscreen-filters>
+
+<div class="graph-table">
+  <!-- Элементы управления: стрелочки переключения года и месяца -->
+  <div
+    class="years"
+    [ngClass]="{
+      'mobile-v': isMobileV(),
+      'static mb-10': !displayedVacationsSignal()?.length || this.loading,
+    }"
+  >
+    <i
+      class="pi pi-angle-left arrow"
+      (click)="filterValues.showType === 'month' ? prevMonth() : prevYear()"
+    ></i>
+    <span
+      class="month-year flex jc-center"
+      [ngStyle]="{
+        width: filterValues.showType === 'month' ? '120px' : 'auto'
+      }"
+      >{{
+        filterValues.showType === 'month'
+          ? (selectedDateSignal() | date : 'LLLL YYYY')
+          : selectedDateSignal()?.getFullYear()
+      }}</span
+    >
+    <i
+      class="pi pi-angle-right arrow"
+      (click)="filterValues.showType === 'month' ? nextMonth() : nextYear()"
+    ></i>
+  </div>
+
+  @if (!this.loading) {
+  <!-- если имеются данные по отпускам сотрудников -->
+  @if (this.displayedVacationsSignal()?.length) {
+  <calendar-graph-time-line
+    *ngIf="!visible"
+    [ngClass]="{
+      member: calendarConfig?.membersShow,
+      work: calendarConfig?.showWorkTime
+    }"
+    [states]="states"
+    [types]="types"
+    [calendarConfig]="calendarConfig"
+    [vacations]="chosenVacations"
+    [daysOfWeek]="daysOfWeek"
+    [months]="months"
+    [dayOffList]="dayOffList"
+    (showInfo)="showInfo($event)"
+    (openVacation)="onOpenApproval($event)"
+    [currentUser]="currentUserFacade.getData()"
+    (openApproval)="onOpenApproval($event)"
+  ></calendar-graph-time-line>
+  } @else {
+  <app-info>{{ 'LIST_EMPTY' | translate }}</app-info>
+  } } @else {
+  <!-- Чтобы не исчезало переключение года (стрелочками) во время загрузки -->
+  <app-info>{{ 'DATA_LOADING' | translate }}...</app-info>
+  }
+</div>
+
+<!-- Диалог с графиком отпусков (полноэкранный режим) -->
+<p-dialog
+  header="{{ 'TITLE_VACATIONS' | translate }}"
+  [(visible)]="visible"
+  [style]="{ width: '100vw', height: '80vw' }"
+  [modal]="true"
+  (onHide)="closeDialogFullscreen()"
+>
+  <app-calendar-graph-fullscreen-filters
+    *ngIf="visible"
+    (tabChanged)="onTabChange($event)"
+    [isFullscreen]="true"
+    [filterValues]="filterValues"
+    [employeeList]="employeeList"
+    [months]="months"
+    [types]="types"
+    [subtitleText]="''"
+    [disablePlanningButton]="disablePlanningButton"
+    (clearIntersection)="clearIntersectionFilter()"
+    (clearEmployee)="clearEmployeeFilter($event)"
+    (clearApproval)="clearApprovalFilter()"
+    (clearDepartment)="clearDepartmentFilter()"
+    (monthApply)="onFilterMonthApply()"
+    (filterSubmit)="onFilterSubmit($event)"
+    (clearAllEmployee)="clearAllEmployeeFilter()"
+    (openEditPlanning)="openEditPlanningClick()"
+  ></app-calendar-graph-fullscreen-filters>
+  <div
+    class="full-calendar"
+    *ngIf="filterValues.showType === 'year' && !loading"
+  >
+    <div class="row fixed-row">
+      <div class="name-column">
+        <div class="years">
+          <i class="pi pi-angle-left arrow" (click)="prevYear()"></i>
+          <span>{{ selectedDateSignal()?.getFullYear() }}</span>
+          <i class="pi pi-angle-right arrow" (click)="nextYear()"></i>
+        </div>
+      </div>
+      <div class="column month-column" *ngFor="let month of months">
+        {{ month }}
+      </div>
+    </div>
+    <div class="row" *ngFor="let item of convertedData">
+      <div class="name-column">
+        <!-- <только если текущая страница "Отпуска сотрудников" и включено выделение сотрудников> -->
+        @if (urlSegmentsSignal()?.[0]?.path === 'vacations-management' &&
+        enableEmployeeSelectionSignal()) {
+        <div class="checkbox-container flex flex-row ai-flex-start p-5 w-32">
+          @if (item?.employeeId) {
+          <p-checkbox
+            [(ngModel)]="selectedEmployeeIdsSignal"
+            (onChange)="
+              employeeVacationsService.onSelectedEmployeeIdsChange($event)
+            "
+            name="selected-vacations"
+            [inputId]="item.employeeId"
+            [value]="item.employeeId"
+            styleClass="employee-checkbox"
+          ></p-checkbox>
+          }
+        </div>
+        }
+
+        <div
+          (click)="showVacationOverlaps(item)"
+          class="flex flex-row flex-1 jc-space-between ai-center clickable"
+        >
+          <span>{{ item.name }}</span>
+          @if (item.hasIntersection) {
+          <img
+            class="w-24 h-24"
+            src="assets/icons/intersection.svg"
+            alt="intersection"
+            [pTooltip]="'VACATIONS_GRAPH_INTERSECTIONS' | translate"
+          />
+          }
+        </div>
+      </div>
+      <div class="column" *ngFor="let vacationsMonth of item.vacations">
+        <div class="month-item">
+          <div
+            *ngFor="let vacation of vacationsMonth"
+            class="vacation"
+            [pTooltip]="getTooltip(vacation.fullPeriod)"
+            [style.width]="3.8 * vacation.daysCount + '%'"
+            [style.background-color]="vacation?.color"
+            [style.margin-left]="3 * vacation.daysFromStart + '%'"
+            [ngClass]="{
+              liner: !vacation.approved,
+              'linear-red': vacation.approved !== null && !vacation.approved
+            }"
+            (click)="
+              showInfo({
+                event: null,
+                vacation: item.fullVacation,
+                period: vacation.fullPeriod
+              })
+            "
+          >
+            <i class="pi pi-sun sun-icon"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="name-column" *ngIf="filterValues.showType === 'month'">
+    <div class="years">
+      <i class="pi pi-angle-left arrow" (click)="prevMonth()"></i>
+      <span>{{ selectedDateSignal() | date : 'LLLL YYYY' }}</span>
+      <i class="pi pi-angle-right arrow" (click)="nextMonth()"></i>
+    </div>
+  </div>
+  <calendar-graph-time-line
+    *ngIf="filterValues.showType === 'month' && !loading"
+    [ngClass]="{
+      member: calendarConfig?.membersShow,
+      work: calendarConfig?.showWorkTime
+    }"
+    [states]="states"
+    [fullscreen]="true"
+    [types]="types"
+    [calendarConfig]="calendarConfig"
+    [vacations]="chosenVacations"
+    [daysOfWeek]="daysOfWeek"
+    [months]="months"
+    [dayOffList]="dayOffList"
+    (showInfo)="showInfo($event)"
+    (openVacation)="onOpenApproval($event)"
+    [currentUser]="currentUserFacade.getData()"
+    (openApproval)="onOpenApproval($event)"
+  ></calendar-graph-time-line>
+  <div class="loader" *ngIf="loading">
+    <p-progressSpinner size="lg"></p-progressSpinner>
+  </div>
+</p-dialog>

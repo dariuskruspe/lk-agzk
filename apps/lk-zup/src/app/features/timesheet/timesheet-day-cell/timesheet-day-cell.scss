@@ -1,0 +1,119 @@
+.timesheet-cell {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--timesheet-cell-height, 30px);
+  border: 1px solid var(--timesheet-cell-border);
+  border-radius: var(--radius, 5px);
+  background: var(--timesheet-cell-bg);
+  color: var(--timesheet-cell-value-text);
+  line-height: 1;
+  box-sizing: border-box;
+  background: var(--cell-bg-color, var(--timesheet-cell-bg));
+  padding: 2px;
+  user-select: none;
+
+  .timesheet-cell__value {
+    color: var(--timesheet-cell-value-text);
+  }
+
+  .timesheet-cell__value-fact {
+    color: var(--timesheet-note-text);
+    font-size: 9px;
+  }
+
+  &--text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+  }
+
+  &--big-icon {
+    font-size: 15px;
+    app-icon {
+      color: var(--cell-color);
+    }
+    border-color: color-mix(in srgb, var(--cell-color) 10%, transparent);
+  }
+
+  &--small-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    border-color: color-mix(in srgb, var(--cell-color) 10%, transparent);
+
+    app-icon {
+      position: absolute;
+      font-size: 12px;
+      right: 0px;
+      top: 0px;
+      color: var(--cell-color);
+    }
+  }
+
+  &--dayoff {
+    border-color: var(--timesheet-cell-empty-border);
+    background: var(--timesheet-cell-empty-bg);
+    color: var(--timesheet-cell-empty-text);
+  }
+
+  &--empty {
+    border-color: var(--timesheet-cell-empty-border);
+    background: var(--timesheet-cell-empty-bg);
+    color: var(--timesheet-cell-empty-text);
+  }
+
+  &--clickable {
+    cursor: pointer;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease,
+      border-color 0.15s ease;
+
+    &:hover {
+      border-color: color-mix(
+        in srgb,
+        var(--primary-color, var(--button-primary-bg, var(--foreground-color)))
+          32%,
+        var(--timesheet-cell-border) 68%
+      );
+      box-shadow: 0 8px 18px
+        color-mix(in srgb, var(--foreground-color) 12%, transparent);
+      transform: translateY(-1px);
+      z-index: 100;
+    }
+
+    &:focus-visible {
+      outline: none;
+      border-color: color-mix(
+        in srgb,
+        var(--primary-color, var(--button-primary-bg, var(--foreground-color)))
+          48%,
+        var(--timesheet-cell-border) 52%
+      );
+      box-shadow:
+        0 0 0 2px
+          color-mix(
+            in srgb,
+            var(
+                --primary-color,
+                var(--button-primary-bg, var(--foreground-color))
+              )
+              18%,
+            transparent
+          ),
+        0 10px 20px color-mix(in srgb, var(--foreground-color) 12%, transparent);
+    }
+  }
+
+  &--has-unapproved-issues {
+    border-color: var(--timesheet-warning-border);
+    background: var(--timesheet-warning-bg);
+  }
+}

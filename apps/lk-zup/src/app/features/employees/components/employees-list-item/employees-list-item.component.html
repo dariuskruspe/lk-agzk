@@ -1,0 +1,8 @@
+<app-item-list-builder
+  *ngFor="let item of dataList?.employees"
+  class="col-12 p-0"
+  [states]="findWorkStatus(item.state)"
+  [dataList]="item"
+  [dataConfig]="dataConfig"
+  (click)="onClick(item.id)"
+></app-item-list-builder>

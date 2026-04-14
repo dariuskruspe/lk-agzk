@@ -1,0 +1,46 @@
+<div class="main-user-menu-overlay" [style.left]="left()">
+  <div class="main-user-menu-overlay__content">
+    <ul class="main-user-menu-overlay__menu">
+      @for (items of userMenuItems(); track $index; let last = $last) {
+        @for (item of items; track item.id) {
+          <li class="main-user-menu-overlay__item">
+            <a
+              [routerLink]="item.link"
+              class="main-user-menu-overlay__link"
+              (click)="onMenuLinkClick()"
+            >
+              @if (item.iconType === 'lucide') {
+                <lucide-icon
+                  [img]="$any(item.icon)"
+                  class="main-user-menu-overlay__link-icon"
+                ></lucide-icon>
+              } @else {
+                <span class="main-user-menu-overlay__link-icon">
+                  <span [class]="item.icon"></span>
+                </span>
+              }
+              <span>{{ item.title }}</span>
+            </a>
+          </li>
+        }
+        @if (!last) {
+          <li class="main-user-menu-overlay__item">
+            <div class="main-user-menu-overlay__divider"></div>
+          </li>
+        }
+      }
+
+      <li class="main-user-menu-overlay__item">
+        <a class="main-user-menu-overlay__link" (click)="onLogout()">
+          <lucide-icon
+            [img]="LogOutIcon"
+            class="main-user-menu-overlay__link-icon"
+          ></lucide-icon>
+          <span>{{ 'BUTTON_LOGOUT' | translate }}</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+<div class="main-user-menu-backdrop" (click)="close.emit()"></div>
+

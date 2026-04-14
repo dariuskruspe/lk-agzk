@@ -1,0 +1,13 @@
+<div class="info-container flex flex-row ai-center">
+  <!-- Иконка в зависимости от типа сообщения -->
+  <div class="severity-icon p-10" [ngSwitch]="severity">
+    <i *ngSwitchCase="'error'" class="pi pi-exclamation-triangle error"></i>
+    <i *ngSwitchCase="'info'" class="pi pi-info-circle info"></i>
+    <i *ngSwitchCase="'success'" class="pi pi-check-circle success"></i>
+    <i *ngSwitchCase="'warn'" class="pi pi-exclamation-triangle warning"></i>
+  </div>
+
+  <div class="content p-10">
+    <ng-content></ng-content>
+  </div>
+</div>

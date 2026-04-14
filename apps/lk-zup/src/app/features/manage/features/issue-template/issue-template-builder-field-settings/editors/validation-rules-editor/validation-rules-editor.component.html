@@ -1,0 +1,147 @@
+<div class="validation-rules-editor">
+  <!-- Заголовок -->
+  <div class="section-header">
+    <div class="header-content">
+      <i class="pi pi-shield"></i>
+      <span class="title">Правила валидации</span>
+      @if (activeRules().length > 0) {
+        <span class="rules-count">{{ activeRules().length }}</span>
+      }
+    </div>
+  </div>
+
+  <!-- Доступные правила -->
+  <div class="available-rules">
+    <div class="section-title">
+      <span>Доступные правила</span>
+      <small>Нажмите для добавления</small>
+    </div>
+    <div class="rules-grid">
+      @for (template of availableRules(); track template.type) {
+        <button
+          type="button"
+          class="rule-option"
+          [disabled]="hasRule(template.type)"
+          (click)="addRule(template.type)"
+          [class.added]="hasRule(template.type)"
+        >
+          <div class="rule-icon">
+            <i class="{{ template.icon }}"></i>
+            @if (hasRule(template.type)) {
+              <i class="check-overlay pi pi-check"></i>
+            }
+          </div>
+          <div class="rule-content">
+            <span class="rule-label">{{ template.label }}</span>
+            <small class="rule-desc">{{ template.description }}</small>
+          </div>
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Активные правила -->
+  <div class="active-rules">
+    @if (activeRules().length === 0) {
+      <div class="empty-state">
+        <i class="pi pi-info-circle"></i>
+        <span>Добавьте правила валидации</span>
+        <p>Выберите из доступных правил выше</p>
+      </div>
+    } @else {
+      @for (rule of activeRules(); track rule.id) {
+        <div class="rule-card" [class.disabled]="!rule.enabled">
+          <div class="rule-header">
+            <div class="rule-toggle">
+              <input
+                type="checkbox"
+                [checked]="rule.enabled"
+                (change)="toggleRule(rule.id)"
+              />
+            </div>
+            <div class="rule-info">
+              <div class="rule-title">
+                <i class="{{ getRuleTemplate(rule.type)?.icon }}"></i>
+                <span class="rule-name">{{
+                  getRuleTemplate(rule.type)?.label
+                }}</span>
+              </div>
+              <div class="rule-description">
+                {{ getRuleTemplate(rule.type)?.description }}
+              </div>
+            </div>
+            <button
+              type="button"
+              class="btn-remove"
+              (click)="removeRule(rule.id)"
+              title="Удалить правило"
+            >
+              <i class="pi pi-times"></i>
+            </button>
+          </div>
+
+          @if (rule.enabled) {
+            <div class="rule-config">
+              <!-- Конфигурация для правил с значениями -->
+              @if (needsValue(rule.type)) {
+                <div class="config-field">
+                  @if (getRuleTemplate(rule.type)?.valueType === 'number') {
+                    <label>Значение</label>
+                    <input
+                      type="number"
+                      class="form-input"
+                      [value]="rule.value || ''"
+                      (input)="updateRuleNumberValue(rule.id, $event)"
+                      [placeholder]="
+                        getRuleTemplate(rule.type)?.placeholder || '0'
+                      "
+                    />
+                  } @else if (
+                    getRuleTemplate(rule.type)?.valueType === 'regex'
+                  ) {
+                    <label>Регулярное выражение</label>
+                    <input
+                      type="text"
+                      class="form-input"
+                      [value]="rule.value || ''"
+                      (input)="updateRuleTextValue(rule.id, $event)"
+                      [placeholder]="
+                        getRuleTemplate(rule.type)?.placeholder || ''
+                      "
+                    />
+                  } @else {
+                    <label>Значение</label>
+                    <input
+                      type="text"
+                      class="form-input"
+                      [value]="rule.value || ''"
+                      (input)="updateRuleTextValue(rule.id, $event)"
+                      [placeholder]="
+                        getRuleTemplate(rule.type)?.placeholder || ''
+                      "
+                    />
+                  }
+                </div>
+              }
+
+              <!-- Сообщение об ошибке -->
+              <div class="config-field">
+                <label>Сообщение об ошибке</label>
+                <input
+                  type="text"
+                  class="form-input"
+                  [value]="rule.message || ''"
+                  (input)="updateRuleMessage(rule.id, $event)"
+                  [placeholder]="
+                    getRuleTemplate(rule.type)?.defaultMessage ||
+                    'Ошибка валидации'
+                  "
+                />
+              </div>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+</div>

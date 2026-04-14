@@ -1,0 +1,32 @@
+.without-view {
+  .p-tabview-panels {
+    display: none;
+  }
+}
+
+.p-tabview-nav-link {
+  background: transparent !important;
+}
+
+.p-tabview {
+  .p-tabview-panels {
+    background: inherit !important;
+  }
+}
+
+.p-tabview .p-tabview-nav {
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius);
+  li {
+    flex: 0 1 200px;
+  }
+}
+
+.p-tabview-title {
+  width: 100%;
+  text-align: center;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
+  box-shadow: none !important;
+}

@@ -1,0 +1,380 @@
+:host {
+  ::ng-deep .p-dialog {
+    padding: 0 !important;
+    margin: 0 !important;
+    position: fixed;
+    top: 60px;
+    right: 0;
+
+    @media (max-width: 769px) {
+      top: 0;
+    }
+  }
+}
+
+button {
+  border-radius: 0;
+}
+
+.header__select-wrapper {
+  position: relative;
+  border-top: 1px solid var(--border-color);
+
+  &:first-of-type {
+    border-top: none;
+  }
+
+  & > button {
+    & > .header-icon {
+      margin: 0 !important;
+    }
+  }
+}
+
+.header__user-wrap {
+  display: flex;
+  align-items: center;
+  color: var(--header-icons-color);
+
+  ::ng-deep .p-dropdown {
+    width: 100%;
+  }
+
+  @media (max-width: 769px) {
+    border: none;
+    align-items: initial;
+    flex-direction: column;
+
+    z-index: 10;
+    top: 0;
+    height: calc(100% - 75px);
+    background-color: var(--header-background);
+    position: fixed;
+    left: 0;
+    padding: 15px;
+
+    .menu-container {
+      height: calc(100% - 60px);
+
+      mat-nav-list {
+        & mat-list-item {
+          height: 70px;
+          font-size: 16px;
+          width: auto;
+          overflow: hidden;
+        }
+      }
+    }
+  }
+}
+
+.header__user {
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+  text-decoration: none;
+  color: inherit;
+  height: fit-content;
+
+  & img {
+    margin-right: 11px;
+
+    @media (max-width: 769px) {
+      margin-left: 0;
+      margin-bottom: 10px;
+    }
+  }
+
+  @media (max-width: 769px) {
+    flex-direction: row;
+    width: 100%;
+    padding: 20px;
+    order: -1;
+  }
+}
+
+.header__user-name {
+  font-size: 15px;
+  line-height: 20px;
+
+  @media (max-width: 991px) {
+    display: none;
+  }
+
+  @media (max-width: 769px) {
+    display: flex;
+  }
+}
+
+.img {
+  width: 32px;
+  height: 32px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header__button {
+  width: 59px;
+  height: 59px;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:focus {
+    outline: none;
+  }
+
+  @media (max-width: 991px) {
+    width: 50px;
+  }
+
+  @media (max-width: 769px) {
+    margin-top: 0;
+    width: 100%;
+    padding: 20px;
+    height: fit-content;
+    border-top: none;
+    justify-content: flex-start;
+
+    & > span {
+      margin-left: 10px !important;
+    }
+  }
+
+  & span {
+    display: none;
+
+    @media (max-width: 769px) {
+      display: block;
+      font-size: 15px;
+      line-height: 20px;
+      color: var(--header-icons-color);
+    }
+  }
+
+  & .header-icon {
+    width: 22px;
+    height: 22px;
+    color: var(--header-icons-color);
+  }
+
+  &:hover {
+    background-color: var(--hover);
+  }
+
+  &--active {
+    background-color: var(--active);
+  }
+
+  &--lang {
+    text-transform: uppercase;
+    color: var(--header-icons-color);
+  }
+}
+
+.header__mobile-txt {
+  display: none;
+  text-transform: capitalize;
+  font-size: 16px;
+
+  @media (max-width: 769px) {
+    display: block;
+  }
+}
+
+.menu_toggler {
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+
+  & .img {
+    margin: 0;
+  }
+
+  @media (max-width: 769px) {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+  }
+
+  .header-icon {
+    margin-right: 3px;
+    margin-left: 3px;
+    font-size: 28px;
+    color: var(--header-icons-color);
+
+    @media (max-width: 769px) {
+      padding: 0;
+    }
+  }
+}
+
+.panel {
+  z-index: 10;
+  top: 51px;
+  height: calc(100% - 51px);
+  background-color: #ffffff;
+  position: fixed;
+  left: 0;
+
+  .menu-container {
+    height: calc(100% - 60px);
+
+    mat-nav-list {
+      & mat-list-item {
+        height: 70px;
+        font-size: 16px;
+        width: auto;
+        overflow: hidden;
+        border-bottom: 1px solid #ececec;
+      }
+    }
+  }
+}
+
+.lang-switcher {
+  height: 100%;
+  min-height: 70px;
+
+  & ::ng-deep {
+    .mat-list-item-content {
+      padding: 0;
+    }
+
+    .mat-expansion-panel {
+      width: 100%;
+      height: 100%;
+      box-shadow: none;
+
+      .mat-expansion-panel-header-title {
+        width: 16px;
+        flex-grow: 0;
+      }
+    }
+  }
+}
+
+.about-company {
+  display: flex;
+  width: 100%;
+  height: fit-content;
+  box-shadow: none;
+  padding: 20px;
+}
+
+.header-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 22px;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--header-icons-color, #a3b3c1);
+
+  @media (max-width: 769px) {
+    width: 22px;
+    height: 22px;
+  }
+
+  & * {
+    color: var(--basic-color);
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &.active * {
+    color: var(--basic-color);
+  }
+
+  &_user {
+    color: var(--secondary-color);
+  }
+}
+
+.mobile-select {
+  position: relative;
+}
+
+.header__select {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  box-shadow: var(--card-shadow);
+  width: 300px;
+  height: max-content;
+
+  ::ng-deep .p-listbox-list-wrapper {
+    max-height: calc(100vh - 65px);
+    overflow-y: auto;
+  }
+
+  @media (max-width: 769px) {
+    position: relative;
+    box-shadow: none;
+    transform: none;
+    width: 100%;
+  }
+}
+
+.notificationsList {
+  position: fixed;
+  background: var(--card-background);
+  width: 100vw;
+  max-width: 522px;
+  height: max-content;
+  border: 1px solid var(--border-color);
+  border-radius: 0 0 6px 6px;
+  color: var(--basic-color);
+  overflow: auto;
+
+  @media (min-width: 770px) {
+    max-height: 554px !important;
+  }
+
+  @media (max-width: 769px) {
+    max-width: none;
+  }
+}
+
+
+.header-icon-badge {
+  position: absolute;
+  font-family: Roboto, sans-serif;
+  top: 15%;
+  right: 15%;
+  border-radius: 50%;
+  background-color: #ffc23f;
+  font-size: 14px;
+  font-weight: 400;
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+  text-align: center;
+  color: #000000 !important;
+
+  @media (max-width: 769px) {
+    right: 85%;
+  }
+
+
+  &.plus10 {
+    font-size: 12px;
+  }
+
+  &.plus99 {
+    font-size: 10px;
+  }
+}

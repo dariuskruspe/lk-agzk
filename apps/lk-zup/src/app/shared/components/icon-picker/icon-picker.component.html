@@ -1,0 +1,45 @@
+<div
+  class="iconpicker-container"
+  (click)="showDialog()"
+  [class.disabled]="disabled()"
+>
+  @if (value()) {
+    <i [class]="value()" style="font-size: 1.5rem; margin-right: 0.5rem"></i>
+    <span>{{ value() }}</span>
+  } @else {
+    <span>Выберите иконку</span>
+  }
+</div>
+
+<p-dialog
+  header="Выберите иконку"
+  [(visible)]="dialogVisible"
+  [modal]="true"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="dialog-content">
+    <div class="search-container">
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="filterIcons()"
+        placeholder="Поиск иконки..."
+      />
+    </div>
+    <div class="icons-grid">
+      @for (icon of filteredIcons(); track icon) {
+        <div
+          class="iconitem"
+          (click)="selectIcon(icon)"
+          [pTooltip]="icon"
+          tooltipPosition="top"
+        >
+          <i [class]="icon" style="font-size: 2rem"></i>
+        </div>
+      }
+    </div>
+  </div>
+</p-dialog>

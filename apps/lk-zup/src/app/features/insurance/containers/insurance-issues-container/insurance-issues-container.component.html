@@ -1,0 +1,14 @@
+<app-insurance-issues
+  [insuranceIssues]="insuranceIssuesFacade.forcedData$ | async"
+  [isIssueContainer]="true"
+  [issuesStatusList]="
+    issuesStatusListFacade.getData() ||
+    (issuesStatusListFacade.getData$() | async)
+  "
+  [loading]="
+    (issuesListFacade.loading$() | async) ||
+    (issuesStatusListFacade.loading$() | async)
+  "
+  (goDetails)="onIssueDetails($event)"
+>
+</app-insurance-issues>

@@ -1,0 +1,78 @@
+.full {
+  margin-bottom: 30px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 20px;
+  }
+}
+
+.login-form {
+  margin-bottom: 20px;
+
+  @media (max-width: 768px) {
+    margin-bottom: 15px;
+  }
+}
+
+::ng-deep {
+  .custom-form-field {
+    @media (max-width: 768px) {
+      margin-bottom: 20px;
+
+      &__label {
+        font-size: 14px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+
+  .p-button {
+    @media (max-width: 768px) {
+      padding: 14px 20px;
+      font-size: 16px;
+    }
+  }
+
+  .p-inputtext,
+  .p-password input {
+    @media (max-width: 768px) {
+      padding: 14px 16px;
+      font-size: 16px;
+    }
+  }
+
+  .secondary {
+    @media (max-width: 768px) {
+      font-size: 14px;
+      text-align: center;
+      margin-top: 24px;
+      color: #6b7280;
+
+      .p-button-link {
+        color: #4f46e5;
+        font-weight: 500;
+        text-decoration: none;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none;
+        background: transparent;
+        transition: color 0.2s ease;
+        vertical-align: baseline;
+        display: inline;
+        height: auto;
+        min-height: auto;
+
+        &:hover {
+          color: #3730a3;
+          text-decoration: none;
+          background: transparent;
+        }
+
+        &:focus {
+          outline: none;
+          box-shadow: none;
+        }
+      }
+    }
+  }
+}

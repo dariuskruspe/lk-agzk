@@ -1,0 +1,34 @@
+<div class="main-container">
+  <div class="scroll-container">
+    <div class="content">
+      <div class="empty-space"></div>
+
+      <!-- Картинка с собачкой Доки и числом 404 -->
+      <img
+        src="./assets/img/special-pages/404-dog.png"
+        width="581"
+        height="333"
+        alt="404 dog image"
+      />
+
+      <!-- Надпись "Ошибка 404" -->
+      <h2 class="font-size-28px">
+        {{ 'ERROR_404' | translate }}
+      </h2>
+
+      <!-- Надпись "Страница не найдена" -->
+      <span class="description flex mt-8 mb-30">
+        {{ 'PAGE_NOT_FOUND' | translate }}
+      </span>
+
+      <!-- Кнопка "Вернуться на главную" -->
+      <button
+        pButton
+        [routerLink]="['/']"
+        [label]="'BUTTON_GO_INDEX' | translate"
+      ></button>
+
+      <div class="empty-space"></div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="app-calendar-graph-legend" [style.--color]="color()">
+  <div
+    class="app-calendar-graph-legend__color"
+    [ngClass]="{
+      'app-calendar-graph-legend__color--approving': variant() === 'approving',
+      'app-calendar-graph-legend__color--cancelled': variant() === 'cancelled'
+    }"
+  >
+    @if (icon() === 'plane') {
+      <svg
+        class="app-calendar-graph-legend__icon"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="currentColor"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          d="M21 16V14L13 9V3.5C13 2.67 12.33 2 11.5 2S10 2.67 10 3.5V9L2 14V16L10 13.5V19L8 20.5V22L11.5 21L15 22V20.5L13 19V13.5L21 16Z"
+        />
+      </svg>
+    } @else {
+      <i class="pi pi-sun app-calendar-graph-legend__icon"></i>
+    }
+  </div>
+  <div class="app-calendar-graph-legend__name">{{ name() }}</div>
+</div>

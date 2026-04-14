@@ -1,0 +1,196 @@
+<!-- Страница "Мои заявки" -->
+@if (settingsSignal() && userSettingsSignal()) {
+<!-- Тулбар с заголовком и кнопкой -->
+<p-toolbar class="title">
+  <h1 class="my-issues-title">{{ 'TITLE_MY_ISSUES' | translate }}</h1>
+  <span class="spacer"></span>
+
+  <!-- Кнопка "Создать заявку" -->
+  <button
+    pButton
+    icon="pi pi-plus-circle"
+    class="button-full-xs onb-stem-issue-list-button"
+    iconPos="left"
+    label="{{ 'BUTTON_ISSUE_CREATE' | translate }}"
+    [routerLink]="['', 'issues', 'types']"
+    queryParamsHandling="preserve"
+  ></button>
+</p-toolbar>
+
+<!-- Панель вкладок, поиска и фильтрации -->
+<div
+  class="tabs-controls-panel"
+  [ngClass]="{ 'no-gradient-before': themeSignal() === 'dark' }"
+>
+  <div class="tabs">
+    <!-- <только для руководителя (менеджера)> -->
+    <!-- Вкладка "Мои заявки" -->
+    @if (userSettingsSignal().issues.issuesForEmployees?.enable) {
+    <div
+      class="tab-item active"
+      (click)="changeTab('applicant')"
+      [class.active]="activeTab === 'applicant'"
+    >
+      {{ 'TITLE_MY_ISSUES' | translate }}
+    </div>
+    }
+
+    <!-- <только для руководителя (менеджера)> -->
+    <!-- Вкладка "Заявки на сотрудников" -->
+    @if (userSettingsSignal().issues.issuesForEmployees?.enable) {
+    <div
+      class="tab-item"
+      (click)="changeTab('other_employee')"
+      [class.active]="activeTab === 'other_employee'"
+    >
+      {{ 'TITLE_ISSUES_TO_MANAGEMENT' | translate }}
+    </div>
+    }
+  </div>
+
+  <!-- Фильтры (поиск + кнопка вызова диалогового окна с прочими фильтрами) -->
+  <div class="filters">
+    <!-- Поиск -->
+    <div class="p-input-icon-left mobile-search-input">
+      <i class="pi pi-search"></i>
+      <input
+        type="text"
+        pInputText
+        [(ngModel)]="filterValue.search"
+        placeholder="{{ 'ISSUE_SEARCH_FIELD' | translate }}"
+        class="search-input"
+        (ngModelChange)="applySearchFilter()"
+      />
+    </div>
+
+    <!-- Кнопка вызова диалогового окна с фильтрами (с иконкой горизонтальных слайдеров, символизирующей настройку [фильтрацию]) -->
+    <div class="filter-icon-button">
+      <i
+        class="pi pi-sliders-h filter-icon"
+        (click)="showFilters = !showFilters; $event.stopPropagation()"
+      ></i>
+    </div>
+
+    <fpc-filter
+    [loading]="loading"
+    [hideResultCount]="true"
+    [filter]="{main: [], secondary: []}"
+    [filterSize]="0"
+    [listSize]="0"
+    [showLegendButton]="false"
+    [showFilerIcon]="false"
+    [isSecondaryFilter]="showFilters"
+    >
+      <app-issues-filters
+      [issuesTypes]="issuesTypes"
+      [filterValue]="filterValue"
+      [daysValueList]="daysValueList"
+      [issuesStatusList]="issuesStatusList"
+      (applyFilters)="applyFilters()"
+      ></app-issues-filters>
+    </fpc-filter>
+
+    <!-- Десктопное диалоговое окно с фильтрами -->
+    <div id="filters-dialog">
+      <div class="filters-dialog" *ngIf="showFilters && !isMobileV()">
+        <app-issues-filters
+        [issuesTypes]="issuesTypes"
+        [filterValue]="filterValue"
+        [daysValueList]="daysValueList"
+        [issuesStatusList]="issuesStatusList"
+        (applyFilters)="applyFilters()"
+        ></app-issues-filters>
+
+        <!-- Панель с кнопками -->
+        <div class="filter-button-bar">
+          <!-- Кнопка "Закрыть" (закрывает диалоговое окно с фильтрами) -->
+          <button
+            pButton
+            label="{{ 'BUTTON_CLOSE' | translate }}"
+            class="p-button-outlined"
+            (click)="showFilters = false"
+          ></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Содержимое -->
+<div class="content">
+  <!-- Метки (chips — "чипы") фильтров -->
+  <div class="filter-chips">
+    <!-- Метки (chips — "чипы") поиска -->
+    <div class="filter-chip" *ngIf="filterValue.search">
+      {{ filterValue.search }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('search')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Статус" -->
+    <div class="filter-chip" *ngIf="filterValue.state">
+      {{ getStatusTitleByValue(filterValue.state) }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('state')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Период" -->
+    <div class="filter-chip" *ngIf="filterValue.days">
+      {{ getPeriodTitleByValue(filterValue.days) }}
+      <i
+        class="pi pi-times times-icon"
+        (click)="clearFilterByChips('days')"
+      ></i>
+    </div>
+
+    <!-- Метки (chips — "чипы") фильтра "Тип заявки" -->
+    <ng-container *ngIf="filterValue.type && filterValue.type.length">
+      <div class="filter-chip" *ngFor="let type of filterValue.type">
+        {{ getTypeTitleByValue(type) }}
+        <i
+          class="pi pi-times times-icon"
+          (click)="clearFilterByChips('type', type)"
+        ></i>
+      </div>
+    </ng-container>
+  </div>
+
+  <!-- <только если активна вкладка "Мои заявки"> -->
+  <!-- Контейнер с загружаемым списком -->
+  <div *ngIf="activeTab === 'applicant'">
+    <loadable-list-container
+      [template]="dataTemplate"
+      [dataConfig]="dataConfig"
+      [dataList]="issuesList"
+      [highlight]="highlight"
+      [scrollContainerClassCss]="scrollContainerClassCss"
+      [otherData]="{ issuesStatusList: issuesStatusList }"
+      [loading]="loading"
+      [appendFilterToQuery]="true"
+      (loadList)="onLoadList($event)"
+      (clickItem)="onGoDetails($event)"
+    ></loadable-list-container>
+  </div>
+
+  <!-- <только если активна вкладка "Заявки на сотрудников"> -->
+  <!-- Контейнер с загружаемым списком -->
+  <div *ngIf="activeTab === 'other_employee'">
+    <loadable-list-container
+      [template]="dataTemplate"
+      [dataConfig]="dataConfig"
+      [dataList]="issuesOtherEmployeeList"
+      [highlight]="highlight"
+      [scrollContainerClassCss]="scrollContainerClassCss"
+      [otherData]="{ issuesStatusList: issuesStatusList }"
+      [loading]="loadingOtherEmployeeIssues"
+      [appendFilterToQuery]="true"
+      (loadList)="onLoadOtherEmployeeList($event)"
+      (clickItem)="onGoDetails($event)"
+    ></loadable-list-container>
+  </div>
+</div>
+}

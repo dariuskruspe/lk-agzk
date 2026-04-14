@@ -1,0 +1,17 @@
+<div class="app-spinner-shell" [class.app-spinner-shell--fill]="fill()">
+  <div
+    class="app-spinner"
+    [class.app-spinner--sm]="size() === 'sm'"
+    [class.app-spinner--lg]="size() === 'lg'"
+  >
+    <div class="app-spinner__visual" aria-hidden="true" #lottie></div>
+
+    <div class="app-spinner__content">
+      <div class="app-spinner__text">{{ text() }}</div>
+
+      @if (description(); as description) {
+        <div class="app-spinner__description">{{ description }}</div>
+      }
+    </div>
+  </div>
+</div>

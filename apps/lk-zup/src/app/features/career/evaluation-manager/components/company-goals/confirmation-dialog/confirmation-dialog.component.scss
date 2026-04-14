@@ -1,0 +1,22 @@
+.confirmation-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dialog-content {
+  padding: 8px 0;
+}
+
+.dialog-message {
+  font-size: 1rem;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-start;
+}
+

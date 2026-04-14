@@ -1,0 +1,183 @@
+<div class="vacation-dialog">
+  <!-- Шапка со статусом -->
+  <div class="vacation-dialog__header">
+    <div class="vacation-dialog__header-title">{{ 'VACATION_STATUS_TITLE' | translate }}</div>
+    <div class="vacation-dialog__header-status" *ngIf="state">
+      <app-issue-status
+        [label]="state.name | translate"
+        [color]="state?.color"
+      ></app-issue-status>
+    </div>
+  </div>
+
+  <!-- Год планирования -->
+  <div class="vacation-dialog__section">
+    <div class="vacation-dialog__label">{{ 'VACATION_PLANNING_YEAR' | translate }}</div>
+    <p-dropdown
+      [options]="yearOptions"
+      [(ngModel)]="selectedYear"
+      [disabled]="true"
+      styleClass="vacation-dialog__dropdown vacation-dialog__dropdown--fullwidth"
+    >
+      <ng-template pTemplate="selectedItem">
+        <span>{{ selectedYear }}</span>
+      </ng-template>
+      <ng-template let-year pTemplate="item">
+        <span>{{ year.value }}</span>
+      </ng-template>
+    </p-dropdown>
+  </div>
+
+  <!-- Предупреждение о 14 днях -->
+  <div
+    *ngIf="period14isRequired && !has14daysPeriod"
+    class="vacation-dialog__warning"
+  >
+    <i class="pi pi-exclamation-circle"></i>
+    <span>{{ 'ERROR_VACATION_14_DAYS' | translate }}</span>
+  </div>
+
+  <!-- Остаток дней -->
+  <ng-container *ngIf="daysSum as days">
+    <div *ngIf="!isApproval" class="vacation-dialog__days-row">
+      <div class="vacation-dialog__days-item">
+        <span class="vacation-dialog__days-label">{{ 'VACATION_NEED_TO_PLAN' | translate }}</span>
+        <span
+          *pluralize="
+            days.totalAvailable >= 0 ? days.totalAvailable : 0;
+            forms: ['ONE_DAY', 'TWO_DAYS', 'PLURAL_DAYS'];
+            let value
+          "
+          class="vacation-dialog__days-value"
+          [ngClass]="{
+            'vacation-dialog__days-value--invalid': days.totalAvailable !== 0
+          }"
+        >
+          {{ days.totalAvailable >= 0 ? days.totalAvailable : 0 }} {{ value | translate }}
+        </span>
+      </div>
+      <div class="vacation-dialog__days-item">
+        <span class="vacation-dialog__days-label">{{ 'VACATION_MAX_TO_PLAN' | translate }}</span>
+        <span
+          *pluralize="
+            possibleDays;
+            forms: ['ONE_DAY', 'TWO_DAYS', 'PLURAL_DAYS'];
+            let value
+          "
+          class="vacation-dialog__days-value"
+          [ngClass]="{
+            'vacation-dialog__days-value--invalid': possibleDays < 0
+          }"
+        >
+          {{ possibleDays }} {{ value | translate }}
+        </span>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Тип отпуска -->
+  <div *ngIf="!isApproval" class="vacation-dialog__section">
+    <div class="vacation-dialog__label">{{ 'VACATION_TYPE_TITLE' | translate }}</div>
+    <p-dropdown
+      [options]="availableDays"
+      [(ngModel)]="chosenType"
+      (onChange)="setType($event.value)"
+      [disabled]="availableDays.length === 1"
+      styleClass="vacation-dialog__dropdown vacation-dialog__dropdown--fullwidth"
+    >
+      <ng-template let-type pTemplate="item">
+        <div class="vacation-type">
+          <span>{{ type.vacationType.representation }}</span>
+          <span *ngIf="type.daysAvailable !== 0" class="vacation-type__available">
+            ({{ type.daysAvailable }})
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="selectedItem">
+        <div class="vacation-type" *ngIf="chosenType">
+          <span>{{ chosenType.vacationType.representation }}</span>
+        </div>
+      </ng-template>
+    </p-dropdown>
+  </div>
+
+  <!-- Остаток дней для текущего типа -->
+  <ng-container *ngIf="daysSum as days">
+    <div *ngIf="!isApproval" class="vacation-dialog__days-row vacation-dialog__days-row--single">
+      <div class="vacation-dialog__days-item vacation-dialog__days-item--wide">
+        <span class="vacation-dialog__days-label">{{ 'VACATION_NEED_TO_PLAN_BY_TYPE' | translate }}</span>
+        <span
+          *pluralize="
+            days.typeAvailable;
+            forms: ['ONE_DAY', 'TWO_DAYS', 'PLURAL_DAYS'];
+            let value
+          "
+          class="vacation-dialog__days-value"
+          [ngClass]="{
+            'vacation-dialog__days-value--invalid': days.typeAvailable !== 0
+          }"
+        >
+          {{ days.typeAvailable }} {{ value | translate }}
+        </span>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Форма с периодами отпуска -->
+  <ng-container *ngFor="let planningType of availableDays">
+    <div
+      *ngIf="planningType?.vacationTypeId === chosenTypeId"
+      class="vacation-dialog__form"
+    >
+      <fpc
+        *ngIf="forms"
+        [formData$]="forms[planningType?.vacationTypeId]?.asObservable()"
+        [dateLocale]="lang"
+        (formSubmit)="setChangedPeriods($event, planningType?.vacationTypeId)"
+        (valueChanged)="onDatesChange($event, planningType?.vacationTypeId)"
+        [submit$]="submit$"
+        (isInvalid)="setInvalid($event, planningType?.vacationTypeId)"
+      ></fpc>
+    </div>
+  </ng-container>
+
+  <!-- Комментарий о периодах с совпадениями -->
+  <div
+    *ngIf="hasCrossingPeriods"
+    class="vacation-dialog__warning vacation-dialog__warning--error"
+  >
+    <i class="pi pi-exclamation-triangle"></i>
+    <span>{{ 'ERROR_VACATION_COINCIDENCES' | translate }}</span>
+  </div>
+
+  <!-- Последний комментарий (если есть) -->
+  <div
+    *ngIf="!commonPeriod?.approved && commonPeriod?.lastComment"
+    class="vacation-dialog__comment"
+  >
+    <div class="vacation-dialog__comment-title">{{ commonPeriod.lastComment.name }}:</div>
+    <div class="vacation-dialog__comment-text">
+      {{ commonPeriod.lastComment.text }}
+    </div>
+  </div>
+
+  <!-- Кнопка отправки -->
+  <div class="vacation-dialog__actions">
+    <button
+      pButton
+      class="vacation-dialog__submit-btn"
+      label="{{ 'BUTTON_SEND' | translate }}"
+      [loading]="saving"
+      [disabled]="
+        saving ||
+        !validMinMax ||
+        invalidSum ||
+        (period14isRequired && !has14daysPeriod) ||
+        commonPeriod?.activeApprovement ||
+        !everythingFilled ||
+        !hasChanges
+      "
+      (click)="saveVacations(vacationActionEnum.save)"
+    ></button>
+  </div>
+</div>

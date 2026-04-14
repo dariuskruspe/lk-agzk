@@ -1,0 +1,16 @@
+<div class="approve-buttons" *ngIf="isRequiringApproval && !isRequiringSignature && !loading">
+  <button
+    (click)="approved.emit()"
+    [disabled]="loading"
+    class="p-button-success"
+    label="{{ 'BUTTON_APPROVE' | translate }}"
+    pButton
+  ></button>
+  <button
+    (click)="rejected.emit()"
+    [disabled]="loading"
+    class="p-button-danger"
+    label="{{ 'BUTTON_REJECT' | translate }}"
+    pButton
+  ></button>
+</div>

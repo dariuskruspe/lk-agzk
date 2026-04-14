@@ -1,0 +1,82 @@
+.result-container {
+  .title {
+    padding: 20px 0;
+  }
+  .comment-body {
+    .comment-field {
+      width: 100%;
+      margin: 5px 0 16px 0;
+    }
+  }
+  .buttons {
+    .approve {
+      margin-right: 16px;
+    }
+  }
+  .result-list {
+    margin: 16px 0;
+    .result-item {
+      margin-bottom: 30px;
+      .error {
+        padding: 20px;
+        background-color: #fee2e2a8;
+        border: 1px solid rgba(37, 47, 63, 0.1);
+        border-radius: 5px;
+        margin-bottom: 8px;
+        display: flex;
+        .error-text {
+          margin-left: 12px;
+        }
+      }
+      .issue {
+        background: var(--background-color);
+        padding: 12px;
+        .issue-body {
+          background: var(--card-background);
+          display: flex;
+          flex-direction: row;
+          border-radius: 5px;
+          box-shadow: 0 3px 6px rgba(0, 112, 255, 0.16);
+          padding: 15px;
+          .icon {
+            align-self: center;
+            margin-right: 13px;
+            .icon {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              height: 36px;
+              min-width: 36px;
+              border-radius: 18px;
+              background-color: var(--issue-icon-background);
+              color: var(--issue-icon-color);
+              .icon-doc {
+                font-size: 1.5rem;
+              }
+            }
+          }
+          .info {
+            width: 100%;
+            .footer-info {
+              width: 100%;
+              display: flex;
+              flex-direction: row;
+              justify-content: space-between;
+              .date {
+                color: #989AA2;
+              }
+              .status {
+                padding: 4px 8px;
+                border-radius: 5px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+.success {
+  padding: 20px 0;
+  min-width: 300px;
+}

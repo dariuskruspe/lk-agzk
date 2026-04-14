@@ -1,0 +1,231 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+::ng-deep {
+  .main-container {
+    max-width: unset !important;
+  }
+
+  .auth-form {
+    min-height: 470px;
+
+    @media (max-width: 768px) {
+      min-height: auto;
+    }
+  }
+
+  ul.p-tabview-nav {
+    margin-bottom: 2px;
+    border: 0 !important;
+  }
+
+  .p-tabview-panels {
+    padding: 20px 0 0 !important;
+
+    @media (max-width: 768px) {
+      padding: 15px 0 0 !important;
+    }
+  }
+
+  .p-tabview-title {
+    text-align: left;
+    font-weight: 400;
+  }
+
+  .p-tabview-nav-link {
+    padding: 15px 0 !important;
+
+    @media (max-width: 768px) {
+      padding: 12px 0 !important;
+    }
+  }
+
+  .p-tabview .p-tabview-nav li {
+    flex-basis: 0;
+    padding-right: 20px;
+
+    &:last-child {
+      padding-right: 0;
+    }
+
+    .p-tabview-nav-link {
+      border-color: transparent;
+    }
+
+    @media (max-width: 768px) {
+      padding-right: 15px;
+    }
+  }
+}
+
+.auth-page {
+  @media (max-width: 768px) {
+    padding: 5px;
+    height: 100vh;
+    background: var(--card-background);
+  }
+}
+
+.auth-page-row {
+  min-height: calc(100vh - 60px); // вычитаем высоту шапки
+
+  @media (max-width: 768px) {
+    min-height: 100vh;
+    flex-direction: column;
+    align-items: center;
+    padding: 5px;
+  }
+}
+
+.auth-container {
+  position: relative;
+  background-color: var(--card-background);
+  min-width: 616px;
+
+  // продляем фон контейнера авторизации на шапку
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -60px; // высота шапки
+    bottom: auto;
+    width: 100%;
+    height: 60px; // высота шапки
+    z-index: -1;
+    background-color: var(--card-background); // как у .auth-container
+
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    min-width: auto;
+    width: 100%;
+    padding: 0;
+    background-color: transparent;
+  }
+}
+
+.logo-container {
+  .app-logo {
+    max-width: 823px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 20px 0;
+
+    .app-logo {
+      max-width: 200px;
+    }
+  }
+}
+
+.auth-card {
+  flex: 1;
+  max-width: 434px;
+
+  justify-content: space-between;
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+    width: 100%;
+    background-color: transparent;
+    padding: 10px;
+    margin: 0;
+  }
+}
+
+.main-logo-container {
+  @media (max-width: 768px) {
+    text-align: center;
+    margin-bottom: 15px;
+  }
+}
+
+.main-logo {
+  width: auto;
+  max-width: 100%;
+  max-height: 100px;
+
+  @media (max-width: 768px) {
+    max-height: 70px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  }
+}
+
+.main-logo-default {
+  width: 233px;
+  height: 100px;
+
+  @media (max-width: 768px) {
+    width: 163px;
+    height: 70px;
+  }
+}
+
+// Дополнительные мобильные стили
+@media (max-width: 768px) {
+  ::ng-deep {
+    .divider {
+      margin: 20px 0 !important;
+    }
+
+    .mt-20 {
+      margin-top: 10px !important;
+    }
+
+    .p-tabview {
+      .p-tabview-nav {
+        justify-content: center;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #e8e9ea;
+        margin-bottom: 20px;
+        padding: 0;
+      }
+
+      .p-tabview-nav li {
+        flex: 1;
+        text-align: center;
+        margin: 0;
+        position: relative;
+
+        .p-tabview-nav-link {
+          border-radius: 0;
+          background: transparent;
+          border: none;
+          border-bottom: 2px solid transparent;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          padding: 16px 20px 14px;
+          font-weight: 500;
+          font-size: 15px;
+          color: #9ca3af;
+          letter-spacing: 0.01em;
+
+          &:hover {
+            background: transparent;
+            color: #6b7280;
+            border-bottom-color: #d1d5db;
+          }
+        }
+
+        &.p-highlight .p-tabview-nav-link {
+          background: transparent;
+          color: #374151;
+          border-bottom-color: #4f46e5;
+          font-weight: 600;
+        }
+      }
+
+      .p-tabview-panels {
+        background: transparent;
+        border: none;
+        padding: 0 !important;
+      }
+    }
+  }
+}
